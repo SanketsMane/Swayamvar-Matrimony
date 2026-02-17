@@ -15,5 +15,7 @@ class DatabaseSeeder extends Seeder
         $this->call(ReligionSeeder::class);
         $this->call(PackageSeeder::class);
         $this->call(FooterSeeder::class);
+        $this->call(CurrencySeeder::class);
+        $this->call(SuperAdminSeeder::class);
     }
 }
