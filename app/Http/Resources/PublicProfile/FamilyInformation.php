@@ -15,9 +15,18 @@ class FamilyInformation extends JsonResource
     public function toArray($request)
     {
         return [
-            'father' => $this->father,
-            'mother' => $this->mother,
-            'sibling' => $this->sibling,
+            'father'            => $this->father,
+            'mother'            => $this->mother,
+            'sibling'           => $this->sibling,
+            // Sanket: Newly added 44-field profile columns for family section
+            'father_occupation' => $this->father_occupation,
+            'mother_occupation' => $this->mother_occupation,
+            'family_income'     => $this->family_income,
+            'family_status'     => $this->family_status,
+            'family_type'       => $this->family_type,
+            'family_value'      => $this->family_value,
+            'is_nri'            => $this->is_nri,
+            'nri_country'       => $this->nri_country,
         ];
     }
 }

@@ -117,7 +117,7 @@ Route::group(['namespace' => 'Api', 'middleware' => ['app_language']], function 
             //Paytm
             Route::get('/paytm/index', 'PaytmController@index');
             // Razor Pay
-            Route::any('pay-with-razorpay', 'RazorpayController@payWithRazorpay')->name('api.razorpay.payment');
+            Route::any('pay-with-razorpay', 'RazorpayController@payWithRazorpay')->name('api.razorpay.pay-with-razorpay');
 
             // PhonePe
             Route::any('pay-with-phonepe', 'PhonepeController@pay')->name('api.phonepe.pay');
@@ -131,6 +131,7 @@ Route::group(['namespace' => 'Api', 'middleware' => ['app_language']], function 
             Route::get('/introduction', 'ProfileController@get_introduction');
             Route::get('/get-email', 'ProfileController@get_email');
             Route::post('/introduction-update', 'ProfileController@introduction_update');
+            Route::post('/profile-wizard/update', 'ProfileController@profile_wizard_update'); // NEW UNIFIED FORM
             Route::get('/basic-info', 'ProfileController@get_basic_info');
             Route::post('/basic-info/update', 'ProfileController@basic_info_update');
             Route::get('present/address', 'ProfileController@present_address');
@@ -189,8 +190,8 @@ Route::group(['namespace' => 'Api', 'middleware' => ['app_language']], function 
             // Profile Image View Request
             Route::get('/profile-picture-view-request', 'ProfileImageController@image_view_request');
             Route::post('/profile-picture-view-request', 'ProfileImageController@store_image_view_request');
-            Route::post('/profile-picture-view-request/accept', 'ProfileImageController@accept_image_view_request')->name('gallery_image_view_request_accept');
-            Route::post('/profile-picture-view-request/reject', 'ProfileImageController@reject_image_view_request')->name('gallery_image_view_request_reject');
+            Route::post('/profile-picture-view-request/accept', 'ProfileImageController@accept_image_view_request')->name('profile_picture_view_request_accept');
+            Route::post('/profile-picture-view-request/reject', 'ProfileImageController@reject_image_view_request')->name('profile_picture_view_request_reject');
 
 
             Route::get('/maritial-status', 'ProfileDropdownController@maritial_status');

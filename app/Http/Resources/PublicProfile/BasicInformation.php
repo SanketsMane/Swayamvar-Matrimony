@@ -22,20 +22,23 @@ class BasicInformation extends JsonResource
 
         $age = Carbon::parse($this->member->birthday)->age;
         return [
-            'firs_name' => $this->first_name,
-            'last_name' => $this->last_name,
-            'code' => $this->code,
-            'age' => $age,
-            'religion' => $this->spiritual_backgrounds->religion->name ?? '',
-            'caste' => $this->spiritual_backgrounds->caste->name ?? '',
-            'date_of_birth' => Carbon::parse($this->member->birthday)->format('Y-m-d'),
-            'onbehalf' => new OnBehalfResource(OnBehalf::find($this->member->on_behalves_id)),
+            'firs_name'      => $this->first_name,
+            'last_name'      => $this->last_name,
+            'code'           => $this->code,
+            'age'            => $age,
+            'religion'       => $this->spiritual_backgrounds->religion->name ?? '',
+            'caste'          => $this->spiritual_backgrounds->caste->name ?? '',
+            'date_of_birth'  => Carbon::parse($this->member->birthday)->format('Y-m-d'),
+            'onbehalf'       => new OnBehalfResource(OnBehalf::find($this->member->on_behalves_id)),
             'no_of_children' => $this->member->children ?? '',
-            'gender' => $this->member->gender == 1 ? "Male" : "Female",
-            'phone' => $this->phone ?? "",
-            'maritial_status' =>  $this->member->marital_status ? $this->member->marital_status->name : '',
-            'photo' => show_profile_picture($this) ? uploaded_asset($this->photo) : static_asset('assets/img/avatar-place.png'),
-
+            'gender'         => $this->member->gender == 1 ? "Male" : "Female",
+            'phone'          => $this->phone ?? "",
+            'maritial_status'=> $this->member->marital_status ? $this->member->marital_status->name : '',
+            'photo'          => show_profile_picture($this) ? uploaded_asset($this->photo) : static_asset('assets/img/avatar-place.png'),
+            // Sanket: Newly added 44-field profile columns for basic info
+            'about'          => $this->member->about ?? '',
+            'bio'            => $this->member->bio ?? '',
+            'annual_income'  => $this->member->annual_income ?? '',
         ];
     }
 }

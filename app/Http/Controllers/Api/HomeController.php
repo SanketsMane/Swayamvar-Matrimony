@@ -353,14 +353,14 @@ class HomeController extends Controller
 
     public function home_with_login()
     {
-        $members = User::query();
-        $members->where('user_type', 'member')
+        $base_query = User::query()
+            ->where('user_type', 'member')
             ->where('approved', 1)
             ->where('blocked', 0)
             ->where('deactivated', 0);
 
         if (auth()->user() && auth()->user()->user_type == 'member') {
-            $members->where('id', '!=', auth()->user()->id)
+            $base_query->where('id', '!=', auth()->user()->id)
                 ->whereIn("id", function ($query) {
                     $query->select('user_id')
                         ->from('members')
@@ -369,19 +369,40 @@ class HomeController extends Controller
 
             $ignored_to = IgnoredUser::where('ignored_by', auth()->user()->id)->pluck('user_id')->toArray();
             if (count($ignored_to) > 0) {
-                $members->whereNotIn('id', $ignored_to);
+                $base_query->whereNotIn('id', $ignored_to);
             }
 
             $ignored_by_ids = IgnoredUser::where('user_id', auth()->user()->id)->pluck('ignored_by')->toArray();
             if (count($ignored_by_ids) > 0) {
-                $members->whereNotIn('id', $ignored_by_ids);
+                $base_query->whereNotIn('id', $ignored_by_ids);
             }
         }
 
-        $members = $members->orderBy('id', 'desc')->limit(15)->get()->shuffle();
+        // 1. One "Hero" Match (Latest high-quality profile with photo)
+        $hero_match = clone $base_query;
+        $hero_match = $hero_match->whereNotNull('photo')->orderBy('id', 'desc')->limit(1)->get();
 
-        return MemberResource::collection($members)->additional([
-            'result' => true
+        // 2. Verified Matches
+        $verified_matches = clone $base_query;
+        $verified_matches = $verified_matches->where('email_verified_at', '!=', null)
+                                             ->inRandomOrder()->limit(5)->get();
+
+        // 3. Active Now (Proxy: Recently updated/created or from a recent activity table)
+        // Since there is no explicit 'last_seen' natively, we use updated_at and order desc.
+        $active_now = clone $base_query;
+        $active_now = $active_now->orderBy('updated_at', 'desc')->limit(5)->get();
+
+        // 4. New Matches
+        $new_matches = clone $base_query;
+        $new_matches = $new_matches->orderBy('created_at', 'desc')->limit(10)->get();
+
+
+        return response()->json([
+            'result' => true,
+            'hero_match' => MemberResource::collection($hero_match),
+            'verified' => MemberResource::collection($verified_matches),
+            'active_now' => MemberResource::collection($active_now),
+            'new_matches' => MemberResource::collection($new_matches)
         ]);
     }
     // app_info

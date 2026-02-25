@@ -42,6 +42,14 @@ class MemberController extends Controller
         $min_height     = ($request->min_height != null) ? $request->min_height : null;
         $max_height     = ($request->max_height != null) ? $request->max_height : null;
         $member_type    = ($request->member_type != null) ? $request->member_type : 0;
+        
+        // --- NEW ADVANCED FILTERS ---
+        $manglik             = ($request->manglik != null) ? filter_var($request->manglik, FILTER_VALIDATE_BOOLEAN) : null;
+        $intercaste_accepted = ($request->intercaste_accepted != null) ? filter_var($request->intercaste_accepted, FILTER_VALIDATE_BOOLEAN) : null;
+        $disability          = ($request->disability != null) ? filter_var($request->disability, FILTER_VALIDATE_BOOLEAN) : null;
+        $income_id           = ($request->income_id != null) ? $request->income_id : null;
+        $with_photo          = ($request->with_photo != null) ? filter_var($request->with_photo, FILTER_VALIDATE_BOOLEAN) : null;
+        $recently_joined     = ($request->recently_joined != null) ? filter_var($request->recently_joined, FILTER_VALIDATE_BOOLEAN) : null;
 
         $users_query = User::query();
         $users_query->orderBy('created_at', 'desc')
@@ -156,6 +164,42 @@ class MemberController extends Controller
             if (count($user_ids) > 0) {
                 $users_query->whereIn('id', $user_ids);
             }
+        }
+
+        // --- APPLY NEW ADVANCED FILTERS ---
+
+        // Manglik Check
+        if ($manglik === true) {
+            $user_ids = SpiritualBackground::where('manglik', 1)->pluck('user_id')->toArray();
+            $users_query->whereIn('id', $user_ids);
+        }
+
+        // Intercaste Accepted Check
+        if ($intercaste_accepted === true) {
+            $user_ids = Member::where('intercaste_accepted', 1)->pluck('user_id')->toArray();
+            $users_query->whereIn('id', $user_ids);
+        }
+
+        // Disability Check
+        if ($disability === true) {
+            $user_ids = PhysicalAttribute::where('disability', 'yes')->pluck('user_id')->toArray();
+            $users_query->whereIn('id', $user_ids);
+        }
+
+        // Income Sort
+        if (!empty($income_id)) {
+            $user_ids = Career::where('income_id', $income_id)->pluck('user_id')->toArray();
+            $users_query->whereIn('id', $user_ids);
+        }
+
+        // Must Have Profile Photo Check
+        if ($with_photo === true) {
+            $users_query->whereNotNull('photo');
+        }
+
+        // Recently Joined Check (e.g. within last 30 days)
+        if ($recently_joined === true) {
+            $users_query->where('created_at', '>=', now()->subDays(30));
         }
 
         $users_query = $users_query->get();
