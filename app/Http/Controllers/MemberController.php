@@ -103,10 +103,14 @@ class MemberController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(Request $request, $id)
+    public function index(Request $request, $id = null)
     {
         $sort_search  = null;
-        $members      = User::latest()->where('user_type', 'member')->where('membership', $id);
+        $members      = User::latest()->where('user_type', 'member');
+        
+        if ($id != null) {
+            $members = $members->where('membership', $id);
+        }
 
         if ($request->has('search')) {
             $sort_search  = $request->search;
