@@ -1,0 +1,286 @@
+
+// Sanket: Inbox screen — refined 2026 premium chat list layout
+import 'dart:async';
+import 'package:active_matrimonial_flutter_app/const/style.dart';
+import 'package:active_matrimonial_flutter_app/screens/chat/chat_middleware.dart';
+import 'package:active_matrimonial_flutter_app/screens/core.dart';
+import 'package:active_matrimonial_flutter_app/screens/notifications/notifications.dart';
+import 'package:flutter/material.dart';
+import 'package:active_matrimonial_flutter_app/l10n/app_localizations.dart';
+
+import '../../components/chat_list_widget.dart';
+import '../../components/deactivate_Massage.dart';
+import '../../components/matched_profile_widget.dart';
+import '../../const/my_theme.dart';
+import '../../helpers/navigator_push.dart';
+import '../../redux/libs/matched_profile/matched_profile_middleware.dart';
+
+class ChatList extends StatefulWidget {
+  final bool? backButtonAppearance;
+
+  const ChatList({super.key, this.backButtonAppearance});
+
+  @override
+  State<ChatList> createState() => _ChatListState();
+}
+
+class _ChatListState extends State<ChatList> {
+  final PageController _matchedProfileController = PageController();
+  Timer? _refreshTimer;
+
+  @override
+  void initState() {
+    super.initState();
+    _initialFetch();
+    _startRefreshTimer();
+  }
+
+  void _initialFetch() {
+    bool isDeactivated = store.state.authState?.userData?.deactivated == 1;
+    bool isApproved = store.state.userVerifyState?.isApprove ?? false;
+
+    if (!isApproved) {
+      if (widget.backButtonAppearance == true) {
+        OneContext().pop();
+      }
+      store.dispatch(
+        ShowMessageAction(
+          msg: "Please verify your account",
+          color: MyTheme.failure,
+        ),
+      );
+    } else if (!isDeactivated) {
+      store.dispatch(Reset.chatList);
+      store.dispatch(chatMiddleware());
+      store.dispatch(matchedProfileFetchAction());
+    }
+  }
+
+  void _startRefreshTimer() {
+    _refreshTimer = Timer.periodic(
+      const Duration(seconds: 20),
+      (Timer t) {
+        if (mounted && store.state.authState?.userData?.deactivated != 1) {
+          store.dispatch(chatMiddleware());
+        }
+      },
+    );
+  }
+
+  @override
+  void dispose() {
+    _refreshTimer?.cancel();
+    _matchedProfileController.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return StoreConnector<AppState, AppState>(
+      converter: (store) => store.state,
+      builder: (_, state) {
+        final isDeactivated = state.authState?.userData?.deactivated == 1;
+        
+        return Scaffold(
+          backgroundColor: MyTheme.background,
+          body: Column(
+            children: [
+              // Sanket: Fixed 56px header
+              _buildHeader(context),
+              
+              Expanded(
+                child: isDeactivated
+                    ? Center(
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 24),
+                          child: DeactivatedAccountMessage(),
+                        ),
+                      )
+                    : RefreshIndicator(
+                        color: MyTheme.primary,
+                        onRefresh: () async {
+                          await store.dispatch(chatMiddleware());
+                          await store.dispatch(matchedProfileFetchAction());
+                        },
+                        child: SingleChildScrollView(
+                          physics: const AlwaysScrollableScrollPhysics(),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              const SizedBox(height: 16),
+                              
+                              // Horizontal Matched Profiles
+                              MatchedProfileWidget(
+                                matched_profile_controller: _matchedProfileController,
+                                state: state,
+                              ),
+                              
+                              const SizedBox(height: 8),
+                              
+                              Padding(
+                                padding: const EdgeInsets.symmetric(horizontal: 16),
+                                child: Text(
+                                  AppLocalizations.of(context)!.chat_list_messages,
+                                  style: Styles.bold_arsenic_16.copyWith(
+                                    fontSize: 17,
+                                    color: MyTheme.text_primary,
+                                  ),
+                                ),
+                              ),
+                              
+                              const SizedBox(height: 12),
+                              
+                              // Chat List
+                              _buildChatList(context, state),
+                              
+                              const SizedBox(height: 40),
+                            ],
+                          ),
+                        ),
+                      ),
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  }
+
+  Widget _buildHeader(BuildContext context) {
+    return Container(
+      height: 56 + MediaQuery.of(context).padding.top,
+      padding: EdgeInsets.only(top: MediaQuery.of(context).padding.top),
+      decoration: const BoxDecoration(
+        color: MyTheme.white,
+        border: Border(bottom: BorderSide(color: MyTheme.border, width: 1)),
+      ),
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 16),
+        child: Row(
+          children: [
+            // Left: Back or Menu
+            widget.backButtonAppearance == true
+                ? _headerIconBtn(Icons.arrow_back_ios_new_rounded, () => Navigator.pop(context))
+                : _headerIconBtn(Icons.menu_rounded, () {}),
+                
+            const Spacer(),
+            Text(
+              AppLocalizations.of(context)!.profile_screen_messages,
+              style: Styles.bold_arsenic_16.copyWith(
+                fontSize: 18,
+                color: MyTheme.text_primary,
+                letterSpacing: -0.3,
+              ),
+            ),
+            const Spacer(),
+            
+            // Right: Notification
+            _headerIconBtn(Icons.notifications_none_rounded, () {
+               NavigatorPush.push(context, const Notifications());
+            }),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _headerIconBtn(IconData icon, VoidCallback onTap) {
+    return InkWell(
+      onTap: onTap,
+      borderRadius: BorderRadius.circular(12),
+      child: Container(
+        width: 40,
+        height: 40,
+        decoration: BoxDecoration(
+          color: MyTheme.background,
+          borderRadius: BorderRadius.circular(12),
+          border: Border.all(color: MyTheme.border),
+        ),
+        child: Icon(icon, color: MyTheme.text_primary, size: 20),
+      ),
+    );
+  }
+
+  Widget _buildChatList(BuildContext context, AppState state) {
+    if (state.chatState?.isFetching ?? true) {
+      return const SizedBox(
+        height: 200,
+        child: Center(child: CircularProgressIndicator(color: MyTheme.primary)),
+      );
+    }
+
+    final chats = state.chatState?.chatList ?? [];
+    
+    if (chats.isEmpty) {
+      return _buildEmptyState(context);
+    }
+
+    return ListView.separated(
+      padding: const EdgeInsets.symmetric(horizontal: 16),
+      shrinkWrap: true,
+      physics: const NeverScrollableScrollPhysics(),
+      itemCount: chats.length,
+      separatorBuilder: (context, index) => const SizedBox(height: 12),
+      itemBuilder: (context, index) {
+        final chat = chats[index];
+        if (chat == null) return const SizedBox.shrink();
+
+        return ChatListWidget(
+          chatId: chat.id,
+          userId: chat.userId,
+          name: chat.memberName,
+          photo: chat.memberPhoto,
+          active: chat.active,
+          packageImage: chat.memberPackage?.image ?? "",
+          lastMessage: chat.lastMessage,
+          unseenMessageCount: chat.unseenMessageCount,
+        );
+      },
+    );
+  }
+
+  Widget _buildEmptyState(BuildContext context) {
+    return Center(
+      child: Padding(
+        padding: const EdgeInsets.only(top: 80, left: 40, right: 40),
+        child: Column(
+          children: [
+            // Mock illustration with icon
+            Container(
+              height: 120,
+              width: 120,
+              decoration: BoxDecoration(
+                color: MyTheme.primary.withOpacity(0.05),
+                shape: BoxShape.circle,
+              ),
+              child: Icon(Icons.chat_bubble_outline_rounded, size: 48, color: MyTheme.primary.withOpacity(0.5)),
+            ),
+            const SizedBox(height: 24),
+            Text(
+              "No conversations yet",
+              style: Styles.bold_arsenic_16.copyWith(fontSize: 18),
+            ),
+            const SizedBox(height: 8),
+            Text(
+              "Start connecting with matches.",
+              textAlign: TextAlign.center,
+              style: Styles.regular_gull_grey_12.copyWith(fontSize: 14),
+            ),
+            const SizedBox(height: 24),
+            ElevatedButton(
+              onPressed: () {},
+              style: ElevatedButton.styleFrom(
+                backgroundColor: MyTheme.primary,
+                foregroundColor: MyTheme.white,
+                elevation: 0,
+                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+              ),
+              child: const Text("Browse Matches"),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}

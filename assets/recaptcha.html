@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>reCAPTCHA</title>
+    <script src="https://www.google.com/recaptcha/api.js" async defer></script>
+    <script>
+        function onRecaptchaSuccess(token) {
+            // Send the token back to Flutter
+            RecaptchaFlutter.onSuccess(token);
+        }
+        function onRecaptchaError(error) {
+            // Send the error back to Flutter
+            RecaptchaFlutter.onError(error);
+        }
+        function onRecaptchaExpired() {
+            // Notify Flutter that the token expired
+            RecaptchaFlutter.onExpired();
+        }
+        function loadCaptcha(siteKey) {
+            // This function is called from Flutter to render the captcha
+            grecaptcha.render('recaptcha', {
+                'sitekey': siteKey,
+                'callback': onRecaptchaSuccess,
+                'expired-callback': onRecaptchaExpired,
+                'error-callback': onRecaptchaError,
+            });
+        }
+    </script>
+</head>
+<body>
+    <div id="recaptcha"></div>
+</body>
+</html>
