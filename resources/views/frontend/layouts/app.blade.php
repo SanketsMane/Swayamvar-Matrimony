@@ -57,11 +57,13 @@ $lang = \App\Models\Language::where('code', $locale)->first();
     <!-- Favicon -->
     <link rel="icon" href="{{ uploaded_asset(get_setting('site_icon')) }}">
 
-    <!-- CSS -->
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700&display=swap">
+    <!-- Stylesheets -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato:300,400,700,900&display=swap">
     <link rel="stylesheet" href="{{ static_asset('assets/css/vendors.css') }}">
-    <link rel="stylesheet" href="{{ static_asset('assets/css/aiz-core.css?v=') }}{{ rand(1000,9999) }}">
-
+    <link rel="stylesheet" href="{{ static_asset('assets/css/aiz-core.css') }}">
+    <link rel="stylesheet" href="{{ static_asset('assets/css/marathi-theme.css') }}">
+    <link rel="stylesheet" href="{{ static_asset('assets/css/testimonials-animation.css') }}">
+    
     @if (\App\Models\Language::where('code', Session::get('locale', Config::get('app.locale')))->first()->rtl == 1)
         <link rel="stylesheet" href="{{ static_asset('assets/css/bootstrap-rtl.min.css') }}">
     @endif
@@ -167,7 +169,7 @@ $lang = \App\Models\Language::where('code', $locale)->first();
 <body class="text-left">
 
     <div
-        class="aiz-main-wrapper d-flex flex-column position-relative @if (Route::currentRouteName() != 'home') pt-8 pt-lg-10 @endif bg-white">
+        class="aiz-main-wrapper d-flex flex-column position-relative @if (Route::currentRouteName() != 'home') pt-4 pt-lg-5 @endif bg-white">
 
         @include('frontend.inc.header')
 
@@ -368,6 +370,11 @@ $lang = \App\Models\Language::where('code', $locale)->first();
             }
         </script>
     @endif
+
+    <!-- WhatsApp Floating Button -->
+    <a href="https://wa.me/917745017887" class="whatsapp-float" target="_blank">
+        <i class="lab la-whatsapp my-float"></i>
+    </a>
 
     {!! get_setting('footer_script') !!}
 

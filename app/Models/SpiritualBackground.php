@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class SpiritualBackground extends Model
 {
+    protected $guarded = [];
     use SoftDeletes;
 
     public function user()

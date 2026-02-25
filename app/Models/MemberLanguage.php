@@ -7,7 +7,8 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class MemberLanguage extends Model
 {
-  use SoftDeletes;
+    use SoftDeletes;
+    protected $fillable = ['name'];
 
   public function partner_expectations()
   {

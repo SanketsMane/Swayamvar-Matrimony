@@ -159,6 +159,142 @@ class ProfileController extends Controller
         return $this->success_message('Member basic info  has been updated successfully.');
     }
 
+    public function profile_wizard_update(Request $request)
+    {
+        $user = User::findOrFail(auth()->id());
+        
+        // --- Users Table Details ---
+        $user->first_name = $request->first_name ?? $user->first_name;
+        $user->middle_name = $request->middle_name ?? $user->middle_name;
+        $user->last_name = $request->surname ?? $user->last_name;
+        $user->name = $user->first_name . ' ' . $user->last_name;
+        $user->gov_id_type = $request->gov_id_type ?? $user->gov_id_type;
+        $user->gov_id_number = $request->gov_id_number ?? $user->gov_id_number;
+        
+        if ($request->hasFile('profile_photo')) {
+            $user->photo = upload_api_file($request->file('profile_photo'));
+        }
+        if ($request->hasFile('id_proof')) {
+            $user->id_proof = upload_api_file($request->file('id_proof'));
+        }
+        
+        // Only update if they provide the fields
+        $user->phone = $request->mobile1 ?? $user->phone;
+        $user->mobile2 = $request->mobile2 ?? $user->mobile2;
+        $user->save();
+
+        // --- Members Table (DOB, Marital Status) ---
+        $member = Member::where('user_id', $user->id)->first();
+        if ($member) {
+            if ($request->dob) {
+                $member->birthday = date('Y-m-d', strtotime($request->dob));
+            }
+            if ($request->marital_status) {
+                $maritalStatusObj = MaritalStatus::where('name', $request->marital_status)->first();
+                if ($maritalStatusObj) {
+                    $member->marital_status_id = $maritalStatusObj->id;
+                }
+            }
+            $member->save();
+        }
+
+        // --- Physical Attributes (Height, Weight, Blood Group, Complexion, Disability) ---
+        $physical = PhysicalAttribute::firstOrNew(['user_id' => $user->id]);
+        $physical->height = $request->height ?? $physical->height;
+        $physical->weight = $request->weight ?? $physical->weight;
+        $physical->blood_group = $request->blood_group ?? $physical->blood_group;
+        $physical->complexion = $request->complexion ?? $physical->complexion;
+        if ($request->has('physical_disability')) {
+            $physical->disability = $request->physical_disability;
+        }
+        $physical->disability_details = $request->disability_details ?? $physical->disability_details;
+        $physical->save();
+
+        // --- Spiritual Background (Religion, Caste, Manglik, Intercaste) ---
+        $spiritual = SpiritualBackground::firstOrNew(['user_id' => $user->id]);
+        if ($request->religion) {
+            $religionObj = Religion::where('name', $request->religion)->first();
+            if ($religionObj) $spiritual->religion_id = $religionObj->id;
+        }
+        if ($request->caste) {
+            $casteObj = Caste::where('name', $request->caste)->first();
+            if ($casteObj) $spiritual->caste_id = $casteObj->id;
+        }
+        if ($request->has('manglik')) {
+            $spiritual->manglik = $request->manglik == 'true' || $request->manglik == 1;
+        }
+        if ($request->has('intercaste_accepted')) {
+            $spiritual->intercaste_accepted = $request->intercaste_accepted == 'true' || $request->intercaste_accepted == 1;
+        }
+        $spiritual->save();
+
+        // --- Lifestyle (Diet) ---
+        $lifestyle = Lifestyle::firstOrNew(['user_id' => $user->id]);
+        $lifestyle->diet = $request->diet ?? $lifestyle->diet;
+        $lifestyle->save();
+
+        // --- Family Details ---
+        $family = Family::firstOrNew(['user_id' => $user->id]);
+        if ($request->has('father_alive')) $family->father_alive = ($request->father_alive == 'true' || $request->father_alive == 1);
+        if ($request->has('mother_alive')) $family->mother_alive = ($request->mother_alive == 'true' || $request->mother_alive == 1);
+        $family->no_of_brothers = $request->no_of_brothers ?? $family->no_of_brothers;
+        $family->married_brothers = $request->married_brothers ?? $family->married_brothers;
+        $family->no_of_sisters = $request->no_of_sisters ?? $family->no_of_sisters;
+        $family->married_sisters = $request->married_sisters ?? $family->married_sisters;
+        $family->father = $request->parents_occupation ?? $family->father;
+        $family->property_details = $request->property_details ?? $family->property_details;
+        $family->save();
+
+        // --- Education & Occupation ---
+        if ($request->education_level) {
+            $education = Education::firstOrNew(['user_id' => $user->id]);
+            $education->degree = $request->education_level;
+            $education->save();
+        }
+        if ($request->occupation_type || $request->annual_income || $request->occupation_details) {
+            $career = Career::firstOrNew(['user_id' => $user->id]);
+            $career->designation = $request->occupation_type ?? $career->designation;
+            $career->income = $request->annual_income ?? $career->income;
+            $career->occupation_details = $request->occupation_details ?? $career->occupation_details;
+            $career->save();
+        }
+
+        // --- Address ---
+        if ($request->address || $request->city) {
+            $address = Address::firstOrNew(['user_id' => $user->id, 'type' => 'present']);
+            $address->postal_code = $request->address ?? $address->postal_code;
+            if ($request->city) {
+                $cityObj = City::where('name', $request->city)->first();
+                if ($cityObj) $address->city_id = $cityObj->id;
+            }
+            $address->save();
+        }
+
+        // --- Partner Expectations ---
+        $partner = PartnerExpectation::firstOrNew(['user_id' => $user->id]);
+        if ($request->has('partner_manglik')) $partner->manglik = ($request->partner_manglik == 'true' || $request->partner_manglik == 1);
+        $partner->education = $request->expected_education ?? $partner->education;
+        $partner->income = $request->expected_income ?? $partner->income;
+        if ($request->has('divorce_accepted')) $partner->divorce_accepted = ($request->divorce_accepted == 'true' || $request->divorce_accepted == 1);
+        if ($request->has('partner_intercaste')) $partner->intercaste_accepted = ($request->partner_intercaste == 'true' || $request->partner_intercaste == 1);
+        $partner->save();
+
+        // Also Handle Multiple Photos
+        if ($request->hasFile('other_photos')) {
+            foreach ($request->file('other_photos') as $photoFile) {
+                $gallery = new GalleryImage();
+                $gallery->user_id = $user->id;
+                $gallery->image = upload_api_file($photoFile);
+                $gallery->save();
+            }
+        }
+
+        return response()->json([
+            'result' => true,
+            'message' => 'Profile compiled successfully with 44 fields.'
+        ]);
+    }
+
     public function present_address()
     {
         $present_address = Address::where('user_id', auth()->id())->where('type', 'present')->first();

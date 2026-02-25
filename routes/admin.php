@@ -55,13 +55,13 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth', 'admin']], function 
     // Member Manage
     Route::resource('members', MemberController::class);
     Route::controller(MemberController::class)->group(function () {
-        Route::get('/members/member_list/{id}', 'index')->name('members.index');
+        Route::get('/members/member_list/{id}', 'index')->name('members.list_by_id');
         Route::post('/members/block', 'block')->name('members.block');
         Route::post('/members/blocking_reason', 'blocking_reason')->name('members.blocking_reason');
         Route::get('/members/login/{id}', 'login')->name('members.login');
 
         Route::get('/deleted_members', 'deleted_members')->name('deleted_members');
-        Route::get('/members/destroy/{id}', 'destroy')->name('members.destroy');
+        Route::get('/members/destroy/{id}', 'destroy')->name('members.destroy_get');
         Route::get('/restore_deleted_member/{id}', 'restore_deleted_member')->name('restore_deleted_member');
         Route::get('/members/permanently_delete/{id}', 'member_permanemtly_delete')->name('members.permanently_delete');
 
@@ -83,7 +83,7 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth', 'admin']], function 
 
     Route::controller(ReportedUserController::class)->group(function () {
         Route::get('/reported-members/{id}', 'reported_members')->name('reported_members');
-        Route::get('/reported/destroy/{id}', 'destroy')->name('report_destrot.destroy');
+        Route::get('/reported/destroy/{id}', 'destroy')->name('report_destrot.destroy_get');
     });
 
     // Bulk member
@@ -98,7 +98,7 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth', 'admin']], function 
     Route::resource('/packages', 'PackageController');
     Route::controller(PackageController::class)->group(function () {
         Route::post('/packages/update_status', 'update_status')->name('packages.update_status');
-        Route::get('/packages/destroy/{id}', 'destroy')->name('packages.destroy');
+        Route::get('/packages/destroy/{id}', 'destroy')->name('packages.destroy_get');
     });
 
     // package Payments
@@ -118,11 +118,11 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth', 'admin']], function 
 
     //Blog Section
     Route::resource('blog-category', 'BlogCategoryController');
-    Route::get('/blog-category/destroy/{id}', 'BlogCategoryController@destroy')->name('blog-category.destroy');
+    Route::get('/blog-category/destroy/{id}', 'BlogCategoryController@destroy')->name('blog-category.destroy_get');
 
     Route::resource('blog', 'BlogController');
     Route::controller(BlogController::class)->group(function () {
-        Route::get('/blog/destroy/{id}', 'destroy')->name('blog.destroy');
+        Route::get('/blog/destroy/{id}', 'destroy')->name('blog.destroy_get');
         Route::post('/blog/change-status', 'change_status')->name('blog.change-status');
     });
 
@@ -130,62 +130,62 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth', 'admin']], function 
     // religions
     Route::resource('/religions', ReligionController::class);
     Route::controller(ReligionController::class)->group(function () {
-        Route::get('/religions/destroy/{id}', 'destroy')->name('religions.destroy');
+        Route::get('/religions/destroy/{id}', 'destroy')->name('religions.destroy_get');
         Route::post('/religion/bulk_destroy', 'religion_bulk_delete')->name('religion.bulk_delete');
     });
 
     // Caste
     Route::resource('/castes', CasteController::class);
     Route::controller(CasteController::class)->group(function () {
-        Route::get('/castes/destroy/{id}', 'destroy')->name('castes.destroy');
+        Route::get('/castes/destroy/{id}', 'destroy')->name('castes.destroy_get');
         Route::post('/caste/bulk_destroy', 'caste_bulk_delete')->name('caste.bulk_delete');
     });
 
     // SubCaste
     Route::resource('/sub-castes', SubCasteController::class);
     Route::controller(SubCasteController::class)->group(function () {
-        Route::get('/sub-castes/destroy/{id}', 'destroy')->name('sub-castes.destroy');
+        Route::get('/sub-castes/destroy/{id}', 'destroy')->name('sub-castes.destroy_get');
         Route::post('/sub-caste/bulk_destroy', 'sub_caste_bulk_delete')->name('sub-castes.bulk_delete');
     });
 
     // Member Language
     Route::resource('member-languages', MemberLanguageController::class);
-    Route::get('/member-language/destroy/{id}', [MemberLanguageController::class, 'destroy'])->name('member-languages.destroy');
+    Route::get('/member-language/destroy/{id}', [MemberLanguageController::class, 'destroy'])->name('member-languages.destroy_get');
 
     // Country
     Route::resource('/countries', CountryController::class);
     Route::controller(CountryController::class)->group(function () {
         Route::post('/countries/status', 'updateStatus')->name('countries.status');
-        Route::get('/countries/destroy/{id}', 'destroy')->name('countries.destroy');
+        Route::get('/countries/destroy/{id}', 'destroy')->name('countries.destroy_get');
     });
     
 
     // State
     Route::resource('/states', StateController::class);
-    Route::get('/states/destroy/{id}', [StateController::class,'destroy'])->name('states.destroy');
+    Route::get('/states/destroy/{id}', [StateController::class,'destroy'])->name('states.destroy_get');
 
     // City
     Route::resource('/cities', 'CityController');
-    Route::get('/cities/destroy/{id}', 'CityController@destroy')->name('cities.destroy');
+    Route::get('/cities/destroy/{id}', 'CityController@destroy')->name('cities.destroy_get');
 
     // Family Status
     Route::resource('/family-status', 'FamilyStatusController');
-    Route::get('/family-status/destroy/{id}', 'FamilyStatusController@destroy')->name('family-status.destroy');
+    Route::get('/family-status/destroy/{id}', 'FamilyStatusController@destroy')->name('family-status.destroy_get');
 
     // Family Value
     Route::resource('/family-values', 'FamilyValueController');
-    Route::get('/family-values/destroy/{id}', 'FamilyValueController@destroy')->name('family-values.destroy');
+    Route::get('/family-values/destroy/{id}', 'FamilyValueController@destroy')->name('family-values.destroy_get');
 
     // On Behalf
     Route::resource('/on-behalf', 'OnBehalfController');
-    Route::get('/on-behalf/destroy/{id}', 'OnBehalfController@destroy')->name('on-behalf.destroy');
+    Route::get('/on-behalf/destroy/{id}', 'OnBehalfController@destroy')->name('on-behalf.destroy_get');
 
     Route::resource('marital-statuses', 'MaritalStatusController');
-    Route::get('/marital-statuses/destroy/{id}', 'MaritalStatusController@destroy')->name('marital-statuses.destroy');
+    Route::get('/marital-statuses/destroy/{id}', 'MaritalStatusController@destroy')->name('marital-statuses.destroy_get');
 
     // Email Templates
     Route::resource('/email-templates', EmailTemplateController::class);
-    Route::post('/email-templates/update', 'EmailTemplateController@update')->name('email-templates.update');
+    Route::post('/email-templates/update', 'EmailTemplateController@update')->name('email-templates.update_post');
 
     // Marketing
     Route::controller(NewsletterController::class)->group(function () {
@@ -199,13 +199,13 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth', 'admin']], function 
     Route::controller(LanguageController::class)->group(function () {
         Route::post('/languages/update_rtl_status', 'update_rtl_status')->name('languages.update_rtl_status');
         Route::post('/languages/key_value_store', 'key_value_store')->name('languages.key_value_store');
-        Route::get('/languages/destroy/{id}', 'destroy')->name('languages.destroy');
+        Route::get('/languages/destroy/{id}', 'destroy')->name('languages.destroy_get');
     });
 
     // Setting
     Route::resource('/settings', SettingController::class);
     Route::controller(SettingController::class)->group(function () {
-        Route::post('/settings/update', 'update')->name('settings.update');
+        Route::post('/settings/update', 'update')->name('settings.update_post');
         Route::post('/settings/activation/update', 'updateActivationSettings')->name('settings.activation.update');
 
         // Firebase Push Notification Setting
@@ -240,7 +240,7 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth', 'admin']], function 
     Route::resource('currencies', 'CurrencyController');
     Route::controller(CurrencyController::class)->group(function () {
         Route::post('/currency/update_currency_activation_status', 'update_currency_activation_status')->name('currency.update_currency_activation_status');
-        Route::get('/currency/destroy/{id}', 'destroy')->name('currency.destroy');
+        Route::get('/currency/destroy/{id}', 'destroy')->name('currency.destroy_get');
     });
 
     // website setting
@@ -253,16 +253,16 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth', 'admin']], function 
 
         Route::resource('custom-pages', 'PageController');
         Route::controller(PageController::class)->group(function () {
-            Route::get('/custom-pages/edit/{id}', 'edit')->name('custom-pages.edit');
-            Route::get('/custom-pages/destroy/{id}', 'destroy')->name('custom-pages.destroy');
+            Route::get('/custom-pages/edit/{id}', 'edit')->name('custom-pages.edit_get');
+            Route::get('/custom-pages/destroy/{id}', 'destroy')->name('custom-pages.destroy_get');
         });
     });
 
     Route::resource('staffs', 'StaffController');
-    Route::get('/staffs/destroy/{id}', 'StaffController@destroy')->name('staffs.destroy');
+    Route::get('/staffs/destroy/{id}', 'StaffController@destroy')->name('staffs.destroy_get');
 
     Route::resource('roles', 'RoleController');
-    Route::get('/roles/destroy/{id}', 'RoleController@destroy')->name('roles.destroy');
+    Route::get('/roles/destroy/{id}', 'RoleController@destroy')->name('roles.destroy_get');
 
     // permission add
     Route::post('/roles/add_permission', 'RoleController@add_permission')->name('roles.permission');
@@ -276,7 +276,7 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth', 'admin']], function 
     Route::resource('/uploaded-files', AizUploadController::class);
     Route::controller(AizUploadController::class)->group(function() {
         Route::any('/uploaded-files/file-info', 'file_info')->name('uploaded-files.info');
-        Route::get('/uploaded-files/destroy/{id}', 'destroy')->name('uploaded-files.destroy');
+        Route::get('/uploaded-files/destroy/{id}', 'destroy')->name('uploaded-files.destroy_get');
         Route::post('/bulk-uploaded-files-delete', 'bulk_uploaded_files_delete')->name('bulk-uploaded-files-delete');
     });
 
@@ -284,5 +284,5 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth', 'admin']], function 
 
     // Manual Payment
     Route::resource('manual_payment_methods', ManualPaymentMethodController::class);
-    Route::get('/manual_payment_methods/destroy/{id}', [ManualPaymentMethodController::class, 'destroy'])->name('manual_payment_methods.destroy');
+    Route::get('/manual_payment_methods/destroy/{id}', [ManualPaymentMethodController::class, 'destroy'])->name('manual_payment_methods.destroy_get');
 });
