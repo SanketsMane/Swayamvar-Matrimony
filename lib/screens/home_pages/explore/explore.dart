@@ -1,5 +1,9 @@
 // Sanket: Matches screen — fully redesigned 2026 premium matrimony layout
 import 'dart:math';
+import 'dart:io';
+import 'package:flutter/services.dart';
+import 'package:one_context/one_context.dart';
+import 'package:active_matrimonial_flutter_app/l10n/app_localizations.dart';
 import 'package:active_matrimonial_flutter_app/const/my_theme.dart';
 import 'package:active_matrimonial_flutter_app/const/style.dart';
 import 'package:active_matrimonial_flutter_app/models_response/common_models/member_data.dart';
@@ -16,6 +20,7 @@ import '../../search_screens/search_middleware.dart';
 import '../../notifications/notifications.dart';
 import 'explore_middleware.dart';
 
+import '../../../components/main_drawer.dart';
 import '../../my_dashboard_pages/shortlist/add_shortlist_middleware.dart';
 import '../../my_dashboard_pages/interest/express_interest_middleware.dart';
 
@@ -124,8 +129,16 @@ class _ExploreState extends State<Explore> {
         bool isSearching = vm.isFilterActive || _searchController.text.isNotEmpty;
         final searchResults = vm.searchList ?? [];
 
-        return Scaffold(
-          backgroundColor: MyTheme.background,
+        return WillPopScope(
+          onWillPop: () async {
+            final shouldPop = (await OneContext().showDialog<bool>(
+              builder: (BuildContext context) => exit_alert_dialog(context),
+            ))!;
+            return shouldPop;
+          },
+          child: Scaffold(
+            backgroundColor: MyTheme.background,
+            drawer: const MainDrawer(),
           body: Column(
             children: [
               _buildHeader(context, vm),
@@ -163,9 +176,10 @@ class _ExploreState extends State<Explore> {
               ),
             ],
           ),
-        );
-      },
-    );
+        ),
+      );
+    },
+  );
   }
 
   Widget _buildEmptyState() {
@@ -181,7 +195,7 @@ class _ExploreState extends State<Explore> {
           Text("Adjust your preferences to see more profiles.", style: Styles.body.copyWith(color: MyTheme.text_secondary)),
           const SizedBox(height: 24),
           ElevatedButton(
-            onPressed: () => AIZRoute.push(context, const AdvancedSearch()),
+            onPressed: () => AIZRoute.push(context, AdvancedSearch()),
             style: ElevatedButton.styleFrom(
               backgroundColor: MyTheme.primary,
               shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(Styles.br_btn)),
@@ -206,9 +220,15 @@ class _ExploreState extends State<Explore> {
         padding: const EdgeInsets.symmetric(horizontal: 16),
         child: Row(
           children: [
-            _headerIconBtn(Icons.tune_rounded, isActive: vm.isFilterActive, onTap: () => AIZRoute.push(context, const AdvancedSearch())),
+            Builder(
+              builder: (context) => _headerIconBtn(Icons.menu, onTap: () => Scaffold.of(context).openDrawer()),
+            ),
             const Spacer(),
-            Text("Matches", style: Styles.bold_arsenic_16.copyWith(color: MyTheme.text_primary, fontSize: 18, letterSpacing: -0.3)),
+            Image.asset(
+              'assets/logo/app_logo.png',
+              height: 36.0,
+              color: MyTheme.primary,
+            ),
             const Spacer(),
             _headerIconBtn(Icons.notifications_none_rounded, onTap: () => AIZRoute.push(context, const Notifications())),
           ],
@@ -643,6 +663,30 @@ class _ExploreState extends State<Explore> {
              final m = results[idx] is MemberData ? results[idx] as MemberData : MemberData(); 
              return _buildNewMatchCard(m, idx);
           }
+        ),
+      ],
+    );
+  }
+
+  Widget exit_alert_dialog(BuildContext context) {
+    return AlertDialog(
+      title: Text(
+        AppLocalizations.of(context)!.exit,
+        style: Styles.bold_arsenic_14,
+      ),
+      actionsAlignment: MainAxisAlignment.end,
+      actions: [
+        TextButton(
+          onPressed: () {
+            Platform.isAndroid ? SystemNavigator.pop() : exit(0);
+          },
+          child: Text('Yes', style: Styles.body),
+        ),
+        TextButton(
+          onPressed: () {
+            Navigator.pop(context, false);
+          },
+          child: Text('No', style: Styles.body),
         ),
       ],
     );

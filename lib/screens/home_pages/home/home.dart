@@ -1,3 +1,5 @@
+import 'package:active_matrimonial_flutter_app/l10n/app_localizations.dart';
+
 import 'dart:io';
 import 'dart:ui';
 import 'package:active_matrimonial_flutter_app/app_config.dart';
@@ -12,6 +14,7 @@ import 'package:active_matrimonial_flutter_app/redux/libs/auth/auth_middleware.d
 import 'package:active_matrimonial_flutter_app/screens/core.dart';
 import 'package:active_matrimonial_flutter_app/screens/user_pages/user_public_profile.dart';
 import 'package:flutter/material.dart';
+import 'package:active_matrimonial_flutter_app/components/main_drawer.dart';
 import 'package:flutter/services.dart';
 import 'package:one_context/one_context.dart';
 import '../../../components/common_widget.dart';
@@ -38,6 +41,7 @@ import '../../my_dashboard_pages/interest/express_interest_middleware.dart';
 import '../../my_dashboard_pages/shortlist/add_shortlist_middleware.dart';
 import '../../notifications/notifications.dart';
 import '../../search_screens/search.dart';
+import '../../search_screens/advanced_search.dart';
 import 'home_action.dart';
 import 'home_middleware.dart';
 class Home extends StatefulWidget {
@@ -126,6 +130,88 @@ class _HomeState extends State<Home> {
                           shape: BoxShape.circle,
                           border: Border.all(color: MyTheme.white, width: 2),
                         ),
+                      ),
+                    ),
+                  ],
+                ),
+              );
+            },
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildActiveNow(BuildContext context, List activeProfiles, HomeViewModel vm) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 24),
+          child: Text("Active Now", style: Styles.h2),
+        ),
+        const SizedBox(height: 16),
+        SizedBox(
+          height: 110, // Adjust height slightly to accommodate the text below avatar
+          child: ListView.separated(
+            padding: const EdgeInsets.symmetric(horizontal: 24),
+            scrollDirection: Axis.horizontal,
+            itemCount: activeProfiles.length,
+            separatorBuilder: (context, index) => const SizedBox(width: 16),
+            itemBuilder: (context, index) {
+              var member = activeProfiles[index];
+              return InkWell(
+                onTap: () {
+                  AIZRoute.push(
+                    context,
+                    UserPublicProfile(userId: member.userId),
+                    middleware: ProfileViewMiddleware(
+                      context: context,
+                      user: store.state.authState?.userData,
+                    ),
+                  );
+                },
+                borderRadius: BorderRadius.circular(Styles.br_card),
+                child: Column(
+                  children: [
+                    Stack(
+                      children: [
+                        Container(
+                          width: 70,
+                          height: 70,
+                          decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                            border: Border.all(color: MyTheme.border, width: 2), // Gives a subtle ring effect
+                            image: DecorationImage(
+                              image: MyImage.imageProvider(member.photo),
+                              fit: BoxFit.cover,
+                            ),
+                          ),
+                        ),
+                        Positioned(
+                          bottom: 2,
+                          right: 2,
+                          child: Container(
+                            width: 14,
+                            height: 14,
+                            decoration: BoxDecoration(
+                              color: const Color(0xFF1CB14D), // Green dot color matching reference
+                              shape: BoxShape.circle,
+                              border: Border.all(color: MyTheme.white, width: 2),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 8),
+                    // Hardcoded active time for demonstration, matching design "Active 1m ago"
+                    // Ideally, this should come from member.lastActive TimeAgo logic
+                    Text(
+                      index % 2 == 0 ? "Active 1m ago" : "Active 6m ago", 
+                      style: TextStyle(
+                        fontFamily: 'Mukta', // Using same family as app
+                        fontSize: 10,
+                        color: const Color(0xFF6B7280),
                       ),
                     ),
                   ],
@@ -236,17 +322,10 @@ class _HomeState extends State<Home> {
   Widget build(BuildContext context) {
     return StoreConnector<AppState, HomeViewModel>(
       converter: (store) => HomeViewModel.fromStore(store),
-      builder: (_, HomeViewModel vm) => WillPopScope(
-        onWillPop: () async {
-          final shouldPop = (await OneContext().showDialog<bool>(
-            builder: (BuildContext context) => exit_alert_dialog(context),
-          ))!;
-          return shouldPop;
-        },
-        child: Scaffold(
+      builder: (_, HomeViewModel vm) => Scaffold(
           backgroundColor: MyTheme.background,
           appBar: buildAppBar(context),
-          drawer: _buildDrawer(context, vm),
+          drawer: MainDrawer(),
           body: SafeArea(
             bottom: false,
             child: vm.isAccountDataLoading
@@ -261,55 +340,40 @@ class _HomeState extends State<Home> {
                         child: Builder(
                           builder: (context) {
                             var members = vm.activeMembers ?? [];
-                            var heroProfile = members.isNotEmpty ? members[0] : null;
-                            var smartMatches = members.length > 1 ? members.sublist(1, members.length > 7 ? 7 : members.length) : [];
-                            var recentProfiles = members.length > 7 ? members.sublist(7, members.length > 17 ? 17 : members.length) : [];
-                            var verifiedProfiles = members.length > 17 ? members.sublist(17) : [];
+                            var activeNowProfiles = vm.activeNowList ?? [];
 
-                            return SingleChildScrollView(
-                              physics: const BouncingScrollPhysics(),
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  _buildGreetingSection(context, vm),
-                                  
-                                  if (heroProfile != null) ...[
-                                    _buildHeroMatchCard(heroProfile, context, vm),
-                                    _buildWhyRecommended(context),
-                                  ] else
-                                    _buildEmptyState(context),
-
-                                  if (members.isNotEmpty) ...[
-                                    const SizedBox(height: 32),
-                                    _buildRecentActivities(context),
-                                    
-                                    if (smartMatches.isNotEmpty) ...[
-                                      const SizedBox(height: 32),
-                                      _buildSmartMatches(context, smartMatches, vm),
-                                    ],
-
-                                    if (recentProfiles.isNotEmpty) ...[
-                                      const SizedBox(height: 32),
-                                      _buildRecentlyActive(context, recentProfiles, vm),
-                                    ],
-
-                                    if (verifiedProfiles.isNotEmpty) ...[
-                                      const SizedBox(height: 32),
-                                      _buildVerifiedProfiles(context, verifiedProfiles, vm),
-                                    ],
-
-                                    const SizedBox(height: 32),
-                                    _buildProfileBoost(context),
-                                    const SizedBox(height: 40),
-                                  ]
-                                ],
-                              ),
+                            return NestedScrollView(
+                              headerSliverBuilder: (context, innerBoxIsScrolled) {
+                                return [
+                                  SliverToBoxAdapter(
+                                    child: Column(
+                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      children: [
+                                        _buildGreetingSection(context, vm),
+                                        if (activeNowProfiles.isNotEmpty) ...[
+                                          const SizedBox(height: 16),
+                                          _buildActiveNow(context, activeNowProfiles, vm),
+                                          const SizedBox(height: 16),
+                                        ],
+                                      ],
+                                    ),
+                                  ),
+                                ];
+                              },
+                              body: members.isEmpty
+                                  ? _buildEmptyState(context)
+                                  : PageView.builder(
+                                      scrollDirection: Axis.vertical,
+                                      itemCount: members.length,
+                                      itemBuilder: (context, index) {
+                                        return _buildReelMatchCard(context, members[index], vm);
+                                      },
+                                    ),
                             );
                           }
                         ),
                       ),
           ),
-        ),
       ),
     );
   }
@@ -357,17 +421,12 @@ class _HomeState extends State<Home> {
       backgroundColor: MyTheme.white,
       toolbarHeight: 56,
       shape: Border(bottom: BorderSide(color: MyTheme.border, width: 1)),
-      leading: Builder(
-        builder: (context) => IconButton(
-          icon: const Icon(Icons.menu, color: MyTheme.text_primary),
-          onPressed: () => Scaffold.of(context).openDrawer(),
-        ),
+      leading: IconButton(
+        icon: const Icon(Icons.tune_rounded, color: MyTheme.text_primary),
+        onPressed: () => AIZRoute.push(context, AdvancedSearch()),
       ),
       centerTitle: true,
-      title: Text(
-        "Swayamvar",
-        style: Styles.h1.copyWith(color: MyTheme.primary, letterSpacing: 0.5),
-      ),
+      title: Text("Matches", style: Styles.bold_arsenic_16.copyWith(color: MyTheme.text_primary, fontSize: 18, letterSpacing: -0.3)),
       actions: [
         IconButton(
           icon: const Icon(Icons.notifications_none, color: MyTheme.text_primary),
@@ -377,87 +436,6 @@ class _HomeState extends State<Home> {
       ],
     );
   }
-
-  Widget _buildDrawer(BuildContext context, HomeViewModel vm) {
-    final userData = store.state.authState?.userData;
-    return Drawer(
-      backgroundColor: MyTheme.white,
-      child: ListView(
-        padding: EdgeInsets.zero,
-        children: [
-          DrawerHeader(
-            decoration: const BoxDecoration(
-              color: MyTheme.primary,
-            ),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: [
-                Container(
-                  width: 60,
-                  height: 60,
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    border: Border.all(color: MyTheme.white, width: 2),
-                    image: DecorationImage(
-                      image: MyImage.imageProvider(store.state.accountState?.profileData?.memberPhoto),
-                      fit: BoxFit.cover,
-                    ),
-                  ),
-                ),
-                const SizedBox(height: 12),
-                Text(
-                  userData?.name ?? "User",
-                  style: Styles.h1.copyWith(color: MyTheme.white, fontSize: 18),
-                ),
-                Text(
-                  userData?.email ?? "",
-                  style: Styles.body.copyWith(color: MyTheme.white.withOpacity(0.8), fontSize: 12),
-                ),
-              ],
-            ),
-          ),
-          _drawerItem(icon: Icons.person_outline, title: "My Profile", onTap: () => AIZRoute.push(context, UserPublicProfile(userId: userData?.id), middleware: ProfileViewMiddleware(context: context, user: userData))),
-          _drawerItem(icon: Icons.edit_outlined, title: "Edit Profile", onTap: () => NavigatorPush.push(context, const MyProfile())),
-          _drawerItem(icon: Icons.favorite_border, title: "Interests Sent", onTap: () => NavigatorPush.push(context, MyInterest())),
-          _drawerItem(icon: Icons.star_border, title: "Shortlist", onTap: () => NavigatorPush.push(context, MyShortlist())),
-          _drawerItem(icon: Icons.verified_outlined, title: "Verification", onTap: () {
-            // Can be routed to verification page if available, else MyProfile
-            NavigatorPush.push(context, const MyProfile());
-          }),
-          _drawerItem(icon: Icons.card_membership_rounded, title: "Membership Plans", onTap: () => NavigatorPush.push(context, PremiumPlans())),
-          const Divider(),
-          _drawerItem(icon: Icons.settings_outlined, title: "Settings", onTap: () => NavigatorPush.push(context, const SettingsScreen())),
-          _drawerItem(icon: Icons.help_outline, title: "Help Center", onTap: () => NavigatorPush.push(context, const SupportTicket())),
-          const Divider(),
-          _drawerItem(icon: Icons.logout_rounded, title: "Logout", color: MyTheme.primary, onTap: () {
-            Navigator.pop(context); // close drawer first
-            store.dispatch(signOutMiddleware(context));
-          }),
-          const SizedBox(height: 30),
-        ],
-      ),
-    );
-  }
-
-  Widget _drawerItem({required IconData icon, required String title, required VoidCallback onTap, Color? color}) {
-    return ListTile(
-      leading: Icon(icon, color: color ?? MyTheme.text_secondary, size: 22),
-      title: Text(
-        title,
-        style: Styles.body.copyWith(
-          color: color ?? MyTheme.text_primary,
-          fontWeight: FontWeight.w500,
-        ),
-      ),
-      onTap: () {
-        Navigator.pop(context); // close drawer
-        onTap();
-      },
-    );
-  }
-
-
   Widget _buildGreetingSection(BuildContext context, HomeViewModel vm) {
     String name = store.state.accountState?.profileData?.memberName?.split(" ")[0] ?? 
                   store.state.authState?.userData?.name?.split(" ")[0] ?? "User";
@@ -991,6 +969,197 @@ class _HomeState extends State<Home> {
     );
   }
 
+  Widget _buildReelMatchCard(BuildContext context, dynamic member, HomeViewModel vm) {
+    return Container(
+      color: Colors.black, // Dark background behind image
+      child: Stack(
+        fit: StackFit.expand,
+        children: [
+          // Background Image
+          Image(
+            image: MyImage.imageProvider(member.photo),
+            fit: BoxFit.cover,
+            errorBuilder: (context, error, stackTrace) => Container(color: MyTheme.border),
+          ),
+          // Gradient Overlay to ensure text readability
+          Container(
+            decoration: BoxDecoration(
+              gradient: LinearGradient(
+                begin: Alignment.topCenter,
+                end: Alignment.bottomCenter,
+                colors: [
+                  Colors.transparent,
+                  Colors.black.withOpacity(0.4),
+                  Colors.black.withOpacity(0.8),
+                ],
+                stops: const [0.5, 0.7, 1.0],
+              ),
+            ),
+          ),
+          // Info Block (Bottom Left)
+          Positioned(
+            bottom: 32,
+            left: 16,
+            right: 80, // Leave space for the action buttons
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Flexible(
+                      child: Text(
+                        "${member.name ?? ''}, ${member.age ?? ''}",
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        style: Styles.h1.copyWith(color: MyTheme.white, fontSize: 28),
+                      ),
+                    ),
+                    const SizedBox(width: 8),
+                    if (member.membership != null && member.membership != 1)
+                      Container(
+                        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                        decoration: BoxDecoration(
+                          color: MyTheme.primary,
+                          borderRadius: BorderRadius.circular(Styles.br_pill),
+                        ),
+                        child: const Text(
+                          "Premium",
+                          style: TextStyle(color: MyTheme.white, fontSize: 10),
+                        ),
+                      ),
+                  ],
+                ),
+                const SizedBox(height: 8),
+                Row(
+                  children: [
+                    const Icon(Icons.location_on, color: MyTheme.white, size: 16),
+                    const SizedBox(width: 4),
+                    Text(
+                      member.country ?? 'India',
+                      style: Styles.body.copyWith(color: MyTheme.white.withOpacity(0.9)),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 4),
+                Row(
+                  children: [
+                    const Icon(Icons.work, color: MyTheme.white, size: 16),
+                    const SizedBox(width: 4),
+                    Text(
+                      member.profession ?? 'Professional',
+                      style: Styles.body.copyWith(color: MyTheme.white.withOpacity(0.9)),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ),
+          // Action Buttons (Bottom Right)
+          Positioned(
+            bottom: 32,
+            right: 16,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                _buildActionBtn(
+                  icon: Icons.close,
+                  color: Colors.white.withOpacity(0.2),
+                  iconColor: Colors.white,
+                  onTap: () {
+                    // Assuming ignoreUser removes from the local list
+                    if (vm.ignoreUser != null) {
+                      vm.ignoreUser!(user: member);
+                    }
+                  },
+                ),
+                const SizedBox(height: 20),
+                _buildActionBtn(
+                  icon: Icons.favorite,
+                  color: MyTheme.primary,
+                  iconColor: Colors.white,
+                  onTap: () {
+                    vm.expressInterest(userId: member.userId);
+                  },
+                ),
+                const SizedBox(height: 20),
+                _buildActionBtn(
+                  icon: Icons.person,
+                  color: Colors.white.withOpacity(0.2),
+                  iconColor: Colors.white,
+                  onTap: () {
+                    _showFullProfileSheet(context, member, vm);
+                  },
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildActionBtn({required IconData icon, required Color color, required Color iconColor, required VoidCallback onTap}) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        width: 50,
+        height: 50,
+        decoration: BoxDecoration(
+          color: color,
+          shape: BoxShape.circle,
+          border: Border.all(color: Colors.white.withOpacity(0.5), width: 1),
+        ),
+        child: Icon(icon, color: iconColor, size: 24),
+      ),
+    );
+  }
+
+  void _showFullProfileSheet(BuildContext context, dynamic member, HomeViewModel vm) {
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: Colors.transparent,
+      builder: (context) {
+        return Container(
+          height: MediaQuery.of(context).size.height * 0.90, // Takes up 90% of screen height
+          decoration: const BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.only(
+              topLeft: Radius.circular(24),
+              topRight: Radius.circular(24),
+            ),
+          ),
+          child: Column(
+            children: [
+              // Small handle for visual affordance
+              Center(
+                child: Container(
+                  margin: const EdgeInsets.only(top: 12, bottom: 8),
+                  width: 40,
+                  height: 5,
+                  decoration: BoxDecoration(
+                    color: Colors.grey[300],
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                ),
+              ),
+              Expanded(
+                child: ClipRRect(
+                  borderRadius: const BorderRadius.only(
+                    topLeft: Radius.circular(24),
+                    topRight: Radius.circular(24),
+                  ),
+                  child: UserPublicProfile(userId: member.userId),
+                ),
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  }
+
   Widget exit_alert_dialog(BuildContext context) {
     return AlertDialog(
       title: Text(
@@ -1019,6 +1188,7 @@ class _HomeState extends State<Home> {
 class HomeViewModel {
   final bool? isFullProfileView;
   final List? activeMembers;
+  final List? activeNowList;
   final bool? isFetch;
   final String? packageExpire;
   final bool? myInterestStateLoading;
@@ -1039,6 +1209,7 @@ class HomeViewModel {
     this.packageExpire,
     this.isFetch,
     this.activeMembers,
+    this.activeNowList,
     this.isFullProfileView,
     this.myInterestStateLoading,
     this.shortlistStateLoading,
@@ -1066,6 +1237,7 @@ class HomeViewModel {
         "1",
       ),
       activeMembers: store.state.homeState!.homeDataList,
+      activeNowList: store.state.homeState!.homeDataList, // TODO: Assuming standard list for now, will refine if there's a specific 'activeNow' list in state later.
       isFetch: store.state.homeState!.isFetching,
       packageExpire:
       store.state.accountState!.profileData?.currentPackageInfo?.packageExpiry,
