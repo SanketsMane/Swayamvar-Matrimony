@@ -1,42 +1,46 @@
-/bootstrap/compiled.php
-/bootstrap/cache/
-.env
-.env.*.php
-.env.php
-/node_modules
-/public/hot
-/public/storage
-/public/uploads
-/storage/*.key
-/vendor
-/temp
-/.idea
-/.vscode
-/.vagrant
-Homestead.json
-Homestead.yaml
-npm-debug.log
-yarn-error.log
+# Miscellaneous
+*.class
+*.log
+*.pyc
+*.swp
 .DS_Store
+.atom/
+.build/
+.buildlog/
+.history
+.svn/
+.swiftpm/
+migrate_working_dir/
+
+# IntelliJ related
+*.iml
+*.ipr
+*.iws
 .idea/
-updates/
-composer.lock
-*.lock
-resources/lang/en.json
 
-.env
-updates.zip
-ecommerce.zip
-install.zip
-/nbproject/private/
-/nbproject
-matrimonial_laravel.zip
+# The .vscode folder contains launch configuration and tasks you configure in
+# VS Code which you may wish to be included in version control, so this line
+# is commented out by default.
+#.vscode/
 
-# Flutter/Android Build Caches
+# Flutter/Dart/Pub related
+**/doc/api/
+**/ios/Flutter/.last_build_id
+.dart_tool/
+.flutter-plugins
+.flutter-plugins-dependencies
+.pub-cache/
+.pub/
 /build/
-/.dart_tool/
-.flutter-plugins*
-/android/.kotlin/
-/android/app/.cxx/
-/android/**/*.iml
-/*.iml
+
+# Symbolication related
+app.*.symbols
+
+# Obfuscation related
+app.*.map.json
+
+# Android Studio will place build artifacts here
+/android/app/debug
+/android/app/profile
+/android/app/release
+install/
