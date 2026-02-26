@@ -1,0 +1,32 @@
+#!/usr/bin/expect -f
+set timeout 60
+
+# Upload production.env
+spawn scp -o StrictHostKeyChecking=no -P 22 production.env root@91.99.127.245:/var/www/swayamvar/.env
+expect {
+  "password:" {
+    send "!Jn\$J!@0SA87Q5z8AAts\r"
+    exp_continue
+  }
+  eof
+}
+
+# Upload nginx config (HTTP initially so certbot can verify it)
+spawn scp -o StrictHostKeyChecking=no -P 22 swayamvar_nginx root@91.99.127.245:/etc/nginx/sites-available/swayamvar
+expect {
+  "password:" {
+    send "!Jn\$J!@0SA87Q5z8AAts\r"
+    exp_continue
+  }
+  eof
+}
+
+# Apply initial config, install certbot, run certbot, restart
+spawn ssh -o StrictHostKeyChecking=no -p 22 root@91.99.127.245 "ln -sf /etc/nginx/sites-available/swayamvar /etc/nginx/sites-enabled/swayamvar && nginx -t && systemctl reload nginx && apt-get update && apt-get install -y certbot python3-certbot-nginx && certbot --nginx -d swayamvarmatrimony.in -d www.swayamvarmatrimony.in --non-interactive --agree-tos -m visionitinfra01@gmail.com --redirect && cd /var/www/swayamvar && php artisan optimize:clear && php artisan optimize"
+expect {
+  "password:" {
+    send "!Jn\$J!@0SA87Q5z8AAts\r"
+    exp_continue
+  }
+  eof
+}

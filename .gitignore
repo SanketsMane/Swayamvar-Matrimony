@@ -31,3 +31,12 @@ install.zip
 /nbproject/private/
 /nbproject
 matrimonial_laravel.zip
+
+# Flutter/Android Build Caches
+/build/
+/.dart_tool/
+.flutter-plugins*
+/android/.kotlin/
+/android/app/.cxx/
+/android/**/*.iml
+/*.iml

@@ -1,0 +1,19 @@
+#!/usr/bin/expect -f
+set timeout 20
+spawn scp -o StrictHostKeyChecking=no -P 22 web.php root@91.99.127.245:/var/www/swayamvar/routes/web.php
+expect {
+  "password:" {
+    send "!Jn\$J!@0SA87Q5z8AAts\r"
+    exp_continue
+  }
+  eof
+}
+
+spawn ssh -o StrictHostKeyChecking=no -p 22 root@91.99.127.245 "cd /var/www/swayamvar && php artisan optimize:clear && php artisan optimize"
+expect {
+  "password:" {
+    send "!Jn\$J!@0SA87Q5z8AAts\r"
+    exp_continue
+  }
+  eof
+}
