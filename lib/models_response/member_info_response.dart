@@ -22,7 +22,7 @@ class MemberInfoResponse {
   factory MemberInfoResponse.fromJson(Map<String, dynamic> json) =>
       MemberInfoResponse(
         result: json["result"],
-        data: MemberInfoData.fromJson(json["data"]),
+        data: json["data"] == null ? null : MemberInfoData.fromJson(json["data"]),
       );
 
   Map<String, dynamic> toJson() => {

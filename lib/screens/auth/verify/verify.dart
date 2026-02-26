@@ -85,10 +85,9 @@ class _VerifyState extends State<Verify> {
                               },
                               child: Text(
                                 LangText(context: SystemHelper.context).getLocal().or_logout,
-                                style: TextStyle(
-                                  fontSize: screenSize.width * 0.04, // Responsive font
+                                style: Styles.buttonText.copyWith(
+                                  fontSize: screenSize.width * 0.04,
                                   color: MyTheme.app_accent_color,
-                                  fontWeight: FontWeight.w500,
                                   decoration: TextDecoration.underline,
                                 ),
                               ),
@@ -123,7 +122,7 @@ class _VerifyState extends State<Verify> {
         defaultPinTheme: PinTheme(
           height: pinSize,
           width: pinSize,
-          textStyle: TextStyle(fontSize: screenSize.width * 0.05), // Responsive font
+          textStyle: Styles.h2.copyWith(fontSize: screenSize.width * 0.05),
           decoration: BoxDecoration(
             borderRadius: const BorderRadius.all(Radius.circular(12.0)),
             color: MyTheme.solitude,
@@ -192,9 +191,8 @@ class _VerifyState extends State<Verify> {
           SizedBox(height: screenSize.height * 0.02),
           Text(
             AppLocalizations.of(context)!.verify_screen_title,
-            style: TextStyle(
+            style: Styles.h1.copyWith(
               color: MyTheme.white,
-              fontWeight: FontWeight.bold,
               fontSize: screenSize.width * 0.06,
             ),
           ),

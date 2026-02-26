@@ -4,7 +4,7 @@ class PublicProfileState {
   bool? isFetching;
   BuildContext? loadingContext;
   late BuildContext galleryLoadingContext;
-  var intro;
+  var introduction;
   var basic;
   var presentaddress;
   var permanentaddress;
@@ -37,7 +37,7 @@ class PublicProfileState {
   PublicProfileState({
     this.loadingContext,
     this.isFetching,
-    this.intro,
+    this.introduction,
     this.basic,
     this.presentaddress,
     this.permanentaddress,
@@ -58,6 +58,7 @@ class PublicProfileState {
     this.partner,
     this.photogallery,
     this.profilematch,
-   required this.profilePicRequest,
+    this.profilePicRequest = false,
+    this.contact,
   });
 }

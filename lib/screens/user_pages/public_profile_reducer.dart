@@ -13,7 +13,8 @@ PublicProfileState? public_profile_reducer(
     return store(state!, action);
   }
   if (action is PublicProfileFailureAction) {
-    state!.error = action.error;
+    state!.isFetching = false;
+    state.error = action.error;
     return state;
   }
   if (action == Reset.publicProfile) {
@@ -34,9 +35,8 @@ PublicProfileState? public_profile_reducer(
 }
 
 store(PublicProfileState state, PublicProfileStoreAction action) {
-  print(action);
   state.isFetching = false;
-  state.intro = action.data.intoduction;
+  state.introduction = action.data.introduction; // Fixed typo and renamed state field
   state.basic = action.data.basicInfo;
   state.contact = action.data.contactDetails;
   state.presentaddress = action.data.presentAddress;

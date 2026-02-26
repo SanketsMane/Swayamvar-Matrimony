@@ -129,10 +129,10 @@ class _UserPublicProfileState extends State<UserPublicProfile> {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
-            _navItem(Icons.explore_outlined, "Discover", false),
-            _navItem(Icons.favorite_border, "Matches", false),
-            _navItem(Icons.chat_bubble_outline, "Inbox", false),
-            _navItem(Icons.person_outline, "Profile", false),
+            _navItem(Icons.explore_outlined, "मुख्य पान", false),
+            _navItem(Icons.favorite_border, "शोधा", false),
+            _navItem(Icons.chat_bubble_outline, "चॅट", false),
+            _navItem(Icons.person_outline, "प्रोफाइल", false),
           ],
         ),
       ),
@@ -209,11 +209,11 @@ class _UserPublicProfileState extends State<UserPublicProfile> {
           top: MediaQuery.of(context).padding.top + 10,
           right: 16,
           child: _circleActionBtn(
-            state.memberInfoState!.memberInfo!.shortlistStatus == 1 
+            (state.memberInfoState?.memberInfo?.shortlistStatus ?? 0) == 1 
                 ? Icons.favorite_rounded 
                 : Icons.favorite_border_rounded,
             () => store.dispatch(addShortlistMiddleware(userId: widget.userId)),
-            iconColor: state.memberInfoState!.memberInfo!.shortlistStatus == 1 ? MyTheme.primary : MyTheme.text_primary,
+            iconColor: (state.memberInfoState?.memberInfo?.shortlistStatus ?? 0) == 1 ? MyTheme.primary : MyTheme.text_primary,
           ),
         ),
         
@@ -231,7 +231,7 @@ class _UserPublicProfileState extends State<UserPublicProfile> {
               children: [
                 Icon(Icons.verified, color: Colors.white, size: 14),
                 SizedBox(width: 4),
-                Text("Verified", style: TextStyle(color: Colors.white, fontSize: 11, fontWeight: FontWeight.bold)),
+                Text("पडताळणी केलेले", style: TextStyle(color: Colors.white, fontSize: 11, fontWeight: FontWeight.bold)),
               ],
             ),
           ),
@@ -246,8 +246,8 @@ class _UserPublicProfileState extends State<UserPublicProfile> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                "${basic?.firsName ?? ''} | ${state.publicProfileState!.basic?.age ?? ''}",
-                style: Styles.bold_white_14.copyWith(fontSize: 28),
+                "${basic?.firsName ?? ''}, ${state.publicProfileState!.basic?.age ?? ''}",
+                style: Styles.profileName.copyWith(color: Colors.white, fontSize: 28),
               ),
               const SizedBox(height: 4),
               Row(
@@ -255,8 +255,8 @@ class _UserPublicProfileState extends State<UserPublicProfile> {
                   const Icon(Icons.location_on_rounded, color: Colors.white70, size: 16),
                   const SizedBox(width: 4),
                   Text(
-                    "Thane, Maharashtra", // Mock location for design
-                    style: Styles.regular_white_12.copyWith(fontSize: 14, color: Colors.white.withOpacity(0.8)),
+                    "ठाणे, महाराष्ट्र", // Localized mock
+                    style: Styles.body.copyWith(fontSize: 14, color: Colors.white.withOpacity(0.8)),
                   ),
                 ],
               ),
@@ -268,8 +268,8 @@ class _UserPublicProfileState extends State<UserPublicProfile> {
                   borderRadius: BorderRadius.circular(20),
                 ),
                 child: Text(
-                  compatibility,
-                  style: const TextStyle(color: Colors.white, fontSize: 12, fontWeight: FontWeight.bold),
+                  "$compatibility जुळते",
+                  style: Styles.caption.copyWith(color: Colors.white, fontWeight: FontWeight.bold),
                 ),
               ),
             ],
@@ -299,7 +299,7 @@ class _UserPublicProfileState extends State<UserPublicProfile> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          _sectionTitle("Basic Information"),
+          _sectionTitle("प्राथमिक माहिती"),
           const SizedBox(height: 16),
           GridView.count(
             crossAxisCount: 2,
@@ -307,10 +307,10 @@ class _UserPublicProfileState extends State<UserPublicProfile> {
             physics: const NeverScrollableScrollPhysics(),
             childAspectRatio: 3.5,
             children: [
-              _infoTile("Religion", profile.spiritual?.religionId ?? "Brahmin"),
-              _infoTile("Height", "${profile.physical?.height ?? '5.5'}'"),
-              _infoTile("Marital Status", profile.basic?.maritialStatus ?? "Never Married"),
-              _infoTile("Tongue", profile.basic?.mothereTongue ?? "Marathi"),
+               _infoTile("धर्म", profile.spiritual?.religionId ?? "ब्राह्मण"),
+              _infoTile("उंची", "${profile.physical?.height ?? '५.५'}'"),
+              _infoTile("वैवाहिक स्थिती", profile.basic?.maritialStatus ?? "अविवाहित"),
+              _infoTile("मातृभाषा", profile.mothertongue?.name ?? "मराठी"), // Sanket: Use state property
             ],
           ),
         ],
@@ -323,7 +323,7 @@ class _UserPublicProfileState extends State<UserPublicProfile> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          _sectionTitle("About"),
+          _sectionTitle("माझ्याबद्दल"),
           const SizedBox(height: 12),
           Text(
             profile.introduction?.introduction ?? "I am looking for a life partner who values family and tradition. I enjoy travel and exploring new cultures.",
@@ -339,14 +339,14 @@ class _UserPublicProfileState extends State<UserPublicProfile> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          _sectionTitle("Personal Details"),
+          _sectionTitle("वैयक्तिक तपशील"),
           const SizedBox(height: 8),
-          _detailRow("Age", "${profile.basic?.age ?? '28'} Years"),
-          _detailRow("Religion", profile.spiritual?.religionId ?? "-"),
-          _detailRow("Caste", profile.spiritual?.casteId ?? "-"),
-          _detailRow("Mother Tongue", profile.basic?.mothereTongue ?? "-"),
-          _detailRow("Education", profile.education?.degree ?? "Bachelor of Engineering"),
-          _detailRow("Location", "Thane, Maharashtra"),
+          _detailRow("वय", "${profile.basic?.age ?? '२८'} वर्षे"),
+          _detailRow("धर्म", profile.spiritual?.religionId ?? "-"),
+          _detailRow("जात", profile.spiritual?.casteId ?? "-"),
+          _detailRow("मातृभाषा", profile.mothertongue?.name ?? "-"),
+          _detailRow("शिक्षण", (profile.education is List && profile.education.isNotEmpty) ? profile.education.first.degree : "-"),
+          _detailRow("स्थान", "ठाणे, महाराष्ट्र"),
         ],
       ),
     );
@@ -357,12 +357,12 @@ class _UserPublicProfileState extends State<UserPublicProfile> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          _sectionTitle("Professional Details"),
+          _sectionTitle("व्यावसायिक तपशील"),
           const SizedBox(height: 8),
-          _detailRow("Occupation", profile.career?.designation ?? "Software Engineer"),
-          _detailRow("Company", profile.career?.company ?? "TCS"),
-          _detailRow("Income", profile.career?.income ?? "8-10 LPA"),
-          _detailRow("Work Location", "Pune / Remote"),
+          _detailRow("व्यवसाय", (profile.career is List && profile.career.isNotEmpty) ? profile.career.first.designation : "-"),
+          _detailRow("कंपनी", (profile.career is List && profile.career.isNotEmpty) ? profile.career.first.company : "-"),
+          _detailRow("उत्पन्न", (profile.career is List && profile.career.isNotEmpty) ? profile.career.first.income : "-"),
+          _detailRow("कामाचे ठिकाण", "पुणे / रिमोट"),
         ],
       ),
     );
@@ -373,12 +373,12 @@ class _UserPublicProfileState extends State<UserPublicProfile> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          _sectionTitle("Family Details"),
+          _sectionTitle("कौटुंबिक तपशील"),
           const SizedBox(height: 8),
-          _detailRow("Father Occupation", profile.family?.father ?? "Retired Government Service"),
-          _detailRow("Mother Occupation", profile.family?.mother ?? "Homemaker"),
-          _detailRow("Siblings", profile.family?.sibling ?? "1 Brother"),
-          _detailRow("Family Type", "Nuclear / Middle Class"),
+          _detailRow("वडिलांचा व्यवसाय", profile.families?.father ?? "निवृत्त सरकारी सेवा"), // Sanket: Fixed family -> families
+          _detailRow("आईचा व्यवसाय", profile.families?.mother ?? "गृहिणी"),
+          _detailRow("भावंडे", profile.families?.sibling ?? "१ भाऊ"),
+          _detailRow("कुटुंबाचा प्रकार", "कौटुंबिक / मध्यमवर्ग"),
         ],
       ),
     );
@@ -390,7 +390,7 @@ class _UserPublicProfileState extends State<UserPublicProfile> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        _sectionTitle("Gallery"),
+        _sectionTitle("गॅलरी"),
         const SizedBox(height: 12),
         SizedBox(
           height: 120,
@@ -441,14 +441,14 @@ class _UserPublicProfileState extends State<UserPublicProfile> {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
-            _actionPill(Icons.close_rounded, "Pass", Colors.grey[400]!, () {}),
-            _actionPill(Icons.star_border_rounded, "Shortlist", Colors.orangeAccent, () {
+            _actionPill(Icons.close_rounded, "नको", Colors.grey[400]!, () {}),
+            _actionPill(Icons.star_border_rounded, "शॉर्टलिस्ट", Colors.orangeAccent, () {
               store.dispatch(addShortlistMiddleware(userId: widget.userId));
             }),
-            _actionPill(Icons.favorite_rounded, "Interest", MyTheme.primary, () {
+            _actionPill(Icons.favorite_rounded, "आवडले", MyTheme.primary, () {
                store.dispatch(expressInterestMiddleware(userId: widget.userId));
             }, isPrimary: true),
-            _actionPill(Icons.chat_bubble_outline_rounded, "Chat", Colors.blueAccent, () {
+            _actionPill(Icons.chat_bubble_outline_rounded, "चॅट", Colors.blueAccent, () {
                OneContext().push(MaterialPageRoute(builder: (context) => Chat(
                  userId: widget.userId,
                  name: state.publicProfileState!.basic?.firsName,
@@ -504,7 +504,7 @@ class _UserPublicProfileState extends State<UserPublicProfile> {
   Widget _sectionTitle(String title) {
     return Text(
       title,
-      style: Styles.bold_arsenic_16.copyWith(fontSize: 17, color: MyTheme.text_primary),
+      style: Styles.h2.copyWith(fontSize: 18, color: MyTheme.text_primary),
     );
   }
 
@@ -523,10 +523,19 @@ class _UserPublicProfileState extends State<UserPublicProfile> {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 8),
       child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        crossAxisAlignment: CrossAxisAlignment.start, // Sanket: Handle multi-line overflow
         children: [
           Text(label, style: Styles.regular_gull_grey_12.copyWith(fontSize: 14)),
-          Text(value, style: Styles.bold_arsenic_12.copyWith(fontSize: 14, color: MyTheme.text_primary)),
+          const SizedBox(width: 8), // Gap
+          Expanded(
+            child: Text(
+              value,
+              textAlign: TextAlign.right,
+              maxLines: 2,
+              overflow: TextOverflow.ellipsis,
+              style: Styles.bold_arsenic_12.copyWith(fontSize: 14, color: MyTheme.text_primary),
+            ),
+          ),
         ],
       ),
     );

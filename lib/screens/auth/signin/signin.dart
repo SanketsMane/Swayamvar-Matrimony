@@ -64,10 +64,8 @@ class _LoginState extends State<Login> {
             ),
             const SizedBox(height: 16),
             Text(
-              'तुमचा योग्य जीवनसाथी शोधा ❤️', // Find Your Perfect Life Partner
-              style: TextStyle(
-                fontFamily: 'Mukta',
-                fontSize: 16,
+              'तुमचा योग्य जीवनसाथी शोधा ❤️',
+              style: Styles.body.copyWith(
                 color: textSecondary,
               ),
             ),
@@ -81,7 +79,7 @@ class _LoginState extends State<Login> {
                   padding: const EdgeInsets.symmetric(horizontal: 12.0),
                   child: Text(
                     'किंवा', // OR
-                    style: TextStyle(color: textSecondary, fontFamily: 'Mukta'),
+                    style: Styles.body.copyWith(color: textSecondary),
                   ),
                 ),
                 Expanded(child: Divider(color: borderColor, thickness: 1)),
@@ -93,7 +91,7 @@ class _LoginState extends State<Login> {
               children: [
                 Text(
                   "खाते नाही का? ", // Don't have an account?
-                  style: TextStyle(color: textSecondary, fontFamily: 'Mukta'),
+                  style: Styles.body.copyWith(color: textSecondary),
                 ),
                 TextButton(
                   onPressed: () => Navigator.push(
@@ -103,8 +101,7 @@ class _LoginState extends State<Login> {
                   child: const Text('नोंदणी करा'), // Register/Sign Up
                   style: TextButton.styleFrom(
                     foregroundColor: primaryColor,
-                    textStyle: const TextStyle(
-                      fontFamily: 'Mukta',
+                    textStyle: Styles.buttonText.copyWith(
                       fontWeight: FontWeight.w700,
                       fontSize: 15,
                     ),
@@ -118,10 +115,8 @@ class _LoginState extends State<Login> {
               child: Text(
                 'सुरू ठेवून तुम्ही अटी आणि गोपनीयता धोरणाशी सहमत आहात', // Terms & Privacy
                 textAlign: TextAlign.center,
-                style: TextStyle(
-                  fontSize: 12,
+                style: Styles.caption.copyWith(
                   color: textSecondary,
-                  fontFamily: 'Mukta',
                 ),
               ),
             ),
@@ -158,12 +153,10 @@ class _LoginState extends State<Login> {
           Text(
             'लॉगिन करा', // Sign In
             textAlign: TextAlign.center,
-            style: TextStyle(
-              fontFamily: 'Mukta',
-              fontSize: 20,
-              fontWeight: FontWeight.w700,
-              color: textPrimary,
-            ),
+          style: Styles.h2.copyWith(
+            fontSize: 20,
+            color: textPrimary,
+          ),
           ),
           const SizedBox(height: 24),
           _buildInputField(
@@ -182,7 +175,11 @@ class _LoginState extends State<Login> {
               ),
               child: Text(
                 "पासवर्ड विसरलात?", // Forgot Password?
-                style: TextStyle(fontSize: 13, color: primaryColor, fontFamily: 'Mukta', fontWeight: FontWeight.w600),
+                style: Styles.buttonText.copyWith(
+                  fontSize: 13,
+                  color: primaryColor,
+                  fontWeight: FontWeight.w600,
+                ),
               ),
             ),
           ),
@@ -200,10 +197,9 @@ class _LoginState extends State<Login> {
                 elevation: 0,
               ),
               child: state.signInState!.isLogin == false
-                  ? const Text(
-                      'लॉगिन करा', // Sign In
-                      style: TextStyle(
-                        fontFamily: 'Mukta',
+                  ? Text(
+                      'लॉगिन करा',
+                      style: Styles.buttonText.copyWith(
                         fontSize: 16,
                         fontWeight: FontWeight.w700,
                       ),
@@ -230,11 +226,11 @@ class _LoginState extends State<Login> {
   }) {
     return TextField(
       controller: controller,
-      style: TextStyle(color: textPrimary, fontSize: 14, fontFamily: 'Mukta'),
+      style: Styles.body.copyWith(color: textPrimary),
       decoration: InputDecoration(
         prefixIcon: Icon(icon, color: textSecondary, size: 20),
         hintText: hint,
-        hintStyle: TextStyle(color: textSecondary.withOpacity(0.5), fontFamily: 'Mukta'),
+        hintStyle: Styles.body.copyWith(color: textSecondary.withOpacity(0.5)),
         filled: true,
         fillColor: const Color(0xFFF5F5F5),
         contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
@@ -259,11 +255,11 @@ class _LoginState extends State<Login> {
     return TextField(
       controller: state.signInState!.passwordController!,
       obscureText: state.signInState!.isObscure!,
-      style: TextStyle(color: textPrimary, fontSize: 14, fontFamily: 'Mukta'),
+      style: Styles.body.copyWith(color: textPrimary),
       decoration: InputDecoration(
         prefixIcon: Icon(Icons.lock_outline, color: textSecondary, size: 20),
         hintText: "पासवर्ड प्रविष्ट करा", // Enter Password
-        hintStyle: TextStyle(color: textSecondary.withOpacity(0.5), fontFamily: 'Mukta'),
+        hintStyle: Styles.body.copyWith(color: textSecondary.withOpacity(0.5)),
         suffixIcon: GestureDetector(
           onTap: () => store.dispatch(IsObscureAction()),
           child: Icon(

@@ -1322,4 +1322,18 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get onboarding_3_subtitle =>
       'Interact with your matches securely and take the first step towards your forever.';
+
+  @override
+  String get home_greeting_morning => 'Good Morning';
+
+  @override
+  String get home_greeting_afternoon => 'Good Afternoon';
+
+  @override
+  String get home_greeting_evening => 'Good Evening';
+
+  @override
+  String home_profile_completeness(Object percent) {
+    return 'Profile $percent% Complete';
+  }
 }

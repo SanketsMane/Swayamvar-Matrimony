@@ -1323,4 +1323,18 @@ class AppLocalizationsMr extends AppLocalizations {
   @override
   String get onboarding_3_subtitle =>
       'तुमच्या जोडीदाराशी सुरक्षितपणे संवाद साधा आणि लग्नाकडे पहिले पाऊल टाका.';
+
+  @override
+  String get home_greeting_morning => 'शुभ प्रभात';
+
+  @override
+  String get home_greeting_afternoon => 'शुभ दुपार';
+
+  @override
+  String get home_greeting_evening => 'शुभ संध्याकाळ';
+
+  @override
+  String home_profile_completeness(Object percent) {
+    return 'प्रोफाइल $percent% पूर्ण';
+  }
 }

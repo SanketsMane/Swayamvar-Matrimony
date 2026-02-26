@@ -121,7 +121,8 @@ class _ChatListState extends State<ChatList> {
                                 padding: const EdgeInsets.symmetric(horizontal: 16),
                                 child: Text(
                                   AppLocalizations.of(context)!.chat_list_messages,
-                                  style: Styles.bold_arsenic_16.copyWith(
+                                  // Sanket: Section header uses Tiro Devanagari Marathi
+                                  style: Styles.h2.copyWith(
                                     fontSize: 17,
                                     color: MyTheme.text_primary,
                                   ),
@@ -166,7 +167,8 @@ class _ChatListState extends State<ChatList> {
             const Spacer(),
             Text(
               AppLocalizations.of(context)!.profile_screen_messages,
-              style: Styles.bold_arsenic_16.copyWith(
+              // Sanket: Page title uses Tiro Devanagari Marathi heading font
+              style: Styles.h2.copyWith(
                 fontSize: 18,
                 color: MyTheme.text_primary,
                 letterSpacing: -0.3,
@@ -257,14 +259,15 @@ class _ChatListState extends State<ChatList> {
             ),
             const SizedBox(height: 24),
             Text(
-              "No conversations yet",
-              style: Styles.bold_arsenic_16.copyWith(fontSize: 18),
+              "अजून कोणतेही संवाद नाही",
+              // Sanket: Empty state heading
+              style: Styles.h2.copyWith(fontSize: 18),
             ),
             const SizedBox(height: 8),
             Text(
-              "Start connecting with matches.",
+              "मॅचेस जोडणे सुरू करा.",
               textAlign: TextAlign.center,
-              style: Styles.regular_gull_grey_12.copyWith(fontSize: 14),
+              style: Styles.body.copyWith(fontSize: 14, color: MyTheme.text_secondary),
             ),
             const SizedBox(height: 24),
             ElevatedButton(
@@ -276,7 +279,10 @@ class _ChatListState extends State<ChatList> {
                 shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
                 padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
               ),
-              child: const Text("Browse Matches"),
+              child: Text(
+                "शोधा",
+                style: Styles.buttonText.copyWith(color: Colors.white, fontSize: 14),
+              ),
             ),
           ],
         ),

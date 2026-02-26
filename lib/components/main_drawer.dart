@@ -88,7 +88,6 @@ class MainDrawer extends StatelessWidget {
         style: Styles.body.copyWith(
           color: color ?? MyTheme.text_primary,
           fontWeight: FontWeight.w500,
-          fontFamily: 'Mukta',
         ),
       ),
       onTap: () {

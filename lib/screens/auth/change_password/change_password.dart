@@ -75,7 +75,7 @@ class ChangePassword extends StatelessWidget {
                       ? Center(
                         child: Text(
                           AppLocalizations.of(context)!.save_change_btn_text,
-                          style: Styles.bold_white_14,
+                          style: Styles.buttonText,
                         ),
                       )
                       : Center(
@@ -164,7 +164,7 @@ class ChangePassword extends StatelessWidget {
       iconTheme: IconThemeData(color: Colors.black),
       title: Text(
         AppLocalizations.of(context)!.change_password,
-        style: Styles.bold_arsenic_14,
+        style: Styles.h2.copyWith(color: MyTheme.arsenic),
       ),
     );
   }

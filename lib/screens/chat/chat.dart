@@ -111,9 +111,9 @@ class _ChatState extends State<Chat> {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          _infoBadge(Icons.verified, "Verified Profile", Colors.blue),
+          _infoBadge(Icons.verified, "पडताळणी केलेले", Colors.blue),
           const SizedBox(width: 20),
-          _infoBadge(Icons.favorite, "Serious Match", MyTheme.primary),
+          _infoBadge(Icons.favorite, "गंभीर जोडी", MyTheme.primary),
         ],
       ),
     );
@@ -126,9 +126,10 @@ class _ChatState extends State<Chat> {
         const SizedBox(width: 6),
         Text(
           text,
-          style: Styles.bold_arsenic_12.copyWith(
+          style: Styles.caption.copyWith(
             fontSize: 11,
             color: MyTheme.text_primary,
+            fontWeight: FontWeight.w600,
           ),
         ),
       ],
@@ -146,8 +147,8 @@ class _ChatState extends State<Chat> {
             Icon(Icons.chat_bubble_outline_rounded, size: 48, color: MyTheme.text_secondary.withOpacity(0.2)),
             const SizedBox(height: 16),
             Text(
-              "Start a conversation",
-              style: Styles.regular_gull_grey_12.copyWith(fontSize: 14),
+              "संवाद सुरू करा",
+              style: Styles.body.copyWith(fontSize: 14, color: MyTheme.text_secondary),
             ),
           ],
         ),
@@ -197,7 +198,7 @@ class _ChatState extends State<Chat> {
             child: (msg.attachment?.isEmpty ?? true)
                 ? Text(
                     msg.message ?? '',
-                    style: TextStyle(
+                    style: Styles.body.copyWith(
                       color: isMe ? Colors.white : MyTheme.text_primary,
                       fontSize: 14,
                       height: 1.4,
@@ -245,11 +246,11 @@ class _ChatState extends State<Chat> {
               child: TextField(
                 controller: _msgController,
                 style: const TextStyle(fontSize: 14),
-                decoration: const InputDecoration(
+                decoration: InputDecoration(
                   border: InputBorder.none,
-                  hintText: 'Type your message...',
-                  hintStyle: TextStyle(color: MyTheme.text_secondary, fontSize: 13),
-                  contentPadding: EdgeInsets.symmetric(vertical: 0),
+                  hintText: 'आपला संदेश टाइप करा...',
+                  hintStyle: Styles.body.copyWith(color: MyTheme.text_secondary, fontSize: 13),
+                  contentPadding: const EdgeInsets.symmetric(vertical: 0),
                 ),
               ),
             ),
@@ -349,12 +350,13 @@ class _ChatState extends State<Chat> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  "${widget.name} | 28", // Mock age as per design spec
-                  style: Styles.bold_arsenic_14.copyWith(fontSize: 16, color: MyTheme.text_primary),
+                  "${widget.name} | 28",
+                  // Sanket: Profile name uses Mukta SemiBold per typography system
+                  style: Styles.profileName.copyWith(fontSize: 16, color: MyTheme.text_primary),
                 ),
                 Text(
                   compatibility,
-                  style: TextStyle(
+                  style: Styles.caption.copyWith(
                     color: MyTheme.primary,
                     fontSize: 10,
                     fontWeight: FontWeight.bold,

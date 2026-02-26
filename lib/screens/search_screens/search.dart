@@ -413,8 +413,8 @@ class _SearchState extends State<Search> {
                           SizedBox(width: screenSize.width * 0.02),
                           Text(
                             AppLocalizations.of(context)!.search_screen_title,
-                            style: Styles.bold_app_accent_16.copyWith(
-                              fontSize: screenSize.width * 0.045, // Responsive font
+                            style: Styles.h2.copyWith(
+                              fontSize: screenSize.width * 0.05,
                             ),
                           ),
                         ],
@@ -432,7 +432,7 @@ class _SearchState extends State<Search> {
                                   keyboard_type: TextInputType.number,
                                   text: AppLocalizations.of(context)!.search_secreen_age_from,
                                   controller: _ageFromController,
-                                  style: Styles.bold_app_accent_12.copyWith(fontSize: screenSize.width * 0.035), // Responsive font
+                                  style: Styles.body.copyWith(fontSize: screenSize.width * 0.035, fontWeight: FontWeight.bold), // Responsive font
                                 ),
                               ),
                               SizedBox(width: screenSize.width * 0.03),
@@ -441,7 +441,7 @@ class _SearchState extends State<Search> {
                                   keyboard_type: TextInputType.number,
                                   text: AppLocalizations.of(context)!.search_screen_to,
                                   controller: _ageToController,
-                                  style: Styles.bold_app_accent_12.copyWith(fontSize: screenSize.width * 0.035), // Responsive font
+                                  style: Styles.body.copyWith(fontSize: screenSize.width * 0.035, fontWeight: FontWeight.bold), // Responsive font
                                 ),
                               ),
                             ],
@@ -498,16 +498,16 @@ class _SearchState extends State<Search> {
                               }
                             },
                             child: Container(
-                              height: screenSize.height * 0.06, // Proportional height
+                              height: screenSize.height * 0.06,
                               width: screenSize.width,
                               decoration: BoxDecoration(
-                                gradient: Styles.buildLinearGradient(begin: Alignment.centerLeft, end: Alignment.centerRight),
+                                color: MyTheme.primary,
                                 borderRadius: const BorderRadius.all(Radius.circular(12)),
                               ),
                               child: Center(
                                 child: Text(
                                   AppLocalizations.of(context)!.advanced_search_screen_btn_text,
-                                  style: Styles.bold_white_14.copyWith(fontSize: screenSize.width * 0.04), // Responsive font
+                                  style: Styles.buttonText.copyWith(fontSize: screenSize.width * 0.04, color: Colors.white),
                                 ),
                               ),
                             ),
@@ -521,7 +521,7 @@ class _SearchState extends State<Search> {
                             },
                             child: Text(
                               AppLocalizations.of(context)!.common_advanced_search_switch,
-                              style: Styles.bold_app_accent_12.copyWith(fontSize: screenSize.width * 0.035), // Responsive font
+                              style: Styles.body.copyWith(fontSize: screenSize.width * 0.035, color: MyTheme.primary, fontWeight: FontWeight.bold),
                             ),
                           ),
                           SizedBox(height: screenSize.height * 0.04),
@@ -552,7 +552,7 @@ class _SearchState extends State<Search> {
       children: [
         Text(
           title,
-          style: Styles.bold_app_accent_12.copyWith(fontSize: screenSize.width * 0.035), // Responsive font
+          style: Styles.body.copyWith(fontSize: screenSize.width * 0.038, fontWeight: FontWeight.bold),
         ),
         SizedBox(height: screenSize.height * 0.007),
         Container(
@@ -567,9 +567,9 @@ class _SearchState extends State<Search> {
             iconSize: 0.0,
             value: value,
             decoration: InputDecoration(
-              hintText: "Select One",
+              hintText: "निवडा",
               isDense: true,
-              hintStyle: Styles.regular_gull_grey_12.copyWith(fontSize: screenSize.width * 0.035), // Responsive font
+              hintStyle: Styles.body.copyWith(fontSize: screenSize.width * 0.035, color: MyTheme.text_secondary),
               border: const OutlineInputBorder(borderSide: BorderSide.none),
               suffixIcon: Icon(Icons.keyboard_arrow_down, color: MyTheme.gull_grey),
             ),

@@ -206,7 +206,7 @@ class _NewPasswordState extends State<NewPassword> {
                                     width: DeviceInfo(context).width,
                                     child: Text(
                                       passwordErrorText!,
-                                      style: TextStyle(color: MyTheme.failure),
+                                      style: Styles.caption.copyWith(color: MyTheme.failure),
                                       textAlign: TextAlign.left,
                                     ),
                                   ),
@@ -278,7 +278,7 @@ class _NewPasswordState extends State<NewPassword> {
                               width: DeviceInfo(context).width,
                               child: Text(
                                 confirmPasswordErrorText!,
-                                style: TextStyle(
+                                style: Styles.caption.copyWith(
                                   color: MyTheme.failure,
                                   fontSize: 11,
                                 ),
@@ -314,9 +314,8 @@ class _NewPasswordState extends State<NewPassword> {
                                 // timer text
                                 Text(
                                   "Don't receive code? $secondsRemaining",
-                                  style: TextStyle(
+                                  style: Styles.body.copyWith(
                                     color: MyTheme.storm_grey,
-                                    fontSize: 14,
                                   ),
                                 ),
 

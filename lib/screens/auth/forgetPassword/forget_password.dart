@@ -44,12 +44,7 @@ class _ForgetPasswordState extends State<ForgetPassword> {
           centerTitle: true,
           title: Text(
             "पासवर्ड विसरलात?", // Forgot Password
-            style: TextStyle(
-              color: textPrimary,
-              fontSize: 18,
-              fontWeight: FontWeight.w600,
-              fontFamily: 'Mukta',
-            ),
+            style: Styles.h2.copyWith(color: textPrimary),
           ),
           bottom: PreferredSize(
             preferredSize: const Size.fromHeight(1.0),
@@ -67,24 +62,13 @@ class _ForgetPasswordState extends State<ForgetPassword> {
                 // Instruction Section
                 Text(
                   "पासवर्ड रिसेट करा", // Reset Your Password
-                  style: TextStyle(
-                    color: textPrimary,
-                    fontSize: 24,
-                    fontWeight: FontWeight.w700,
-                    letterSpacing: -0.5,
-                    fontFamily: 'Mukta',
-                  ),
+                  style: Styles.h1.copyWith(color: textPrimary, letterSpacing: -0.5),
                 ),
                 const SizedBox(height: 12),
                 Text(
                   "तुमचा मोबाईल नंबर किंवा ईमेल प्रविष्ट करा.", // Enter your mobile number or email
                   textAlign: TextAlign.center,
-                  style: TextStyle(
-                    color: textSecondary,
-                    fontSize: 14,
-                    height: 1.5,
-                    fontFamily: 'Mukta',
-                  ),
+                  style: Styles.body.copyWith(color: textSecondary, height: 1.5),
                 ),
                 const SizedBox(height: 32),
 
@@ -111,11 +95,10 @@ class _ForgetPasswordState extends State<ForgetPassword> {
                           state.forgetPasswordState!.valueChanger!
                               ? "मोबाईल नंबर" // Mobile Number
                               : "ईमेल आयडी", // Email ID
-                          style: TextStyle(
+                          style: Styles.body.copyWith(
                             color: textPrimary,
                             fontSize: 13,
                             fontWeight: FontWeight.w600,
-                            fontFamily: 'Mukta',
                           ),
                         ),
                         const SizedBox(height: 8),
@@ -141,13 +124,13 @@ class _ForgetPasswordState extends State<ForgetPassword> {
                                           setSelectorButtonAsPrefixIcon: true,
                                           trailingSpace: false),
                                       inputDecoration: _inputDecoration("मोबाईल नंबर"),
-                                      textStyle: TextStyle(color: textPrimary, fontSize: 14),
-                                      selectorTextStyle: TextStyle(color: textPrimary, fontSize: 14),
+                                      textStyle: Styles.body.copyWith(color: textPrimary),
+                                      selectorTextStyle: Styles.body.copyWith(color: textPrimary),
                                     )
                                   : const SizedBox.shrink())
                               : TextFormField(
                                   controller: state.forgetPasswordState!.forgetpasswordController,
-                                  style: TextStyle(color: textPrimary, fontSize: 14),
+                                  style: Styles.body.copyWith(color: textPrimary),
                                   validator: (value) {
                                     if (value == null || value.isEmpty) {
                                       return "कृपया तुमचा ईमेल प्रविष्ट करा";
@@ -168,11 +151,9 @@ class _ForgetPasswordState extends State<ForgetPassword> {
                               state.forgetPasswordState!.valueChanger!
                                   ? "ईमेल वापरा" // Use Email instead
                                   : "फोन नंबर वापरा", // Use Phone Number instead
-                              style: TextStyle(
+                              style: Styles.buttonText.copyWith(
                                 color: primaryColor,
                                 fontSize: 12,
-                                fontWeight: FontWeight.w600,
-                                fontFamily: 'Mukta',
                                 decoration: TextDecoration.underline,
                               ),
                             ),
@@ -195,12 +176,11 @@ class _ForgetPasswordState extends State<ForgetPassword> {
                             ),
                           ),
                           child: state.forgetPasswordState!.fp_loader == false
-                              ? const Text(
+                              ? Text(
                                   "OTP पाठवा", // Send OTP
-                                  style: TextStyle(
+                                  style: Styles.buttonText.copyWith(
                                     fontSize: 16,
-                                    fontWeight: FontWeight.w600,
-                                    fontFamily: 'Mukta',
+                                    fontWeight: FontWeight.w700,
                                   ),
                                 )
                               : const SizedBox(
@@ -224,11 +204,9 @@ class _ForgetPasswordState extends State<ForgetPassword> {
                     onTap: () => Navigator.pop(context),
                     child: Text(
                       "लॉगिनवर परत जा", // Back to Sign In
-                      style: TextStyle(
+                      style: Styles.buttonText.copyWith(
                         color: primaryColor,
-                        fontWeight: FontWeight.w600,
                         fontSize: 14,
-                        fontFamily: 'Mukta',
                         decoration: TextDecoration.underline,
                       ),
                     ),
@@ -246,7 +224,7 @@ class _ForgetPasswordState extends State<ForgetPassword> {
   InputDecoration _inputDecoration(String hint) {
     return InputDecoration(
       hintText: hint,
-      hintStyle: TextStyle(color: textSecondary.withOpacity(0.6), fontSize: 14, fontFamily: 'Mukta'),
+      hintStyle: Styles.body.copyWith(color: textSecondary.withOpacity(0.6)),
       border: InputBorder.none,
       isDense: true,
       contentPadding: const EdgeInsets.symmetric(vertical: 12),

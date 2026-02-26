@@ -228,16 +228,16 @@ class _AdvancedSearchState extends State<AdvancedSearch> {
         onPressed: () => Navigator.pop(context),
       ),
       title: Text(
-        "${AppLocalizations.of(context)!.filter_reset} (${AppLocalizations.of(context)!.search_screen_title})", 
-        style: const TextStyle(color: MyTheme.text_primary, fontSize: 18, fontWeight: FontWeight.bold)
+        "फिल्टर्स (शोध)", 
+        style: Styles.h2.copyWith(color: MyTheme.text_primary, fontSize: 18)
       ),
       centerTitle: true,
       actions: [
         TextButton(
           onPressed: _handleReset,
           child: Text(
-            AppLocalizations.of(context)!.filter_reset, 
-            style: const TextStyle(color: MyTheme.primary, fontWeight: FontWeight.bold)
+            "रिसेट करा", 
+            style: Styles.body.copyWith(color: MyTheme.primary, fontWeight: FontWeight.bold)
           ),
         ),
       ],
@@ -251,7 +251,7 @@ class _AdvancedSearchState extends State<AdvancedSearch> {
         children: [
           Container(width: 4, height: 16, decoration: BoxDecoration(color: MyTheme.primary, borderRadius: BorderRadius.circular(2))),
           const SizedBox(width: 8),
-          Text(title, style: Styles.bold_arsenic_14.copyWith(color: MyTheme.text_primary)),
+          Text(title, style: Styles.body.copyWith(color: MyTheme.text_primary, fontWeight: FontWeight.bold)),
         ],
       ),
     );
@@ -353,8 +353,8 @@ class _AdvancedSearchState extends State<AdvancedSearch> {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text(AppLocalizations.of(context)!.filter_age_range, style: const TextStyle(fontWeight: FontWeight.w600)),
-              Text("${_ageRange.start.round()} - ${_ageRange.end.round()} वर्ष", style: const TextStyle(color: MyTheme.primary, fontWeight: FontWeight.bold)),
+              Text(AppLocalizations.of(context)!.filter_age_range, style: Styles.body.copyWith(fontWeight: FontWeight.w600)),
+              Text("${_ageRange.start.round()} - ${_ageRange.end.round()} वर्षे", style: Styles.body.copyWith(color: MyTheme.primary, fontWeight: FontWeight.bold)),
             ],
           ),
           RangeSlider(
@@ -378,8 +378,8 @@ class _AdvancedSearchState extends State<AdvancedSearch> {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              const Text("उंचीची श्रेणी (Height Range)", style: TextStyle(fontWeight: FontWeight.w600)),
-              Text("${_heightRange.start.toStringAsFixed(1)} - ${_heightRange.end.toStringAsFixed(1)} फूट", style: const TextStyle(color: MyTheme.primary, fontWeight: FontWeight.bold)),
+              Text("उंचीची श्रेणी", style: Styles.body.copyWith(fontWeight: FontWeight.w600)),
+              Text("${_heightRange.start.toStringAsFixed(1)} - ${_heightRange.end.toStringAsFixed(1)} फूट", style: Styles.body.copyWith(color: MyTheme.primary, fontWeight: FontWeight.bold)),
             ],
           ),
           RangeSlider(
@@ -404,7 +404,7 @@ class _AdvancedSearchState extends State<AdvancedSearch> {
             context,
             AppLocalizations.of(context)!.filter_education, 
             _education_value, [
-              "10th", "12th", "ITI", "Diploma", "Graduate", "Post Graduate", "PhD"
+              "१०वी", "१२वी", "ITI", "डिप्लोमा", "पदवीधर", "पदव्युत्तर", "PhD"
             ], 
             (val) => setState(() => _education_value = val)
           ),
@@ -413,7 +413,7 @@ class _AdvancedSearchState extends State<AdvancedSearch> {
             context,
             AppLocalizations.of(context)!.filter_income, 
             _income_value, [
-              "0 – 2 Lakh", "2 – 5 Lakh", "5 – 10 Lakh", "10+ Lakh"
+              "० – २ लाख", "२ – ५ लाख", "५ – १० लाख", "१०+ लाख"
             ], 
             (val) => setState(() => _income_value = val)
           ),
@@ -444,7 +444,10 @@ class _AdvancedSearchState extends State<AdvancedSearch> {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        Text(title, style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w500)),
+        Expanded(
+          child: Text(title, style: Styles.body.copyWith(fontSize: 14, fontWeight: FontWeight.w500)),
+        ),
+        const SizedBox(width: 8),
         Switch.adaptive(
           value: value,
           onChanged: onChanged,
@@ -472,7 +475,7 @@ class _AdvancedSearchState extends State<AdvancedSearch> {
           ),
           child: Text(
             AppLocalizations.of(context)!.filter_apply, 
-            style: const TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.bold)
+            style: Styles.buttonText.copyWith(color: Colors.white, fontSize: 16)
           ),
         ),
       ),
@@ -496,7 +499,7 @@ class _AdvancedSearchState extends State<AdvancedSearch> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(label, style: const TextStyle(fontSize: 12, color: MyTheme.text_secondary, fontWeight: FontWeight.w500)),
+        Text(label, style: Styles.caption.copyWith(fontSize: 12, color: MyTheme.text_secondary, fontWeight: FontWeight.w500)),
         const SizedBox(height: 6),
         Container(
           height: 48,
@@ -506,11 +509,11 @@ class _AdvancedSearchState extends State<AdvancedSearch> {
             child: DropdownButton<dynamic>(
               isExpanded: true,
               value: (items.any((e) => e.id == selectedId)) ? selectedId : null,
-              hint: Text(AppLocalizations.of(context)!.filter_select ?? "Select"),
+              hint: Text("निवडा", style: Styles.body.copyWith(fontSize: 14, color: MyTheme.text_secondary)),
               items: items.map((item) {
                 return DropdownMenuItem<dynamic>(
                   value: item.id, 
-                  child: Text(item.name ?? "", style: const TextStyle(fontSize: 14))
+                  child: Text(item.name ?? "", style: Styles.body.copyWith(fontSize: 14))
                 );
               }).toList(),
               onChanged: (val) { if (val != null) onChanged(val); },
@@ -537,7 +540,7 @@ class _AdvancedSearchState extends State<AdvancedSearch> {
               value: (items.contains(value)) ? value : null,
               hint: Text(AppLocalizations.of(context)!.filter_select ?? "Select"),
               items: items.map((String item) {
-                return DropdownMenuItem<String>(value: item, child: Text(item, style: const TextStyle(fontSize: 14)));
+                return DropdownMenuItem<String>(value: item, child: Text(item, style: Styles.body.copyWith(fontSize: 14)));
               }).toList(),
               onChanged: (val) { if (val != null) onChanged(val); },
             ),

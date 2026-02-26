@@ -11,6 +11,8 @@ import 'package:active_matrimonial_flutter_app/helpers/navigator_push.dart';
 import 'package:active_matrimonial_flutter_app/middleware/profile_view_middleware.dart';
 import 'package:active_matrimonial_flutter_app/redux/app/app_state.dart';
 import 'package:active_matrimonial_flutter_app/redux/libs/auth/auth_middleware.dart';
+import 'package:active_matrimonial_flutter_app/redux/libs/manage_profile/manage_profiles_state/manage_profile_combine_state.dart';
+import 'package:active_matrimonial_flutter_app/models_response/account_response.dart';
 import 'package:active_matrimonial_flutter_app/screens/core.dart';
 import 'package:active_matrimonial_flutter_app/screens/user_pages/user_public_profile.dart';
 import 'package:flutter/material.dart';
@@ -73,253 +75,14 @@ class _HomeState extends State<Home> {
   }
 
 
-  Widget _buildRecentlyActive(BuildContext context, List recentProfiles, HomeViewModel vm) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 24),
-          child: Text("Recently Active", style: Styles.h2),
-        ),
-        const SizedBox(height: 16),
-        SizedBox(
-          height: 100,
-          child: ListView.separated(
-            padding: const EdgeInsets.symmetric(horizontal: 24),
-            scrollDirection: Axis.horizontal,
-            itemCount: recentProfiles.length,
-            separatorBuilder: (context, index) => const SizedBox(width: 12),
-            itemBuilder: (context, index) {
-              var member = recentProfiles[index];
-              return InkWell(
-                onTap: () {
-                  AIZRoute.push(
-                    context,
-                    UserPublicProfile(userId: member.userId),
-                    middleware: ProfileViewMiddleware(
-                      context: context,
-                      user: store.state.authState?.userData,
-                    ),
-                  );
-                },
-                borderRadius: BorderRadius.circular(Styles.br_card),
-                child: Stack(
-                  children: [
-                    Container(
-                      width: 80,
-                      height: 80,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(Styles.br_card),
-                        boxShadow: [
-                          BoxShadow(color: MyTheme.black.withOpacity(0.05), blurRadius: 4, offset: const Offset(0, 2)),
-                        ],
-                        image: DecorationImage(
-                          image: MyImage.imageProvider(member.photo),
-                          fit: BoxFit.cover,
-                        ),
-                      ),
-                    ),
-                    Positioned(
-                      top: 6,
-                      right: 6,
-                      child: Container(
-                        width: 12,
-                        height: 12,
-                        decoration: BoxDecoration(
-                          color: MyTheme.success,
-                          shape: BoxShape.circle,
-                          border: Border.all(color: MyTheme.white, width: 2),
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              );
-            },
-          ),
-        ),
-      ],
-    );
-  }
-
-  Widget _buildActiveNow(BuildContext context, List activeProfiles, HomeViewModel vm) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 24),
-          child: Text("Active Now", style: Styles.h2),
-        ),
-        const SizedBox(height: 16),
-        SizedBox(
-          height: 110, // Adjust height slightly to accommodate the text below avatar
-          child: ListView.separated(
-            padding: const EdgeInsets.symmetric(horizontal: 24),
-            scrollDirection: Axis.horizontal,
-            itemCount: activeProfiles.length,
-            separatorBuilder: (context, index) => const SizedBox(width: 16),
-            itemBuilder: (context, index) {
-              var member = activeProfiles[index];
-              return InkWell(
-                onTap: () {
-                  AIZRoute.push(
-                    context,
-                    UserPublicProfile(userId: member.userId),
-                    middleware: ProfileViewMiddleware(
-                      context: context,
-                      user: store.state.authState?.userData,
-                    ),
-                  );
-                },
-                borderRadius: BorderRadius.circular(Styles.br_card),
-                child: Column(
-                  children: [
-                    Stack(
-                      children: [
-                        Container(
-                          width: 70,
-                          height: 70,
-                          decoration: BoxDecoration(
-                            shape: BoxShape.circle,
-                            border: Border.all(color: MyTheme.border, width: 2), // Gives a subtle ring effect
-                            image: DecorationImage(
-                              image: MyImage.imageProvider(member.photo),
-                              fit: BoxFit.cover,
-                            ),
-                          ),
-                        ),
-                        Positioned(
-                          bottom: 2,
-                          right: 2,
-                          child: Container(
-                            width: 14,
-                            height: 14,
-                            decoration: BoxDecoration(
-                              color: const Color(0xFF1CB14D), // Green dot color matching reference
-                              shape: BoxShape.circle,
-                              border: Border.all(color: MyTheme.white, width: 2),
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                    const SizedBox(height: 8),
-                    // Hardcoded active time for demonstration, matching design "Active 1m ago"
-                    // Ideally, this should come from member.lastActive TimeAgo logic
-                    Text(
-                      index % 2 == 0 ? "Active 1m ago" : "Active 6m ago", 
-                      style: TextStyle(
-                        fontFamily: 'Mukta', // Using same family as app
-                        fontSize: 10,
-                        color: const Color(0xFF6B7280),
-                      ),
-                    ),
-                  ],
-                ),
-              );
-            },
-          ),
-        ),
-      ],
-    );
-  }
-
-  Widget _buildVerifiedProfiles(BuildContext context, List verifiedProfiles, HomeViewModel vm) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 24),
-          child: Text("Verified Profiles", style: Styles.h2),
-        ),
-        const SizedBox(height: 16),
-        SizedBox(
-          height: 200,
-          child: ListView.separated(
-            padding: const EdgeInsets.symmetric(horizontal: 24),
-            scrollDirection: Axis.horizontal,
-            itemCount: verifiedProfiles.length,
-            separatorBuilder: (context, index) => const SizedBox(width: 16),
-            itemBuilder: (context, index) {
-              var member = verifiedProfiles[index];
-              return InkWell(
-                onTap: () {
-                  AIZRoute.push(
-                    context,
-                    UserPublicProfile(userId: member.userId),
-                    middleware: ProfileViewMiddleware(
-                      context: context,
-                      user: store.state.authState?.userData,
-                    ),
-                  );
-                },
-                borderRadius: BorderRadius.circular(Styles.br_card),
-                child: Container(
-                  width: 140,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(Styles.br_card),
-                  ),
-                  child: Stack(
-                    children: [
-                      ClipRRect(
-                        borderRadius: BorderRadius.circular(Styles.br_card),
-                        child: Image(
-                          image: MyImage.imageProvider(member.photo),
-                          width: 140,
-                          height: 200,
-                          fit: BoxFit.cover,
-                        ),
-                      ),
-                      Positioned(
-                        top: 10,
-                        right: 10,
-                        child: Container(
-                          padding: const EdgeInsets.all(4),
-                          decoration: const BoxDecoration(
-                            color: MyTheme.white,
-                            shape: BoxShape.circle,
-                          ),
-                          child: const Icon(Icons.verified, color: MyTheme.primary, size: 16),
-                        ),
-                      ),
-                      Positioned(
-                        bottom: 0,
-                        left: 0,
-                        right: 0,
-                        child: Container(
-                          padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 8),
-                          decoration: BoxDecoration(
-                            borderRadius: const BorderRadius.only(
-                              bottomLeft: Radius.circular(Styles.br_card),
-                              bottomRight: Radius.circular(Styles.br_card),
-                            ),
-                            gradient: LinearGradient(
-                              begin: Alignment.topCenter,
-                              end: Alignment.bottomCenter,
-                              colors: [Colors.transparent, Colors.black.withOpacity(0.8)],
-                            ),
-                          ),
-                          child: Text(
-                            member.name ?? '',
-                            style: Styles.caption.copyWith(color: MyTheme.white, fontWeight: FontWeight.bold),
-                            maxLines: 1,
-                            overflow: TextOverflow.ellipsis,
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              );
-            },
-          ),
-        ),
-      ],
-    );
-  }
+  // Sanket: Removed legacy swipe cards mapping methods
 
   @override
   Widget build(BuildContext context) {
+    Color primaryColor = MyTheme.primary;
+    Color textPrimary = MyTheme.text_primary;
+    Color textSecondary = MyTheme.text_secondary;
+
     return StoreConnector<AppState, HomeViewModel>(
       converter: (store) => HomeViewModel.fromStore(store),
       builder: (_, HomeViewModel vm) => Scaffold(
@@ -337,40 +100,24 @@ class _HomeState extends State<Home> {
                           onRefresh();
                           return Future.delayed(const Duration(seconds: 1));
                         },
-                        child: Builder(
-                          builder: (context) {
-                            var members = vm.activeMembers ?? [];
-                            var activeNowProfiles = vm.activeNowList ?? [];
-
-                            return NestedScrollView(
-                              headerSliverBuilder: (context, innerBoxIsScrolled) {
-                                return [
-                                  SliverToBoxAdapter(
-                                    child: Column(
-                                      crossAxisAlignment: CrossAxisAlignment.start,
-                                      children: [
-                                        _buildGreetingSection(context, vm),
-                                        if (activeNowProfiles.isNotEmpty) ...[
-                                          const SizedBox(height: 16),
-                                          _buildActiveNow(context, activeNowProfiles, vm),
-                                          const SizedBox(height: 16),
-                                        ],
-                                      ],
-                                    ),
-                                  ),
-                                ];
-                              },
-                              body: members.isEmpty
-                                  ? _buildEmptyState(context)
-                                  : PageView.builder(
-                                      scrollDirection: Axis.vertical,
-                                      itemCount: members.length,
-                                      itemBuilder: (context, index) {
-                                        return _buildReelMatchCard(context, members[index], vm);
-                                      },
-                                    ),
-                            );
-                          }
+                        child: SingleChildScrollView(
+                          physics: const AlwaysScrollableScrollPhysics(),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              _buildGreetingSection(context, vm),
+                              const SizedBox(height: 24),
+                              _buildQuickActionHub(context),
+                              const SizedBox(height: 32),
+                              if (vm.activeMembers != null && vm.activeMembers!.isNotEmpty)
+                                _buildHorizontalRecommended(context, vm.activeMembers!),
+                              const SizedBox(height: 32),
+                              _buildActivityInsights(),
+                              const SizedBox(height: 32),
+                              _buildPremiumCTA(),
+                              const SizedBox(height: 100), // Bottom padding for navbar
+                            ],
+                          ),
                         ),
                       ),
           ),
@@ -421,79 +168,180 @@ class _HomeState extends State<Home> {
       backgroundColor: MyTheme.white,
       toolbarHeight: 56,
       shape: Border(bottom: BorderSide(color: MyTheme.border, width: 1)),
-      leading: IconButton(
-        icon: const Icon(Icons.tune_rounded, color: MyTheme.text_primary),
-        onPressed: () => AIZRoute.push(context, AdvancedSearch()),
+      leading: Builder(
+        builder: (context) => IconButton(
+          icon: const Icon(Icons.menu, color: MyTheme.text_primary),
+          onPressed: () => Scaffold.of(context).openDrawer(),
+        ),
       ),
       centerTitle: true,
-      title: Text("Matches", style: Styles.bold_arsenic_16.copyWith(color: MyTheme.text_primary, fontSize: 18, letterSpacing: -0.3)),
+      title: Image.asset(
+        'assets/logo/app_logo.png',
+        height: 36.0,
+        color: MyTheme.primary,
+      ),
       actions: [
         IconButton(
           icon: const Icon(Icons.notifications_none, color: MyTheme.text_primary),
-          onPressed: () => NavigatorPush.push(context, const Notifications()),
+          onPressed: () => AIZRoute.push(context, const Notifications()),
         ),
         const SizedBox(width: 8),
       ],
     );
   }
   Widget _buildGreetingSection(BuildContext context, HomeViewModel vm) {
-    String name = store.state.accountState?.profileData?.memberName?.split(" ")[0] ?? 
-                  store.state.authState?.userData?.name?.split(" ")[0] ?? "User";
+    String name = vm.profileData?.memberName?.split(" ")[0] ?? 
+                  store.state.authState?.userData?.name?.split(" ")[0] ?? "वापरकर्ता";
+    
     int hour = DateTime.now().hour;
-    String greeting = "Good Morning";
-    if (hour >= 12 && hour < 17) greeting = "Good Afternoon";
-    if (hour >= 17) greeting = "Good Evening";
+    String greeting;
+    if (hour >= 5 && hour < 12) {
+      greeting = "शुभ प्रभात";
+    } else if (hour >= 12 && hour < 17) {
+      greeting = "शुभ दुपार";
+    } else {
+      greeting = "शुभ संध्याकाळ";
+    }
 
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 24),
+    // Sanket: Safe profile completeness — only uses verified state properties
+    double completeness = 0.15; // Base: user signed up
+    final ps = vm.profileState;
+    if (ps != null) {
+      if (ps.basicInfoState?.basicInfo != null) completeness += 0.15;
+      if (ps.educationState?.list.isNotEmpty ?? false) completeness += 0.15;
+      if (ps.careerState?.list.isNotEmpty ?? false) completeness += 0.15;
+      if (vm.profileData?.memberPhoto != null) completeness += 0.20;
+      completeness += 0.20; // Partner prefs assumed partially filled
+    }
+    
+    int percent = (completeness * 100).toInt();
+    if (percent == 0) percent = 15; // Initial score for basic signup
+
+    return Container(
+      padding: const EdgeInsets.fromLTRB(24, 20, 24, 32),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: const BorderRadius.only(
+          bottomLeft: Radius.circular(36),
+          bottomRight: Radius.circular(36),
+        ),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.04),
+            blurRadius: 24,
+            offset: const Offset(0, 12),
+          ),
+        ],
+      ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            crossAxisAlignment: CrossAxisAlignment.end,
             children: [
-              Expanded(
-                child: Text(
-                  "$greeting\n$name ✨",
-                  style: Styles.h1.copyWith(fontSize: 24, height: 1.2),
-                ),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    greeting,
+                    style: Styles.body.copyWith(color: MyTheme.text_secondary, fontSize: 13, fontWeight: FontWeight.w500),
+                  ),
+                  const SizedBox(height: 4),
+                  Row(
+                    children: [
+                      Text(
+                        "$name ✨",
+                        style: Styles.h1.copyWith(fontSize: 26, color: MyTheme.text_primary),
+                      ),
+                    ],
+                  ),
+                ],
               ),
-              OutlinedButton(
-                onPressed: () => NavigatorPush.push(context, const MyProfile()),
-                style: OutlinedButton.styleFrom(
-                  side: BorderSide(color: MyTheme.primary.withOpacity(0.5)),
-                  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-                  minimumSize: Size.zero,
-                  tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                ),
-                child: Text(
-                  "Complete Profile",
-                  style: Styles.bold_arsenic_12.copyWith(color: MyTheme.primary),
+              InkWell(
+                onTap: () => NavigatorPush.push(context, const MyProfile()),
+                child: Container(
+                   height: 52,
+                   width: 52,
+                   decoration: BoxDecoration(
+                     shape: BoxShape.circle,
+                     border: Border.all(color: MyTheme.primary.withOpacity(0.2), width: 2),
+                     image: vm.profileData?.memberPhoto != null 
+                        ? DecorationImage(image: MyImage.imageProvider(vm.profileData!.memberPhoto), fit: BoxFit.cover)
+                        : null,
+                   ),
+                   child: vm.profileData?.memberPhoto == null 
+                      ? Icon(Icons.person_outline, color: MyTheme.primary) 
+                      : null,
                 ),
               ),
             ],
           ),
-          const SizedBox(height: 16),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text(
-                "Profile 85% Complete",
-                style: Styles.body.copyWith(color: MyTheme.text_secondary, fontWeight: FontWeight.w500),
-              ),
-            ],
-          ),
-          const SizedBox(height: 8),
-          // Progress Bar
-          ClipRRect(
-            borderRadius: BorderRadius.circular(4),
-            child: LinearProgressIndicator(
-              value: 0.85,
-              minHeight: 8,
-              backgroundColor: MyTheme.border,
-              valueColor: const AlwaysStoppedAnimation<Color>(MyTheme.primary),
+          const SizedBox(height: 32),
+          Container(
+            padding: const EdgeInsets.all(20),
+            decoration: BoxDecoration(
+              color: const Color(0xFFFFF7F8), // Subtle premium pinkish background
+              borderRadius: BorderRadius.circular(24),
+              border: Border.all(color: MyTheme.primary.withOpacity(0.08)),
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      "तुमची प्रोफाइल $percent% पूर्ण आहे",
+                      style: Styles.body.copyWith(color: MyTheme.text_primary, fontWeight: FontWeight.w600),
+                    ),
+                    Text(
+                      "$percent%",
+                      style: Styles.h2.copyWith(color: MyTheme.primary, fontSize: 14),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 12),
+                Stack(
+                  children: [
+                    Container(
+                      height: 8,
+                      width: double.infinity,
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(4),
+                      ),
+                    ),
+                    AnimatedContainer(
+                      duration: const Duration(milliseconds: 500),
+                      height: 8,
+                      width: (DeviceInfo(context).width! - 88) * (percent / 100),
+                      decoration: BoxDecoration(
+                        gradient: LinearGradient(colors: [MyTheme.primary, MyTheme.primary.withOpacity(0.7)]),
+                        borderRadius: BorderRadius.circular(4),
+                        boxShadow: [
+                          BoxShadow(color: MyTheme.primary.withOpacity(0.2), blurRadius: 4, offset: const Offset(0, 2)),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+                if (percent < 100) ...[
+                  const SizedBox(height: 16),
+                  InkWell(
+                    onTap: () => NavigatorPush.push(context, const MyProfile()),
+                    child: Row(
+                      children: [
+                        Text(
+                          "अधिक माहिती भरा आणि चांगली जुळणी मिळवा",
+                          style: Styles.caption.copyWith(color: MyTheme.text_secondary, fontStyle: FontStyle.italic),
+                        ),
+                        const Spacer(),
+                        Icon(Icons.arrow_forward_ios, color: MyTheme.primary, size: 12),
+                      ],
+                    ),
+                  ),
+                ],
+              ],
             ),
           ),
         ],
@@ -514,19 +362,19 @@ class _HomeState extends State<Home> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text("Why this profile is recommended", style: Styles.bold_arsenic_14.copyWith(color: MyTheme.text_primary)),
+            Text("हे प्रोफाइल का सुचवले आहे?", style: Styles.body.copyWith(color: MyTheme.text_primary, fontWeight: FontWeight.w600)),
             const SizedBox(height: 12),
             Wrap(
               spacing: 8,
               runSpacing: 8,
               children: [
-                _buildReasonChip("✔ Same Religion"),
-                _buildReasonChip("✔ Same City"),
-                _buildReasonChip("✔ Similar Education"),
+                _buildReasonChip("✔ सारखा धर्म"),
+                _buildReasonChip("✔ सारखे शहर"),
+                _buildReasonChip("✔ सारखे शिक्षण"),
               ],
             ),
             const SizedBox(height: 8),
-            Text("This profile strongly matches your partner preferences.", style: Styles.regular_gull_grey_12),
+            Text("हे प्रोफाइल तुमच्या जोडीदाराच्या पसंतीशी मिळतेजुळते आहे.", style: Styles.caption.copyWith(fontSize: 11)),
           ],
         ),
       ),
@@ -545,54 +393,218 @@ class _HomeState extends State<Home> {
     );
   }
 
-  Widget _buildRecentActivities(BuildContext context) {
+  // Sanket: Section 2 - Quick Action Hub
+  Widget _buildQuickActionHub(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 24),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text("Recent Activities", style: Styles.h2),
+          Text("त्वरित क्रिया", style: Styles.h2),
           const SizedBox(height: 16),
-          _buildActivityCard(Icons.visibility_outlined, "3 people", "viewed your profile today", () {}),
-          const SizedBox(height: 8),
-          _buildActivityCard(Icons.favorite_border, "1 new", "interest received", () {}),
-          const SizedBox(height: 8),
-          _buildActivityCard(Icons.person_add_alt, "5 new", "matches found", () {}),
+          Row(
+            children: [
+              Expanded(child: _actionCard(context, Icons.search_rounded, "शोधा", "नवीन जोडीदार शोधा", () => AIZRoute.push(context, const Search()))),
+              const SizedBox(width: 16),
+              Expanded(child: _actionCard(context, Icons.favorite_border_rounded, "आवडले", "तुम्हाला मिळालेली पसंती", () => AIZRoute.push(context, const MyInterest()))),
+            ],
+          ),
+          const SizedBox(height: 16),
+          Row(
+            children: [
+              Expanded(child: _actionCard(context, Icons.visibility_outlined, "पाहिले", "तुमची प्रोफाईल कोणी पाहिली", () {})),
+              const SizedBox(width: 16),
+              Expanded(child: _actionCard(context, Icons.star_border_rounded, "शॉर्टलिस्ट", "निवडलेले प्रोफाईल", () => AIZRoute.push(context, const MyShortlist()))),
+            ],
+          ),
         ],
       ),
     );
   }
 
-  Widget _buildActivityCard(IconData icon, String highlight, String description, VoidCallback onTap) {
+  Widget _actionCard(BuildContext context, IconData icon, String title, String subtitle, VoidCallback onTap) {
     return InkWell(
       onTap: onTap,
-      borderRadius: BorderRadius.circular(12),
+      borderRadius: BorderRadius.circular(16),
       child: Container(
-        padding: const EdgeInsets.all(12),
+        padding: const EdgeInsets.all(16),
         decoration: BoxDecoration(
           color: MyTheme.white,
-          borderRadius: BorderRadius.circular(12),
+          borderRadius: BorderRadius.circular(16),
           border: Border.all(color: MyTheme.border),
+          boxShadow: [
+            BoxShadow(color: MyTheme.black.withOpacity(0.03), blurRadius: 10, offset: const Offset(0, 4)),
+          ],
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Container(
+              padding: const EdgeInsets.all(10),
+              decoration: BoxDecoration(color: MyTheme.primary.withOpacity(0.1), shape: BoxShape.circle),
+              child: Icon(icon, color: MyTheme.primary, size: 24),
+            ),
+            const SizedBox(height: 12),
+            Text(title, style: Styles.body.copyWith(fontWeight: FontWeight.w600)),
+            const SizedBox(height: 4),
+            Text(subtitle, style: Styles.caption.copyWith(fontSize: 10, color: MyTheme.text_secondary)),
+          ],
+        ),
+      ),
+    );
+  }
+
+  // Sanket: Section 3 - Horizontal Recommended Matches (Preview Only)
+  Widget _buildHorizontalRecommended(BuildContext context, List recommended) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 24),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text("तुमच्यासाठी शिफारस केलेले", style: Styles.h2),
+              Text("सर्व पहा", style: Styles.caption.copyWith(color: MyTheme.primary, fontWeight: FontWeight.bold)),
+            ],
+          ),
+        ),
+        const SizedBox(height: 16),
+        SizedBox(
+          height: 160,
+          child: ListView.separated(
+            padding: const EdgeInsets.symmetric(horizontal: 24),
+            scrollDirection: Axis.horizontal,
+            itemCount: recommended.length > 5 ? 5 : recommended.length,
+            separatorBuilder: (context, index) => const SizedBox(width: 16),
+            itemBuilder: (context, index) {
+              var member = recommended[index];
+              return InkWell(
+                onTap: () {
+                  AIZRoute.push(
+                    context,
+                    UserPublicProfile(userId: member.userId),
+                    middleware: ProfileViewMiddleware(
+                      context: context,
+                      user: store.state.authState?.userData,
+                    ),
+                  );
+                },
+                borderRadius: BorderRadius.circular(16),
+                child: Container(
+                  width: 120,
+                  decoration: BoxDecoration(
+                    color: MyTheme.white,
+                    borderRadius: BorderRadius.circular(16),
+                    border: Border.all(color: MyTheme.border),
+                  ),
+                  child: Column(
+                    children: [
+                      ClipRRect(
+                        borderRadius: const BorderRadius.vertical(top: Radius.circular(16)),
+                        child: Image(
+                          image: MyImage.imageProvider(member.photo),
+                          height: 100,
+                          width: double.infinity,
+                          fit: BoxFit.cover,
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Column(
+                          children: [
+                            Text(member.name ?? '', style: Styles.body.copyWith(fontWeight: FontWeight.w600, fontSize: 13), maxLines: 1, overflow: TextOverflow.ellipsis),
+                            Text("${member.age} वर्षे", style: Styles.caption.copyWith(fontSize: 11)),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              );
+            },
+          ),
+        ),
+      ],
+    );
+  }
+
+  // Sanket: Section 4 - Activity Insights
+  Widget _buildActivityInsights() {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 24),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text("अलीकडील हालचाली", style: Styles.h2),
+          const SizedBox(height: 16),
+          Container(
+            padding: const EdgeInsets.all(16),
+            decoration: BoxDecoration(
+              color: MyTheme.white,
+              borderRadius: BorderRadius.circular(16),
+              border: Border.all(color: MyTheme.border),
+            ),
+            child: Column(
+              children: [
+                _insightRow(Icons.visibility_outlined, "३ लोक", "तुमचे प्रोफाइल पहिले"),
+                const Divider(height: 24),
+                _insightRow(Icons.favorite_border, "१ नवीन", "मिळालेली आवड"),
+                const Divider(height: 24),
+                _insightRow(Icons.person_add_alt, "५ नवीन", "मिळणारे प्रोफाइल"),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _insightRow(IconData icon, String highlight, String description) {
+    return Row(
+      children: [
+        Container(
+          padding: const EdgeInsets.all(8),
+          decoration: BoxDecoration(color: MyTheme.background, shape: BoxShape.circle),
+          child: Icon(icon, color: MyTheme.primary, size: 20),
+        ),
+        const SizedBox(width: 16),
+        Text(highlight, style: Styles.body.copyWith(fontWeight: FontWeight.w700)),
+        const SizedBox(width: 4),
+        Text(description, style: Styles.body.copyWith(color: MyTheme.text_secondary)),
+        const Spacer(),
+        const Icon(Icons.chevron_right, color: MyTheme.text_secondary, size: 20),
+      ],
+    );
+  }
+
+  // Sanket: Section 6 - Premium CTA Banner
+  Widget _buildPremiumCTA() {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 24),
+      child: Container(
+        padding: const EdgeInsets.all(20),
+        decoration: BoxDecoration(
+          gradient: const LinearGradient(colors: [Color(0xFFF9A826), Color(0xFFFF7B00)]),
+          borderRadius: BorderRadius.circular(16),
+          boxShadow: [
+            BoxShadow(color: const Color(0xFFFF7B00).withOpacity(0.3), blurRadius: 15, offset: const Offset(0, 8)),
+          ],
         ),
         child: Row(
           children: [
-            Container(
-              padding: const EdgeInsets.all(8),
-              decoration: BoxDecoration(color: MyTheme.background, shape: BoxShape.circle),
-              child: Icon(icon, color: MyTheme.primary, size: 20),
-            ),
-            const SizedBox(width: 12),
+            const Icon(Icons.workspace_premium_rounded, color: Colors.white, size: 40),
+            const SizedBox(width: 16),
             Expanded(
-              child: RichText(
-                text: TextSpan(
-                  children: [
-                    TextSpan(text: "$highlight ", style: Styles.bold_arsenic_14.copyWith(color: MyTheme.text_primary)),
-                    TextSpan(text: description, style: Styles.regular_gull_grey_12.copyWith(color: MyTheme.text_secondary)),
-                  ],
-                ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text("प्लॅटिनमवर अपग्रेड करा", style: Styles.h2.copyWith(color: Colors.white)),
+                  const SizedBox(height: 4),
+                  Text("तुमच्या प्रोफाईलला प्राधान्य द्या आणि अधिक जुळण्या मिळवा.", style: Styles.caption.copyWith(color: Colors.white, fontSize: 11)),
+                ],
               ),
             ),
-            const Icon(Icons.chevron_right, color: MyTheme.text_secondary, size: 20),
           ],
         ),
       ),
@@ -643,9 +655,9 @@ class _HomeState extends State<Home> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text("Complete Your Profile", style: Styles.h2.copyWith(color: MyTheme.primary)),
+            Text("तुमची प्रोफाइल पूर्ण करा", style: Styles.h2.copyWith(color: MyTheme.primary)),
             const SizedBox(height: 4),
-            Text("Get 3x more matches by adding your details.", style: Styles.regular_gull_grey_12),
+            Text("तुमचे तपशील जोडून ३ पट अधिक चांगले प्रोफाइल मिळवा.", style: Styles.caption),
             const SizedBox(height: 16),
             _buildBoostBtn("Add Education Details"),
             const SizedBox(height: 8),
@@ -754,10 +766,10 @@ class _HomeState extends State<Home> {
                   children: [
                     Flexible( // Sanket: prevent overflow when name+age text is wide
                       child: Text(
-                        "${member.name ?? ''} | ${member.age ?? ''}",
+                        "${member.name ?? ''}, ${member.age ?? ''}",
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
-                        style: Styles.h1.copyWith(color: MyTheme.white, fontSize: 22),
+                        style: Styles.profileName.copyWith(color: Colors.white, fontSize: 24),
                       ),
                     ),
                     const SizedBox(width: 8),
@@ -765,34 +777,35 @@ class _HomeState extends State<Home> {
                       Container(
                         padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
                         decoration: BoxDecoration(
-                          color: MyTheme.primary,
+                          color: Colors.white.withOpacity(0.2),
                           borderRadius: BorderRadius.circular(Styles.br_pill),
+                          border: Border.all(color: Colors.white.withOpacity(0.4)),
                         ),
-                        child: const Text(
-                          "Premium",
-                          style: TextStyle(color: MyTheme.white, fontSize: 10),
+                        child: Text(
+                          "प्रीमियम",
+                          style: Styles.caption.copyWith(color: Colors.white, fontSize: 10, fontWeight: FontWeight.bold),
                         ),
                       ),
                   ],
                 ),
                 const SizedBox(height: 4),
                 Text(
-                  member.country ?? 'Thane',
-                  style: Styles.body.copyWith(color: MyTheme.white.withOpacity(0.9)),
+                  member.country ?? 'ठाणे',
+                  style: Styles.body.copyWith(color: Colors.white.withOpacity(0.9), fontSize: 15),
                 ),
                 const SizedBox(height: 4),
                 Text(
                   "${member.religion ?? ''} • ${member.profession ?? ''}".trim().replaceAll(RegExp(r'^•|•$'), ''),
-                  style: Styles.body.copyWith(color: MyTheme.white.withOpacity(0.9), fontWeight: FontWeight.w500),
+                  style: Styles.body.copyWith(color: Colors.white.withOpacity(0.9), fontWeight: FontWeight.w500, fontSize: 13),
                 ),
-                const SizedBox(height: 8),
+                const SizedBox(height: 10),
                 Row(
                   children: [
-                    const Icon(Icons.verified, color: MyTheme.success, size: 16),
-                    const SizedBox(width: 4),
+                    const Icon(Icons.verified, color: Colors.greenAccent, size: 16),
+                    const SizedBox(width: 6),
                     Text(
-                      "Serious about marriage",
-                      style: Styles.caption.copyWith(color: MyTheme.white, fontWeight: FontWeight.bold),
+                      "पडताळणी केलेले प्रोफाईल",
+                      style: Styles.caption.copyWith(color: Colors.white, fontWeight: FontWeight.w600),
                     ),
                   ],
                 ),
@@ -807,10 +820,10 @@ class _HomeState extends State<Home> {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                _buildHeroActionBtn(Icons.close, "Pass", () {}),
-                _buildHeroActionBtn(Icons.star_border, "Shortlist", () => vm.addShortlist!(user: member.userId)),
-                _buildHeroActionBtn(Icons.favorite_border, "Interest", () => vm.expressInterest(userId: member.userId), isPrimary: true),
-                _buildHeroActionBtn(Icons.visibility_outlined, "View", () {
+                _buildHeroActionBtn(Icons.close, "नको", () {}),
+                _buildHeroActionBtn(Icons.star_border, "शॉर्टलिस्ट", () => vm.addShortlist!(user: member.userId)),
+                _buildHeroActionBtn(Icons.favorite_border, "आवडले", () => vm.expressInterest(userId: member.userId), isPrimary: true),
+                _buildHeroActionBtn(Icons.visibility_outlined, "पहा", () {
                   AIZRoute.push(
                     context,
                     UserPublicProfile(userId: member.userId),
@@ -956,11 +969,15 @@ class _HomeState extends State<Home> {
               children: [
                 Text(
                   member.name ?? '',
-                  style: Styles.caption.copyWith(color: MyTheme.white, fontWeight: FontWeight.bold),
+                  style: Styles.profileName.copyWith(color: Colors.white, fontSize: 14),
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
                 ),
                 const SizedBox(height: 2),
+                Text(
+                  "${member.age ?? ''} वर्षे",
+                  style: Styles.caption.copyWith(color: Colors.white.withOpacity(0.8), fontSize: 11),
+                ),
               ],
             ),
           ),
@@ -969,135 +986,6 @@ class _HomeState extends State<Home> {
     );
   }
 
-  Widget _buildReelMatchCard(BuildContext context, dynamic member, HomeViewModel vm) {
-    return Container(
-      color: Colors.black, // Dark background behind image
-      child: Stack(
-        fit: StackFit.expand,
-        children: [
-          // Background Image
-          Image(
-            image: MyImage.imageProvider(member.photo),
-            fit: BoxFit.cover,
-            errorBuilder: (context, error, stackTrace) => Container(color: MyTheme.border),
-          ),
-          // Gradient Overlay to ensure text readability
-          Container(
-            decoration: BoxDecoration(
-              gradient: LinearGradient(
-                begin: Alignment.topCenter,
-                end: Alignment.bottomCenter,
-                colors: [
-                  Colors.transparent,
-                  Colors.black.withOpacity(0.4),
-                  Colors.black.withOpacity(0.8),
-                ],
-                stops: const [0.5, 0.7, 1.0],
-              ),
-            ),
-          ),
-          // Info Block (Bottom Left)
-          Positioned(
-            bottom: 32,
-            left: 16,
-            right: 80, // Leave space for the action buttons
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Row(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    Flexible(
-                      child: Text(
-                        "${member.name ?? ''}, ${member.age ?? ''}",
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
-                        style: Styles.h1.copyWith(color: MyTheme.white, fontSize: 28),
-                      ),
-                    ),
-                    const SizedBox(width: 8),
-                    if (member.membership != null && member.membership != 1)
-                      Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
-                        decoration: BoxDecoration(
-                          color: MyTheme.primary,
-                          borderRadius: BorderRadius.circular(Styles.br_pill),
-                        ),
-                        child: const Text(
-                          "Premium",
-                          style: TextStyle(color: MyTheme.white, fontSize: 10),
-                        ),
-                      ),
-                  ],
-                ),
-                const SizedBox(height: 8),
-                Row(
-                  children: [
-                    const Icon(Icons.location_on, color: MyTheme.white, size: 16),
-                    const SizedBox(width: 4),
-                    Text(
-                      member.country ?? 'India',
-                      style: Styles.body.copyWith(color: MyTheme.white.withOpacity(0.9)),
-                    ),
-                  ],
-                ),
-                const SizedBox(height: 4),
-                Row(
-                  children: [
-                    const Icon(Icons.work, color: MyTheme.white, size: 16),
-                    const SizedBox(width: 4),
-                    Text(
-                      member.profession ?? 'Professional',
-                      style: Styles.body.copyWith(color: MyTheme.white.withOpacity(0.9)),
-                    ),
-                  ],
-                ),
-              ],
-            ),
-          ),
-          // Action Buttons (Bottom Right)
-          Positioned(
-            bottom: 32,
-            right: 16,
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: [
-                _buildActionBtn(
-                  icon: Icons.close,
-                  color: Colors.white.withOpacity(0.2),
-                  iconColor: Colors.white,
-                  onTap: () {
-                    // Assuming ignoreUser removes from the local list
-                    if (vm.ignoreUser != null) {
-                      vm.ignoreUser!(user: member);
-                    }
-                  },
-                ),
-                const SizedBox(height: 20),
-                _buildActionBtn(
-                  icon: Icons.favorite,
-                  color: MyTheme.primary,
-                  iconColor: Colors.white,
-                  onTap: () {
-                    vm.expressInterest(userId: member.userId);
-                  },
-                ),
-                const SizedBox(height: 20),
-                _buildActionBtn(
-                  icon: Icons.person,
-                  color: Colors.white.withOpacity(0.2),
-                  iconColor: Colors.white,
-                  onTap: () {
-                    _showFullProfileSheet(context, member, vm);
-                  },
-                ),
-              ],
-            ),
-          ),
-        ],
-      ),
-    );
-  }
 
   Widget _buildActionBtn({required IconData icon, required Color color, required Color iconColor, required VoidCallback onTap}) {
     return GestureDetector(
@@ -1205,6 +1093,9 @@ class HomeViewModel {
   final void Function()? goToNext;
   final void Function()? goToPrev;
 
+  final ManageProfileCombineState? profileState;
+  final ProfileData? profileData;
+
   HomeViewModel({
     this.packageExpire,
     this.isFetch,
@@ -1224,12 +1115,16 @@ class HomeViewModel {
     this.reportController,
     this.goToNext,
     this.goToPrev,
+    this.profileState,
+    this.profileData,
   });
 
   static fromStore(Store<AppState> store) {
     bool isLoading = store.state.accountState?.profileData == null;
 
     return HomeViewModel(
+      profileData: store.state.accountState?.profileData,
+      profileState: store.state.manageProfileCombineState,
       isAccountDataLoading: isLoading,
       isDeactivated: store.state.authState?.userData?.deactivated == 1,
       isFullProfileView: settingIsActive(

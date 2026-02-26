@@ -23,6 +23,11 @@ import 'explore_middleware.dart';
 import '../../../components/main_drawer.dart';
 import '../../my_dashboard_pages/shortlist/add_shortlist_middleware.dart';
 import '../../my_dashboard_pages/interest/express_interest_middleware.dart';
+import '../home/home_action.dart';
+import '../../account/account_middleware.dart';
+import '../../auth/signin/signin.dart';
+import '../../../middleware/profile_view_middleware.dart';
+import '../../manage_profiles/manage_profile.dart'; // For MyProfile import if needed, but it's used in home.dart
 
 class Explore extends StatefulWidget {
   const Explore({super.key});
@@ -33,6 +38,16 @@ class Explore extends StatefulWidget {
 
 class _ExploreState extends State<Explore> {
   final TextEditingController _searchController = TextEditingController();
+  late PageController _pageController;
+
+  @override
+  void initState() {
+    super.initState();
+    _pageController = PageController();
+    _pageController.addListener(() {
+      setState(() {}); // Force rebuild to update header position
+    });
+  }
 
   // Mock configs
   final List<String> _mockNames = ['Akash Patil', 'Rohit Kulkarni', 'Snehal Jadhav', 'Pooja More', 'Rahul Desai', 'Neha Sharma', 'Vikram Singh', 'Priya Gupta', 'Karan Mehta', 'Anjali Rao'];
@@ -43,6 +58,7 @@ class _ExploreState extends State<Explore> {
   @override
   void dispose() {
     _searchController.dispose();
+    _pageController.dispose();
     super.dispose();
   }
 
@@ -95,39 +111,22 @@ class _ExploreState extends State<Explore> {
           return seen.add(m.userId!);
         }).toList();
 
-        List<MemberData> topMatches = [];
-        List<MemberData> nearbyMatches = [];
         List<MemberData> activeNowMatches = [];
-        List<MemberData> newMatches = [];
 
-        if (uniqueMembers.length >= 3) {
-           topMatches = uniqueMembers.take(3).toList();
-           uniqueMembers = uniqueMembers.skip(3).toList();
-        } else {
-           topMatches = uniqueMembers;
-           uniqueMembers = [];
-        }
-
-        if (uniqueMembers.length >= 5) {
-           nearbyMatches = uniqueMembers.take(5).toList();
-           uniqueMembers = uniqueMembers.skip(5).toList();
-        } else {
-           nearbyMatches = uniqueMembers;
-           uniqueMembers = [];
-        }
-
-        if (uniqueMembers.length >= 5) {
-           activeNowMatches = uniqueMembers.take(5).toList();
-           uniqueMembers = uniqueMembers.skip(5).toList();
+        if (uniqueMembers.length >= 8) {
+           activeNowMatches = uniqueMembers.take(8).toList();
         } else {
            activeNowMatches = uniqueMembers;
-           uniqueMembers = [];
         }
         
-        newMatches = uniqueMembers.take(8).toList();
-
         bool isSearching = vm.isFilterActive || _searchController.text.isNotEmpty;
         final searchResults = vm.searchList ?? [];
+
+        double headerOffset = 0.0;
+        if (_pageController.hasClients) {
+          // Increased offset to 300.0 to ensure App Bar + Active Now are fully hidden
+          headerOffset = -(_pageController.offset).clamp(0.0, 300.0);
+        }
 
         return WillPopScope(
           onWillPop: () async {
@@ -137,52 +136,76 @@ class _ExploreState extends State<Explore> {
             return shouldPop;
           },
           child: Scaffold(
-            backgroundColor: MyTheme.background,
+            backgroundColor: Colors.black, // Dark background for Reels
             drawer: const MainDrawer(),
-          body: Column(
-            children: [
-              _buildHeader(context, vm),
-              Expanded(
-                child: RefreshIndicator(
-                  color: MyTheme.primary,
-                  onRefresh: () async {
-                    StoreProvider.of<AppState>(context).dispatch(fetchPremiumMembersAction());
-                    StoreProvider.of<AppState>(context).dispatch(fetchNewMembersAction());
-                  },
-                  child: SingleChildScrollView(
-                    physics: const BouncingScrollPhysics(),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        const SizedBox(height: 16),
-                        _buildSearchSection(context, vm),
-                        const SizedBox(height: 16),
-                        
-                        if (isSearching) ...[
-                           _buildFilteredGrid(context, searchResults, vm),
-                        ] else ...[
-                           _buildMatchSummary(rawMembers.length),
-                           if (topMatches.isNotEmpty) _buildTopMatches(topMatches, vm),
-                           if (nearbyMatches.isNotEmpty) _buildNearbyMatches(nearbyMatches),
-                           if (activeNowMatches.isNotEmpty) _buildRecentlyActive(activeNowMatches),
-                           if (newMatches.isNotEmpty) _buildNewMatchesGrid(newMatches),
-                           if (topMatches.isEmpty && nearbyMatches.isEmpty && newMatches.isEmpty) _buildEmptyState(),
-                        ],
-                        const SizedBox(height: 48),
-                      ],
-                    ),
-                  ),
-                ),
+            body: RefreshIndicator(
+              color: MyTheme.primary,
+              onRefresh: () async {
+                StoreProvider.of<AppState>(context).dispatch(fetchPremiumMembersAction());
+                StoreProvider.of<AppState>(context).dispatch(fetchNewMembersAction());
+              },
+              child: Stack(
+                children: [
+                   // Layer 1: The Reels (PageView)
+                   if (uniqueMembers.isEmpty)
+                      _buildEmptyState(context)
+                   else
+                      PageView.builder(
+                        controller: _pageController,
+                        scrollDirection: Axis.vertical,
+                        itemCount: uniqueMembers.length,
+                        itemBuilder: (context, index) {
+                          return _buildReelMatchCard(context, uniqueMembers[index], vm);
+                        },
+                      ),
+
+                   // Layer 2: The Sliding Header (App Bar + Active Now)
+                   if (!isSearching)
+                     Positioned(
+                       top: headerOffset,
+                       left: 0,
+                       right: 0,
+                       child: Container(
+                         color: MyTheme.white, // Opaque background
+                         child: Column(
+                           mainAxisSize: MainAxisSize.min,
+                           children: [
+                              _buildHeader(context, vm),
+                              if (activeNowMatches.isNotEmpty) 
+                                 _buildActiveNow(context, activeNowMatches),
+                              const SizedBox(height: 8),
+                           ],
+                         ),
+                       ),
+                     ),
+                   
+                   // Layer 3: Search Results Overlay (If searching)
+                   if (isSearching)
+                     Positioned.fill(
+                       child: Container(
+                         color: MyTheme.background,
+                         child: Column(
+                           children: [
+                              _buildHeader(context, vm),
+                              Expanded(
+                                child: SingleChildScrollView(
+                                  child: _buildFilteredGrid(context, searchResults, vm),
+                                ),
+                              ),
+                           ],
+                         ),
+                       ),
+                     ),
+                ],
               ),
-            ],
+            ),
           ),
-        ),
-      );
-    },
-  );
+        );
+      },
+    );
   }
 
-  Widget _buildEmptyState() {
+  Widget _buildEmptyState(BuildContext context) {
     return Center(
       child: Column(
         mainAxisSize: MainAxisSize.min,
@@ -220,15 +243,9 @@ class _ExploreState extends State<Explore> {
         padding: const EdgeInsets.symmetric(horizontal: 16),
         child: Row(
           children: [
-            Builder(
-              builder: (context) => _headerIconBtn(Icons.menu, onTap: () => Scaffold.of(context).openDrawer()),
-            ),
+            _headerIconBtn(Icons.tune_rounded, onTap: () => AIZRoute.push(context, AdvancedSearch())),
             const Spacer(),
-            Image.asset(
-              'assets/logo/app_logo.png',
-              height: 36.0,
-              color: MyTheme.primary,
-            ),
+            Text("Matches", style: Styles.bold_arsenic_16.copyWith(color: MyTheme.text_primary, fontSize: 18, letterSpacing: -0.3)),
             const Spacer(),
             _headerIconBtn(Icons.notifications_none_rounded, onTap: () => AIZRoute.push(context, const Notifications())),
           ],
@@ -254,84 +271,6 @@ class _ExploreState extends State<Explore> {
     );
   }
 
-  Widget _buildSearchSection(BuildContext context, ExploreViewModel vm) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16),
-      child: Row(
-        children: [
-          Expanded(
-            child: Container(
-              height: 44,
-              decoration: BoxDecoration(
-                color: MyTheme.white,
-                borderRadius: BorderRadius.circular(12),
-                border: Border.all(color: MyTheme.border),
-              ),
-              child: TextField(
-                controller: _searchController,
-                onSubmitted: (val) {
-                  store.dispatch(SearchSetFiltersAction(searchText: val));
-                  store.dispatch(Reset.search);
-                  store.dispatch(searchMiddleware(searchText: val));
-                },
-                style: Styles.regular_arsenic_14.copyWith(color: MyTheme.text_primary),
-                decoration: InputDecoration(
-                  hintText: "Search by name or city",
-                  hintStyle: Styles.regular_arsenic_14.copyWith(color: MyTheme.text_secondary),
-                  prefixIcon: const Icon(Icons.search_rounded, color: MyTheme.text_secondary, size: 20),
-                  border: InputBorder.none,
-                  contentPadding: const EdgeInsets.symmetric(vertical: 12),
-                ),
-              ),
-            ),
-          ),
-          if (vm.isFilterActive || _searchController.text.isNotEmpty) ...[
-            const SizedBox(width: 8),
-            TextButton(
-              onPressed: () {
-                _searchController.clear();
-                store.dispatch(SearchClearFiltersAction());
-              },
-              child: const Text("Clear", style: TextStyle(color: MyTheme.primary, fontWeight: FontWeight.bold)),
-            ),
-          ],
-        ],
-      ),
-    );
-  }
-
-  Widget _buildMatchSummary(int total) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16),
-      child: Container(
-        padding: const EdgeInsets.all(16),
-        decoration: BoxDecoration(
-          color: MyTheme.white,
-          borderRadius: BorderRadius.circular(16),
-          border: Border.all(color: MyTheme.border),
-          boxShadow: [BoxShadow(color: MyTheme.black.withOpacity(0.04), blurRadius: 8, offset: const Offset(0, 2))],
-        ),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text("You have $total Matches", style: Styles.bold_arsenic_16.copyWith(color: MyTheme.text_primary)),
-                const SizedBox(height: 4),
-                Text("6 New Matches This Week", style: Styles.regular_gull_grey_12.copyWith(color: MyTheme.text_secondary, fontWeight: FontWeight.w500)),
-              ],
-            ),
-            Container(
-              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-              decoration: BoxDecoration(color: MyTheme.primary.withOpacity(0.1), borderRadius: BorderRadius.circular(20)),
-              child: Text("View All", style: Styles.bold_arsenic_12.copyWith(color: MyTheme.primary)),
-            )
-          ],
-        ),
-      ),
-    );
-  }
 
   Widget _buildCompBadge(int match) {
     Color bColor;
@@ -360,13 +299,13 @@ class _ExploreState extends State<Explore> {
           shrinkWrap: true,
           physics: const NeverScrollableScrollPhysics(),
           itemCount: min(matches.length, 3),
-          itemBuilder: (ctx, idx) => _buildTopMatchCard(matches[idx], idx, vm),
+          itemBuilder: (ctx, idx) => _buildTopMatchCard(context, matches[idx], idx, vm),
         )
       ],
     );
   }
 
-  Widget _buildTopMatchCard(MemberData m, int idx, ExploreViewModel vm) {
+  Widget _buildTopMatchCard(BuildContext context, MemberData m, int idx, ExploreViewModel vm) {
     int score = _mockMatchScores[idx % _mockMatchScores.length];
     return Container(
       margin: const EdgeInsets.fromLTRB(16, 0, 16, 16),
@@ -420,7 +359,7 @@ class _ExploreState extends State<Explore> {
                     const SizedBox(width: 8),
                     Expanded(child: _actionBtn("Shortlist", Icons.star_border, MyTheme.text_secondary, () => vm.addShortlist(user: m.userId!))),
                     const SizedBox(width: 8),
-                    Expanded(child: _actionBtn("View", Icons.person_outline, MyTheme.text_secondary, () => AIZRoute.push(context, UserPublicProfile(userId: m.userId!)))),
+                    Expanded(child: _actionBtn("View", Icons.person_outline, MyTheme.text_secondary, () => AIZRoute.push(context, UserPublicProfile(userId: m.userId ?? 0)))),
                   ],
                 )
               ],
@@ -470,14 +409,14 @@ class _ExploreState extends State<Explore> {
             scrollDirection: Axis.horizontal,
             physics: const BouncingScrollPhysics(),
             itemCount: matches.length,
-            itemBuilder: (ctx, idx) => _buildNearbyCard(matches[idx], idx),
+            itemBuilder: (ctx, idx) => _buildNearbyCard(context, matches[idx], idx),
           ),
         )
       ],
     );
   }
 
-  Widget _buildNearbyCard(MemberData m, int idx) {
+  Widget _buildNearbyCard(BuildContext context, MemberData m, int idx) {
     return GestureDetector(
       onTap: () => AIZRoute.push(context, UserPublicProfile(userId: m.userId!)),
       child: Container(
@@ -513,55 +452,68 @@ class _ExploreState extends State<Explore> {
     );
   }
 
-  Widget _buildRecentlyActive(List<MemberData> matches) {
+  Widget _buildActiveNow(BuildContext context, List<MemberData> matches) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const SizedBox(height: 32),
         Padding(
-           padding: const EdgeInsets.symmetric(horizontal: 16),
-           child: Text("Active Now", style: Styles.bold_arsenic_16.copyWith(fontSize: 18, color: MyTheme.text_primary)),
+           padding: const EdgeInsets.fromLTRB(16, 8, 16, 12),
+           child: Text("Active Now", style: Styles.bold_arsenic_12.copyWith(fontSize: 14, color: MyTheme.text_primary, letterSpacing: 0.2)),
         ),
-        const SizedBox(height: 12),
         SizedBox(
-          height: 110,
+          height: 90,
           child: ListView.builder(
-            padding: const EdgeInsets.symmetric(horizontal: 12),
+            padding: const EdgeInsets.symmetric(horizontal: 14),
             scrollDirection: Axis.horizontal,
             physics: const BouncingScrollPhysics(),
             itemCount: matches.length,
             itemBuilder: (ctx, idx) {
               final m = matches[idx];
               return GestureDetector(
-                onTap: () => AIZRoute.push(context, UserPublicProfile(userId: m.userId!)),
+                onTap: () => AIZRoute.push(context, UserPublicProfile(userId: m.userId ?? 0)),
                 child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 6),
+                  padding: const EdgeInsets.only(right: 14),
                   child: Column(
                      children: [
                         Stack(
                           children: [
-                             ClipRRect(
-                               borderRadius: BorderRadius.circular(35),
-                               child: SizedBox(
-                                 width: 70, height: 70,
-                                 child: MyImages.normalImage(m.photo)
-                               )
+                             Container(
+                               width: 58,
+                               height: 58,
+                               decoration: BoxDecoration(
+                                 shape: BoxShape.circle,
+                                 border: Border.all(color: MyTheme.primary.withOpacity(0.1), width: 1.5),
+                                 image: DecorationImage(
+                                   image: MyImage.imageProvider(m.photo),
+                                   fit: BoxFit.cover,
+                                 ),
+                               ),
                              ),
                              Positioned(
-                               bottom: 0, right: 0,
+                               bottom: 0,
+                               right: 0,
                                child: Container(
-                                  width: 16, height: 16,
-                                  decoration: BoxDecoration(
-                                     color: MyTheme.success,
-                                     shape: BoxShape.circle,
-                                     border: Border.all(color: Colors.white, width: 2)
-                                  ),
-                               )
-                             )
+                                 width: 12,
+                                 height: 12,
+                                 decoration: BoxDecoration(
+                                   color: const Color(0xFF1CB14D),
+                                   shape: BoxShape.circle,
+                                   border: Border.all(color: MyTheme.white, width: 2),
+                                 ),
+                               ),
+                             ),
                           ]
                         ),
                         const SizedBox(height: 6),
-                        Text("Active ${idx * 5 + 1}m ago", style: Styles.caption.copyWith(color: MyTheme.text_secondary, fontSize: 10)),
+                        Text(
+                          "Active ${idx * 5 + 1}m", 
+                          style: TextStyle(
+                            fontFamily: 'Mukta',
+                            fontSize: 10,
+                            fontWeight: FontWeight.w500,
+                            color: const Color(0xFF6B7280),
+                          ),
+                        ),
                      ]
                   )
                 )
@@ -570,6 +522,165 @@ class _ExploreState extends State<Explore> {
           ),
         )
       ],
+    );
+  }
+
+  Widget _buildReelMatchCard(BuildContext context, MemberData member, ExploreViewModel vm) {
+    return Container(
+      color: Colors.black,
+      child: Stack(
+        fit: StackFit.expand,
+        children: [
+          MyImages.normalImage(member.photo),
+          Container(
+            decoration: BoxDecoration(
+              gradient: LinearGradient(
+                begin: Alignment.topCenter,
+                end: Alignment.bottomCenter,
+                colors: [
+                  Colors.transparent,
+                  Colors.black.withOpacity(0.4),
+                  Colors.black.withOpacity(0.8),
+                ],
+                stops: const [0.5, 0.7, 1.0],
+              ),
+            ),
+          ),
+          Positioned(
+            bottom: 25,
+            left: 16,
+            right: 80,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Flexible(
+                      child: Text(
+                        "${member.name ?? ''}, ${member.age ?? ''}",
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        style: Styles.h1.copyWith(color: MyTheme.white, fontSize: 28),
+                      ),
+                    ),
+                    const SizedBox(width: 8),
+                  ],
+                ),
+                const SizedBox(height: 8),
+                Row(
+                  children: [
+                    const Icon(Icons.location_on, color: MyTheme.white, size: 16),
+                    const SizedBox(width: 4),
+                    Text(
+                      member.country ?? 'India',
+                      style: Styles.body.copyWith(color: MyTheme.white.withOpacity(0.9)),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ),
+          Positioned(
+            bottom: 25,
+            right: 16,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                _buildActionBtn(
+                  icon: Icons.close,
+                  color: Colors.white.withOpacity(0.2),
+                  iconColor: Colors.white,
+                  onTap: () {
+                    if (member.userId != null) {
+                       vm.ignoreUser(user: member);
+                    }
+                  },
+                ),
+                const SizedBox(height: 20),
+                _buildActionBtn(
+                  icon: Icons.favorite,
+                  color: MyTheme.primary,
+                  iconColor: Colors.white,
+                  onTap: () {
+                    if (member.userId != null) {
+                      vm.expressInterest(userId: member.userId!);
+                    }
+                  },
+                ),
+                const SizedBox(height: 20),
+                _buildActionBtn(
+                  icon: Icons.person,
+                  color: Colors.white.withOpacity(0.2),
+                  iconColor: Colors.white,
+                  onTap: () {
+                     _showFullProfileSheet(context, member, vm);
+                  },
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildActionBtn({required IconData icon, required Color color, required Color iconColor, required VoidCallback onTap}) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        width: 50,
+        height: 50,
+        decoration: BoxDecoration(
+          color: color,
+          shape: BoxShape.circle,
+          border: Border.all(color: Colors.white.withOpacity(0.5), width: 1),
+        ),
+        child: Icon(icon, color: iconColor, size: 24),
+      ),
+    );
+  }
+
+  void _showFullProfileSheet(BuildContext context, MemberData member, ExploreViewModel vm) {
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: Colors.transparent,
+      builder: (context) {
+        return Container(
+          height: MediaQuery.of(context).size.height * 0.90,
+          decoration: const BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.only(
+              topLeft: Radius.circular(24),
+              topRight: Radius.circular(24),
+            ),
+          ),
+          child: Column(
+            children: [
+              Center(
+                child: Container(
+                  margin: const EdgeInsets.only(top: 12, bottom: 8),
+                  width: 40, height: 5,
+                  decoration: BoxDecoration(
+                    color: Colors.grey[300],
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                ),
+              ),
+              Expanded(
+                child: ClipRRect(
+                  borderRadius: const BorderRadius.only(
+                    topLeft: Radius.circular(24),
+                    topRight: Radius.circular(24),
+                  ),
+                  child: UserPublicProfile(userId: member.userId ?? 0),
+                ),
+              ),
+            ],
+          ),
+        );
+      },
     );
   }
 
@@ -594,13 +705,13 @@ class _ExploreState extends State<Explore> {
              mainAxisSpacing: 12
           ),
           itemCount: matches.length,
-          itemBuilder: (ctx, idx) => _buildNewMatchCard(matches[idx], idx),
+          itemBuilder: (ctx, idx) => _buildNewMatchCard(context, matches[idx], idx),
         ),
       ],
     );
   }
 
-  Widget _buildNewMatchCard(MemberData m, int idx) {
+  Widget _buildNewMatchCard(BuildContext context, MemberData m, int idx) {
     return GestureDetector(
       onTap: () => AIZRoute.push(context, UserPublicProfile(userId: m.userId!)),
       child: Container(
@@ -637,7 +748,7 @@ class _ExploreState extends State<Explore> {
 
   Widget _buildFilteredGrid(BuildContext context, List<dynamic> results, ExploreViewModel vm) {
     if (results.isEmpty) {
-       return _buildEmptyState();
+       return _buildEmptyState(context);
     }
     
     return Column(
@@ -661,7 +772,7 @@ class _ExploreState extends State<Explore> {
           ),
           itemBuilder: (ctx, idx) {
              final m = results[idx] is MemberData ? results[idx] as MemberData : MemberData(); 
-             return _buildNewMatchCard(m, idx);
+             return _buildNewMatchCard(context, m, idx);
           }
         ),
       ],
@@ -702,6 +813,7 @@ class ExploreViewModel {
   final bool isFilterActive;
   final void Function({dynamic user}) addShortlist;
   final void Function({required int userId}) expressInterest;
+  final void Function({required MemberData user}) ignoreUser;
 
   ExploreViewModel({
     required this.isLogin,
@@ -712,6 +824,7 @@ class ExploreViewModel {
     required this.isFilterActive,
     required this.addShortlist,
     required this.expressInterest,
+    required this.ignoreUser,
   });
 
   static ExploreViewModel fromStore(Store<AppState> store) {
@@ -724,6 +837,7 @@ class ExploreViewModel {
       isFilterActive: store.state.basicSearchState?.isFilterActive ?? false,
       addShortlist: ({dynamic user}) => store.dispatch(addShortlistMiddleware(userId: user)),
       expressInterest: ({required int userId}) => store.dispatch(expressInterestMiddleware(userId: userId)),
+      ignoreUser: ({required MemberData user}) => store.dispatch(AddToIgnoreListFromHome(user: user)),
     );
   }
 }

@@ -19,6 +19,7 @@ import 'package:active_matrimonial_flutter_app/l10n/app_localizations.dart';
 import '../helpers/push_notification_service.dart';
 import '../helpers/shared_pref.dart';
 import '../main.dart';
+import '../widgets/custom_bottom_navbar.dart';
 
 class AppNavigation extends StatefulWidget {
   const AppNavigation({super.key});
@@ -68,44 +69,25 @@ class _AppNavigationState extends State<AppNavigation> {
     return WillPopScope(
       onWillPop: _handleWillPop,
       child: Scaffold(
-        body: _buildBody(),
-        bottomNavigationBar: Container(
-          height: 64,
-          decoration: BoxDecoration(
-            color: MyTheme.white,
-            border: Border(
-              top: BorderSide(color: MyTheme.border, width: 1),
+        body: Stack(
+          children: [
+            // Main Content with bottom padding to avoid overlap
+            Padding(
+              padding: const EdgeInsets.only(bottom: 70),
+              child: _buildBody(),
             ),
-          ),
-          child: BottomNavigationBar(
-            type: BottomNavigationBarType.fixed,
-            currentIndex: _currentIndex,
-            backgroundColor: Colors.transparent,
-            elevation: 0,
-            selectedItemColor: MyTheme.primary,
-            unselectedItemColor: MyTheme.text_secondary,
-            selectedLabelStyle: Styles.caption.copyWith(color: MyTheme.primary, fontSize: 10),
-            unselectedLabelStyle: Styles.caption.copyWith(fontSize: 10),
-            onTap: onTapped,
-            items: [
-              BottomNavigationBarItem(
-                icon: Icon(_currentIndex == 0 ? Icons.explore : Icons.explore_outlined),
-                label: 'Discover',
+
+            // Floating Custom Navbar
+            Positioned(
+              left: 0,
+              right: 0,
+              bottom: 0,
+              child: CustomBottomNavBar(
+                currentIndex: _currentIndex,
+                onTap: onTapped,
               ),
-              BottomNavigationBarItem(
-                icon: Icon(_currentIndex == 1 ? Icons.favorite : Icons.favorite_border),
-                label: 'Matches',
-              ),
-              BottomNavigationBarItem(
-                icon: Icon(_currentIndex == 2 ? Icons.chat_bubble : Icons.chat_bubble_outline),
-                label: 'Inbox',
-              ),
-              BottomNavigationBarItem(
-                icon: Icon(_currentIndex == 3 ? Icons.person : Icons.person_outline),
-                label: 'Profile',
-              ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );

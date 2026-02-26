@@ -8,6 +8,7 @@ import 'package:active_matrimonial_flutter_app/helpers/main_helpers.dart';
 import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
 import 'package:flutter/foundation.dart';
+import 'package:active_matrimonial_flutter_app/repository/manage_profile_repository.dart';
 
 class MyProfile extends StatefulWidget {
   const MyProfile({super.key});
@@ -98,6 +99,53 @@ class _MyProfileState extends State<MyProfile> {
   }
 
   bool _isSubmitting = false;
+  bool _isLoadingData = true;
+
+  @override
+  void initState() {
+    super.initState();
+    _loadProfileData();
+  }
+
+  Future<void> _loadProfileData() async {
+    try {
+      final repo = ManageProfileRepository();
+      var basicRes = await repo.fetchBasicInfo();
+      var phyRes = await repo.fetchPhysicalAttribute();
+      var conRes = await repo.fetchContact();
+
+      if (mounted) {
+        setState(() {
+          if (basicRes.result == true && basicRes.data != null) {
+            _firstName.text = basicRes.data!.firsName ?? '';
+            _surname.text = basicRes.data!.lastName ?? '';
+            if (basicRes.data!.dateOfBirth != null) {
+              try {
+                _dob = basicRes.data!.dateOfBirth;
+                if (_dob != null) {
+                  _computedAge = DateTime.now().year - _dob!.year;
+                }
+              } catch (e) {}
+            }
+          }
+
+          if (phyRes.result == true && phyRes.data != null) {
+            _weight.text = phyRes.data!.weight?.toString() ?? '';
+            _disabilityDetails.text = phyRes.data!.disability ?? '';
+          }
+
+          if (conRes.result == true && conRes.data != null && conRes.data!.email != null) {
+             // Contact get response API doesn't hold phone, only email
+          }
+
+          _isLoadingData = false;
+        });
+      }
+    } catch (e) {
+      if (mounted) setState(() => _isLoadingData = false);
+      debugPrint("Error loading profile data: ${e.toString()}");
+    }
+  }
 
   void _submitForm() async {
     setState(() => _isSubmitting = true);
@@ -190,6 +238,16 @@ class _MyProfileState extends State<MyProfile> {
 
   @override
   Widget build(BuildContext context) {
+    if (_isLoadingData) {
+      return Scaffold(
+        backgroundColor: MyTheme.background,
+        appBar: _buildHeader(),
+        body: const Center(
+          child: CircularProgressIndicator(color: MyTheme.primary),
+        ),
+      );
+    }
+
     return Scaffold(
       backgroundColor: MyTheme.background,
       appBar: _buildHeader(),
@@ -223,11 +281,8 @@ class _MyProfileState extends State<MyProfile> {
         icon: const Icon(Icons.arrow_back, color: MyTheme.text_primary),
         onPressed: _prevStep,
       ),
-      title: const Text("Edit Profile",
-          style: TextStyle(
-              color: MyTheme.text_primary,
-              fontSize: 18,
-              fontWeight: FontWeight.bold)),
+      title: Text("प्रोफाईल संपादित करा",
+          style: Styles.h2.copyWith(color: MyTheme.text_primary, fontSize: 18)),
       centerTitle: true,
       bottom: PreferredSize(
         preferredSize: const Size.fromHeight(1),
@@ -285,11 +340,10 @@ class _MyProfileState extends State<MyProfile> {
                   shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(12)),
                 ),
-                child: const Text("Back",
-                    style: TextStyle(
+                child: Text("मागे",
+                    style: Styles.buttonText.copyWith(
                         color: MyTheme.text_primary,
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold)),
+                        fontSize: 16)),
               ),
             ),
           if (_currentStep > 0) const SizedBox(width: 12),
@@ -307,11 +361,10 @@ class _MyProfileState extends State<MyProfile> {
               child: _isSubmitting 
                   ? const SizedBox(height: 20, width: 20, child: CircularProgressIndicator(color: Colors.white, strokeWidth: 2))
                   : Text(
-                  _currentStep == _totalSteps - 1 ? "Complete Profile" : "Next",
-                  style: const TextStyle(
+                  _currentStep == _totalSteps - 1 ? "पूर्ण करा" : "पुढील",
+                  style: Styles.buttonText.copyWith(
                       color: Colors.white,
-                      fontSize: 16,
-                      fontWeight: FontWeight.bold)),
+                      fontSize: 16)),
             ),
           ),
         ],
@@ -324,11 +377,11 @@ class _MyProfileState extends State<MyProfile> {
   // =========================================================================
   Widget _buildStep1BasicPhysical() {
     return _pageWrapper([
-      _sectionTitle("Basic Personal Details"),
-      _buildTextField("First Name", _firstName),
-      _buildTextField("Middle Name", _middleName),
-      _buildTextField("Surname", _surname),
-      _buildDatePicker("Date of Birth", _dob, (date) {
+      _sectionTitle("प्राथमिक वैयक्तिक माहिती"),
+      _buildTextField("पहिले नाव", _firstName),
+      _buildTextField("मधले नाव", _middleName),
+      _buildTextField("आडनाव", _surname),
+      _buildDatePicker("जन्म तारीख", _dob, (date) {
         setState(() {
           _dob = date;
           _computedAge = DateTime.now().year - date.year;
@@ -337,17 +390,17 @@ class _MyProfileState extends State<MyProfile> {
       if (_computedAge != null)
         Padding(
           padding: const EdgeInsets.only(bottom: 16),
-          child: Text("Age: $_computedAge years",
-              style: const TextStyle(color: MyTheme.primary, fontWeight: FontWeight.bold)),
+          child: Text("वय: $_computedAge वर्षे",
+              style: Styles.body.copyWith(color: MyTheme.primary, fontWeight: FontWeight.bold)),
         ),
-      _buildDropdown("Religion", _religion, ["Hindu", "Muslim", "Christian", "Sikh", "Jain", "Buddhist"], (v) => setState(() => _religion = v)),
-      _buildDropdown("Caste", _caste, ["Maratha", "Brahmin", "Kunbi", "Dhangar", "Mali", "Chambhar", "Mahar"], (v) => setState(() => _caste = v)),
-      _buildDropdown("Marital Status", _maritalStatus, [
-        "Never Married", "Divorced Male", "Divorced Female", "Widow", "Widower"
+      _buildDropdown("धर्म", _religion, ["हिंदू", "मुस्लिम", "ख्रिश्चन", "शीख", "जैन", "बौद्ध"], (v) => setState(() => _religion = v)),
+      _buildDropdown("जात", _caste, ["मराठा", "ब्राह्मण", "कुणबी", "धनगर", "माळी", "चांभार", "महार"], (v) => setState(() => _caste = v)),
+      _buildDropdown("वैवाहिक स्थिती", _maritalStatus, [
+        "अविवाहित", "घटस्फोटित पुरुष", "घटस्फोटित महिला", "विधवा", "विधुर"
       ], (v) => setState(() => _maritalStatus = v)),
 
       const SizedBox(height: 16),
-      _sectionTitle("Physical Details"),
+      _sectionTitle("शारीरिक माहिती"),
       _buildDropdown("Height", _height, [
         "4.5 ft", "5.0 ft", "5.2 ft", "5.5 ft", "5.8 ft", "6.0 ft", "6.2 ft", "6.5 ft"
       ], (v) => setState(() => _height = v)),
@@ -372,25 +425,25 @@ class _MyProfileState extends State<MyProfile> {
   Widget _buildStep2FamilyEducation() {
     List<String> numberOptions = List.generate(11, (i) => i.toString());
     return _pageWrapper([
-      _sectionTitle("Family Background"),
-      _buildRadioOption("Father Alive", _fatherAlive, (v) => setState(() => _fatherAlive = v!)),
-      _buildRadioOption("Mother Alive", _motherAlive, (v) => setState(() => _motherAlive = v!)),
-      _buildDropdown("Number of Brothers", _noOfBrothers, numberOptions, (v) => setState(() => _noOfBrothers = v)),
-      _buildDropdown("Married Brothers", _marriedBrothers, numberOptions, (v) => setState(() => _marriedBrothers = v)),
-      _buildDropdown("Number of Sisters", _noOfSisters, numberOptions, (v) => setState(() => _noOfSisters = v)),
-      _buildDropdown("Married Sisters", _marriedSisters, numberOptions, (v) => setState(() => _marriedSisters = v)),
-      _buildTextField("Parents Occupation", _parentsOccupation),
-      _buildTextField("Property Details (स्थावर मालमत्ता)", _propertyDetails, maxLines: 3),
+      _sectionTitle("कौटुंबिक माहिती"),
+      _buildRadioOption("वडील हयात आहेत का?", _fatherAlive, (v) => setState(() => _fatherAlive = v!)),
+      _buildRadioOption("आई हयात आहे का?", _motherAlive, (v) => setState(() => _motherAlive = v!)),
+      _buildDropdown("भावांची संख्या", _noOfBrothers, numberOptions, (v) => setState(() => _noOfBrothers = v)),
+      _buildDropdown("विवाहित भाऊ", _marriedBrothers, numberOptions, (v) => setState(() => _marriedBrothers = v)),
+      _buildDropdown("बहिणींची संख्या", _noOfSisters, numberOptions, (v) => setState(() => _noOfSisters = v)),
+      _buildDropdown("विवाहित बहिणी", _marriedSisters, numberOptions, (v) => setState(() => _marriedSisters = v)),
+      _buildTextField("वडिलांचा व्यवसाय", _parentsOccupation),
+      _buildTextField("स्थावर मालमत्ता", _propertyDetails, maxLines: 3),
 
       const SizedBox(height: 16),
-      _sectionTitle("Education Details"),
-      _buildDropdown("Education Level", _educationLevel, ["10th", "12th", "ITI", "Diploma", "Graduate", "Post Graduate", "PhD"], (v) => setState(() => _educationLevel = v)),
+      _sectionTitle("शैक्षणिक माहिती"),
+      _buildDropdown("शैक्षणिक स्तर", _educationLevel, ["१०वी", "१२वी", "ITI", "डिप्लोमा", "पदवीधर", "पदव्युत्तर", "PhD"], (v) => setState(() => _educationLevel = v)),
 
       const SizedBox(height: 16),
-      _sectionTitle("Occupation Details"),
-      _buildDropdown("Occupation Type", _occupationType, ["Student", "Private Job", "Government Job", "Business", "Farmer"], (v) => setState(() => _occupationType = v)),
-      _buildTextField("Occupation Details (e.g. Software Dev in Pune)", _occupationDetails, maxLines: 2),
-      _buildDropdown("Annual Income", _annualIncome, ["0–2 Lakh", "2–5 Lakh", "5–10 Lakh", "10+ Lakh"], (v) => setState(() => _annualIncome = v)),
+      _sectionTitle("व्यावसायिक माहिती"),
+      _buildDropdown("व्यवसायाचा प्रकार", _occupationType, ["विद्यार्थी", "खाजगी नोकरी", "सरकारी नोकरी", "व्यवसाय", "शेतकरी"], (v) => setState(() => _occupationType = v)),
+      _buildTextField("व्यवसायाचा तपशील (उदा. सॉफ्टवेअर देव, पुणे)", _occupationDetails, maxLines: 2),
+      _buildDropdown("वार्षिक उत्पन्न", _annualIncome, ["०–२ लाख", "२–५ लाख", "५–१० लाख", "१०+ लाख"], (v) => setState(() => _annualIncome = v)),
     ]);
   }
 
@@ -447,7 +500,7 @@ class _MyProfileState extends State<MyProfile> {
   Widget _sectionTitle(String title) {
     return Padding(
       padding: const EdgeInsets.only(bottom: 20),
-      child: Text(title, style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: MyTheme.text_primary)),
+      child: Text(title, style: Styles.h2.copyWith(fontSize: 20, color: MyTheme.text_primary)),
     );
   }
 
@@ -457,7 +510,7 @@ class _MyProfileState extends State<MyProfile> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(label, style: const TextStyle(color: MyTheme.text_secondary, fontSize: 13, fontWeight: FontWeight.w600)),
+          Text(label, style: Styles.body.copyWith(color: MyTheme.text_secondary, fontSize: 13, fontWeight: FontWeight.w600)),
           const SizedBox(height: 8),
           Container(
             decoration: BoxDecoration(
@@ -486,7 +539,7 @@ class _MyProfileState extends State<MyProfile> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(label, style: const TextStyle(color: MyTheme.text_secondary, fontSize: 13, fontWeight: FontWeight.w600)),
+          Text(label, style: Styles.body.copyWith(color: MyTheme.text_secondary, fontSize: 13, fontWeight: FontWeight.w600)),
           const SizedBox(height: 8),
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 16),
@@ -499,7 +552,7 @@ class _MyProfileState extends State<MyProfile> {
               child: DropdownButton<String>(
                 isExpanded: true,
                 value: value,
-                hint: const Text("Select"),
+                hint: const Text("निवडा"),
                 items: items.map((e) => DropdownMenuItem(value: e, child: Text(e))).toList(),
                 onChanged: (v) {
                   if (v != null) onChanged(v);
@@ -518,7 +571,7 @@ class _MyProfileState extends State<MyProfile> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(label, style: const TextStyle(color: MyTheme.text_secondary, fontSize: 13, fontWeight: FontWeight.w600)),
+          Text(label, style: Styles.body.copyWith(color: MyTheme.text_secondary, fontSize: 13, fontWeight: FontWeight.w600)),
           const SizedBox(height: 8),
           InkWell(
             onTap: () async {
@@ -539,7 +592,7 @@ class _MyProfileState extends State<MyProfile> {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text(date != null ? DateFormat('dd MMM yyyy').format(date) : "Select Date", 
+                  Text(date != null ? DateFormat('dd MMM yyyy').format(date) : "तारीख निवडा", 
                       style: TextStyle(color: date != null ? MyTheme.text_primary : MyTheme.text_secondary)),
                   const Icon(Icons.calendar_today, color: MyTheme.text_secondary, size: 20),
                 ],
@@ -557,13 +610,13 @@ class _MyProfileState extends State<MyProfile> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(label, style: const TextStyle(color: MyTheme.text_secondary, fontSize: 13, fontWeight: FontWeight.w600)),
+          Text(label, style: Styles.body.copyWith(color: MyTheme.text_secondary, fontSize: 13, fontWeight: FontWeight.w600)),
           const SizedBox(height: 8),
           Row(
             children: [
               Expanded(
                 child: RadioListTile<bool>(
-                  title: const Text("Yes"),
+                  title: const Text("हो"),
                   value: true,
                   groupValue: value,
                   onChanged: onChanged,
@@ -573,7 +626,7 @@ class _MyProfileState extends State<MyProfile> {
               ),
               Expanded(
                 child: RadioListTile<bool>(
-                  title: const Text("No"),
+                  title: const Text("नाही"),
                   value: false,
                   groupValue: value,
                   onChanged: onChanged,
@@ -594,7 +647,7 @@ class _MyProfileState extends State<MyProfile> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(label, style: const TextStyle(color: MyTheme.text_secondary, fontSize: 13, fontWeight: FontWeight.w600)),
+          Text(label, style: Styles.body.copyWith(color: MyTheme.text_secondary, fontSize: 13, fontWeight: FontWeight.w600)),
           const SizedBox(height: 8),
           InkWell(
             onTap: () async {
@@ -616,7 +669,7 @@ class _MyProfileState extends State<MyProfile> {
                     children: [
                       Icon(Icons.cloud_upload_outlined, color: MyTheme.text_secondary, size: 40),
                       SizedBox(height: 8),
-                      Text("Tap to upload", style: TextStyle(color: MyTheme.text_secondary)),
+                      Text("अपलोड करण्यासाठी दाबा", style: TextStyle(color: MyTheme.text_secondary)),
                     ],
                   ),
             ),
@@ -632,7 +685,7 @@ class _MyProfileState extends State<MyProfile> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(label, style: const TextStyle(color: MyTheme.text_secondary, fontSize: 13, fontWeight: FontWeight.w600)),
+          Text(label, style: Styles.body.copyWith(color: MyTheme.text_secondary, fontSize: 13, fontWeight: FontWeight.w600)),
           const SizedBox(height: 8),
           InkWell(
             onTap: () async {
@@ -663,7 +716,7 @@ class _MyProfileState extends State<MyProfile> {
                     children: [
                       Icon(Icons.photo_library_outlined, color: MyTheme.text_secondary, size: 40),
                       SizedBox(height: 8),
-                      Text("Tap to upload multiple photos", style: TextStyle(color: MyTheme.text_secondary)),
+                      Text("अनेक फोटो अपलोड करण्यासाठी दाबा", style: TextStyle(color: MyTheme.text_secondary)),
                     ],
                   ),
             ),

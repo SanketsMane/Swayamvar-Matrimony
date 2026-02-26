@@ -140,5 +140,9 @@
   "onboarding_2_title": "तुमची जोडी शोधा",
   "onboarding_2_subtitle": "हजारो सत्यापित प्रोफाइलशी कनेक्ट व्हा आणि तुमच्यासाठी बनविलेले प्रोफाइल शोधा.",
   "onboarding_3_title": "संभाषण सुरू करा",
-  "onboarding_3_subtitle": "तुमच्या जोडीदाराशी सुरक्षितपणे संवाद साधा आणि लग्नाकडे पहिले पाऊल टाका."
+  "onboarding_3_subtitle": "तुमच्या जोडीदाराशी सुरक्षितपणे संवाद साधा आणि लग्नाकडे पहिले पाऊल टाका.",
+  "home_greeting_morning": "शुभ प्रभात",
+  "home_greeting_afternoon": "शुभ दुपार",
+  "home_greeting_evening": "शुभ संध्याकाळ",
+  "home_profile_completeness": "प्रोफाइल {percent}% पूर्ण"
 }

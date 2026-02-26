@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-
+import '../const/style.dart';
 import '../const/const.dart';
 import '../const/my_theme.dart';
 import '../helpers/device_info.dart';
@@ -95,8 +95,7 @@ class NotificationListCard extends StatelessWidget {
                       children: [
                         Text(
                           time!,
-                          style:
-                              const TextStyle(fontSize: 12, color: Colors.grey),
+                          style: Styles.caption.copyWith(fontSize: 12, color: Colors.grey),
                         ),
                         readAt != "read"
                             ? Container(
@@ -115,6 +114,7 @@ class NotificationListCard extends StatelessWidget {
                     width: DeviceInfo(context).width! * 0.66,
                     child: Text(
                       message!,
+                      style: Styles.body.copyWith(fontSize: 14),
                       overflow: TextOverflow.ellipsis,
                       maxLines: 2,
                       softWrap: false,

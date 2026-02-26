@@ -12,7 +12,8 @@ NotificationState? notification_reducer(
     store_notification(state!, action);
   }
   if (action is NotificationFailureAction) {
-    state!.error = action.error;
+    state!.isFetching = false; // Sanket: Reset loading on failure
+    state.error = action.error;
     return state;
   }
   return state;
@@ -20,12 +21,15 @@ NotificationState? notification_reducer(
 
 store_notification(NotificationState state, StoreNotification action) {
   state.isFetching = false;
-  if (action.payload!.meta!.lastPage != state.page) {
+  if (action.payload?.meta != null && action.payload!.meta!.lastPage != state.page) {
     state.page += 1;
   } else {
     state.hasMore = false;
   }
-  state.notification_list!.addAll(action.payload!.data!);
+
+  if (action.payload?.data != null) {
+    state.notification_list!.addAll(action.payload!.data!);
+  }
   return state;
 }
 

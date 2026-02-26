@@ -1,5 +1,6 @@
 import 'package:active_matrimonial_flutter_app/config/app_router.dart';
 import 'package:active_matrimonial_flutter_app/const/my_theme.dart';
+import 'package:active_matrimonial_flutter_app/const/style.dart';
 import 'package:active_matrimonial_flutter_app/helpers/device_info.dart';
 import 'package:active_matrimonial_flutter_app/helpers/shared_pref.dart';
 import 'package:flutter/material.dart';
@@ -122,9 +123,7 @@ class _OnBoardingPagesState extends State<OnBoardingPages> {
                           },
                           child: Text(
                             pageList[index]['title']!,
-                            style: const TextStyle(
-                              fontFamily: "Poppins",
-                              fontWeight: FontWeight.bold,
+                            style: Styles.h1.copyWith(
                               fontSize: 32,
                               color: Colors.white,
                               height: 1.2,
@@ -151,9 +150,7 @@ class _OnBoardingPagesState extends State<OnBoardingPages> {
                           },
                           child: Text(
                             pageList[index]['subtitle']!,
-                            style: const TextStyle(
-                              fontFamily: "Poppins",
-                              fontWeight: FontWeight.normal,
+                            style: Styles.body.copyWith(
                               fontSize: 16,
                               color: Colors.white70,
                               height: 1.5,
@@ -230,11 +227,7 @@ class _OnBoardingPagesState extends State<OnBoardingPages> {
                           _currentIndex == pageList.length - 1
                               ? "Get Started"
                               : "Next",
-                          style: const TextStyle(
-                            color: Colors.white,
-                            fontSize: 16,
-                            fontWeight: FontWeight.w600,
-                          ),
+                          style: Styles.buttonText.copyWith(fontSize: 16),
                         ),
                         const SizedBox(width: 8),
                         Icon(
@@ -271,12 +264,9 @@ class _OnBoardingPagesState extends State<OnBoardingPages> {
                     color: Colors.black12,
                     borderRadius: BorderRadius.circular(20),
                   ),
-                  child: const Text(
+                  child: Text(
                     "Skip",
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontWeight: FontWeight.w500,
-                    ),
+                    style: Styles.buttonText.copyWith(color: Colors.white),
                   ),
                 ),
               ),

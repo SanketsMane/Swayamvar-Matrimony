@@ -50,7 +50,7 @@ class _NotificationsState extends State<Notifications> {
     scrollController.dispose();
   }
 
-  List<String> items = ['Mark all as read'];
+  List<String> items = ['सर्व वाचलेले म्हणून खूण करा'];
 
   @override
   Widget build(BuildContext context) {
@@ -95,20 +95,19 @@ class _NotificationsState extends State<Notifications> {
                         child:
                             vm.hasMore
                                 ? CircularProgressIndicator(
-                                  color: MyTheme.storm_grey,
-                                )
-                                : const Text('No more data'),
+                                    )
+                                : Text('अजून माहिती उपलब्ध नाही', style: Styles.caption),
                       ),
                     );
                   }
 
                   return NotificationListCard(
-                    type: vm.listofdata[index].type!,
-                    photo: vm.listofdata[index].photo ?? '',
-                    time: vm.listofdata[index].time!,
-                    readAt: vm.listofdata[index].readAt!,
-                    message: vm.listofdata[index].message!,
-                    notifyBy: vm.listofdata[index].notifyBy!,
+                    type: vm.listofdata[index].type ?? "", // Sanket: Safe access
+                    photo: vm.listofdata[index].photo ?? "",
+                    time: vm.listofdata[index].time ?? "",
+                    readAt: vm.listofdata[index].readAt ?? "",
+                    message: vm.listofdata[index].message ?? "",
+                    notifyBy: vm.listofdata[index].notifyBy ?? 0,
                   );
                 },
               )
@@ -132,7 +131,7 @@ class _NotificationsState extends State<Notifications> {
       iconTheme: const IconThemeData(color: Colors.black),
       title: Text(
         AppLocalizations.of(context)!.notifications_page_title,
-        style: Styles.bold_app_accent_16,
+        style: Styles.h2.copyWith(color: MyTheme.text_primary, fontSize: 18),
       ),
       actions: [
         PopupMenuButton(
@@ -140,7 +139,7 @@ class _NotificationsState extends State<Notifications> {
           icon: const Icon(Icons.more_vert, color: Colors.black, size: 20),
           onSelected: (dynamic value) {
             switch (value.toString().toLowerCase()) {
-              case 'mark all as read':
+              case 'सर्व वाचलेले म्हणून खूण करा':
                 store.dispatch(notificationReadMiddleware());
                 break;
             }
@@ -150,7 +149,7 @@ class _NotificationsState extends State<Notifications> {
                 .map(
                   (e) => PopupMenuItem(
                     value: e,
-                    child: Text(e, style: const TextStyle(color: Colors.black)),
+                    child: Text(e, style: Styles.body.copyWith(color: Colors.black)),
                   ),
                 )
                 .toList();

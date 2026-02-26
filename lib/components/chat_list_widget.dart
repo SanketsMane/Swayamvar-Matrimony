@@ -109,7 +109,8 @@ class ChatListWidget extends StatelessWidget {
                           name,
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,
-                          style: Styles.bold_arsenic_16.copyWith(
+                          style: Styles.profileName.copyWith(
+                            // Sanket: Chat name uses Mukta SemiBold per typography system
                             fontSize: 15,
                             color: MyTheme.text_primary,
                           ),
@@ -136,10 +137,10 @@ class ChatListWidget extends StatelessWidget {
                   ),
                   const SizedBox(height: 2),
                   Text(
-                    lastMessage ?? "Start a conversation...",
+                    lastMessage ?? "संवाद सुरू करा...",
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
-                    style: Styles.regular_gull_grey_12.copyWith(
+                    style: Styles.caption.copyWith(
                       fontSize: 13,
                       color: MyTheme.text_secondary,
                     ),
@@ -154,8 +155,8 @@ class ChatListWidget extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Text(
-                  "2m ago", // Mock for now as per design spec
-                  style: Styles.regular_gull_grey_12.copyWith(fontSize: 11),
+                  "2m ago",
+                  style: Styles.caption.copyWith(fontSize: 11, color: MyTheme.text_secondary),
                 ),
                 const SizedBox(height: 4),
                 if (unseenMessageCount > 0)

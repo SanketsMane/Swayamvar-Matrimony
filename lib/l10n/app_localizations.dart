@@ -2677,6 +2677,30 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Interact with your matches securely and take the first step towards your forever.'**
   String get onboarding_3_subtitle;
+
+  /// No description provided for @home_greeting_morning.
+  ///
+  /// In en, this message translates to:
+  /// **'Good Morning'**
+  String get home_greeting_morning;
+
+  /// No description provided for @home_greeting_afternoon.
+  ///
+  /// In en, this message translates to:
+  /// **'Good Afternoon'**
+  String get home_greeting_afternoon;
+
+  /// No description provided for @home_greeting_evening.
+  ///
+  /// In en, this message translates to:
+  /// **'Good Evening'**
+  String get home_greeting_evening;
+
+  /// No description provided for @home_profile_completeness.
+  ///
+  /// In en, this message translates to:
+  /// **'Profile {percent}% Complete'**
+  String home_profile_completeness(Object percent);
 }
 
 class _AppLocalizationsDelegate

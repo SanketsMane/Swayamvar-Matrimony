@@ -22,18 +22,18 @@ class PublicProfileResponse {
   factory PublicProfileResponse.fromJson(Map<String, dynamic> json) =>
       PublicProfileResponse(
         result: json["result"],
-        data: Data.fromJson(json["data"]),
+        data: json["data"] is Map<String, dynamic> ? Data.fromJson(json["data"]) : null, // Sanket: Harden
       );
 
   Map<String, dynamic> toJson() => {
         "result": result,
-        "data": data!.toJson(),
+        "data": data?.toJson(), // Sanket: Use null safety
       };
 }
 
 class Data {
   Data(
-      {this.intoduction,
+      {this.introduction,
       this.basicInfo,
       this.presentAddress,
       this.contactDetails,
@@ -56,7 +56,7 @@ class Data {
       this.viewContactCheck,
       this.profilePicRequest});
 
-  Intoduction? intoduction;
+  Introduction? introduction;
   BasicInfo? basicInfo;
   var presentAddress;
   ContactDetails? contactDetails;
@@ -80,88 +80,96 @@ class Data {
   bool? profilePicRequest;
 
   factory Data.fromJson(Map<String, dynamic> json) => Data(
-        intoduction: json["intoduction"] != null
-            ? Intoduction.fromJson(json["intoduction"])
-            : json["intoduction"],
-        basicInfo: json["basic_info"] != null
+        introduction: json["introduction"] is Map<String, dynamic>
+            ? Introduction.fromJson(json["introduction"])
+            : null, // Sanket: Fixed typo and hardened with type check
+        basicInfo: json["basic_info"] is Map<String, dynamic>
             ? BasicInfo.fromJson(json["basic_info"])
-            : json["basic_info"],
-        presentAddress: json["present_address"] != null
+            : null,
+        presentAddress: json["present_address"] is Map<String, dynamic>
             ? EntAddress.fromJson(json["present_address"])
-            : json["present_address"],
-        contactDetails: json["contact_details"] != null
+            : null,
+        contactDetails: json["contact_details"] is Map<String, dynamic>
             ? ContactDetails.fromJson(json["contact_details"])
-            : json["contact_details"],
-        education: List<Education>.from(
-            json["education"].map((x) => Education.fromJson(x))),
-        career:
-            List<Career>.from(json["career"].map((x) => Career.fromJson(x))),
-        physicalAttributes: json["physical_attributes"] != null
+            : null,
+        education: json["education"] is List
+            ? List<Education>.from(
+                json["education"].map((x) => Education.fromJson(x)))
+            : [],
+        career: json["career"] is List
+            ? List<Career>.from(json["career"].map((x) => Career.fromJson(x)))
+            : [],
+        physicalAttributes: json["physical_attributes"] is Map<String, dynamic>
             ? PhysicalAttributes.fromJson(json["physical_attributes"])
-            : json["physical_attributes"],
-        knownLanguages: json["known_languages"] != null
+            : null,
+        knownLanguages: json["known_languages"] is List
             ? List<MotherTongue>.from(
                 json["known_languages"].map((x) => MotherTongue.fromJson(x)))
-            : json["known_languages"],
-        motherTongue: json["mother_tongue"] != null
+            : [],
+        motherTongue: json["mother_tongue"] is Map<String, dynamic>
             ? MotherTongue.fromJson(json["mother_tongue"])
-            : json["mother_tongue"],
-        hobbiesInterest: json["hobbies_interest"] != null
+            : null,
+        hobbiesInterest: json["hobbies_interest"] is Map<String, dynamic>
             ? HobbiesInterest.fromJson(json["hobbies_interest"])
-            : json["hobbies_interest"],
-        attitudeBehavior: json["attitude_behavior"] != null
+            : null,
+        attitudeBehavior: json["attitude_behavior"] is Map<String, dynamic>
             ? AttitudeBehavior.fromJson(json["attitude_behavior"])
-            : json["attitude_behavior"],
-        residenceInfo: json["residence_info"] != null
+            : null,
+        residenceInfo: json["residence_info"] is Map<String, dynamic>
             ? ResidenceInfo.fromJson(json["residence_info"])
-            : json["residence_info"],
-        spiritualBackgrounds: json["spiritual_backgrounds"] != null
+            : null,
+        spiritualBackgrounds: json["spiritual_backgrounds"] is Map<String, dynamic>
             ? SpiritualBackgrounds.fromJson(json["spiritual_backgrounds"])
-            : json["spiritual_backgrounds"],
-        lifestyles: json["lifestyles"] != null
+            : null,
+        lifestyles: json["lifestyles"] is Map<String, dynamic>
             ? Lifestyles.fromJson(json["lifestyles"])
-            : json["lifestyles"],
-        astrologies: json["astrologies"] != null
+            : null,
+        astrologies: json["astrologies"] is Map<String, dynamic>
             ? Astrologies.fromJson(json["astrologies"])
-            : json["astrologies"],
-        permanentAddress: json["permanent_address"] != null
+            : null,
+        permanentAddress: json["permanent_address"] is Map<String, dynamic>
             ? EntAddress.fromJson(json["permanent_address"])
-            : json["permanent_address"],
-        familiesInformation: json["families_information"] != null
+            : null,
+        familiesInformation: json["families_information"] is Map<String, dynamic>
             ? FamiliesInformation.fromJson(json["families_information"])
-            : json["families_information"],
-        partnerExpectation: json["partner_expectation"] != null
+            : null,
+        partnerExpectation: json["partner_expectation"] is Map<String, dynamic>
             ? PartnerExpectation.fromJson(json["partner_expectation"])
-            : json["partner_expectation"],
-        photoGallery: List<PhotoGallery>.from(
-            json["photo_gallery"].map((x) => PhotoGallery.fromJson(x))),
+            : null,
+        photoGallery: json["photo_gallery"] is List
+            ? List<PhotoGallery>.from(
+                json["photo_gallery"].map((x) => PhotoGallery.fromJson(x)))
+            : [],
         profileMatch: json["profile_match"],
         viewContactCheck: json["view_contact_check"],
         profilePicRequest: json["profile_pic_request"],
       );
 
   Map<String, dynamic> toJson() => {
-        "intoduction": intoduction!.toJson(),
-        "basic_info": basicInfo!.toJson(),
-        "present_address": presentAddress.toJson(),
-        "contact_details": contactDetails!.toJson(),
-        "education": List<dynamic>.from(education!.map((x) => x.toJson())),
-        "career": List<dynamic>.from(career!.map((x) => x.toJson())),
-        "physical_attributes": physicalAttributes!.toJson(),
-        "known_languages":
-            List<dynamic>.from(knownLanguages!.map((x) => x.toJson())),
-        "mother_tongue": motherTongue!.toJson(),
-        "hobbies_interest": hobbiesInterest!.toJson(),
-        "attitude_behavior": attitudeBehavior!.toJson(),
-        "residence_info": residenceInfo.toJson(),
-        "spiritual_backgrounds": spiritualBackgrounds!.toJson(),
-        "lifestyles": lifestyles!.toJson(),
-        "astrologies": astrologies!.toJson(),
-        "permanent_address": permanentAddress.toJson(),
-        "families_information": familiesInformation!.toJson(),
-        "partner_expectation": partnerExpectation!.toJson(),
-        "photo_gallery":
-            List<dynamic>.from(photoGallery!.map((x) => x.toJson())),
+        "introduction": introduction?.toJson(), // Sanket: Use null safety
+        "basic_info": basicInfo?.toJson(),
+        "present_address": presentAddress?.toJson(),
+        "contact_details": contactDetails?.toJson(),
+        "education":
+            education == null ? null : List<dynamic>.from(education!.map((x) => x.toJson())),
+        "career": career == null ? null : List<dynamic>.from(career!.map((x) => x.toJson())),
+        "physical_attributes": physicalAttributes?.toJson(),
+        "known_languages": knownLanguages == null
+            ? null
+            : List<dynamic>.from(knownLanguages!.map((x) => x.toJson())),
+        "mother_tongue": motherTongue?.toJson(),
+        "hobbies_interest": hobbiesInterest?.toJson(),
+        "attitude_behavior": attitudeBehavior?.toJson(),
+        "residence_info": residenceInfo?.toJson(),
+        "spiritual_backgrounds": spiritualBackgrounds?.toJson(),
+        "lifestyles": lifestyles?.toJson(),
+        "astrologies": astrologies?.toJson(),
+        "permanent_address": permanentAddress?.toJson(),
+        "families_information": familiesInformation?.toJson(),
+        "partner_expectation": partnerExpectation?.toJson(),
+        "photo_gallery": photoGallery == null
+            ? null
+            : List<dynamic>.from(photoGallery!.map((x) => x.toJson())),
         "profile_match": profileMatch,
         "view_contact_check": viewContactCheck,
         "profile_pic_request": profilePicRequest,
@@ -240,6 +248,7 @@ class BasicInfo {
     this.phone,
     this.maritialStatus,
     this.photo,
+    this.mothereTongue, // Sanket: Added for compatibility
   });
 
   String? firsName;
@@ -255,6 +264,7 @@ class BasicInfo {
   String? phone;
   String? maritialStatus;
   String? photo;
+  String? mothereTongue; // Sanket: Alias to prevent crashes
 
   factory BasicInfo.fromJson(Map<String, dynamic> json) => BasicInfo(
         firsName: json["firs_name"],
@@ -263,13 +273,14 @@ class BasicInfo {
         age: json["age"],
         religion: json["religion"],
         caste: json["caste"],
-        dateOfBirth: DateTime.parse(json["date_of_birth"]),
-        onbehalf: MotherTongue.fromJson(json["onbehalf"]),
+        dateOfBirth: json["date_of_birth"] == null ? null : DateTime.tryParse(json["date_of_birth"]),
+        onbehalf: json["onbehalf"] == null ? null : MotherTongue.fromJson(json["onbehalf"]),
         noOfChildren: json["no_of_children"],
         gender: json["gender"],
         phone: json["phone"],
         maritialStatus: json["maritial_status"],
         photo: json["photo"],
+        mothereTongue: json["mothere_tongue"]?.toString(), // Sanket: Alias
       );
 
   Map<String, dynamic> toJson() => {
@@ -279,13 +290,14 @@ class BasicInfo {
         "age": age,
         "religion": religion,
         "caste": caste,
-        "date_of_birth": dateOfBirth!.toIso8601String(),
-        "onbehalf": onbehalf!.toJson(),
+        "date_of_birth": dateOfBirth?.toIso8601String(), // Sanket: Null safety
+        "onbehalf": onbehalf?.toJson(),
         "no_of_children": noOfChildren,
         "gender": gender,
         "phone": phone,
         "maritial_status": maritialStatus,
         "photo": photo,
+        "mothere_tongue": mothereTongue,
       };
 }
 
@@ -479,15 +491,15 @@ class HobbiesInterest {
       };
 }
 
-class Intoduction {
-  Intoduction({
+class Introduction {
+  Introduction({
     this.introduction,
   });
 
   String? introduction;
 
-  factory Intoduction.fromJson(Map<String, dynamic> json) => Intoduction(
-        introduction: json["introduction"],
+  factory Introduction.fromJson(Map<String, dynamic> json) => Introduction(
+        introduction: json["introduction"]?.toString(), // Sanket: Ensure string
       );
 
   Map<String, dynamic> toJson() => {

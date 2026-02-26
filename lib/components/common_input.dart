@@ -21,7 +21,7 @@ class InputStyle {
       ),
       isDense: true,
       hintText: hint,
-      hintStyle: TextStyle(fontSize: 14, color: MyTheme.light_grey),
+      hintStyle: Styles.body.copyWith(color: MyTheme.light_grey),
       border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
       suffixIcon: suffixIcon,
     );
@@ -45,9 +45,9 @@ class InputStyle {
       ),
 
       isDense: true,
-      contentPadding: EdgeInsets.symmetric(horizontal: 8),
+      contentPadding: const EdgeInsets.symmetric(horizontal: 8),
       hintText: hint,
-      hintStyle: Styles.regular_gull_grey_12,
+      hintStyle: Styles.body.copyWith(color: MyTheme.text_secondary, fontSize: 12),
       border: const OutlineInputBorder(
         borderRadius: BorderRadius.all(Radius.circular(12)),
       ),

@@ -138,11 +138,9 @@ flutter:
     - family: Poppins
       fonts:
         - asset: fonts/Poppins-Regular.ttf
+    # Sanket: Noto Sans Devanagari — primary UI font for Marathi text
     - family: Noto Sans Devanagari
       fonts:
         - asset: fonts/NotoSansDevanagari-Regular.ttf
         - asset: fonts/NotoSansDevanagari-Bold.ttf
           weight: 700
-  #       - asset: fonts/Schyler-Italic.ttf
-  #         style: italic1
-  # see https://flutter.dev/custom-fonts/#from-packages

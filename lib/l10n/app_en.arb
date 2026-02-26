@@ -438,5 +438,9 @@
   "onboarding_2_title": "Find Your Match",
   "onboarding_2_subtitle": "Connect with thousands of verified profiles and find the one made for you.",
   "onboarding_3_title": "Start Conversation",
-  "onboarding_3_subtitle": "Interact with your matches securely and take the first step towards your forever."
+  "onboarding_3_subtitle": "Interact with your matches securely and take the first step towards your forever.",
+  "home_greeting_morning": "Good Morning",
+  "home_greeting_afternoon": "Good Afternoon",
+  "home_greeting_evening": "Good Evening",
+  "home_profile_completeness": "Profile {percent}% Complete"
 }

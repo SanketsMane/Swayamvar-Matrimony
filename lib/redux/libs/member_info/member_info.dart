@@ -51,7 +51,8 @@ MemberInfoState? member_info_reducer(MemberInfoState? state, dynamic action) {
     return state;
   }
   if (action is MemberInfoFailureAction) {
-    state!.error = action.error;
+    state!.isFetching = false;
+    state.error = action.error;
     return state;
   }
 
