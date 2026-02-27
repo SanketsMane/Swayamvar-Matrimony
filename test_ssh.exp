@@ -1,0 +1,6 @@
+#!/usr/bin/expect -f
+set timeout 10
+spawn ssh -o StrictHostKeyChecking=no root@91.99.127.245 "cd /var/www/vhosts/swayamvarmatrimony.in/httpdocs && php artisan tinker --execute='echo json_encode(\\App\\Models\\User::whereIn(\"id\", \[35, 37, 39\])->get(\[\"id\", \"first_name\", \"last_name\", \"photo\"\]));'"
+expect "password:"
+send "v~b*@Q>w1\$a3\r"
+expect eof

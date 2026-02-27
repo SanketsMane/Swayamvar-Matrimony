@@ -5,6 +5,7 @@ import 'package:active_matrimonial_flutter_app/const/my_theme.dart';
 import 'package:active_matrimonial_flutter_app/const/style.dart';
 import 'package:active_matrimonial_flutter_app/app_config.dart';
 import 'package:active_matrimonial_flutter_app/helpers/main_helpers.dart';
+import 'package:active_matrimonial_flutter_app/l10n/app_localizations.dart';
 import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
 import 'package:flutter/foundation.dart';
@@ -225,14 +226,14 @@ class _MyProfileState extends State<MyProfile> {
       setState(() => _isSubmitting = false);
       
       if (response.statusCode == 200) {
-        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("Profile saved successfully!")));
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(AppLocalizations.of(context)!.profile_saved_ok)));
         Navigator.pop(context);
       } else {
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Failed to save profile. Code: ${response.statusCode}")));
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(AppLocalizations.of(context)!.profile_saved_fail)));
       }
     } catch (e) {
       setState(() => _isSubmitting = false);
-      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("Error saving profile!")));
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(AppLocalizations.of(context)!.profile_save_error)));
     }
   }
 
@@ -281,7 +282,7 @@ class _MyProfileState extends State<MyProfile> {
         icon: const Icon(Icons.arrow_back, color: MyTheme.text_primary),
         onPressed: _prevStep,
       ),
-      title: Text("प्रोफाईल संपादित करा",
+      title: Text(AppLocalizations.of(context)!.profile_edit_title,
           style: Styles.h2.copyWith(color: MyTheme.text_primary, fontSize: 18)),
       centerTitle: true,
       bottom: PreferredSize(
@@ -340,7 +341,7 @@ class _MyProfileState extends State<MyProfile> {
                   shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(12)),
                 ),
-                child: Text("मागे",
+                child: Text(AppLocalizations.of(context)!.profile_back,
                     style: Styles.buttonText.copyWith(
                         color: MyTheme.text_primary,
                         fontSize: 16)),
@@ -361,7 +362,7 @@ class _MyProfileState extends State<MyProfile> {
               child: _isSubmitting 
                   ? const SizedBox(height: 20, width: 20, child: CircularProgressIndicator(color: Colors.white, strokeWidth: 2))
                   : Text(
-                  _currentStep == _totalSteps - 1 ? "पूर्ण करा" : "पुढील",
+                  _currentStep == _totalSteps - 1 ? AppLocalizations.of(context)!.profile_submit : AppLocalizations.of(context)!.profile_next,
                   style: Styles.buttonText.copyWith(
                       color: Colors.white,
                       fontSize: 16)),
@@ -377,11 +378,11 @@ class _MyProfileState extends State<MyProfile> {
   // =========================================================================
   Widget _buildStep1BasicPhysical() {
     return _pageWrapper([
-      _sectionTitle("प्राथमिक वैयक्तिक माहिती"),
-      _buildTextField("पहिले नाव", _firstName),
-      _buildTextField("मधले नाव", _middleName),
-      _buildTextField("आडनाव", _surname),
-      _buildDatePicker("जन्म तारीख", _dob, (date) {
+      _sectionTitle(AppLocalizations.of(context)!.profile_section_basic),
+      _buildTextField(AppLocalizations.of(context)!.profile_label_first_name, _firstName),
+      _buildTextField(AppLocalizations.of(context)!.profile_label_middle_name, _middleName),
+      _buildTextField(AppLocalizations.of(context)!.profile_label_last_name, _surname),
+      _buildDatePicker(AppLocalizations.of(context)!.profile_label_dob, _dob, (date) {
         setState(() {
           _dob = date;
           _computedAge = DateTime.now().year - date.year;
@@ -390,32 +391,32 @@ class _MyProfileState extends State<MyProfile> {
       if (_computedAge != null)
         Padding(
           padding: const EdgeInsets.only(bottom: 16),
-          child: Text("वय: $_computedAge वर्षे",
+          child: Text(AppLocalizations.of(context)!.profile_label_age(_computedAge!),
               style: Styles.body.copyWith(color: MyTheme.primary, fontWeight: FontWeight.bold)),
         ),
-      _buildDropdown("धर्म", _religion, ["हिंदू", "मुस्लिम", "ख्रिश्चन", "शीख", "जैन", "बौद्ध"], (v) => setState(() => _religion = v)),
-      _buildDropdown("जात", _caste, ["मराठा", "ब्राह्मण", "कुणबी", "धनगर", "माळी", "चांभार", "महार"], (v) => setState(() => _caste = v)),
-      _buildDropdown("वैवाहिक स्थिती", _maritalStatus, [
+      _buildDropdown(AppLocalizations.of(context)!.profile_label_religion, _religion, ["हिंदू", "मुस्लिम", "ख्रिश्चन", "शीख", "जैन", "बौद्ध"], (v) => setState(() => _religion = v)),
+      _buildDropdown(AppLocalizations.of(context)!.profile_label_caste, _caste, ["मराठा", "ब्राह्मण", "कुणबी", "धनगर", "माळी", "चांभार", "महार"], (v) => setState(() => _caste = v)),
+      _buildDropdown(AppLocalizations.of(context)!.profile_label_marital_status, _maritalStatus, [
         "अविवाहित", "घटस्फोटित पुरुष", "घटस्फोटित महिला", "विधवा", "विधुर"
       ], (v) => setState(() => _maritalStatus = v)),
 
       const SizedBox(height: 16),
-      _sectionTitle("शारीरिक माहिती"),
-      _buildDropdown("Height", _height, [
+      _sectionTitle(AppLocalizations.of(context)!.profile_section_physical),
+      _buildDropdown(AppLocalizations.of(context)!.profile_label_height, _height, [
         "4.5 ft", "5.0 ft", "5.2 ft", "5.5 ft", "5.8 ft", "6.0 ft", "6.2 ft", "6.5 ft"
       ], (v) => setState(() => _height = v)),
-      _buildTextField("Weight (kg)", _weight, isNumber: true),
-      _buildDropdown("Blood Group", _bloodGroup, [
+      _buildTextField(AppLocalizations.of(context)!.profile_label_weight, _weight, isNumber: true),
+      _buildDropdown(AppLocalizations.of(context)!.profile_label_blood_group, _bloodGroup, [
         "A+", "A-", "B+", "B-", "O+", "O-", "AB+", "AB-"
       ], (v) => setState(() => _bloodGroup = v)),
-      _buildDropdown("Complexion", _complexion, ["Fair", "Medium", "Wheatish", "Dark"], (v) => setState(() => _complexion = v)),
+      _buildDropdown(AppLocalizations.of(context)!.profile_label_complexion, _complexion, ["Fair", "Medium", "Wheatish", "Dark"], (v) => setState(() => _complexion = v)),
       
-      _buildRadioOption("Physical Disability", _physicalDisability, (v) => setState(() => _physicalDisability = v!)),
-      if (_physicalDisability) _buildTextField("Disability Details", _disabilityDetails),
+      _buildRadioOption(AppLocalizations.of(context)!.profile_label_disability, _physicalDisability, (v) => setState(() => _physicalDisability = v!)),
+      if (_physicalDisability) _buildTextField(AppLocalizations.of(context)!.profile_label_disability_details, _disabilityDetails),
       
-      _buildDropdown("Diet", _diet, ["Veg", "Non Veg"], (v) => setState(() => _diet = v)),
-      _buildRadioOption("Manglik", _manglik, (v) => setState(() => _manglik = v!)),
-      _buildRadioOption("Intercaste Marriage Accepted", _intercasteAccepted, (v) => setState(() => _intercasteAccepted = v!)),
+      _buildDropdown(AppLocalizations.of(context)!.profile_label_diet, _diet, ["Veg", "Non Veg"], (v) => setState(() => _diet = v)),
+      _buildRadioOption(AppLocalizations.of(context)!.profile_label_manglik, _manglik, (v) => setState(() => _manglik = v!)),
+      _buildRadioOption(AppLocalizations.of(context)!.profile_label_intercaste, _intercasteAccepted, (v) => setState(() => _intercasteAccepted = v!)),
     ]);
   }
 
@@ -425,25 +426,25 @@ class _MyProfileState extends State<MyProfile> {
   Widget _buildStep2FamilyEducation() {
     List<String> numberOptions = List.generate(11, (i) => i.toString());
     return _pageWrapper([
-      _sectionTitle("कौटुंबिक माहिती"),
-      _buildRadioOption("वडील हयात आहेत का?", _fatherAlive, (v) => setState(() => _fatherAlive = v!)),
-      _buildRadioOption("आई हयात आहे का?", _motherAlive, (v) => setState(() => _motherAlive = v!)),
-      _buildDropdown("भावांची संख्या", _noOfBrothers, numberOptions, (v) => setState(() => _noOfBrothers = v)),
-      _buildDropdown("विवाहित भाऊ", _marriedBrothers, numberOptions, (v) => setState(() => _marriedBrothers = v)),
-      _buildDropdown("बहिणींची संख्या", _noOfSisters, numberOptions, (v) => setState(() => _noOfSisters = v)),
-      _buildDropdown("विवाहित बहिणी", _marriedSisters, numberOptions, (v) => setState(() => _marriedSisters = v)),
-      _buildTextField("वडिलांचा व्यवसाय", _parentsOccupation),
-      _buildTextField("स्थावर मालमत्ता", _propertyDetails, maxLines: 3),
+      _sectionTitle(AppLocalizations.of(context)!.profile_section_family),
+      _buildRadioOption(AppLocalizations.of(context)!.profile_label_father_alive, _fatherAlive, (v) => setState(() => _fatherAlive = v!)),
+      _buildRadioOption(AppLocalizations.of(context)!.profile_label_mother_alive, _motherAlive, (v) => setState(() => _motherAlive = v!)),
+      _buildDropdown(AppLocalizations.of(context)!.profile_label_brothers, _noOfBrothers, numberOptions, (v) => setState(() => _noOfBrothers = v)),
+      _buildDropdown(AppLocalizations.of(context)!.profile_label_married_brothers, _marriedBrothers, numberOptions, (v) => setState(() => _marriedBrothers = v)),
+      _buildDropdown(AppLocalizations.of(context)!.profile_label_sisters, _noOfSisters, numberOptions, (v) => setState(() => _noOfSisters = v)),
+      _buildDropdown(AppLocalizations.of(context)!.profile_label_married_sisters, _marriedSisters, numberOptions, (v) => setState(() => _marriedSisters = v)),
+      _buildTextField(AppLocalizations.of(context)!.profile_label_parents_occ, _parentsOccupation),
+      _buildTextField(AppLocalizations.of(context)!.profile_label_property, _propertyDetails, maxLines: 3),
 
       const SizedBox(height: 16),
-      _sectionTitle("शैक्षणिक माहिती"),
-      _buildDropdown("शैक्षणिक स्तर", _educationLevel, ["१०वी", "१२वी", "ITI", "डिप्लोमा", "पदवीधर", "पदव्युत्तर", "PhD"], (v) => setState(() => _educationLevel = v)),
+      _sectionTitle(AppLocalizations.of(context)!.profile_section_education),
+      _buildDropdown(AppLocalizations.of(context)!.profile_label_education_level, _educationLevel, ["१०वी", "१२वी", "ITI", "डिप्लोमा", "पदवीधर", "पदव्युत्तर", "PhD"], (v) => setState(() => _educationLevel = v)),
 
       const SizedBox(height: 16),
-      _sectionTitle("व्यावसायिक माहिती"),
-      _buildDropdown("व्यवसायाचा प्रकार", _occupationType, ["विद्यार्थी", "खाजगी नोकरी", "सरकारी नोकरी", "व्यवसाय", "शेतकरी"], (v) => setState(() => _occupationType = v)),
-      _buildTextField("व्यवसायाचा तपशील (उदा. सॉफ्टवेअर देव, पुणे)", _occupationDetails, maxLines: 2),
-      _buildDropdown("वार्षिक उत्पन्न", _annualIncome, ["०–२ लाख", "२–५ लाख", "५–१० लाख", "१०+ लाख"], (v) => setState(() => _annualIncome = v)),
+      _sectionTitle(AppLocalizations.of(context)!.profile_section_career),
+      _buildDropdown(AppLocalizations.of(context)!.profile_label_occ_type, _occupationType, ["विद्यार्थी", "खाजगी नोकरी", "सरकारी नोकरी", "व्यवसाय", "शेतकरी"], (v) => setState(() => _occupationType = v)),
+      _buildTextField(AppLocalizations.of(context)!.profile_label_occ_details, _occupationDetails, maxLines: 2),
+      _buildDropdown(AppLocalizations.of(context)!.profile_label_income, _annualIncome, ["०–२ लाख", "२–५ लाख", "५–१० लाख", "१०+ लाख"], (v) => setState(() => _annualIncome = v)),
     ]);
   }
 
@@ -452,20 +453,20 @@ class _MyProfileState extends State<MyProfile> {
   // =========================================================================
   Widget _buildStep3ContactPhotos() {
     return _pageWrapper([
-      _sectionTitle("Address & Contact Details"),
-      _buildDropdown("Government ID Type", _govIdType, ["Aadhaar", "PAN", "Driving License", "Passport", "Voter ID"], (v) => setState(() => _govIdType = v)),
-      _buildTextField("Government ID Number", _govIdNumber),
-      _buildTextField("Address", _address, maxLines: 3),
-      _buildDropdown("City", _city, ["Pune", "Mumbai", "Nagpur", "Nashik", "Aurangabad", "Solapur"], (v) => setState(() => _city = v)),
-      _buildTextField("Mobile Number 1 (Login OTP)", _mobile1, isNumber: true),
-      _buildTextField("Mobile Number 2 (Optional)", _mobile2, isNumber: true),
+      _sectionTitle(AppLocalizations.of(context)!.profile_section_contact),
+      _buildDropdown(AppLocalizations.of(context)!.profile_label_gov_id_type, _govIdType, ["Aadhaar", "PAN", "Driving License", "Passport", "Voter ID"], (v) => setState(() => _govIdType = v)),
+      _buildTextField(AppLocalizations.of(context)!.profile_label_gov_id_number, _govIdNumber),
+      _buildTextField(AppLocalizations.of(context)!.profile_label_address, _address, maxLines: 3),
+      _buildDropdown(AppLocalizations.of(context)!.profile_label_city, _city, ["Pune", "Mumbai", "Nagpur", "Nashik", "Aurangabad", "Solapur"], (v) => setState(() => _city = v)),
+      _buildTextField(AppLocalizations.of(context)!.profile_label_mobile1, _mobile1, isNumber: true),
+      _buildTextField(AppLocalizations.of(context)!.profile_label_mobile2, _mobile2, isNumber: true),
 
       const SizedBox(height: 16),
-      _sectionTitle("Photo Uploads"),
-      _buildUploadBox("Profile Photo", _profilePhoto, (file) => setState(() => _profilePhoto = file)),
-      _buildUploadBox("ID Proof Upload", _idProof, (file) => setState(() => _idProof = file)),
+      _sectionTitle(AppLocalizations.of(context)!.profile_section_photos),
+      _buildUploadBox(AppLocalizations.of(context)!.profile_label_profile_photo, _profilePhoto, (file) => setState(() => _profilePhoto = file)),
+      _buildUploadBox(AppLocalizations.of(context)!.profile_label_id_proof, _idProof, (file) => setState(() => _idProof = file)),
       // Handle Multiple photos ideally with a grid, but for UI mockup:
-      _buildMultiUploadBox("Other Photos", _otherPhotos, (files) => setState(() => _otherPhotos = files)),
+      _buildMultiUploadBox(AppLocalizations.of(context)!.profile_label_other_photos, _otherPhotos, (files) => setState(() => _otherPhotos = files)),
     ]);
   }
 
@@ -474,13 +475,13 @@ class _MyProfileState extends State<MyProfile> {
   // =========================================================================
   Widget _buildStep4Expectations() {
     return _pageWrapper([
-      _sectionTitle("Partner Expectations"),
-      _buildTextField("Preferred Cities (Comma separated)", TextEditingController(text: _preferredCities.join(", "))),
-      _buildRadioOption("Manglik Preference", _partnerManglik, (v) => setState(() => _partnerManglik = v!)),
-      _buildDropdown("Expected Education", _expectedEducation, ["10th", "12th", "Diploma", "Graduate", "Post Graduate", "PhD"], (v) => setState(() => _expectedEducation = v)),
-      _buildDropdown("Expected Income", _expectedIncome, ["0–2 Lakh", "2–5 Lakh", "5–10 Lakh", "10+ Lakh"], (v) => setState(() => _expectedIncome = v)),
-      _buildRadioOption("Divorce Accepted", _divorceAccepted, (v) => setState(() => _divorceAccepted = v!)),
-      _buildRadioOption("Intercaste Marriage Accepted", _partnerIntercaste, (v) => setState(() => _partnerIntercaste = v!)),
+      _sectionTitle(AppLocalizations.of(context)!.profile_section_expectations),
+      _buildTextField(AppLocalizations.of(context)!.profile_label_preferred_cities, TextEditingController(text: _preferredCities.join(", "))),
+      _buildRadioOption(AppLocalizations.of(context)!.profile_label_partner_manglik, _partnerManglik, (v) => setState(() => _partnerManglik = v!)),
+      _buildDropdown(AppLocalizations.of(context)!.profile_label_expected_edu, _expectedEducation, ["10th", "12th", "Diploma", "Graduate", "Post Graduate", "PhD"], (v) => setState(() => _expectedEducation = v)),
+      _buildDropdown(AppLocalizations.of(context)!.profile_label_expected_income, _expectedIncome, ["0–2 Lakh", "2–5 Lakh", "5–10 Lakh", "10+ Lakh"], (v) => setState(() => _expectedIncome = v)),
+      _buildRadioOption(AppLocalizations.of(context)!.profile_label_divorce_accepted, _divorceAccepted, (v) => setState(() => _divorceAccepted = v!)),
+      _buildRadioOption(AppLocalizations.of(context)!.profile_label_partner_intercaste, _partnerIntercaste, (v) => setState(() => _partnerIntercaste = v!)),
     ]);
   }
 
@@ -552,7 +553,7 @@ class _MyProfileState extends State<MyProfile> {
               child: DropdownButton<String>(
                 isExpanded: true,
                 value: value,
-                hint: const Text("निवडा"),
+                hint: Text(AppLocalizations.of(context)!.profile_label_select),
                 items: items.map((e) => DropdownMenuItem(value: e, child: Text(e))).toList(),
                 onChanged: (v) {
                   if (v != null) onChanged(v);
@@ -592,7 +593,7 @@ class _MyProfileState extends State<MyProfile> {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text(date != null ? DateFormat('dd MMM yyyy').format(date) : "तारीख निवडा", 
+                  Text(date != null ? DateFormat('dd MMM yyyy').format(date) : AppLocalizations.of(context)!.profile_label_date_pick, 
                       style: TextStyle(color: date != null ? MyTheme.text_primary : MyTheme.text_secondary)),
                   const Icon(Icons.calendar_today, color: MyTheme.text_secondary, size: 20),
                 ],
@@ -616,7 +617,7 @@ class _MyProfileState extends State<MyProfile> {
             children: [
               Expanded(
                 child: RadioListTile<bool>(
-                  title: const Text("हो"),
+                  title: Text(AppLocalizations.of(context)!.profile_yes),
                   value: true,
                   groupValue: value,
                   onChanged: onChanged,
@@ -626,7 +627,7 @@ class _MyProfileState extends State<MyProfile> {
               ),
               Expanded(
                 child: RadioListTile<bool>(
-                  title: const Text("नाही"),
+                  title: Text(AppLocalizations.of(context)!.profile_no),
                   value: false,
                   groupValue: value,
                   onChanged: onChanged,
@@ -664,12 +665,12 @@ class _MyProfileState extends State<MyProfile> {
               ),
               child: file != null 
                  ? ClipRRect(borderRadius: BorderRadius.circular(12), child: kIsWeb ? Image.network(file.path, fit: BoxFit.cover) : Image.file(file, fit: BoxFit.cover))
-                 : const Column(
+                 : Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Icon(Icons.cloud_upload_outlined, color: MyTheme.text_secondary, size: 40),
-                      SizedBox(height: 8),
-                      Text("अपलोड करण्यासाठी दाबा", style: TextStyle(color: MyTheme.text_secondary)),
+                      const Icon(Icons.cloud_upload_outlined, color: MyTheme.text_secondary, size: 40),
+                      const SizedBox(height: 8),
+                      Text(AppLocalizations.of(context)!.profile_label_upload_tap, style: const TextStyle(color: MyTheme.text_secondary)),
                     ],
                   ),
             ),
@@ -711,12 +712,12 @@ class _MyProfileState extends State<MyProfile> {
                       )).toList(),
                     ),
                   )
-                : const Column(
+                : Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Icon(Icons.photo_library_outlined, color: MyTheme.text_secondary, size: 40),
-                      SizedBox(height: 8),
-                      Text("अनेक फोटो अपलोड करण्यासाठी दाबा", style: TextStyle(color: MyTheme.text_secondary)),
+                      const Icon(Icons.photo_library_outlined, color: MyTheme.text_secondary, size: 40),
+                      const SizedBox(height: 8),
+                      Text(AppLocalizations.of(context)!.profile_label_upload_multi_tap, style: const TextStyle(color: MyTheme.text_secondary)),
                     ],
                   ),
             ),

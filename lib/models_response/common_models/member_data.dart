@@ -20,6 +20,9 @@ class MemberData {
     this.galleryViewRequestStatus,
     this.expressInterest,
     this.mothereTongue,
+    this.education,
+    this.job,
+    this.income,
   });
 
   int? userId;
@@ -34,6 +37,9 @@ class MemberData {
   String? religion;
   String? caste;
   String? profession; // Sanket: added missing field accessed in home hero card
+  String? education;
+  String? job;
+  String? income;
   bool? packageUpdateAlert;
   String? interestStatus;
   int? shortlistStatus;
@@ -64,6 +70,9 @@ class MemberData {
         galleryViewRequestStatus: json["gallery_view_resquest_status"],
         expressInterest: json["express_interest"],
         mothereTongue: json["mothere_tongue"],
+        education: json["education"],
+        job: json["job"],
+        income: json["income"],
       );
 
   Map<String, dynamic> toJson() => {
@@ -87,5 +96,8 @@ class MemberData {
         "gallery_view_resquest_status": galleryViewRequestStatus,
         "express_interest": expressInterest,
         "mothere_tongue": mothereTongue,
+        "education": education,
+        "job": job,
+        "income": income,
       };
 }

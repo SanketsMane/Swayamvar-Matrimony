@@ -2701,6 +2701,810 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Profile {percent}% Complete'**
   String home_profile_completeness(Object percent);
+
+  /// No description provided for @explore_page_title.
+  ///
+  /// In en, this message translates to:
+  /// **'Matches'**
+  String get explore_page_title;
+
+  /// No description provided for @explore_active_now.
+  ///
+  /// In en, this message translates to:
+  /// **'Active Now'**
+  String get explore_active_now;
+
+  /// No description provided for @explore_no_matches.
+  ///
+  /// In en, this message translates to:
+  /// **'No matches found.'**
+  String get explore_no_matches;
+
+  /// No description provided for @explore_adjust_prefs.
+  ///
+  /// In en, this message translates to:
+  /// **'Adjust your preferences to see more profiles.'**
+  String get explore_adjust_prefs;
+
+  /// No description provided for @explore_edit_prefs.
+  ///
+  /// In en, this message translates to:
+  /// **'Edit Preferences'**
+  String get explore_edit_prefs;
+
+  /// No description provided for @explore_top_matches.
+  ///
+  /// In en, this message translates to:
+  /// **'Top Matches For You'**
+  String get explore_top_matches;
+
+  /// No description provided for @explore_nearby.
+  ///
+  /// In en, this message translates to:
+  /// **'Matches Near You'**
+  String get explore_nearby;
+
+  /// No description provided for @explore_interest.
+  ///
+  /// In en, this message translates to:
+  /// **'Interest'**
+  String get explore_interest;
+
+  /// No description provided for @explore_shortlist.
+  ///
+  /// In en, this message translates to:
+  /// **'Shortlist'**
+  String get explore_shortlist;
+
+  /// No description provided for @explore_view.
+  ///
+  /// In en, this message translates to:
+  /// **'View'**
+  String get explore_view;
+
+  /// No description provided for @explore_follow.
+  ///
+  /// In en, this message translates to:
+  /// **'Follow'**
+  String get explore_follow;
+
+  /// No description provided for @explore_ignore.
+  ///
+  /// In en, this message translates to:
+  /// **'Ignore'**
+  String get explore_ignore;
+
+  /// No description provided for @explore_chip_height.
+  ///
+  /// In en, this message translates to:
+  /// **'Height'**
+  String get explore_chip_height;
+
+  /// No description provided for @explore_chip_caste.
+  ///
+  /// In en, this message translates to:
+  /// **'Caste'**
+  String get explore_chip_caste;
+
+  /// No description provided for @explore_chip_edu.
+  ///
+  /// In en, this message translates to:
+  /// **'Edu'**
+  String get explore_chip_edu;
+
+  /// No description provided for @explore_chip_job.
+  ///
+  /// In en, this message translates to:
+  /// **'Job'**
+  String get explore_chip_job;
+
+  /// No description provided for @explore_chip_income.
+  ///
+  /// In en, this message translates to:
+  /// **'Income'**
+  String get explore_chip_income;
+
+  /// No description provided for @explore_chip_na.
+  ///
+  /// In en, this message translates to:
+  /// **'N/A'**
+  String get explore_chip_na;
+
+  /// No description provided for @explore_match_high.
+  ///
+  /// In en, this message translates to:
+  /// **'High Match'**
+  String get explore_match_high;
+
+  /// No description provided for @explore_match_medium.
+  ///
+  /// In en, this message translates to:
+  /// **'Medium'**
+  String get explore_match_medium;
+
+  /// No description provided for @explore_match_low.
+  ///
+  /// In en, this message translates to:
+  /// **'Low Match'**
+  String get explore_match_low;
+
+  /// No description provided for @explore_ft.
+  ///
+  /// In en, this message translates to:
+  /// **'ft'**
+  String get explore_ft;
+
+  /// No description provided for @explore_active_ago.
+  ///
+  /// In en, this message translates to:
+  /// **'Active'**
+  String get explore_active_ago;
+
+  /// No description provided for @profile_edit_title.
+  ///
+  /// In en, this message translates to:
+  /// **'Edit Profile'**
+  String get profile_edit_title;
+
+  /// No description provided for @profile_step_basic.
+  ///
+  /// In en, this message translates to:
+  /// **'Basic & Physical'**
+  String get profile_step_basic;
+
+  /// No description provided for @profile_step_family.
+  ///
+  /// In en, this message translates to:
+  /// **'Family & Career'**
+  String get profile_step_family;
+
+  /// No description provided for @profile_step_contact.
+  ///
+  /// In en, this message translates to:
+  /// **'Contact & Photos'**
+  String get profile_step_contact;
+
+  /// No description provided for @profile_step_expectations.
+  ///
+  /// In en, this message translates to:
+  /// **'Partner Expectations'**
+  String get profile_step_expectations;
+
+  /// No description provided for @profile_next.
+  ///
+  /// In en, this message translates to:
+  /// **'Next'**
+  String get profile_next;
+
+  /// No description provided for @profile_back.
+  ///
+  /// In en, this message translates to:
+  /// **'Back'**
+  String get profile_back;
+
+  /// No description provided for @profile_submit.
+  ///
+  /// In en, this message translates to:
+  /// **'Submit'**
+  String get profile_submit;
+
+  /// No description provided for @profile_saved_ok.
+  ///
+  /// In en, this message translates to:
+  /// **'Profile saved successfully!'**
+  String get profile_saved_ok;
+
+  /// No description provided for @profile_saved_fail.
+  ///
+  /// In en, this message translates to:
+  /// **'Failed to save profile.'**
+  String get profile_saved_fail;
+
+  /// No description provided for @profile_save_error.
+  ///
+  /// In en, this message translates to:
+  /// **'Error saving profile!'**
+  String get profile_save_error;
+
+  /// No description provided for @profile_section_basic.
+  ///
+  /// In en, this message translates to:
+  /// **'Personal Information'**
+  String get profile_section_basic;
+
+  /// No description provided for @profile_section_physical.
+  ///
+  /// In en, this message translates to:
+  /// **'Physical Information'**
+  String get profile_section_physical;
+
+  /// No description provided for @profile_section_family.
+  ///
+  /// In en, this message translates to:
+  /// **'Family Information'**
+  String get profile_section_family;
+
+  /// No description provided for @profile_section_education.
+  ///
+  /// In en, this message translates to:
+  /// **'Education'**
+  String get profile_section_education;
+
+  /// No description provided for @profile_section_career.
+  ///
+  /// In en, this message translates to:
+  /// **'Career'**
+  String get profile_section_career;
+
+  /// No description provided for @profile_section_contact.
+  ///
+  /// In en, this message translates to:
+  /// **'Contact & Address'**
+  String get profile_section_contact;
+
+  /// No description provided for @profile_section_photos.
+  ///
+  /// In en, this message translates to:
+  /// **'Photo Uploads'**
+  String get profile_section_photos;
+
+  /// No description provided for @profile_section_expectations.
+  ///
+  /// In en, this message translates to:
+  /// **'Partner Expectations'**
+  String get profile_section_expectations;
+
+  /// No description provided for @profile_label_first_name.
+  ///
+  /// In en, this message translates to:
+  /// **'First Name'**
+  String get profile_label_first_name;
+
+  /// No description provided for @profile_label_middle_name.
+  ///
+  /// In en, this message translates to:
+  /// **'Middle Name'**
+  String get profile_label_middle_name;
+
+  /// No description provided for @profile_label_last_name.
+  ///
+  /// In en, this message translates to:
+  /// **'Last Name'**
+  String get profile_label_last_name;
+
+  /// No description provided for @profile_label_dob.
+  ///
+  /// In en, this message translates to:
+  /// **'Date of Birth'**
+  String get profile_label_dob;
+
+  /// No description provided for @profile_label_age.
+  ///
+  /// In en, this message translates to:
+  /// **'Age: {age} Years'**
+  String profile_label_age(Object age);
+
+  /// No description provided for @profile_label_religion.
+  ///
+  /// In en, this message translates to:
+  /// **'Religion'**
+  String get profile_label_religion;
+
+  /// No description provided for @profile_label_caste.
+  ///
+  /// In en, this message translates to:
+  /// **'Caste'**
+  String get profile_label_caste;
+
+  /// No description provided for @profile_label_marital_status.
+  ///
+  /// In en, this message translates to:
+  /// **'Marital Status'**
+  String get profile_label_marital_status;
+
+  /// No description provided for @profile_label_height.
+  ///
+  /// In en, this message translates to:
+  /// **'Height'**
+  String get profile_label_height;
+
+  /// No description provided for @profile_label_weight.
+  ///
+  /// In en, this message translates to:
+  /// **'Weight (kg)'**
+  String get profile_label_weight;
+
+  /// No description provided for @profile_label_blood_group.
+  ///
+  /// In en, this message translates to:
+  /// **'Blood Group'**
+  String get profile_label_blood_group;
+
+  /// No description provided for @profile_label_complexion.
+  ///
+  /// In en, this message translates to:
+  /// **'Complexion'**
+  String get profile_label_complexion;
+
+  /// No description provided for @profile_label_disability.
+  ///
+  /// In en, this message translates to:
+  /// **'Physical Disability'**
+  String get profile_label_disability;
+
+  /// No description provided for @profile_label_disability_details.
+  ///
+  /// In en, this message translates to:
+  /// **'Disability Details'**
+  String get profile_label_disability_details;
+
+  /// No description provided for @profile_label_diet.
+  ///
+  /// In en, this message translates to:
+  /// **'Diet'**
+  String get profile_label_diet;
+
+  /// No description provided for @profile_label_manglik.
+  ///
+  /// In en, this message translates to:
+  /// **'Manglik'**
+  String get profile_label_manglik;
+
+  /// No description provided for @profile_label_intercaste.
+  ///
+  /// In en, this message translates to:
+  /// **'Intercaste Marriage Accepted'**
+  String get profile_label_intercaste;
+
+  /// No description provided for @profile_label_father_alive.
+  ///
+  /// In en, this message translates to:
+  /// **'Is Father Alive?'**
+  String get profile_label_father_alive;
+
+  /// No description provided for @profile_label_mother_alive.
+  ///
+  /// In en, this message translates to:
+  /// **'Is Mother Alive?'**
+  String get profile_label_mother_alive;
+
+  /// No description provided for @profile_label_brothers.
+  ///
+  /// In en, this message translates to:
+  /// **'Number of Brothers'**
+  String get profile_label_brothers;
+
+  /// No description provided for @profile_label_married_brothers.
+  ///
+  /// In en, this message translates to:
+  /// **'Married Brothers'**
+  String get profile_label_married_brothers;
+
+  /// No description provided for @profile_label_sisters.
+  ///
+  /// In en, this message translates to:
+  /// **'Number of Sisters'**
+  String get profile_label_sisters;
+
+  /// No description provided for @profile_label_married_sisters.
+  ///
+  /// In en, this message translates to:
+  /// **'Married Sisters'**
+  String get profile_label_married_sisters;
+
+  /// No description provided for @profile_label_parents_occ.
+  ///
+  /// In en, this message translates to:
+  /// **'Parents Occupation'**
+  String get profile_label_parents_occ;
+
+  /// No description provided for @profile_label_property.
+  ///
+  /// In en, this message translates to:
+  /// **'Property Details'**
+  String get profile_label_property;
+
+  /// No description provided for @profile_label_education_level.
+  ///
+  /// In en, this message translates to:
+  /// **'Education Level'**
+  String get profile_label_education_level;
+
+  /// No description provided for @profile_label_occ_type.
+  ///
+  /// In en, this message translates to:
+  /// **'Occupation Type'**
+  String get profile_label_occ_type;
+
+  /// No description provided for @profile_label_occ_details.
+  ///
+  /// In en, this message translates to:
+  /// **'Occupation Details'**
+  String get profile_label_occ_details;
+
+  /// No description provided for @profile_label_income.
+  ///
+  /// In en, this message translates to:
+  /// **'Annual Income'**
+  String get profile_label_income;
+
+  /// No description provided for @profile_label_gov_id_type.
+  ///
+  /// In en, this message translates to:
+  /// **'Government ID Type'**
+  String get profile_label_gov_id_type;
+
+  /// No description provided for @profile_label_gov_id_number.
+  ///
+  /// In en, this message translates to:
+  /// **'Government ID Number'**
+  String get profile_label_gov_id_number;
+
+  /// No description provided for @profile_label_address.
+  ///
+  /// In en, this message translates to:
+  /// **'Address'**
+  String get profile_label_address;
+
+  /// No description provided for @profile_label_city.
+  ///
+  /// In en, this message translates to:
+  /// **'City'**
+  String get profile_label_city;
+
+  /// No description provided for @profile_label_mobile1.
+  ///
+  /// In en, this message translates to:
+  /// **'Mobile Number 1'**
+  String get profile_label_mobile1;
+
+  /// No description provided for @profile_label_mobile2.
+  ///
+  /// In en, this message translates to:
+  /// **'Mobile Number 2 (Optional)'**
+  String get profile_label_mobile2;
+
+  /// No description provided for @profile_label_profile_photo.
+  ///
+  /// In en, this message translates to:
+  /// **'Profile Photo'**
+  String get profile_label_profile_photo;
+
+  /// No description provided for @profile_label_id_proof.
+  ///
+  /// In en, this message translates to:
+  /// **'ID Proof Upload'**
+  String get profile_label_id_proof;
+
+  /// No description provided for @profile_label_other_photos.
+  ///
+  /// In en, this message translates to:
+  /// **'Other Photos'**
+  String get profile_label_other_photos;
+
+  /// No description provided for @profile_label_upload_tap.
+  ///
+  /// In en, this message translates to:
+  /// **'Tap to Upload'**
+  String get profile_label_upload_tap;
+
+  /// No description provided for @profile_label_upload_multi_tap.
+  ///
+  /// In en, this message translates to:
+  /// **'Tap to Upload Multiple Photos'**
+  String get profile_label_upload_multi_tap;
+
+  /// No description provided for @profile_label_date_pick.
+  ///
+  /// In en, this message translates to:
+  /// **'Select Date'**
+  String get profile_label_date_pick;
+
+  /// No description provided for @profile_label_select.
+  ///
+  /// In en, this message translates to:
+  /// **'Select'**
+  String get profile_label_select;
+
+  /// No description provided for @profile_label_preferred_cities.
+  ///
+  /// In en, this message translates to:
+  /// **'Preferred Cities'**
+  String get profile_label_preferred_cities;
+
+  /// No description provided for @profile_label_partner_manglik.
+  ///
+  /// In en, this message translates to:
+  /// **'Manglik Preference'**
+  String get profile_label_partner_manglik;
+
+  /// No description provided for @profile_label_expected_edu.
+  ///
+  /// In en, this message translates to:
+  /// **'Expected Education'**
+  String get profile_label_expected_edu;
+
+  /// No description provided for @profile_label_expected_income.
+  ///
+  /// In en, this message translates to:
+  /// **'Expected Income'**
+  String get profile_label_expected_income;
+
+  /// No description provided for @profile_label_divorce_accepted.
+  ///
+  /// In en, this message translates to:
+  /// **'Divorce Accepted'**
+  String get profile_label_divorce_accepted;
+
+  /// No description provided for @profile_label_partner_intercaste.
+  ///
+  /// In en, this message translates to:
+  /// **'Intercaste Marriage Accepted'**
+  String get profile_label_partner_intercaste;
+
+  /// No description provided for @profile_yes.
+  ///
+  /// In en, this message translates to:
+  /// **'Yes'**
+  String get profile_yes;
+
+  /// No description provided for @profile_no.
+  ///
+  /// In en, this message translates to:
+  /// **'No'**
+  String get profile_no;
+
+  /// No description provided for @pub_profile_basic_info.
+  ///
+  /// In en, this message translates to:
+  /// **'Basic Information'**
+  String get pub_profile_basic_info;
+
+  /// No description provided for @pub_profile_about.
+  ///
+  /// In en, this message translates to:
+  /// **'About Me'**
+  String get pub_profile_about;
+
+  /// No description provided for @pub_profile_personal.
+  ///
+  /// In en, this message translates to:
+  /// **'Personal Details'**
+  String get pub_profile_personal;
+
+  /// No description provided for @pub_profile_professional.
+  ///
+  /// In en, this message translates to:
+  /// **'Professional Details'**
+  String get pub_profile_professional;
+
+  /// No description provided for @pub_profile_family.
+  ///
+  /// In en, this message translates to:
+  /// **'Family Details'**
+  String get pub_profile_family;
+
+  /// No description provided for @pub_profile_physical.
+  ///
+  /// In en, this message translates to:
+  /// **'Physical Attributes'**
+  String get pub_profile_physical;
+
+  /// No description provided for @pub_profile_spiritual.
+  ///
+  /// In en, this message translates to:
+  /// **'Spiritual & Social'**
+  String get pub_profile_spiritual;
+
+  /// No description provided for @pub_profile_lifestyle.
+  ///
+  /// In en, this message translates to:
+  /// **'Lifestyle'**
+  String get pub_profile_lifestyle;
+
+  /// No description provided for @pub_profile_partner_exp.
+  ///
+  /// In en, this message translates to:
+  /// **'Partner Expectations'**
+  String get pub_profile_partner_exp;
+
+  /// No description provided for @pub_profile_gallery.
+  ///
+  /// In en, this message translates to:
+  /// **'Photos'**
+  String get pub_profile_gallery;
+
+  /// No description provided for @pub_profile_verified.
+  ///
+  /// In en, this message translates to:
+  /// **'Verified'**
+  String get pub_profile_verified;
+
+  /// No description provided for @pub_profile_match.
+  ///
+  /// In en, this message translates to:
+  /// **'Match'**
+  String get pub_profile_match;
+
+  /// No description provided for @pub_profile_age_years.
+  ///
+  /// In en, this message translates to:
+  /// **'Years'**
+  String get pub_profile_age_years;
+
+  /// No description provided for @pub_profile_religion.
+  ///
+  /// In en, this message translates to:
+  /// **'Religion'**
+  String get pub_profile_religion;
+
+  /// No description provided for @pub_profile_height.
+  ///
+  /// In en, this message translates to:
+  /// **'Height'**
+  String get pub_profile_height;
+
+  /// No description provided for @pub_profile_marital_status.
+  ///
+  /// In en, this message translates to:
+  /// **'Marital Status'**
+  String get pub_profile_marital_status;
+
+  /// No description provided for @pub_profile_mother_tongue.
+  ///
+  /// In en, this message translates to:
+  /// **'Mother Tongue'**
+  String get pub_profile_mother_tongue;
+
+  /// No description provided for @pub_profile_age.
+  ///
+  /// In en, this message translates to:
+  /// **'Age'**
+  String get pub_profile_age;
+
+  /// No description provided for @pub_profile_caste.
+  ///
+  /// In en, this message translates to:
+  /// **'Caste'**
+  String get pub_profile_caste;
+
+  /// No description provided for @pub_profile_education.
+  ///
+  /// In en, this message translates to:
+  /// **'Education'**
+  String get pub_profile_education;
+
+  /// No description provided for @pub_profile_location.
+  ///
+  /// In en, this message translates to:
+  /// **'Location'**
+  String get pub_profile_location;
+
+  /// No description provided for @pub_profile_designation.
+  ///
+  /// In en, this message translates to:
+  /// **'Designation'**
+  String get pub_profile_designation;
+
+  /// No description provided for @pub_profile_company.
+  ///
+  /// In en, this message translates to:
+  /// **'Company'**
+  String get pub_profile_company;
+
+  /// No description provided for @pub_profile_income.
+  ///
+  /// In en, this message translates to:
+  /// **'Income'**
+  String get pub_profile_income;
+
+  /// No description provided for @pub_profile_occ_type.
+  ///
+  /// In en, this message translates to:
+  /// **'Occupation'**
+  String get pub_profile_occ_type;
+
+  /// No description provided for @pub_profile_father.
+  ///
+  /// In en, this message translates to:
+  /// **'Father'**
+  String get pub_profile_father;
+
+  /// No description provided for @pub_profile_mother.
+  ///
+  /// In en, this message translates to:
+  /// **'Mother'**
+  String get pub_profile_mother;
+
+  /// No description provided for @pub_profile_brothers.
+  ///
+  /// In en, this message translates to:
+  /// **'Brothers'**
+  String get pub_profile_brothers;
+
+  /// No description provided for @pub_profile_sisters.
+  ///
+  /// In en, this message translates to:
+  /// **'Sisters'**
+  String get pub_profile_sisters;
+
+  /// No description provided for @pub_profile_weight.
+  ///
+  /// In en, this message translates to:
+  /// **'Weight'**
+  String get pub_profile_weight;
+
+  /// No description provided for @pub_profile_blood_group.
+  ///
+  /// In en, this message translates to:
+  /// **'Blood Group'**
+  String get pub_profile_blood_group;
+
+  /// No description provided for @pub_profile_complexion.
+  ///
+  /// In en, this message translates to:
+  /// **'Complexion'**
+  String get pub_profile_complexion;
+
+  /// No description provided for @pub_profile_disability.
+  ///
+  /// In en, this message translates to:
+  /// **'Disability'**
+  String get pub_profile_disability;
+
+  /// No description provided for @pub_profile_manglik.
+  ///
+  /// In en, this message translates to:
+  /// **'Manglik'**
+  String get pub_profile_manglik;
+
+  /// No description provided for @pub_profile_intercaste.
+  ///
+  /// In en, this message translates to:
+  /// **'Intercaste Accepted'**
+  String get pub_profile_intercaste;
+
+  /// No description provided for @pub_profile_diet.
+  ///
+  /// In en, this message translates to:
+  /// **'Diet'**
+  String get pub_profile_diet;
+
+  /// No description provided for @pub_profile_drink.
+  ///
+  /// In en, this message translates to:
+  /// **'Drink'**
+  String get pub_profile_drink;
+
+  /// No description provided for @pub_profile_smoke.
+  ///
+  /// In en, this message translates to:
+  /// **'Smoke'**
+  String get pub_profile_smoke;
+
+  /// No description provided for @pub_profile_pref_edu.
+  ///
+  /// In en, this message translates to:
+  /// **'Expected Education'**
+  String get pub_profile_pref_edu;
+
+  /// No description provided for @pub_profile_pref_income.
+  ///
+  /// In en, this message translates to:
+  /// **'Expected Income'**
+  String get pub_profile_pref_income;
+
+  /// No description provided for @pub_profile_pref_cities.
+  ///
+  /// In en, this message translates to:
+  /// **'Preferred Cities'**
+  String get pub_profile_pref_cities;
+
+  /// No description provided for @pub_profile_pref_divorce.
+  ///
+  /// In en, this message translates to:
+  /// **'Divorce Accepted'**
+  String get pub_profile_pref_divorce;
 }
 
 class _AppLocalizationsDelegate

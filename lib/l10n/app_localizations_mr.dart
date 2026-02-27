@@ -1337,4 +1337,410 @@ class AppLocalizationsMr extends AppLocalizations {
   String home_profile_completeness(Object percent) {
     return 'प्रोफाइल $percent% पूर्ण';
   }
+
+  @override
+  String get explore_page_title => 'जोडीदार';
+
+  @override
+  String get explore_active_now => 'आता ऑनलाइन';
+
+  @override
+  String get explore_no_matches => 'कोणतेही जोडीदार सापडले नाहीत.';
+
+  @override
+  String get explore_adjust_prefs =>
+      'अधिक प्रोफाइल पाहण्यासाठी आपले प्राधान्य समायोजित करा.';
+
+  @override
+  String get explore_edit_prefs => 'प्राधान्य संपादित करा';
+
+  @override
+  String get explore_top_matches => 'आपल्यासाठी टॉप जोडीदार';
+
+  @override
+  String get explore_nearby => 'जवळचे जोडीदार';
+
+  @override
+  String get explore_interest => 'स्वारस्य';
+
+  @override
+  String get explore_shortlist => 'शॉर्टलिस्ट';
+
+  @override
+  String get explore_view => 'पहा';
+
+  @override
+  String get explore_follow => 'फॉलो';
+
+  @override
+  String get explore_ignore => 'दुर्लक्षित करा';
+
+  @override
+  String get explore_chip_height => 'उंची';
+
+  @override
+  String get explore_chip_caste => 'जात';
+
+  @override
+  String get explore_chip_edu => 'शिक्षण';
+
+  @override
+  String get explore_chip_job => 'नोकरी';
+
+  @override
+  String get explore_chip_income => 'उत्पन्न';
+
+  @override
+  String get explore_chip_na => 'लागू नाही';
+
+  @override
+  String get explore_match_high => 'उत्तम जोड';
+
+  @override
+  String get explore_match_medium => 'मध्यम';
+
+  @override
+  String get explore_match_low => 'कमी जोड';
+
+  @override
+  String get explore_ft => 'फूट';
+
+  @override
+  String get explore_active_ago => 'ऑनलाइन';
+
+  @override
+  String get profile_edit_title => 'प्रोफाईल संपादित करा';
+
+  @override
+  String get profile_step_basic => 'मूलभूत आणि शारीरिक';
+
+  @override
+  String get profile_step_family => 'कुटुंब आणि करिअर';
+
+  @override
+  String get profile_step_contact => 'संपर्क आणि फोटो';
+
+  @override
+  String get profile_step_expectations => 'जोडीदाराच्या अपेक्षा';
+
+  @override
+  String get profile_next => 'पुढील';
+
+  @override
+  String get profile_back => 'मागे';
+
+  @override
+  String get profile_submit => 'पूर्ण करा';
+
+  @override
+  String get profile_saved_ok => 'प्रोफाईल यशस्वीरीत्या जतन केली!';
+
+  @override
+  String get profile_saved_fail => 'प्रोफाईल जतन करण्यात अयशस्वी.';
+
+  @override
+  String get profile_save_error => 'प्रोफाईल जतन करताना त्रुटी!';
+
+  @override
+  String get profile_section_basic => 'वैयक्तिक माहिती';
+
+  @override
+  String get profile_section_physical => 'शारीरिक माहिती';
+
+  @override
+  String get profile_section_family => 'कौटुंबिक माहिती';
+
+  @override
+  String get profile_section_education => 'शैक्षणिक माहिती';
+
+  @override
+  String get profile_section_career => 'व्यावसायिक माहिती';
+
+  @override
+  String get profile_section_contact => 'संपर्क आणि पत्ता';
+
+  @override
+  String get profile_section_photos => 'फोटो अपलोड';
+
+  @override
+  String get profile_section_expectations => 'जोडीदाराच्या अपेक्षा';
+
+  @override
+  String get profile_label_first_name => 'पहिले नाव';
+
+  @override
+  String get profile_label_middle_name => 'मधले नाव';
+
+  @override
+  String get profile_label_last_name => 'आडनाव';
+
+  @override
+  String get profile_label_dob => 'जन्म तारीख';
+
+  @override
+  String profile_label_age(Object age) {
+    return 'वय: $age वर्षे';
+  }
+
+  @override
+  String get profile_label_religion => 'धर्म';
+
+  @override
+  String get profile_label_caste => 'जात';
+
+  @override
+  String get profile_label_marital_status => 'वैवाहिक स्थिती';
+
+  @override
+  String get profile_label_height => 'उंची';
+
+  @override
+  String get profile_label_weight => 'वजन (kg)';
+
+  @override
+  String get profile_label_blood_group => 'रक्तगट';
+
+  @override
+  String get profile_label_complexion => 'वर्ण';
+
+  @override
+  String get profile_label_disability => 'शारीरिक अपंगत्व';
+
+  @override
+  String get profile_label_disability_details => 'अपंगत्वाचा तपशील';
+
+  @override
+  String get profile_label_diet => 'आहार';
+
+  @override
+  String get profile_label_manglik => 'मंगळीक';
+
+  @override
+  String get profile_label_intercaste => 'आंतरजातीय विवाह स्वीकार्य';
+
+  @override
+  String get profile_label_father_alive => 'वडील हयात आहेत का?';
+
+  @override
+  String get profile_label_mother_alive => 'आई हयात आहे का?';
+
+  @override
+  String get profile_label_brothers => 'भावांची संख्या';
+
+  @override
+  String get profile_label_married_brothers => 'विवाहित भाऊ';
+
+  @override
+  String get profile_label_sisters => 'बहिणींची संख्या';
+
+  @override
+  String get profile_label_married_sisters => 'विवाहित बहिणी';
+
+  @override
+  String get profile_label_parents_occ => 'वडिलांचा व्यवसाय';
+
+  @override
+  String get profile_label_property => 'स्थावर मालमत्ता';
+
+  @override
+  String get profile_label_education_level => 'शैक्षणिक स्तर';
+
+  @override
+  String get profile_label_occ_type => 'व्यवसायाचा प्रकार';
+
+  @override
+  String get profile_label_occ_details => 'व्यवसायाचा तपशील';
+
+  @override
+  String get profile_label_income => 'वार्षिक उत्पन्न';
+
+  @override
+  String get profile_label_gov_id_type => 'सरकारी ID प्रकार';
+
+  @override
+  String get profile_label_gov_id_number => 'सरकारी ID क्रमांक';
+
+  @override
+  String get profile_label_address => 'पत्ता';
+
+  @override
+  String get profile_label_city => 'शहर';
+
+  @override
+  String get profile_label_mobile1 => 'मोबाईल नंबर 1';
+
+  @override
+  String get profile_label_mobile2 => 'मोबाईल नंबर 2 (वैकल्पिक)';
+
+  @override
+  String get profile_label_profile_photo => 'प्रोफाईल फोटो';
+
+  @override
+  String get profile_label_id_proof => 'ID पुरावा अपलोड';
+
+  @override
+  String get profile_label_other_photos => 'इतर फोटो';
+
+  @override
+  String get profile_label_upload_tap => 'अपलोड करण्यासाठी दाबा';
+
+  @override
+  String get profile_label_upload_multi_tap =>
+      'अनेक फोटो अपलोड करण्यासाठी दाबा';
+
+  @override
+  String get profile_label_date_pick => 'तारीख निवडा';
+
+  @override
+  String get profile_label_select => 'निवडा';
+
+  @override
+  String get profile_label_preferred_cities => 'पसंतीचे शहर';
+
+  @override
+  String get profile_label_partner_manglik => 'मंगळीक पसंती';
+
+  @override
+  String get profile_label_expected_edu => 'अपेक्षित शिक्षण';
+
+  @override
+  String get profile_label_expected_income => 'अपेक्षित उत्पन्न';
+
+  @override
+  String get profile_label_divorce_accepted => 'घटस्फोट स्वीकार्य';
+
+  @override
+  String get profile_label_partner_intercaste => 'आंतरजातीय विवाह स्वीकार्य';
+
+  @override
+  String get profile_yes => 'हो';
+
+  @override
+  String get profile_no => 'नाही';
+
+  @override
+  String get pub_profile_basic_info => 'प्राथमिक माहिती';
+
+  @override
+  String get pub_profile_about => 'माझ्याबद्दल';
+
+  @override
+  String get pub_profile_personal => 'वैयक्तिक तपशील';
+
+  @override
+  String get pub_profile_professional => 'व्यावसायिक तपशील';
+
+  @override
+  String get pub_profile_family => 'कौटुंबिक तपशील';
+
+  @override
+  String get pub_profile_physical => 'शारीरिक वैशिष्ट्ये';
+
+  @override
+  String get pub_profile_spiritual => 'आध्यात्मिक आणि सामाजिक';
+
+  @override
+  String get pub_profile_lifestyle => 'जीवनशैली';
+
+  @override
+  String get pub_profile_partner_exp => 'जोडीदाराच्या अपेक्षा';
+
+  @override
+  String get pub_profile_gallery => 'फोटो';
+
+  @override
+  String get pub_profile_verified => 'पडताळणी केलेले';
+
+  @override
+  String get pub_profile_match => 'जुळते';
+
+  @override
+  String get pub_profile_age_years => 'वर्षे';
+
+  @override
+  String get pub_profile_religion => 'धर्म';
+
+  @override
+  String get pub_profile_height => 'उंची';
+
+  @override
+  String get pub_profile_marital_status => 'वैवाहिक स्थिती';
+
+  @override
+  String get pub_profile_mother_tongue => 'मातृभाषा';
+
+  @override
+  String get pub_profile_age => 'वय';
+
+  @override
+  String get pub_profile_caste => 'जात';
+
+  @override
+  String get pub_profile_education => 'शिक्षण';
+
+  @override
+  String get pub_profile_location => 'ठिकाण';
+
+  @override
+  String get pub_profile_designation => 'पद';
+
+  @override
+  String get pub_profile_company => 'कंपनी';
+
+  @override
+  String get pub_profile_income => 'उत्पन्न';
+
+  @override
+  String get pub_profile_occ_type => 'व्यवसाय';
+
+  @override
+  String get pub_profile_father => 'वडील';
+
+  @override
+  String get pub_profile_mother => 'आई';
+
+  @override
+  String get pub_profile_brothers => 'भाऊ';
+
+  @override
+  String get pub_profile_sisters => 'बहिणी';
+
+  @override
+  String get pub_profile_weight => 'वजन';
+
+  @override
+  String get pub_profile_blood_group => 'रक्तगट';
+
+  @override
+  String get pub_profile_complexion => 'वर्ण';
+
+  @override
+  String get pub_profile_disability => 'अपंगत्व';
+
+  @override
+  String get pub_profile_manglik => 'मंगळीक';
+
+  @override
+  String get pub_profile_intercaste => 'आंतरजातीय स्वीकार्य';
+
+  @override
+  String get pub_profile_diet => 'आहार';
+
+  @override
+  String get pub_profile_drink => 'मद्यपान';
+
+  @override
+  String get pub_profile_smoke => 'धूम्रपान';
+
+  @override
+  String get pub_profile_pref_edu => 'अपेक्षित शिक्षण';
+
+  @override
+  String get pub_profile_pref_income => 'अपेक्षित उत्पन्न';
+
+  @override
+  String get pub_profile_pref_cities => 'पसंतीचे शहर';
+
+  @override
+  String get pub_profile_pref_divorce => 'घटस्फोट स्वीकार्य';
 }

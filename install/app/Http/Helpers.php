@@ -660,19 +660,29 @@ if (!function_exists('show_profile_picture')) {
     function show_profile_picture($user)
     {
         $profile_picture_privacy = get_setting('profile_picture_privacy');
+        $auth_user = null;
         if (Auth::check()) {
+            $auth_user = Auth::user();
+        } elseif (request()->bearerToken()) {
+            $token = \Laravel\Sanctum\PersonalAccessToken::findToken(request()->bearerToken());
+            if ($token && $token->tokenable) {
+                $auth_user = $token->tokenable;
+            }
+        }
+
+        if ($auth_user) {
             $profile_picture_show = true;
 
-            if (Auth::user()->id != $user->id) {
+            if ($auth_user->id != $user->id) {
                 if ($user->photo != null && $user->photo_approved == 1) {
                     if ($profile_picture_privacy == 'only_me') {
                         $profile_picture_show = false;
-                        $photo_view_request = \App\Models\ViewProfilePicture::where('user_id', $user->id)->where('requested_by', Auth::user()->id)->first();
+                        $photo_view_request = \App\Models\ViewProfilePicture::where('user_id', $user->id)->where('requested_by', $auth_user->id)->first();
                         if ($photo_view_request != null && $photo_view_request->status == 1) {
                             $profile_picture_show = true;
                         }
                     } elseif ($profile_picture_privacy == 'premium_members') {
-                        if (Auth::user()->membership == 1) {
+                        if ($auth_user->membership == 1) {
                             $profile_picture_show = false;
                         }
                     }

@@ -393,61 +393,113 @@ class _HomeState extends State<Home> {
     );
   }
 
-  // Sanket: Section 2 - Quick Action Hub
+  // Sanket: Section 2 - Quick Action Hub (2026 premium redesign)
   Widget _buildQuickActionHub(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 24),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text("त्वरित क्रिया", style: Styles.h2),
-          const SizedBox(height: 16),
-          Row(
-            children: [
-              Expanded(child: _actionCard(context, Icons.search_rounded, "शोधा", "नवीन जोडीदार शोधा", () => AIZRoute.push(context, const Search()))),
-              const SizedBox(width: 16),
-              Expanded(child: _actionCard(context, Icons.favorite_border_rounded, "आवडले", "तुम्हाला मिळालेली पसंती", () => AIZRoute.push(context, const MyInterest()))),
-            ],
-          ),
-          const SizedBox(height: 16),
-          Row(
-            children: [
-              Expanded(child: _actionCard(context, Icons.visibility_outlined, "पाहिले", "तुमची प्रोफाईल कोणी पाहिली", () {})),
-              const SizedBox(width: 16),
-              Expanded(child: _actionCard(context, Icons.star_border_rounded, "शॉर्टलिस्ट", "निवडलेले प्रोफाईल", () => AIZRoute.push(context, const MyShortlist()))),
-            ],
-          ),
-        ],
+    final actions = [
+      _ActionItem(
+        icon: Icons.search_rounded,
+        label: "शोधा",
+        sub: "नवीन जोडीदार",
+        gradient: const [Color(0xFFFF6B9D), Color(0xFFFF8E53)],
+        onTap: () => AIZRoute.push(context, const Search()),
       ),
+      _ActionItem(
+        icon: Icons.favorite_rounded,
+        label: "आवडले",
+        sub: "पसंती मिळाल्या",
+        gradient: const [Color(0xFFE040FB), Color(0xFF7C4DFF)],
+        onTap: () => AIZRoute.push(context, const MyInterest()),
+      ),
+      _ActionItem(
+        icon: Icons.remove_red_eye_rounded,
+        label: "पाहिले",
+        sub: "प्रोफाईल पाहिले",
+        gradient: const [Color(0xFF00BCD4), Color(0xFF2979FF)],
+        onTap: () {},
+      ),
+      _ActionItem(
+        icon: Icons.star_rounded,
+        label: "शॉर्टलिस्ट",
+        sub: "निवडलेले",
+        gradient: const [Color(0xFF43E97B), Color(0xFF38F9D7)],
+        onTap: () => AIZRoute.push(context, const MyShortlist()),
+      ),
+    ];
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 24),
+          child: Row(
+            children: [
+              Container(
+                width: 4, height: 20,
+                decoration: BoxDecoration(
+                  gradient: const LinearGradient(
+                    colors: [Color(0xFFFF6B9D), Color(0xFF7C4DFF)],
+                    begin: Alignment.topCenter,
+                    end: Alignment.bottomCenter,
+                  ),
+                  borderRadius: BorderRadius.circular(2),
+                ),
+              ),
+              const SizedBox(width: 10),
+              Text("त्वरित क्रिया", style: Styles.h2.copyWith(fontWeight: FontWeight.w800, letterSpacing: -0.5)),
+            ],
+          ),
+        ),
+        const SizedBox(height: 16),
+        SizedBox(
+          height: 112,
+          child: ListView.builder(
+            padding: const EdgeInsets.symmetric(horizontal: 20),
+            scrollDirection: Axis.horizontal,
+            physics: const BouncingScrollPhysics(),
+            itemCount: actions.length,
+            itemBuilder: (ctx, i) => _premiumActionCard(actions[i]),
+          ),
+        ),
+      ],
     );
   }
 
-  Widget _actionCard(BuildContext context, IconData icon, String title, String subtitle, VoidCallback onTap) {
-    return InkWell(
-      onTap: onTap,
-      borderRadius: BorderRadius.circular(16),
+  Widget _premiumActionCard(_ActionItem item) {
+    return GestureDetector(
+      onTap: item.onTap,
       child: Container(
+        width: 136,
+        margin: const EdgeInsets.only(right: 12),
         padding: const EdgeInsets.all(16),
         decoration: BoxDecoration(
-          color: MyTheme.white,
-          borderRadius: BorderRadius.circular(16),
-          border: Border.all(color: MyTheme.border),
-          boxShadow: [
-            BoxShadow(color: MyTheme.black.withOpacity(0.03), blurRadius: 10, offset: const Offset(0, 4)),
-          ],
+          gradient: LinearGradient(
+            colors: item.gradient.map((c) => c.withOpacity(0.12)).toList(),
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+          ),
+          borderRadius: BorderRadius.circular(20),
+          border: Border.all(color: item.gradient.first.withOpacity(0.25), width: 1.5),
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Container(
-              padding: const EdgeInsets.all(10),
-              decoration: BoxDecoration(color: MyTheme.primary.withOpacity(0.1), shape: BoxShape.circle),
-              child: Icon(icon, color: MyTheme.primary, size: 24),
+              width: 42, height: 42,
+              decoration: BoxDecoration(
+                gradient: LinearGradient(colors: item.gradient, begin: Alignment.topLeft, end: Alignment.bottomRight),
+                borderRadius: BorderRadius.circular(14),
+                boxShadow: [BoxShadow(color: item.gradient.last.withOpacity(0.4), blurRadius: 8, offset: const Offset(0, 4))],
+              ),
+              child: Icon(item.icon, color: Colors.white, size: 22),
             ),
-            const SizedBox(height: 12),
-            Text(title, style: Styles.body.copyWith(fontWeight: FontWeight.w600)),
-            const SizedBox(height: 4),
-            Text(subtitle, style: Styles.caption.copyWith(fontSize: 10, color: MyTheme.text_secondary)),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(item.label, style: Styles.body.copyWith(fontWeight: FontWeight.w700, fontSize: 14, color: MyTheme.text_primary)),
+                Text(item.sub, style: Styles.caption.copyWith(fontSize: 10, color: MyTheme.text_secondary, height: 1.3)),
+              ],
+            ),
           ],
         ),
       ),
@@ -1153,4 +1205,14 @@ class HomeViewModel {
       goToPrev: () => store.dispatch(GoPrevPage()),
     );
   }
+}
+
+// Sanket: Data class for premium quick action tiles
+class _ActionItem {
+  final IconData icon;
+  final String label;
+  final String sub;
+  final List<Color> gradient;
+  final VoidCallback onTap;
+  const _ActionItem({required this.icon, required this.label, required this.sub, required this.gradient, required this.onTap});
 }

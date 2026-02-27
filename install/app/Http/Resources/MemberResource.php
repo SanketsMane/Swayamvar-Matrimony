@@ -90,6 +90,10 @@ class MemberResource extends JsonResource
                 'report_status'        => $profile_reported ? true : false,
                 'profile_view_resquest_status'   => $profile_view_resquest_status ? true : false,
                 'gallery_view_resquest_status'   => $gallery_view_resquest_status ? true : false,
+                'caste'                => !empty($this->spiritual_backgrounds->caste->name) ? $this->spiritual_backgrounds->caste->name : '',
+                'education'            => !empty($this->education->first()->degree) ? $this->education->first()->degree : '',
+                'job'                  => !empty($this->career->first()->designation) ? $this->career->first()->designation : '',
+                'income'               => !empty($this->member->annual_income) ? $this->member->annual_income : '',
             ];
         }
     }

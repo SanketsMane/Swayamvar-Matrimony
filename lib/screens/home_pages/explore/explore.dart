@@ -173,7 +173,6 @@ class _ExploreState extends State<Explore> {
                               _buildHeader(context, vm),
                               if (activeNowMatches.isNotEmpty) 
                                  _buildActiveNow(context, activeNowMatches),
-                              const SizedBox(height: 8),
                            ],
                          ),
                        ),
@@ -213,9 +212,9 @@ class _ExploreState extends State<Explore> {
           const SizedBox(height: 48),
           Icon(Icons.people_alt_outlined, size: 64, color: MyTheme.border),
           const SizedBox(height: 16),
-          Text("No matches found.", style: Styles.h2.copyWith(color: MyTheme.text_primary)),
+          Text(AppLocalizations.of(context)!.explore_no_matches, style: Styles.h2.copyWith(color: MyTheme.text_primary)),
           const SizedBox(height: 8),
-          Text("Adjust your preferences to see more profiles.", style: Styles.body.copyWith(color: MyTheme.text_secondary)),
+          Text(AppLocalizations.of(context)!.explore_adjust_prefs, style: Styles.body.copyWith(color: MyTheme.text_secondary)),
           const SizedBox(height: 24),
           ElevatedButton(
             onPressed: () => AIZRoute.push(context, AdvancedSearch()),
@@ -224,7 +223,7 @@ class _ExploreState extends State<Explore> {
               shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(Styles.br_btn)),
               padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
             ),
-            child: const Text("Edit Preferences", style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
+            child: Text(AppLocalizations.of(context)!.explore_edit_prefs, style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
           ),
         ],
       ),
@@ -245,7 +244,7 @@ class _ExploreState extends State<Explore> {
           children: [
             _headerIconBtn(Icons.tune_rounded, onTap: () => AIZRoute.push(context, AdvancedSearch())),
             const Spacer(),
-            Text("Matches", style: Styles.bold_arsenic_16.copyWith(color: MyTheme.text_primary, fontSize: 18, letterSpacing: -0.3)),
+            Text(AppLocalizations.of(context)!.explore_page_title, style: Styles.bold_arsenic_16.copyWith(color: MyTheme.text_primary, fontSize: 18, letterSpacing: -0.3)),
             const Spacer(),
             _headerIconBtn(Icons.notifications_none_rounded, onTap: () => AIZRoute.push(context, const Notifications())),
           ],
@@ -281,7 +280,7 @@ class _ExploreState extends State<Explore> {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
       decoration: BoxDecoration(color: bColor, borderRadius: BorderRadius.circular(12)),
-      child: Text('$match% ${match >= 85 ? "High" : match >= 60 ? "Medium" : "Low"} Match', style: const TextStyle(color: Colors.white, fontSize: 10, fontWeight: FontWeight.bold)),
+      child: Text('$match% ${match >= 85 ? AppLocalizations.of(context)!.explore_match_high : match >= 60 ? AppLocalizations.of(context)!.explore_match_medium : AppLocalizations.of(context)!.explore_match_low}', style: const TextStyle(color: Colors.white, fontSize: 10, fontWeight: FontWeight.bold)),
     );
   }
 
@@ -292,7 +291,7 @@ class _ExploreState extends State<Explore> {
         const SizedBox(height: 24),
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 16),
-          child: Text("Top Matches For You", style: Styles.bold_arsenic_16.copyWith(fontSize: 18, color: MyTheme.text_primary)),
+          child: Text(AppLocalizations.of(context)!.explore_top_matches, style: Styles.bold_arsenic_16.copyWith(fontSize: 18, color: MyTheme.text_primary)),
         ),
         const SizedBox(height: 12),
         ListView.builder(
@@ -318,7 +317,7 @@ class _ExploreState extends State<Explore> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          ClipRRect(
+           ClipRRect(
             borderRadius: const BorderRadius.vertical(top: Radius.circular(16)),
             child: SizedBox(
                height: 250,
@@ -326,7 +325,7 @@ class _ExploreState extends State<Explore> {
                child: Stack(
                  fit: StackFit.expand,
                  children: [
-                    MyImages.normalImage(m.photo),
+                    MyImages.normalImage(m.photo, alignment: Alignment.topCenter),
                     Positioned(
                       top: 12, left: 12,
                       child: _buildCompBadge(score)
@@ -344,6 +343,8 @@ class _ExploreState extends State<Explore> {
                 const SizedBox(height: 4),
                 Text(_getCity(m, idx), style: Styles.regular_gull_grey_12.copyWith(color: MyTheme.text_secondary, fontSize: 13)),
                 const SizedBox(height: 12),
+                _buildInfoChips(m),
+                const SizedBox(height: 12),
                 
                 Container(
                   width: double.infinity,
@@ -355,11 +356,11 @@ class _ExploreState extends State<Explore> {
                 const SizedBox(height: 16),
                 Row(
                   children: [
-                    Expanded(child: _actionBtn("Interest", Icons.favorite, MyTheme.primary, () => vm.expressInterest(userId: m.userId!))),
+                    Expanded(child: _actionBtn(AppLocalizations.of(context)!.explore_interest, Icons.favorite, MyTheme.primary, () => vm.expressInterest(userId: m.userId!))),
                     const SizedBox(width: 8),
-                    Expanded(child: _actionBtn("Shortlist", Icons.star_border, MyTheme.text_secondary, () => vm.addShortlist(user: m.userId!))),
+                    Expanded(child: _actionBtn(AppLocalizations.of(context)!.explore_shortlist, Icons.star_border, MyTheme.text_secondary, () => vm.addShortlist(user: m.userId!))),
                     const SizedBox(width: 8),
-                    Expanded(child: _actionBtn("View", Icons.person_outline, MyTheme.text_secondary, () => AIZRoute.push(context, UserPublicProfile(userId: m.userId ?? 0)))),
+                    Expanded(child: _actionBtn(AppLocalizations.of(context)!.explore_view, Icons.person_outline, MyTheme.text_secondary, () => AIZRoute.push(context, UserPublicProfile(userId: m.userId ?? 0)))),
                   ],
                 )
               ],
@@ -399,7 +400,7 @@ class _ExploreState extends State<Explore> {
         const SizedBox(height: 16),
         Padding(
            padding: const EdgeInsets.symmetric(horizontal: 16),
-           child: Text("Matches Near You", style: Styles.bold_arsenic_16.copyWith(fontSize: 18, color: MyTheme.text_primary)),
+           child: Text(AppLocalizations.of(context)!.explore_nearby, style: Styles.bold_arsenic_16.copyWith(fontSize: 18, color: MyTheme.text_primary)),
         ),
         const SizedBox(height: 12),
         SizedBox(
@@ -432,7 +433,7 @@ class _ExploreState extends State<Explore> {
             Expanded(
                child: ClipRRect(
                   borderRadius: const BorderRadius.vertical(top: Radius.circular(16)),
-                  child: MyImages.normalImage(m.photo),
+                  child: MyImages.normalImage(m.photo, alignment: Alignment.topCenter),
                )
             ),
             Padding(
@@ -453,75 +454,78 @@ class _ExploreState extends State<Explore> {
   }
 
   Widget _buildActiveNow(BuildContext context, List<MemberData> matches) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Padding(
-           padding: const EdgeInsets.fromLTRB(16, 8, 16, 12),
-           child: Text("Active Now", style: Styles.bold_arsenic_12.copyWith(fontSize: 14, color: MyTheme.text_primary, letterSpacing: 0.2)),
-        ),
-        SizedBox(
-          height: 90,
-          child: ListView.builder(
-            padding: const EdgeInsets.symmetric(horizontal: 14),
-            scrollDirection: Axis.horizontal,
-            physics: const BouncingScrollPhysics(),
-            itemCount: matches.length,
-            itemBuilder: (ctx, idx) {
-              final m = matches[idx];
-              return GestureDetector(
-                onTap: () => AIZRoute.push(context, UserPublicProfile(userId: m.userId ?? 0)),
-                child: Padding(
-                  padding: const EdgeInsets.only(right: 14),
-                  child: Column(
-                     children: [
-                        Stack(
-                          children: [
-                             Container(
-                               width: 58,
-                               height: 58,
-                               decoration: BoxDecoration(
-                                 shape: BoxShape.circle,
-                                 border: Border.all(color: MyTheme.primary.withOpacity(0.1), width: 1.5),
-                                 image: DecorationImage(
-                                   image: MyImage.imageProvider(m.photo),
-                                   fit: BoxFit.cover,
-                                 ),
-                               ),
-                             ),
-                             Positioned(
-                               bottom: 0,
-                               right: 0,
-                               child: Container(
-                                 width: 12,
-                                 height: 12,
+    return Theme(
+      data: Theme.of(context).copyWith(dividerColor: Colors.transparent),
+      child: ExpansionTile(
+        tilePadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 0),
+        dense: true,
+        visualDensity: const VisualDensity(horizontal: 0, vertical: -4),
+        title: Text("🟢 ${AppLocalizations.of(context)!.explore_active_now} (${matches.length})", style: Styles.bold_arsenic_12.copyWith(fontSize: 14, color: MyTheme.text_primary, letterSpacing: 0.2)),
+        childrenPadding: const EdgeInsets.only(bottom: 12),
+        children: [
+          SizedBox(
+            height: 90,
+            child: ListView.builder(
+              padding: const EdgeInsets.symmetric(horizontal: 14),
+              scrollDirection: Axis.horizontal,
+              physics: const BouncingScrollPhysics(),
+              itemCount: matches.length,
+              itemBuilder: (ctx, idx) {
+                final m = matches[idx];
+                return GestureDetector(
+                  onTap: () => AIZRoute.push(context, UserPublicProfile(userId: m.userId ?? 0)),
+                  child: Padding(
+                    padding: const EdgeInsets.only(right: 14),
+                    child: Column(
+                       children: [
+                          Stack(
+                            children: [
+                               Container(
+                                 width: 58,
+                                 height: 58,
                                  decoration: BoxDecoration(
-                                   color: const Color(0xFF1CB14D),
                                    shape: BoxShape.circle,
-                                   border: Border.all(color: MyTheme.white, width: 2),
+                                   border: Border.all(color: MyTheme.primary.withOpacity(0.1), width: 1.5),
+                                   image: DecorationImage(
+                                     image: MyImage.imageProvider(m.photo),
+                                     fit: BoxFit.cover,
+                                   ),
                                  ),
                                ),
-                             ),
-                          ]
-                        ),
-                        const SizedBox(height: 6),
-                        Text(
-                          "Active ${idx * 5 + 1}m", 
-                          style: TextStyle(
-                            fontFamily: 'Mukta',
-                            fontSize: 10,
-                            fontWeight: FontWeight.w500,
-                            color: const Color(0xFF6B7280),
+                               Positioned(
+                                 bottom: 0,
+                                 right: 0,
+                                 child: Container(
+                                   width: 12,
+                                   height: 12,
+                                   decoration: BoxDecoration(
+                                     color: const Color(0xFF1CB14D),
+                                     shape: BoxShape.circle,
+                                     border: Border.all(color: MyTheme.white, width: 2),
+                                   ),
+                                 ),
+                               ),
+                            ]
                           ),
-                        ),
-                     ]
+                          const SizedBox(height: 6),
+                          Text(
+                            "${AppLocalizations.of(ctx)!.explore_active_ago} ${idx * 5 + 1}m", 
+                            style: const TextStyle(
+                              fontFamily: 'Mukta',
+                              fontSize: 10,
+                              fontWeight: FontWeight.w500,
+                              color: Color(0xFF6B7280),
+                            ),
+                          ),
+                       ]
+                    )
                   )
-                )
-              );
-            }
-          ),
-        )
-      ],
+                );
+              }
+            ),
+          )
+        ],
+      )
     );
   }
 
@@ -531,7 +535,7 @@ class _ExploreState extends State<Explore> {
       child: Stack(
         fit: StackFit.expand,
         children: [
-          MyImages.normalImage(member.photo),
+          MyImages.normalImage(member.photo, alignment: Alignment.topCenter),
           Container(
             decoration: BoxDecoration(
               gradient: LinearGradient(
@@ -578,6 +582,8 @@ class _ExploreState extends State<Explore> {
                     ),
                   ],
                 ),
+                const SizedBox(height: 12),
+                _buildInfoChips(member, isDarkTheme: true),
               ],
             ),
           ),
@@ -726,7 +732,7 @@ class _ExploreState extends State<Explore> {
             Expanded(
                child: ClipRRect(
                   borderRadius: const BorderRadius.vertical(top: Radius.circular(16)),
-                  child: SizedBox(width: double.infinity, child: MyImages.normalImage(m.photo))
+                  child: SizedBox(width: double.infinity, child: MyImages.normalImage(m.photo, alignment: Alignment.topCenter))
                )
             ),
             Padding(
@@ -800,6 +806,44 @@ class _ExploreState extends State<Explore> {
           child: Text('No', style: Styles.body),
         ),
       ],
+    );
+  }
+
+  Widget _buildInfoChips(MemberData m, {bool isDarkTheme = false}) {
+    final l = AppLocalizations.of(context)!;
+    final na = l.explore_chip_na;
+    final List<String> chips = [];
+    
+    chips.add((m.height != null && m.height.toString().isNotEmpty) ? "${m.height} ${l.explore_ft}" : "${l.explore_chip_height}: $na");
+    chips.add((m.caste != null && m.caste!.isNotEmpty) ? m.caste! : "${l.explore_chip_caste}: $na");
+    chips.add((m.education != null && m.education!.isNotEmpty) ? m.education! : "${l.explore_chip_edu}: $na");
+    chips.add((m.job != null && m.job!.isNotEmpty) ? m.job! : "${l.explore_chip_job}: $na");
+    chips.add((m.income != null && m.income!.toString().isNotEmpty) ? "${l.explore_chip_income}: ${m.income}" : "${l.explore_chip_income}: $na");
+
+    final Color bgColor = isDarkTheme ? Colors.white.withOpacity(0.15) : MyTheme.primary.withOpacity(0.08);
+    final Color borderColor = isDarkTheme ? Colors.white.withOpacity(0.3) : MyTheme.primary.withOpacity(0.2);
+    final Color textColor = isDarkTheme ? Colors.white : MyTheme.primary;
+
+    return Wrap(
+      spacing: 6,
+      runSpacing: 6,
+      children: chips.map((c) => Container(
+        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+        decoration: BoxDecoration(
+          color: bgColor,
+          borderRadius: BorderRadius.circular(20),
+          border: Border.all(color: borderColor),
+        ),
+        child: Text(
+          c, 
+          style: TextStyle(
+            fontSize: 11, 
+            color: textColor, 
+            fontWeight: FontWeight.w600,
+            letterSpacing: 0.3
+          ),
+        ),
+      )).toList(),
     );
   }
 }

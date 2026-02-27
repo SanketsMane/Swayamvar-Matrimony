@@ -72,26 +72,42 @@ class _UserPublicProfileState extends State<UserPublicProfile> {
                       child: Column(
                         children: [
                           // 2. Basic Info Card
-                          _buildBasicInfoCard(profile),
+                          _buildBasicInfoCard(context, profile),
                           const SizedBox(height: 16),
                           
                           // 3. About Section
-                          _buildAboutSection(profile),
+                          _buildAboutSection(context, profile),
                           const SizedBox(height: 16),
                           
                           // 4. Personal Details
-                          _buildPersonalDetails(profile),
+                          _buildPersonalDetails(context, profile),
                           const SizedBox(height: 16),
                           
                           // 5. Professional Details
-                          _buildProfessionalDetails(profile),
+                          _buildProfessionalDetails(context, profile),
+                          const SizedBox(height: 16),
+
+                          // 6. Physical Attributes (NEW)
+                          _buildPhysicalAttributes(context, profile),
+                          const SizedBox(height: 16),
+
+                          // 7. Spiritual & Social (NEW)
+                          _buildSpiritualBackground(context, profile),
+                          const SizedBox(height: 16),
+
+                          // 8. Lifestyle (NEW)
+                          _buildLifestyle(context, profile),
                           const SizedBox(height: 16),
                           
-                          // 6. Family Details
-                          _buildFamilyDetails(profile),
+                          // 9. Family Details
+                          _buildFamilyDetails(context, profile),
+                          const SizedBox(height: 16),
+
+                          // 10. Partner Expectations (NEW)
+                          _buildPartnerExpectations(context, profile),
                           const SizedBox(height: 16),
                           
-                          // 7. Gallery Section
+                          // 11. Gallery Section
                           _buildGallerySection(context, state),
                           
                           const SizedBox(height: 160), // Space for sticky bars
@@ -294,12 +310,13 @@ class _UserPublicProfileState extends State<UserPublicProfile> {
     );
   }
 
-  Widget _buildBasicInfoCard(dynamic profile) {
+  Widget _buildBasicInfoCard(BuildContext context, dynamic profile) {
+    final l = AppLocalizations.of(context)!;
     return _profileCard(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          _sectionTitle("प्राथमिक माहिती"),
+          _sectionTitle(l.pub_profile_basic_info),
           const SizedBox(height: 16),
           GridView.count(
             crossAxisCount: 2,
@@ -307,10 +324,10 @@ class _UserPublicProfileState extends State<UserPublicProfile> {
             physics: const NeverScrollableScrollPhysics(),
             childAspectRatio: 3.5,
             children: [
-               _infoTile("धर्म", profile.spiritual?.religionId ?? "ब्राह्मण"),
-              _infoTile("उंची", "${profile.physical?.height ?? '५.५'}'"),
-              _infoTile("वैवाहिक स्थिती", profile.basic?.maritialStatus ?? "अविवाहित"),
-              _infoTile("मातृभाषा", profile.mothertongue?.name ?? "मराठी"), // Sanket: Use state property
+               _infoTile(l.pub_profile_religion, profile.spiritual?.religionId ?? "-"),
+              _infoTile(l.pub_profile_height, "${profile.physical?.height ?? '-'}'"),
+              _infoTile(l.pub_profile_marital_status, profile.basic?.maritialStatus ?? "-"),
+              _infoTile(l.pub_profile_mother_tongue, profile.mothertongue?.name ?? "-"),
             ],
           ),
         ],
@@ -318,15 +335,16 @@ class _UserPublicProfileState extends State<UserPublicProfile> {
     );
   }
 
-  Widget _buildAboutSection(dynamic profile) {
+  Widget _buildAboutSection(BuildContext context, dynamic profile) {
+    final l = AppLocalizations.of(context)!;
     return _profileCard(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          _sectionTitle("माझ्याबद्दल"),
+          _sectionTitle(l.pub_profile_about),
           const SizedBox(height: 12),
           Text(
-            profile.introduction?.introduction ?? "I am looking for a life partner who values family and tradition. I enjoy travel and exploring new cultures.",
+            profile.introduction?.introduction ?? "-",
             style: Styles.regular_gull_grey_12.copyWith(fontSize: 14, height: 1.5, color: MyTheme.text_primary),
           ),
         ],
@@ -334,51 +352,125 @@ class _UserPublicProfileState extends State<UserPublicProfile> {
     );
   }
 
-  Widget _buildPersonalDetails(dynamic profile) {
+  Widget _buildPersonalDetails(BuildContext context, dynamic profile) {
+    final l = AppLocalizations.of(context)!;
     return _profileCard(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          _sectionTitle("वैयक्तिक तपशील"),
+          _sectionTitle(l.pub_profile_personal),
           const SizedBox(height: 8),
-          _detailRow("वय", "${profile.basic?.age ?? '२८'} वर्षे"),
-          _detailRow("धर्म", profile.spiritual?.religionId ?? "-"),
-          _detailRow("जात", profile.spiritual?.casteId ?? "-"),
-          _detailRow("मातृभाषा", profile.mothertongue?.name ?? "-"),
-          _detailRow("शिक्षण", (profile.education is List && profile.education.isNotEmpty) ? profile.education.first.degree : "-"),
-          _detailRow("स्थान", "ठाणे, महाराष्ट्र"),
+          _detailRow(l.pub_profile_age, "${profile.basic?.age ?? '-'} ${l.pub_profile_age_years}"),
+          _detailRow(l.pub_profile_religion, profile.spiritual?.religionId ?? "-"),
+          _detailRow(l.pub_profile_caste, profile.spiritual?.casteId ?? "-"),
+          _detailRow(l.pub_profile_mother_tongue, profile.mothertongue?.name ?? "-"),
+          _detailRow(l.pub_profile_education, (profile.education is List && profile.education.isNotEmpty) ? profile.education.first.degree : "-"),
+          _detailRow(l.pub_profile_location, profile.presentAddress?.city ?? "-"),
         ],
       ),
     );
   }
 
-  Widget _buildProfessionalDetails(dynamic profile) {
+  Widget _buildProfessionalDetails(BuildContext context, dynamic profile) {
+    final l = AppLocalizations.of(context)!;
     return _profileCard(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          _sectionTitle("व्यावसायिक तपशील"),
+          _sectionTitle(l.pub_profile_professional),
           const SizedBox(height: 8),
-          _detailRow("व्यवसाय", (profile.career is List && profile.career.isNotEmpty) ? profile.career.first.designation : "-"),
-          _detailRow("कंपनी", (profile.career is List && profile.career.isNotEmpty) ? profile.career.first.company : "-"),
-          _detailRow("उत्पन्न", (profile.career is List && profile.career.isNotEmpty) ? profile.career.first.income : "-"),
-          _detailRow("कामाचे ठिकाण", "पुणे / रिमोट"),
+          _detailRow(l.pub_profile_designation, (profile.career is List && profile.career.isNotEmpty) ? profile.career.first.designation : "-"),
+          _detailRow(l.pub_profile_company, (profile.career is List && profile.career.isNotEmpty) ? profile.career.first.company : "-"),
+          _detailRow(l.pub_profile_income, (profile.career is List && profile.career.isNotEmpty) ? profile.career.first.income : "-"),
         ],
       ),
     );
   }
 
-  Widget _buildFamilyDetails(dynamic profile) {
+  // Sanket: Physical Attributes Card (NEW)
+  Widget _buildPhysicalAttributes(BuildContext context, dynamic profile) {
+    final l = AppLocalizations.of(context)!;
     return _profileCard(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          _sectionTitle("कौटुंबिक तपशील"),
+          _sectionTitle(l.pub_profile_physical),
           const SizedBox(height: 8),
-          _detailRow("वडिलांचा व्यवसाय", profile.families?.father ?? "निवृत्त सरकारी सेवा"), // Sanket: Fixed family -> families
-          _detailRow("आईचा व्यवसाय", profile.families?.mother ?? "गृहिणी"),
-          _detailRow("भावंडे", profile.families?.sibling ?? "१ भाऊ"),
-          _detailRow("कुटुंबाचा प्रकार", "कौटुंबिक / मध्यमवर्ग"),
+          _detailRow(l.pub_profile_height, "${profile.physical?.height ?? '-'}"),
+          _detailRow(l.pub_profile_weight, "${profile.physical?.weight ?? '-'} kg"),
+          _detailRow(l.pub_profile_blood_group, profile.physical?.bloodGroup ?? "-"),
+          _detailRow(l.pub_profile_complexion, profile.physical?.complexion ?? "-"),
+          _detailRow(l.pub_profile_disability, profile.physical?.physicalDisability == true ? l.profile_yes : l.profile_no),
+        ],
+      ),
+    );
+  }
+
+  // Sanket: Spiritual & Social Card (NEW)
+  Widget _buildSpiritualBackground(BuildContext context, dynamic profile) {
+    final l = AppLocalizations.of(context)!;
+    return _profileCard(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          _sectionTitle(l.pub_profile_spiritual),
+          const SizedBox(height: 8),
+          _detailRow(l.pub_profile_religion, profile.spiritual?.religionId ?? "-"),
+          _detailRow(l.pub_profile_caste, profile.spiritual?.casteId ?? "-"),
+          _detailRow(l.pub_profile_manglik, profile.spiritual?.manglik == true ? l.profile_yes : l.profile_no),
+          _detailRow(l.pub_profile_intercaste, profile.spiritual?.intercasteAccepted == true ? l.profile_yes : l.profile_no),
+        ],
+      ),
+    );
+  }
+
+  // Sanket: Lifestyle Card (NEW)
+  Widget _buildLifestyle(BuildContext context, dynamic profile) {
+    final l = AppLocalizations.of(context)!;
+    return _profileCard(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          _sectionTitle(l.pub_profile_lifestyle),
+          const SizedBox(height: 8),
+          _detailRow(l.pub_profile_diet, profile.lifeStyle?.diet ?? "-"),
+          _detailRow(l.pub_profile_drink, profile.lifeStyle?.drink ?? "-"),
+          _detailRow(l.pub_profile_smoke, profile.lifeStyle?.smoke ?? "-"),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildFamilyDetails(BuildContext context, dynamic profile) {
+    final l = AppLocalizations.of(context)!;
+    return _profileCard(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          _sectionTitle(l.pub_profile_family),
+          const SizedBox(height: 8),
+          _detailRow(l.pub_profile_father, profile.families?.father ?? "-"),
+          _detailRow(l.pub_profile_mother, profile.families?.mother ?? "-"),
+          _detailRow(l.pub_profile_brothers, profile.families?.sibling ?? "-"),
+        ],
+      ),
+    );
+  }
+
+  // Sanket: Partner Expectations Card (NEW)
+  Widget _buildPartnerExpectations(BuildContext context, dynamic profile) {
+    final l = AppLocalizations.of(context)!;
+    return _profileCard(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          _sectionTitle(l.pub_profile_partner_exp),
+          const SizedBox(height: 8),
+          _detailRow(l.pub_profile_pref_edu, profile.partnerExpectation?.expectedEducation ?? "-"),
+          _detailRow(l.pub_profile_pref_income, profile.partnerExpectation?.expectedIncome ?? "-"),
+          _detailRow(l.pub_profile_pref_cities, profile.partnerExpectation?.preferredCity ?? "-"),
+          _detailRow(l.pub_profile_pref_divorce, profile.partnerExpectation?.divorceAccepted == true ? l.profile_yes : l.profile_no),
+          _detailRow(l.pub_profile_manglik, profile.partnerExpectation?.partnerManglik == true ? l.profile_yes : l.profile_no),
         ],
       ),
     );
@@ -386,11 +478,12 @@ class _UserPublicProfileState extends State<UserPublicProfile> {
 
   Widget _buildGallerySection(BuildContext context, AppState state) {
     final images = state.publicProfileState?.photogallery ?? [];
+    final l = AppLocalizations.of(context)!;
     
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        _sectionTitle("गॅलरी"),
+        _sectionTitle(l.pub_profile_gallery),
         const SizedBox(height: 12),
         SizedBox(
           height: 120,

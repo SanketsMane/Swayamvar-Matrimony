@@ -1336,4 +1336,409 @@ class AppLocalizationsEn extends AppLocalizations {
   String home_profile_completeness(Object percent) {
     return 'Profile $percent% Complete';
   }
+
+  @override
+  String get explore_page_title => 'Matches';
+
+  @override
+  String get explore_active_now => 'Active Now';
+
+  @override
+  String get explore_no_matches => 'No matches found.';
+
+  @override
+  String get explore_adjust_prefs =>
+      'Adjust your preferences to see more profiles.';
+
+  @override
+  String get explore_edit_prefs => 'Edit Preferences';
+
+  @override
+  String get explore_top_matches => 'Top Matches For You';
+
+  @override
+  String get explore_nearby => 'Matches Near You';
+
+  @override
+  String get explore_interest => 'Interest';
+
+  @override
+  String get explore_shortlist => 'Shortlist';
+
+  @override
+  String get explore_view => 'View';
+
+  @override
+  String get explore_follow => 'Follow';
+
+  @override
+  String get explore_ignore => 'Ignore';
+
+  @override
+  String get explore_chip_height => 'Height';
+
+  @override
+  String get explore_chip_caste => 'Caste';
+
+  @override
+  String get explore_chip_edu => 'Edu';
+
+  @override
+  String get explore_chip_job => 'Job';
+
+  @override
+  String get explore_chip_income => 'Income';
+
+  @override
+  String get explore_chip_na => 'N/A';
+
+  @override
+  String get explore_match_high => 'High Match';
+
+  @override
+  String get explore_match_medium => 'Medium';
+
+  @override
+  String get explore_match_low => 'Low Match';
+
+  @override
+  String get explore_ft => 'ft';
+
+  @override
+  String get explore_active_ago => 'Active';
+
+  @override
+  String get profile_edit_title => 'Edit Profile';
+
+  @override
+  String get profile_step_basic => 'Basic & Physical';
+
+  @override
+  String get profile_step_family => 'Family & Career';
+
+  @override
+  String get profile_step_contact => 'Contact & Photos';
+
+  @override
+  String get profile_step_expectations => 'Partner Expectations';
+
+  @override
+  String get profile_next => 'Next';
+
+  @override
+  String get profile_back => 'Back';
+
+  @override
+  String get profile_submit => 'Submit';
+
+  @override
+  String get profile_saved_ok => 'Profile saved successfully!';
+
+  @override
+  String get profile_saved_fail => 'Failed to save profile.';
+
+  @override
+  String get profile_save_error => 'Error saving profile!';
+
+  @override
+  String get profile_section_basic => 'Personal Information';
+
+  @override
+  String get profile_section_physical => 'Physical Information';
+
+  @override
+  String get profile_section_family => 'Family Information';
+
+  @override
+  String get profile_section_education => 'Education';
+
+  @override
+  String get profile_section_career => 'Career';
+
+  @override
+  String get profile_section_contact => 'Contact & Address';
+
+  @override
+  String get profile_section_photos => 'Photo Uploads';
+
+  @override
+  String get profile_section_expectations => 'Partner Expectations';
+
+  @override
+  String get profile_label_first_name => 'First Name';
+
+  @override
+  String get profile_label_middle_name => 'Middle Name';
+
+  @override
+  String get profile_label_last_name => 'Last Name';
+
+  @override
+  String get profile_label_dob => 'Date of Birth';
+
+  @override
+  String profile_label_age(Object age) {
+    return 'Age: $age Years';
+  }
+
+  @override
+  String get profile_label_religion => 'Religion';
+
+  @override
+  String get profile_label_caste => 'Caste';
+
+  @override
+  String get profile_label_marital_status => 'Marital Status';
+
+  @override
+  String get profile_label_height => 'Height';
+
+  @override
+  String get profile_label_weight => 'Weight (kg)';
+
+  @override
+  String get profile_label_blood_group => 'Blood Group';
+
+  @override
+  String get profile_label_complexion => 'Complexion';
+
+  @override
+  String get profile_label_disability => 'Physical Disability';
+
+  @override
+  String get profile_label_disability_details => 'Disability Details';
+
+  @override
+  String get profile_label_diet => 'Diet';
+
+  @override
+  String get profile_label_manglik => 'Manglik';
+
+  @override
+  String get profile_label_intercaste => 'Intercaste Marriage Accepted';
+
+  @override
+  String get profile_label_father_alive => 'Is Father Alive?';
+
+  @override
+  String get profile_label_mother_alive => 'Is Mother Alive?';
+
+  @override
+  String get profile_label_brothers => 'Number of Brothers';
+
+  @override
+  String get profile_label_married_brothers => 'Married Brothers';
+
+  @override
+  String get profile_label_sisters => 'Number of Sisters';
+
+  @override
+  String get profile_label_married_sisters => 'Married Sisters';
+
+  @override
+  String get profile_label_parents_occ => 'Parents Occupation';
+
+  @override
+  String get profile_label_property => 'Property Details';
+
+  @override
+  String get profile_label_education_level => 'Education Level';
+
+  @override
+  String get profile_label_occ_type => 'Occupation Type';
+
+  @override
+  String get profile_label_occ_details => 'Occupation Details';
+
+  @override
+  String get profile_label_income => 'Annual Income';
+
+  @override
+  String get profile_label_gov_id_type => 'Government ID Type';
+
+  @override
+  String get profile_label_gov_id_number => 'Government ID Number';
+
+  @override
+  String get profile_label_address => 'Address';
+
+  @override
+  String get profile_label_city => 'City';
+
+  @override
+  String get profile_label_mobile1 => 'Mobile Number 1';
+
+  @override
+  String get profile_label_mobile2 => 'Mobile Number 2 (Optional)';
+
+  @override
+  String get profile_label_profile_photo => 'Profile Photo';
+
+  @override
+  String get profile_label_id_proof => 'ID Proof Upload';
+
+  @override
+  String get profile_label_other_photos => 'Other Photos';
+
+  @override
+  String get profile_label_upload_tap => 'Tap to Upload';
+
+  @override
+  String get profile_label_upload_multi_tap => 'Tap to Upload Multiple Photos';
+
+  @override
+  String get profile_label_date_pick => 'Select Date';
+
+  @override
+  String get profile_label_select => 'Select';
+
+  @override
+  String get profile_label_preferred_cities => 'Preferred Cities';
+
+  @override
+  String get profile_label_partner_manglik => 'Manglik Preference';
+
+  @override
+  String get profile_label_expected_edu => 'Expected Education';
+
+  @override
+  String get profile_label_expected_income => 'Expected Income';
+
+  @override
+  String get profile_label_divorce_accepted => 'Divorce Accepted';
+
+  @override
+  String get profile_label_partner_intercaste => 'Intercaste Marriage Accepted';
+
+  @override
+  String get profile_yes => 'Yes';
+
+  @override
+  String get profile_no => 'No';
+
+  @override
+  String get pub_profile_basic_info => 'Basic Information';
+
+  @override
+  String get pub_profile_about => 'About Me';
+
+  @override
+  String get pub_profile_personal => 'Personal Details';
+
+  @override
+  String get pub_profile_professional => 'Professional Details';
+
+  @override
+  String get pub_profile_family => 'Family Details';
+
+  @override
+  String get pub_profile_physical => 'Physical Attributes';
+
+  @override
+  String get pub_profile_spiritual => 'Spiritual & Social';
+
+  @override
+  String get pub_profile_lifestyle => 'Lifestyle';
+
+  @override
+  String get pub_profile_partner_exp => 'Partner Expectations';
+
+  @override
+  String get pub_profile_gallery => 'Photos';
+
+  @override
+  String get pub_profile_verified => 'Verified';
+
+  @override
+  String get pub_profile_match => 'Match';
+
+  @override
+  String get pub_profile_age_years => 'Years';
+
+  @override
+  String get pub_profile_religion => 'Religion';
+
+  @override
+  String get pub_profile_height => 'Height';
+
+  @override
+  String get pub_profile_marital_status => 'Marital Status';
+
+  @override
+  String get pub_profile_mother_tongue => 'Mother Tongue';
+
+  @override
+  String get pub_profile_age => 'Age';
+
+  @override
+  String get pub_profile_caste => 'Caste';
+
+  @override
+  String get pub_profile_education => 'Education';
+
+  @override
+  String get pub_profile_location => 'Location';
+
+  @override
+  String get pub_profile_designation => 'Designation';
+
+  @override
+  String get pub_profile_company => 'Company';
+
+  @override
+  String get pub_profile_income => 'Income';
+
+  @override
+  String get pub_profile_occ_type => 'Occupation';
+
+  @override
+  String get pub_profile_father => 'Father';
+
+  @override
+  String get pub_profile_mother => 'Mother';
+
+  @override
+  String get pub_profile_brothers => 'Brothers';
+
+  @override
+  String get pub_profile_sisters => 'Sisters';
+
+  @override
+  String get pub_profile_weight => 'Weight';
+
+  @override
+  String get pub_profile_blood_group => 'Blood Group';
+
+  @override
+  String get pub_profile_complexion => 'Complexion';
+
+  @override
+  String get pub_profile_disability => 'Disability';
+
+  @override
+  String get pub_profile_manglik => 'Manglik';
+
+  @override
+  String get pub_profile_intercaste => 'Intercaste Accepted';
+
+  @override
+  String get pub_profile_diet => 'Diet';
+
+  @override
+  String get pub_profile_drink => 'Drink';
+
+  @override
+  String get pub_profile_smoke => 'Smoke';
+
+  @override
+  String get pub_profile_pref_edu => 'Expected Education';
+
+  @override
+  String get pub_profile_pref_income => 'Expected Income';
+
+  @override
+  String get pub_profile_pref_cities => 'Preferred Cities';
+
+  @override
+  String get pub_profile_pref_divorce => 'Divorce Accepted';
 }

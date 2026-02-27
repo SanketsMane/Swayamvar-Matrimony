@@ -251,10 +251,9 @@ class ProfileController extends Controller
             $education->degree = $request->education_level;
             $education->save();
         }
-        if ($request->occupation_type || $request->annual_income || $request->occupation_details) {
+        if ($request->occupation_type || $request->occupation_details) {
             $career = Career::firstOrNew(['user_id' => $user->id]);
             $career->designation = $request->occupation_type ?? $career->designation;
-            $career->income = $request->annual_income ?? $career->income;
             $career->occupation_details = $request->occupation_details ?? $career->occupation_details;
             $career->save();
         }
@@ -274,7 +273,6 @@ class ProfileController extends Controller
         $partner = PartnerExpectation::firstOrNew(['user_id' => $user->id]);
         if ($request->has('partner_manglik')) $partner->manglik = ($request->partner_manglik == 'true' || $request->partner_manglik == 1);
         $partner->education = $request->expected_education ?? $partner->education;
-        $partner->income = $request->expected_income ?? $partner->income;
         if ($request->has('divorce_accepted')) $partner->divorce_accepted = ($request->divorce_accepted == 'true' || $request->divorce_accepted == 1);
         if ($request->has('partner_intercaste')) $partner->intercaste_accepted = ($request->partner_intercaste == 'true' || $request->partner_intercaste == 1);
         $partner->save();
