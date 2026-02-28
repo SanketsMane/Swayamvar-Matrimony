@@ -185,17 +185,17 @@ class LangConfig {
     'yi',
     'yo',
     'za',
-    'zu'
+    'zu',
   ];
   List<Locale> localList = [];
 
   List<Locale> supportedLocales() {
-  //   langList.forEach((lang) {
-  //     var local = Locale(lang, '');
-  //     localList.add(local);
-  //   });
+    //   langList.forEach((lang) {
+    //     var local = Locale(lang, '');
+    //     localList.add(local);
+    //   });
 
-    for(var lang in langList){
+    for (var lang in langList) {
       var local = Locale(lang, '');
       localList.add(local);
     }

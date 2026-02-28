@@ -1,8 +1,7 @@
 import 'dart:convert';
-
 import 'package:active_matrimonial_flutter_app/components/common_app_bar.dart';
 import 'package:active_matrimonial_flutter_app/helpers/navigator_push.dart';
-import 'package:active_matrimonial_flutter_app/main.dart';
+import 'package:active_matrimonial_flutter_app/redux/store.dart';
 import 'package:active_matrimonial_flutter_app/repository/payment_repository.dart';
 import 'package:active_matrimonial_flutter_app/screens/account/account_middleware.dart';
 import 'package:active_matrimonial_flutter_app/screens/my_dashboard_pages/wallet/my_wallet.dart';
@@ -16,10 +15,10 @@ import '../../helpers/main_helpers.dart';
 import '../../redux/libs/helpers/show_message_state.dart';
 
 class PaypalScreen extends StatefulWidget {
-  String? amount;
-  String? payment_type;
-  String? payment_method_key;
-  String? package_id;
+  final String? amount;
+  final String? payment_type;
+  final String? payment_method_key;
+  final String? package_id;
 
   PaypalScreen({
     super.key,
@@ -36,13 +35,14 @@ class PaypalScreen extends StatefulWidget {
 class _PaypalScreenState extends State<PaypalScreen> {
   dynamic _initial_url;
   var accessToken = getToken;
-  var userId = store.state.authState!.userData!.id!;
+  late var userId;
+
   final WebViewController _webViewController = WebViewController();
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
+    userId = store.state.authState!.userData!.id!;
     getSetInitialUrl();
   }
 
@@ -51,13 +51,6 @@ class _PaypalScreenState extends State<PaypalScreen> {
       ..setJavaScriptMode(JavaScriptMode.unrestricted)
       ..setNavigationDelegate(
         NavigationDelegate(
-          // onPageStarted: (controller) {
-          //   _webViewController.loadRequest(Uri.parse(_initial_url), headers: {
-          //     "Accept": "application/json",
-          //     "Content-Type": "application/json",
-          //     "Authorization": "Bearer $accessToken"
-          //   });
-          // },
           onWebResourceError: (error) {},
           onPageFinished: (page) {
             if (page.contains("/paypal/payment/done")) {
@@ -96,10 +89,11 @@ class _PaypalScreenState extends State<PaypalScreen> {
       Navigator.of(context).pop();
       return;
     }
-    paypalUrlResponse.values.toList();
     _initial_url = paypalUrlResponse.values.toList()[1];
-    setState(() {});
-    paypal();
+    if (mounted) {
+      setState(() {});
+      paypal();
+    }
   }
 
   @override
@@ -132,15 +126,6 @@ class _PaypalScreenState extends State<PaypalScreen> {
             }
             if (widget.payment_type == "package_payment") {
               store.dispatch(accountMiddleware());
-
-              // OneContext().navigator.push(
-              //       MaterialPageRoute(
-              //         builder: (context) => PackageHistory(
-              //           from_package: true,
-              //         ),
-              //       ),
-              //     );
-
               NavigatorPush.push_replace(
                 page: PackageHistory(from_package: true),
               );

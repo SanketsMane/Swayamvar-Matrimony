@@ -41,10 +41,10 @@ class BasicInfoState {
   });
 
   BasicInfoState.initialState()
-      : isloading = false,
-        f_nameController = TextEditingController(text: ''),
-        l_nameController = TextEditingController(text: ''),
-        no_childController = TextEditingController(text: ''),
-        phoneController = TextEditingController(text: ''),
-        date = DateTime.now();
+    : isloading = false,
+      f_nameController = TextEditingController(text: ''),
+      l_nameController = TextEditingController(text: ''),
+      no_childController = TextEditingController(text: ''),
+      phoneController = TextEditingController(text: ''),
+      date = DateTime.now();
 }

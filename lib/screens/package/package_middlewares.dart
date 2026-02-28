@@ -12,6 +12,7 @@ import 'package:redux_thunk/redux_thunk.dart';
 
 import '../account/account_middleware.dart';
 import 'package_history.dart';
+import 'package:active_matrimonial_flutter_app/redux/store.dart';
 
 ThunkAction<AppState> packageListMiddleware() {
   return (Store<AppState> store) async {
@@ -31,8 +32,9 @@ ThunkAction<AppState> packageListMiddleware() {
 ThunkAction<AppState> packageDetailsMiddleware({packageId}) {
   return (Store<AppState> store) async {
     try {
-      var data =
-          await PackageRepository().fetchPackageDetail(packageId: packageId);
+      var data = await PackageRepository().fetchPackageDetail(
+        packageId: packageId,
+      );
       store.dispatch(PackageDetailsStoreAction(payload: data));
     } catch (e) {
       store.dispatch(PackageDetailsFailureAction(error: e.toString()));
@@ -57,23 +59,31 @@ ThunkAction<AppState> packageHistoryMiddleware() {
   };
 }
 
-ThunkAction<AppState> packagePurchaseMiddleware(
-    {amount, packageId, paymentMethod}) {
+ThunkAction<AppState> packagePurchaseMiddleware({
+  amount,
+  packageId,
+  paymentMethod,
+}) {
   return (Store<AppState> store) async {
     try {
       var data = await PackageRepository().packagePurchase(
-          amount: amount, packageId: packageId, paymentMethod: paymentMethod);
+        amount: amount,
+        packageId: packageId,
+        paymentMethod: paymentMethod,
+      );
       Navigator.pop(store.state.packagePaymentWithWalletState!.loadingContext!);
       if (data.result) {
         store.dispatch(
-            ShowMessageAction(msg: data.message, color: MyTheme.success));
+          ShowMessageAction(msg: data.message, color: MyTheme.success),
+        );
 
         NavigatorPush.push_replace(page: PackageHistory());
         store.dispatch(accountMiddleware());
         store.dispatch(authMiddleware());
       } else {
         store.dispatch(
-            ShowMessageAction(msg: data.message, color: MyTheme.failure));
+          ShowMessageAction(msg: data.message, color: MyTheme.failure),
+        );
       }
     } catch (e) {
       return;

@@ -11,26 +11,15 @@ String ticketReplyResponseToJson(TicketReplyResponse data) =>
     json.encode(data.toJson());
 
 class TicketReplyResponse {
-  TicketReplyResponse({
-    this.result,
-    this.message,
-  });
+  TicketReplyResponse({this.result, this.message});
 
   bool? result;
   String? message;
 
   factory TicketReplyResponse.fromJson(Map<String, dynamic> json) =>
-      TicketReplyResponse(
-        result: json["result"],
-        message: json["message"],
-      );
+      TicketReplyResponse(result: json["result"], message: json["message"]);
 
-  Map<String, dynamic> toJson() => {
-        "result": result,
-        "message": message,
-      };
+  Map<String, dynamic> toJson() => {"result": result, "message": message};
 
-  TicketReplyResponse.initialState()
-      : result = false,
-        message = '';
+  TicketReplyResponse.initialState() : result = false, message = '';
 }

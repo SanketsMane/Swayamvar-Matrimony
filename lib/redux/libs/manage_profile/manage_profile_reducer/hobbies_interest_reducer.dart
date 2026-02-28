@@ -3,13 +3,16 @@ import 'package:active_matrimonial_flutter_app/models_response/manage_profile/ge
 import 'package:active_matrimonial_flutter_app/redux/libs/manage_profile/manage_profiles_state/hobbies_interest_state.dart';
 import 'package:flutter/material.dart';
 
-import '../../../../main.dart';
+import '../../../../redux/store.dart';
 import '../manage_profile_middleware/manage_profile_update_middlewares.dart';
+import 'package:active_matrimonial_flutter_app/redux/store.dart';
 
 class HobbiesInterestLoader {}
 
 HobbiesInterestState? hobbies_interest_reducer(
-    HobbiesInterestState? state, dynamic action) {
+  HobbiesInterestState? state,
+  dynamic action,
+) {
   if (action is HobbiesInterestLoader) {
     state!.isLoading = !state.isLoading!;
     return state;
@@ -24,22 +27,8 @@ HobbiesInterestState? hobbies_interest_reducer(
   //update info
   if (action == UpdateInfo.hobbiesInterest) {
     FocusManager.instance.primaryFocus?.unfocus();
-    if (state!.formKey.currentState!.validate()) {
-      store.dispatch(
-        hobbiesInterestUpdateMiddleware(
-          hobbies: state.hobbiesController!.text,
-          interests: state.interestsController!.text,
-          music: state.musicController!.text,
-          books: state.booksController!.text,
-          movies: state.moviesController!.text,
-          tv_shows: state.tvShowController!.text,
-          sports: state.sportsController!.text,
-          fitness_activites: state.fitnessActivitiesController!.text,
-          cuisines: state.cuisinesController!.text,
-          dress_styles: state.dressStylesController!.text,
-        ),
-      );
-    }
+    // Sanket: Side effect removed from reducer.
+    // store.dispatch(hobbiesInterestUpdateMiddleware(...)) must be called from the UI or a thunk.
   }
 
   return state;

@@ -13,10 +13,7 @@ String newMembersResponseToJson(NewMembersResponse data) =>
     json.encode(data.toJson());
 
 class NewMembersResponse {
-  NewMembersResponse({
-    this.result,
-    this.data,
-  });
+  NewMembersResponse({this.result, this.data});
 
   bool? result;
   List<MemberData>? data;
@@ -24,18 +21,17 @@ class NewMembersResponse {
   factory NewMembersResponse.fromJson(Map<String, dynamic> json) =>
       NewMembersResponse(
         result: json["result"],
-        data: json["data"] == null
-            ? []
-            : List<MemberData>.from(
-                json["data"].map((x) => MemberData.fromJson(x))),
+        data:
+            json["data"] == null
+                ? []
+                : List<MemberData>.from(
+                  json["data"].map((x) => MemberData.fromJson(x)),
+                ),
       );
 
   Map<String, dynamic> toJson() => {
-        "result": result,
-        "data": data == null
-            ? []
-            : List<dynamic>.from(data!.map((x) => x.toJson())),
-      };
+    "result": result,
+    "data":
+        data == null ? [] : List<dynamic>.from(data!.map((x) => x.toJson())),
+  };
 }
-
-

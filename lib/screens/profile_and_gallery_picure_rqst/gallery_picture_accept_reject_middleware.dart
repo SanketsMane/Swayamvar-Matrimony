@@ -8,25 +8,32 @@ import 'package:redux_thunk/redux_thunk.dart';
 
 import '../../repository/public_profile_and_gallery_view_request_repository.dart';
 import 'gallery_picture_view_get_middleware.dart';
+import 'package:active_matrimonial_flutter_app/redux/store.dart';
 
-ThunkAction<AppState> getGalleryPictureAcceptRejectMiddleware(
-    {isAcceptReject, id}) {
+ThunkAction<AppState> getGalleryPictureAcceptRejectMiddleware({
+  isAcceptReject,
+  id,
+}) {
   return (Store<AppState> store) async {
     try {
       var data = await ProfileAndGalleryViewRequestRepository()
           .postGalleryPictureAcceptReject(
-              id: id, isAcceptReject: isAcceptReject);
+            id: id,
+            isAcceptReject: isAcceptReject,
+          );
 
       Navigator.pop(store.state.galleryPictureViewState!.loadingContext!);
 
       if (data.result == true) {
         store.dispatch(
-            ShowMessageAction(msg: data.message, color: MyTheme.success));
+          ShowMessageAction(msg: data.message, color: MyTheme.success),
+        );
         store.dispatch(GalleryPictureViewReset());
         store.dispatch(getGalleryPictureViewRequestMiddleware());
       } else {
         store.dispatch(
-            ShowMessageAction(msg: data.message, color: MyTheme.failure));
+          ShowMessageAction(msg: data.message, color: MyTheme.failure),
+        );
       }
     } catch (e) {
       debugPrint(e.toString());

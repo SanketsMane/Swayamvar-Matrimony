@@ -32,15 +32,15 @@ class PhysicalAttrState {
   });
 
   PhysicalAttrState.initialState()
-      : heightController = TextEditingController(text: ''),
-        weightController = TextEditingController(text: ''),
-        eyeColorController = TextEditingController(text: ''),
-        hairColorController = TextEditingController(text: ''),
-        complexionController = TextEditingController(text: ''),
-        bodyArtController = TextEditingController(text: ''),
-        bodyTypeController = TextEditingController(text: ''),
-        disabilityController = TextEditingController(text: ''),
-        bloodController = TextEditingController(text: ''),
-        physicalAttrData = null,
-        isLoading = false;
+    : heightController = TextEditingController(text: ''),
+      weightController = TextEditingController(text: ''),
+      eyeColorController = TextEditingController(text: ''),
+      hairColorController = TextEditingController(text: ''),
+      complexionController = TextEditingController(text: ''),
+      bodyArtController = TextEditingController(text: ''),
+      bodyTypeController = TextEditingController(text: ''),
+      disabilityController = TextEditingController(text: ''),
+      bloodController = TextEditingController(text: ''),
+      physicalAttrData = null,
+      isLoading = false;
 }

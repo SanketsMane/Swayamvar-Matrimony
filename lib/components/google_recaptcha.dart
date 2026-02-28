@@ -1,4 +1,3 @@
-
 import 'dart:async';
 
 import 'package:flutter/material.dart';
@@ -25,10 +24,9 @@ class CaptchaState extends State<Captcha> {
   double zoomValue = 2;
 
   Future<void> _onLoadFlutterAssetExample(
-      WebViewController controller, BuildContext context) async {
-
-  }
-
+    WebViewController controller,
+    BuildContext context,
+  ) async {}
 
   @override
   initState() {
@@ -58,7 +56,6 @@ class CaptchaState extends State<Captcha> {
             onMessageReceived: (JavaScriptMessage message) {
               bool value = message.message == "true";
               widget.handleCaptcha!(value);
-
             },
           );
       });
@@ -76,9 +73,7 @@ class CaptchaState extends State<Captcha> {
     return SizedBox(
       width: DeviceInfo(context).width,
       height: 150,
-      child: WebViewWidget(
-        controller: _webViewController,
-      ),
+      child: WebViewWidget(controller: _webViewController),
     );
   }
 

@@ -1,5 +1,3 @@
-
-
 import 'package:flutter/material.dart';
 import 'package:active_matrimonial_flutter_app/const/my_theme.dart';
 import 'package:active_matrimonial_flutter_app/const/style.dart';
@@ -7,10 +5,7 @@ import 'package:active_matrimonial_flutter_app/const/style.dart';
 class DeactivatedAccountMessage extends StatelessWidget {
   final String? message;
 
-  const DeactivatedAccountMessage({
-    Key? key,
-    this.message,
-  }) : super(key: key);
+  const DeactivatedAccountMessage({Key? key, this.message}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -35,7 +30,8 @@ class DeactivatedAccountMessage extends StatelessWidget {
           ],
         ),
         child: Text(
-          message ?? "Your account is deactivated. Please go to the Account screen to reactivate it.",
+          message ??
+              "Your account is deactivated. Please go to the Account screen to reactivate it.",
           textAlign: TextAlign.center,
           style: Styles.bold_white_16,
         ),

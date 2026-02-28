@@ -3,7 +3,7 @@ import 'package:active_matrimonial_flutter_app/const/style.dart';
 import 'package:active_matrimonial_flutter_app/helpers/device_info.dart';
 import 'package:active_matrimonial_flutter_app/helpers/shared_pref.dart';
 import 'package:active_matrimonial_flutter_app/redux/libs/auth/vertify_middleware.dart';
-import 'package:active_matrimonial_flutter_app/screens/auth/signin/signin.dart';
+import 'package:active_matrimonial_flutter_app/screens/auth/signin/phone_login.dart';
 import 'package:active_matrimonial_flutter_app/screens/core.dart';
 import 'package:flutter/material.dart';
 import 'package:active_matrimonial_flutter_app/l10n/app_localizations.dart';
@@ -163,7 +163,7 @@ class _SignupVerifyState extends State<SignupVerify> {
                 onTap: () {
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => Login()),
+                    MaterialPageRoute(builder: (context) => const PhoneLogin()),
                   );
                 },
                 child: Text(

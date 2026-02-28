@@ -1,4 +1,3 @@
-
 import 'package:active_matrimonial_flutter_app/const/my_theme.dart';
 import 'package:active_matrimonial_flutter_app/const/style.dart';
 import 'package:active_matrimonial_flutter_app/helpers/get_context.dart';
@@ -6,16 +5,17 @@ import 'package:active_matrimonial_flutter_app/helpers/localization.dart';
 import 'package:active_matrimonial_flutter_app/helpers/shared_pref.dart';
 import 'package:active_matrimonial_flutter_app/redux/libs/auth/signout_middleware.dart';
 import 'package:active_matrimonial_flutter_app/redux/libs/auth/vertify_middleware.dart';
-import 'package:active_matrimonial_flutter_app/screens/auth/signin/signin.dart';
 import 'package:active_matrimonial_flutter_app/screens/core.dart';
 import 'package:flutter/material.dart';
 import 'package:active_matrimonial_flutter_app/l10n/app_localizations.dart';
 import 'package:pinput/pinput.dart';
+
 class Verify extends StatefulWidget {
   const Verify({super.key});
   @override
   State<Verify> createState() => _VerifyState();
 }
+
 class _VerifyState extends State<Verify> {
   final _formKey = GlobalKey<FormState>();
 
@@ -32,78 +32,87 @@ class _VerifyState extends State<Verify> {
     final screenSize = MediaQuery.of(context).size;
     return StoreConnector<AppState, AppState>(
       converter: (store) => store.state,
-      builder: (_, state) => Scaffold(
-        resizeToAvoidBottomInset: false,
-        body: SizedBox(
-          height: screenSize.height,
-          child: Stack(
-            children: [
-              buildGradientAndLogoContainer(context, screenSize),
-              Positioned(
-                bottom: 0,
-                child: Container(
-                  height: screenSize.height * 0.65,
-                  width: screenSize.width,
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.only(
-                      topLeft: Radius.circular(screenSize.width * 0.08),
-                      topRight: Radius.circular(screenSize.width * 0.08),
-                    ),
-                  ),
-                  child: Padding(
-                    padding: EdgeInsets.symmetric(
-                      horizontal: screenSize.width * 0.08,
-                      vertical: screenSize.height * 0.04,
-                    ),
-                    child: Form(
-                      key: _formKey,
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          SizedBox(height: screenSize.height * 0.02),
-                          buildPinPutContainer(context, screenSize),
-                          SizedBox(height: screenSize.height * 0.05),
-                          buildVerifyButtonContainer(context, state, screenSize),
-                          SizedBox(height: screenSize.height * 0.04),
-                          InkWell(
-                            onTap: () {
-                              store.dispatch(resendVerifyCodeMiddleware());
-                            },
-                            child: Center(
-                              child: Text(
-                                AppLocalizations.of(context)!.re_send_otp,
-                                style: Styles.bold_app_accent_12.copyWith(fontSize: screenSize.width * 0.035), // Responsive font
+      builder:
+          (_, state) => Scaffold(
+            resizeToAvoidBottomInset: false,
+            body: SizedBox(
+              height: screenSize.height,
+              child: Stack(
+                children: [
+                  buildGradientAndLogoContainer(context, screenSize),
+                  Positioned(
+                    bottom: 0,
+                    child: Container(
+                      height: screenSize.height * 0.65,
+                      width: screenSize.width,
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.only(
+                          topLeft: Radius.circular(screenSize.width * 0.08),
+                          topRight: Radius.circular(screenSize.width * 0.08),
+                        ),
+                      ),
+                      child: Padding(
+                        padding: EdgeInsets.symmetric(
+                          horizontal: screenSize.width * 0.08,
+                          vertical: screenSize.height * 0.04,
+                        ),
+                        child: Form(
+                          key: _formKey,
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              SizedBox(height: screenSize.height * 0.02),
+                              buildPinPutContainer(context, screenSize),
+                              SizedBox(height: screenSize.height * 0.05),
+                              buildVerifyButtonContainer(
+                                context,
+                                state,
+                                screenSize,
                               ),
-                            ),
-                          ),
-                          const Spacer(),
-                          Center(
-                            child: InkWell(
-                              onTap: () {
-                                store.dispatch(signOutMiddleware(context));
-                              },
-                              child: Text(
-                                LangText(context: SystemHelper.context).getLocal().or_logout,
-                                style: Styles.buttonText.copyWith(
-                                  fontSize: screenSize.width * 0.04,
-                                  color: MyTheme.app_accent_color,
-                                  decoration: TextDecoration.underline,
+                              SizedBox(height: screenSize.height * 0.04),
+                              InkWell(
+                                onTap: () {
+                                  store.dispatch(resendVerifyCodeMiddleware());
+                                },
+                                child: Center(
+                                  child: Text(
+                                    AppLocalizations.of(context)!.re_send_otp,
+                                    style: Styles.bold_app_accent_12.copyWith(
+                                      fontSize: screenSize.width * 0.035,
+                                    ), // Responsive font
+                                  ),
                                 ),
                               ),
-                            ),
+                              const Spacer(),
+                              Center(
+                                child: InkWell(
+                                  onTap: () {
+                                    store.dispatch(signOutMiddleware(context));
+                                  },
+                                  child: Text(
+                                    LangText(
+                                      context: SystemHelper.context,
+                                    ).getLocal().or_logout,
+                                    style: Styles.buttonText.copyWith(
+                                      fontSize: screenSize.width * 0.04,
+                                      color: MyTheme.app_accent_color,
+                                      decoration: TextDecoration.underline,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              SizedBox(height: screenSize.height * 0.02),
+                            ],
                           ),
-                          SizedBox(height: screenSize.height * 0.02),
-                        ],
+                        ),
                       ),
                     ),
                   ),
-                ),
+                ],
               ),
-            ],
+            ),
           ),
-        ),
-      ),
     );
   }
 
@@ -132,7 +141,11 @@ class _VerifyState extends State<Verify> {
     );
   }
 
-  Widget buildVerifyButtonContainer(BuildContext context, AppState state, Size screenSize) {
+  Widget buildVerifyButtonContainer(
+    BuildContext context,
+    AppState state,
+    Size screenSize,
+  ) {
     return InkWell(
       onTap: () {
         FocusManager.instance.primaryFocus?.unfocus();
@@ -158,12 +171,15 @@ class _VerifyState extends State<Verify> {
           borderRadius: const BorderRadius.all(Radius.circular(12)),
         ),
         child: Center(
-          child: state.verifyState!.vloader == false
-              ? Text(
-            AppLocalizations.of(context)!.verify_screen_btn_text,
-            style: Styles.bold_white_14.copyWith(fontSize: screenSize.width * 0.04), // Responsive font
-          )
-              :  CircularProgressIndicator(color: MyTheme.storm_grey),
+          child:
+              state.verifyState!.vloader == false
+                  ? Text(
+                    AppLocalizations.of(context)!.verify_screen_btn_text,
+                    style: Styles.bold_white_14.copyWith(
+                      fontSize: screenSize.width * 0.04,
+                    ), // Responsive font
+                  )
+                  : CircularProgressIndicator(color: MyTheme.storm_grey),
         ),
       ),
     );
@@ -199,7 +215,9 @@ class _VerifyState extends State<Verify> {
           SizedBox(height: screenSize.height * 0.01),
           Text(
             AppLocalizations.of(context)!.verify_screen_sub_title,
-            style: Styles.regular_white_14.copyWith(fontSize: screenSize.width * 0.035), // Responsive font
+            style: Styles.regular_white_14.copyWith(
+              fontSize: screenSize.width * 0.035,
+            ), // Responsive font
           ),
         ],
       ),

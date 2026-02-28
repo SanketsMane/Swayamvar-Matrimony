@@ -16,7 +16,7 @@ class ExploreState {
   CarouselSliderController? happyStoriesController = CarouselSliderController();
   CarouselSliderController? reviewController = CarouselSliderController();
   PageController? pageController = PageController();
-// slider
+  // slider
   bool? isFetchingSlider;
   List? sliderImageList = [];
   String? sliderError;
@@ -28,11 +28,11 @@ class ExploreState {
   bool? isFetchingNewMembers;
   List<MemberData>? newMemberList = [];
   String? newMemberError;
-// premium members
+  // premium members
   bool? isFetchingPremiumMembers;
   List<MemberData>? premiumMemberList = [];
   String? premiumMembersError;
-//banner
+  //banner
   bool? isFetchingBanner;
   List? bannerList = [];
   String? bannerError;
@@ -94,36 +94,36 @@ class ExploreState {
   });
 
   ExploreState.initialState()
-      : isFetching = true,
-        error = '',
-        isFetchingSlider = true,
-        sliderError = '',
-        sliderImageList = [],
-        isFetchingBlog = true,
-        blogError = '',
-        blogList = [],
-        isFetchingNewMembers = true,
-        newMemberList = [],
-        newMemberError = '',
-        isFetchingPremiumMembers = true,
-        premiumMembersError = '',
-        premiumMemberList = [],
-        isFetchingBanner = true,
-        bannerList = [],
-        bannerError = '',
-        isFetchingTrustedBy = true,
-        trustedByList = [],
-        trustedByError = '',
-        isFetchingHappyStories = true,
-        happyStoriesList = [],
-        happyStoriesError = '',
-        isFetchingPackage = true,
-        packageList = [],
-        packageError = '',
-        isFetchingReview = true,
-        review = null,
-        reviewError = '',
-        carouselIndex = 0,
-        carouselIndex2 = 0,
-        happyStoriesIndex = 0;
+    : isFetching = true,
+      error = '',
+      isFetchingSlider = true,
+      sliderError = '',
+      sliderImageList = [],
+      isFetchingBlog = true,
+      blogError = '',
+      blogList = [],
+      isFetchingNewMembers = true,
+      newMemberList = [],
+      newMemberError = '',
+      isFetchingPremiumMembers = true,
+      premiumMembersError = '',
+      premiumMemberList = [],
+      isFetchingBanner = true,
+      bannerList = [],
+      bannerError = '',
+      isFetchingTrustedBy = true,
+      trustedByList = [],
+      trustedByError = '',
+      isFetchingHappyStories = true,
+      happyStoriesList = [],
+      happyStoriesError = '',
+      isFetchingPackage = true,
+      packageList = [],
+      packageError = '',
+      isFetchingReview = true,
+      review = null,
+      reviewError = '',
+      carouselIndex = 0,
+      carouselIndex2 = 0,
+      happyStoriesIndex = 0;
 }

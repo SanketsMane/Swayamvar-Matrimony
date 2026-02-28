@@ -16,11 +16,14 @@ class PackageRepository {
     var baseUrl = "${AppConfig.BASE_URL}/packages";
     var accessToken = getToken;
 
-    var response = await http.get(Uri.parse(baseUrl), headers: {
-      "Accept": "application/json",
-      "Content-Type": "application/json",
-      "Authorization": "Bearer $accessToken"
-    });
+    var response = await http.get(
+      Uri.parse(baseUrl),
+      headers: {
+        "Accept": "application/json",
+        "Content-Type": "application/json",
+        "Authorization": "Bearer $accessToken",
+      },
+    );
 
     var data = packageListResponseFromJson(response.body);
     return data;
@@ -32,13 +35,15 @@ class PackageRepository {
     var accessToken = getToken;
     var postBody = jsonEncode({"package_id": packageId});
 
-    var response = await http.post(Uri.parse(baseUrl),
-        headers: {
-          "Accept": "application/json",
-          "Content-Type": "application/json",
-          "Authorization": "Bearer $accessToken",
-        },
-        body: postBody);
+    var response = await http.post(
+      Uri.parse(baseUrl),
+      headers: {
+        "Accept": "application/json",
+        "Content-Type": "application/json",
+        "Authorization": "Bearer $accessToken",
+      },
+      body: postBody,
+    );
 
     var data = packageDetailsResponseFromJson(response.body);
 
@@ -51,11 +56,14 @@ class PackageRepository {
         "${AppConfig.BASE_URL}/member/package-purchase-history?page=$page";
     var accessToken = getToken;
 
-    var response = await http.get(Uri.parse(baseUrl), headers: {
-      "Accept": "application/json",
-      "Content-Type": "application/json",
-      "Authorization": "Bearer $accessToken",
-    });
+    var response = await http.get(
+      Uri.parse(baseUrl),
+      headers: {
+        "Accept": "application/json",
+        "Content-Type": "application/json",
+        "Authorization": "Bearer $accessToken",
+      },
+    );
 
     var data = packageHistoryResponseFromJson(response.body);
 
@@ -63,23 +71,28 @@ class PackageRepository {
   }
 
   // package purchase
-  Future<CommonResponse> packagePurchase(
-      {amount, packageId, paymentMethod}) async {
+  Future<CommonResponse> packagePurchase({
+    amount,
+    packageId,
+    paymentMethod,
+  }) async {
     var baseUrl = "${AppConfig.BASE_URL}/member/package-purchase";
     var accessToken = getToken;
     var postBody = jsonEncode({
       "amount": amount.toString(),
       "package_id": packageId.toString(),
-      "payment_method": paymentMethod.toString()
+      "payment_method": paymentMethod.toString(),
     });
 
-    var response = await http.post(Uri.parse(baseUrl),
-        headers: {
-          "Accept": "application/json",
-          "Content-Type": "application/json",
-          "Authorization": "Bearer $accessToken",
-        },
-        body: postBody);
+    var response = await http.post(
+      Uri.parse(baseUrl),
+      headers: {
+        "Accept": "application/json",
+        "Content-Type": "application/json",
+        "Authorization": "Bearer $accessToken",
+      },
+      body: postBody,
+    );
 
     var data = commonResponseFromJson(response.body);
 

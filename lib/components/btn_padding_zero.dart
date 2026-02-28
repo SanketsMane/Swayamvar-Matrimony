@@ -11,7 +11,9 @@ class ButtonPaddingZero extends StatelessWidget {
   Widget build(BuildContext context) {
     return TextButton(
       style: TextButton.styleFrom(
-          padding: EdgeInsets.zero, backgroundColor: background),
+        padding: EdgeInsets.zero,
+        backgroundColor: background,
+      ),
       onPressed: onPressed as void Function()?,
       child: text,
     );

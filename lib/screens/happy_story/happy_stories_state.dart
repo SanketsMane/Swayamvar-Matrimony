@@ -14,9 +14,9 @@ class HappyStoriesState {
   });
 
   HappyStoriesState.initialState()
-      : happyStoriesList = [],
-        isFetching = true,
-        error = '',
-        page = 1,
-        hasMore = true;
+    : happyStoriesList = [],
+      isFetching = true,
+      error = '',
+      page = 1,
+      hasMore = true;
 }

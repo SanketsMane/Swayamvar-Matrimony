@@ -28,16 +28,17 @@ class SpiritualSocialState {
     spSaveChanges = !spSaveChanges!;
   }
 
-  SpiritualSocialState(
-      {this.spiritualSocialGetResponse,
-      this.isloading,
-      this.spSaveChanges,
-      this.casteResponse,
-      this.subcasteResponse});
+  SpiritualSocialState({
+    this.spiritualSocialGetResponse,
+    this.isloading,
+    this.spSaveChanges,
+    this.casteResponse,
+    this.subcasteResponse,
+  });
   SpiritualSocialState.initialState()
-      : isloading = false,
-        spSaveChanges = false,
-        spiritualSocialGetResponse = SpiritualSocialGetResponse.initialState(),
-        casteResponse = CasteResponse.initialState(),
-        subcasteResponse = SubcasteResponse.initialState();
+    : isloading = false,
+      spSaveChanges = false,
+      spiritualSocialGetResponse = SpiritualSocialGetResponse.initialState(),
+      casteResponse = CasteResponse.initialState(),
+      subcasteResponse = SubcasteResponse.initialState();
 }

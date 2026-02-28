@@ -11,9 +11,10 @@ import 'package:one_context/one_context.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
 import '../../helpers/main_helpers.dart';
-import '../../main.dart';
+import '../../redux/store.dart';
 import '../../redux/libs/helpers/show_message_state.dart';
 import '../account/account_middleware.dart';
+import 'package:active_matrimonial_flutter_app/redux/store.dart';
 
 class RazorpayScreen extends StatefulWidget {
   var amount;
@@ -89,7 +90,6 @@ class _RazorpayScreenState extends State<RazorpayScreen> {
   }
 
   razorpay() {
-
     if (initialUrl == null) {
       print("Initial URL is null");
       return;

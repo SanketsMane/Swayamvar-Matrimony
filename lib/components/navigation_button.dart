@@ -7,29 +7,29 @@ class NavigationButton extends StatelessWidget {
   final text;
   final bool showBorder;
 
-  const NavigationButton(
-      {super.key, this.color, this.text, this.showBorder = true});
+  const NavigationButton({
+    super.key,
+    this.color,
+    this.text,
+    this.showBorder = true,
+  });
 
   @override
   Widget build(BuildContext context) {
     return Container(
       height: 36.0,
-      decoration: showBorder
-          ? BoxDecoration(
-              border: Border.all(color: Colors.white),
-              color: color,
-              borderRadius: const BorderRadius.all(
-                Radius.circular(30.0),
-              ),
-            )
-          : null,
+      decoration:
+          showBorder
+              ? BoxDecoration(
+                border: Border.all(color: Colors.white),
+                color: color,
+                borderRadius: const BorderRadius.all(Radius.circular(30.0)),
+              )
+              : null,
       child: Center(
         child: Padding(
           padding: const EdgeInsets.only(left: 12.0, right: 12.0),
-          child: Text(
-            text,
-            style: Styles.regular_white_12,
-          ),
+          child: Text(text, style: Styles.regular_white_12),
         ),
       ),
     );

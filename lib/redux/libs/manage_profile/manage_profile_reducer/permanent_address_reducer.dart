@@ -1,5 +1,5 @@
 import 'package:active_matrimonial_flutter_app/enums/enums.dart';
-import 'package:active_matrimonial_flutter_app/main.dart';
+import 'package:active_matrimonial_flutter_app/redux/store.dart';
 import 'package:active_matrimonial_flutter_app/models_response/common_models/ddown.dart';
 import 'package:active_matrimonial_flutter_app/models_response/manage_profile/get_manage_profile/permanent_address_get_response.dart';
 import 'package:active_matrimonial_flutter_app/redux/libs/drop_down/city_middleware.dart';
@@ -43,7 +43,9 @@ class PAddCountryValueAction {
 
 ///--------------------#############@#$*&^%$#@
 PermanentAddressState? permanent_address_reducer(
-    PermanentAddressState? state, dynamic action) {
+  PermanentAddressState? state,
+  dynamic action,
+) {
   if (action is IsLoading) {
     return is_loading_toggler(state!, action);
   }
@@ -72,14 +74,18 @@ PermanentAddressState? permanent_address_reducer(
 }
 
 permanent_get_response(
-    PermanentAddressState state, PermanentGetResponse action) {
+  PermanentAddressState state,
+  PermanentGetResponse action,
+) {
   state.permanentGetResponse!.result = action.result;
   state.permanentGetResponse!.data = action.data;
   return state;
 }
 
 state_response(
-    PermanentAddressState state, PermanentAddressStateListAction action) {
+  PermanentAddressState state,
+  PermanentAddressStateListAction action,
+) {
   state.stateResponse!.data!.addAll(action.data!);
   if (state.stateResponse!.data!.isNotEmpty) {
     state.selected_state = state.stateResponse!.data!.first;
@@ -90,13 +96,16 @@ state_response(
       }
     }
     store.dispatch(
-        cityMiddleware(state.selected_state!.id, AppStates.permanentAddress));
+      cityMiddleware(state.selected_state!.id, AppStates.permanentAddress),
+    );
   }
   return state;
 }
 
 city_responose(
-    PermanentAddressState state, PermanentAddressCityListAction action) {
+  PermanentAddressState state,
+  PermanentAddressCityListAction action,
+) {
   state.cityResponse!.data!.addAll(action.data!);
   if (state.cityResponse!.data!.isNotEmpty) {
     state.selected_city = state.cityResponse!.data!.first;
@@ -111,7 +120,9 @@ city_responose(
 }
 
 permanent_address_save_changes_toggler(
-    PermanentAddressState state, PermanentAddressSaveChanges action) {
+  PermanentAddressState state,
+  PermanentAddressSaveChanges action,
+) {
   state.permanent_address_save_changes = !state.permanent_address_save_changes!;
   return state;
 }

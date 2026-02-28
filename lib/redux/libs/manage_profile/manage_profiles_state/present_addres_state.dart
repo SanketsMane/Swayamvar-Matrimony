@@ -32,8 +32,8 @@ class PresentAddressState {
   });
 
   PresentAddressState.initialState()
-      : stateResponse = StateResponse.initialState(),
-        cityResponse = CityResponse.initialState(),
-        saveChangesLoader = false,
-        isLoading = false;
+    : stateResponse = StateResponse.initialState(),
+      cityResponse = CityResponse.initialState(),
+      saveChangesLoader = false,
+      isLoading = false;
 }

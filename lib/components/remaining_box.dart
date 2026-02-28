@@ -17,9 +17,10 @@ class RemainingBox extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    String displayValue = (value == null || value.toString().trim().isEmpty)
-        ? '0'
-        : value.toString();
+    String displayValue =
+        (value == null || value.toString().trim().isEmpty)
+            ? '0'
+            : value.toString();
 
     return SizedBox(
       width: DeviceInfo(context).width! * .25,
@@ -31,9 +32,7 @@ class RemainingBox extends StatelessWidget {
             style: Styles.regular_white_12,
             textAlign: TextAlign.center,
           ),
-          const SizedBox(
-            height: 6,
-          ),
+          const SizedBox(height: 6),
           Text(
             displayValue,
             style: Styles.medium_white_22,

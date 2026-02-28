@@ -51,130 +51,150 @@ class _SupportTicketState extends State<SupportTicket> {
   Widget build(BuildContext context) {
     return StoreConnector<AppState, AppState>(
       converter: (store) => store.state,
-      onInit: (store) => [
-        store.dispatch(getSupportTicketMiddleware()),
-        store.dispatch(getSupportTicketCategoriesMiddleware()),
-      ],
-      builder: (_, state) => Scaffold(
-        appBar: CommonAppBar(
-          text: AppLocalizations.of(context)!.support_ticket,
-        ).build(context),
-        body: Column(
-          children: [
-            buildCreateTicket(state, context),
-            Const.height20,
-            state.supportTicketState!.isFetching == false
-                ? buildListViewSeparated(state)
-                : Expanded(child: CommonWidget.circularIndicator),
+      onInit:
+          (store) => [
+            store.dispatch(getSupportTicketMiddleware()),
+            store.dispatch(getSupportTicketCategoriesMiddleware()),
           ],
-        ),
-      ),
+      builder:
+          (_, state) => Scaffold(
+            appBar: CommonAppBar(
+              text: AppLocalizations.of(context)!.support_ticket,
+            ).build(context),
+            body: Column(
+              children: [
+                buildCreateTicket(state, context),
+                Const.height20,
+                state.supportTicketState!.isFetching == false
+                    ? buildListViewSeparated(state)
+                    : Expanded(child: CommonWidget.circularIndicator),
+              ],
+            ),
+          ),
     );
   }
 
   Widget buildListViewSeparated(AppState state) {
     return Expanded(
-      child: state.supportTicketState!.myTickets!.isEmpty
-          ? Text('Nodata')
-          : ListView.separated(
-        itemCount: state.supportTicketState!.myTickets!.length,
-        separatorBuilder: (BuildContext context, int index) =>
-        Const.height15,
-        itemBuilder: (BuildContext context, int index) {
-          return Container(
-            /// box decoration
-            margin: EdgeInsets.symmetric(
-              horizontal: Const.kPaddingHorizontal,
-            ),
-            decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: const BorderRadius.all(
-                Radius.circular(12.0),
-              ),
-              boxShadow: [CommonWidget.box_shadow()],
-            ),
-
-            // child0
-            child: Padding(
-              padding: const EdgeInsets.only(
-                left: 20,
-                top: 14,
-                bottom: 14,
-              ),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    state.supportTicketState!.myTickets![index].ticketId,
-                    style: Styles.bold_arsenic_14,
-                  ),
-                  const SizedBox(height: 9),
-                  NameDataRow(
-                    name: AppLocalizations.of(
-                      context,
-                    )!
-                        .support_ticket_status,
-                    data: state.supportTicketState!.myTickets![index]
-                        .status ==
-                        0
-                        ? "Pending"
-                        : "Approved",
-                    style: TextStyle(
-                      color: state.supportTicketState!.myTickets![index]
-                          .status ==
-                          1
-                          ? MyTheme.green
-                          : MyTheme.app_accent_color,
-                      fontSize: 12,
-                      fontWeight: FontWeight.bold,
+      child:
+          state.supportTicketState!.myTickets!.isEmpty
+              ? Text('Nodata')
+              : ListView.separated(
+                itemCount: state.supportTicketState!.myTickets!.length,
+                separatorBuilder:
+                    (BuildContext context, int index) => Const.height15,
+                itemBuilder: (BuildContext context, int index) {
+                  return Container(
+                    /// box decoration
+                    margin: EdgeInsets.symmetric(
+                      horizontal: Const.kPaddingHorizontal,
                     ),
-                  ),
-                  Const.height5,
-                  NameDataRow(
-                    name: AppLocalizations.of(
-                      context,
-                    )!
-                        .support_ticket_subject,
-                    data: state
-                        .supportTicketState!.myTickets![index].subject,
-                  ),
-                  Const.height5,
-                  NameDataRow(
-                    name: AppLocalizations.of(
-                      context,
-                    )!
-                        .support_ticket_category,
-                    data: state.supportTicketState!.myTickets![index]
-                        .supportCategoryName,
-                  ),
-                  Const.height5,
-                  NameDataRow(
-                    name: AppLocalizations.of(
-                      context,
-                    )!
-                        .support_ticket_new_reply,
-                    data: DateFormat('yyyy-MM-dd').format(
-                      state.supportTicketState!.myTickets![index]
-                          .createdAt,
-                    ),
-                  ),
-                  Const.height20,
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      /// view ticket
-                      buildViewOfTicket(
-                        state.supportTicketState!.myTickets![index],
-                        state,
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: const BorderRadius.all(
+                        Radius.circular(12.0),
                       ),
-                    ],
-                  ),
-                ],
+                      boxShadow: [CommonWidget.box_shadow()],
+                    ),
+
+                    // child0
+                    child: Padding(
+                      padding: const EdgeInsets.only(
+                        left: 20,
+                        top: 14,
+                        bottom: 14,
+                      ),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            state
+                                .supportTicketState!
+                                .myTickets![index]
+                                .ticketId,
+                            style: Styles.bold_arsenic_14,
+                          ),
+                          const SizedBox(height: 9),
+                          NameDataRow(
+                            name:
+                                AppLocalizations.of(
+                                  context,
+                                )!.support_ticket_status,
+                            data:
+                                state
+                                            .supportTicketState!
+                                            .myTickets![index]
+                                            .status ==
+                                        0
+                                    ? "Pending"
+                                    : "Approved",
+                            style: TextStyle(
+                              color:
+                                  state
+                                              .supportTicketState!
+                                              .myTickets![index]
+                                              .status ==
+                                          1
+                                      ? MyTheme.green
+                                      : MyTheme.app_accent_color,
+                              fontSize: 12,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          Const.height5,
+                          NameDataRow(
+                            name:
+                                AppLocalizations.of(
+                                  context,
+                                )!.support_ticket_subject,
+                            data:
+                                state
+                                    .supportTicketState!
+                                    .myTickets![index]
+                                    .subject,
+                          ),
+                          Const.height5,
+                          NameDataRow(
+                            name:
+                                AppLocalizations.of(
+                                  context,
+                                )!.support_ticket_category,
+                            data:
+                                state
+                                    .supportTicketState!
+                                    .myTickets![index]
+                                    .supportCategoryName,
+                          ),
+                          Const.height5,
+                          NameDataRow(
+                            name:
+                                AppLocalizations.of(
+                                  context,
+                                )!.support_ticket_new_reply,
+                            data: DateFormat('yyyy-MM-dd').format(
+                              state
+                                  .supportTicketState!
+                                  .myTickets![index]
+                                  .createdAt,
+                            ),
+                          ),
+                          Const.height20,
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              /// view ticket
+                              buildViewOfTicket(
+                                state.supportTicketState!.myTickets![index],
+                                state,
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
+                    ),
+                  );
+                },
               ),
-            ),
-          );
-        },
-      ),
     );
   }
 
@@ -204,7 +224,9 @@ class _SupportTicketState extends State<SupportTicket> {
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             Text(
-                              AppLocalizations.of(context)!.support_ticket_details,
+                              AppLocalizations.of(
+                                context,
+                              )!.support_ticket_details,
                               style: Styles.bold_arsenic_14,
                             ),
                             IconButton(
@@ -232,8 +254,10 @@ class _SupportTicketState extends State<SupportTicket> {
                             mainAxisSize: MainAxisSize.min,
                             children: [
                               SizedBox(height: 10),
-                              Text(detail.subject,
-                                  style: const TextStyle(fontSize: 18)),
+                              Text(
+                                detail.subject,
+                                style: const TextStyle(fontSize: 18),
+                              ),
                               const Divider(),
                               Container(
                                 decoration: BoxDecoration(
@@ -254,7 +278,8 @@ class _SupportTicketState extends State<SupportTicket> {
                               ),
                               const SizedBox(height: 8),
                               Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
                                 children: [
                                   InkWell(
                                     onTap: getReplyImage,
@@ -274,16 +299,18 @@ class _SupportTicketState extends State<SupportTicket> {
                                   InkWell(
                                     onTap: () async {
                                       final String? replyText =
-                                      await _replySummernoteKey.currentState
-                                          ?.getText();
+                                          await _replySummernoteKey.currentState
+                                              ?.getText();
                                       if (replyText != null &&
                                           replyText.isNotEmpty) {
                                         store.dispatch(
                                           storeSupportTicketReplyMiddleware(
                                             ticket_id: detail.id,
                                             reply: replyText,
-                                            attachment: state
-                                                .supportTicketReplyState!.image,
+                                            attachment:
+                                                state
+                                                    .supportTicketReplyState!
+                                                    .image,
                                           ),
                                         );
                                         FocusManager.instance.primaryFocus
@@ -326,104 +353,126 @@ class _SupportTicketState extends State<SupportTicket> {
                               Column(
                                 children: [
                                   for (final reply in detail.reply)
-                                    Builder(builder: (context) {
-                                      final myPhotoUrl = state
-                                          .accountState?.profileData?.memberPhoto;
-                                      final bool isMyReply = myPhotoUrl != null &&
-                                          reply.repliedUserImage == myPhotoUrl;
+                                    Builder(
+                                      builder: (context) {
+                                        final myPhotoUrl =
+                                            state
+                                                .accountState
+                                                ?.profileData
+                                                ?.memberPhoto;
+                                        final bool isMyReply =
+                                            myPhotoUrl != null &&
+                                            reply.repliedUserImage ==
+                                                myPhotoUrl;
 
-                                      final avatar = ClipRRect(
-                                        borderRadius:
-                                        BorderRadius.circular(25.0),
-                                        child: SizedBox(
-                                          width: 40,
-                                          height: 40,
-                                          child: MyImages.normalImage(
-                                            reply.repliedUserImage ?? '',
+                                        final avatar = ClipRRect(
+                                          borderRadius: BorderRadius.circular(
+                                            25.0,
                                           ),
-                                        ),
-                                      );
-                                      final messageBubble = Flexible(
-                                        child: Container(
-                                          padding:
-                                          const EdgeInsets.symmetric(
-                                              horizontal: 14, vertical: 10),
-                                          decoration: BoxDecoration(
-                                            color: isMyReply
-                                                ? MyTheme.app_accent_color
-                                                : MyTheme.zircon
-                                                .withOpacity(0.8),
-                                            borderRadius: BorderRadius.only(
-                                              topLeft:
-                                              const Radius.circular(16),
-                                              topRight:
-                                              const Radius.circular(16),
-                                              bottomLeft: isMyReply
-                                                  ? const Radius.circular(16)
-                                                  : Radius.zero,
-                                              bottomRight: isMyReply
-                                                  ? Radius.zero
-                                                  : const Radius.circular(16),
+                                          child: SizedBox(
+                                            width: 40,
+                                            height: 40,
+                                            child: MyImages.normalImage(
+                                              reply.repliedUserImage ?? '',
                                             ),
                                           ),
-                                          child: Column(
-                                            crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                            children: [
-                                              Html(
-                                                data: reply.reply ?? '',
-                                                style: {
-                                                  "body": Style(
-                                                    color: isMyReply
-                                                        ? Colors.white
-                                                        : Colors.black,
-                                                  ),
-                                                },
-                                              ),
-                                              if (reply.replyAttachment !=
-                                                  null &&
-                                                  reply.replyAttachment!
-                                                      .isNotEmpty)
-                                                Padding(
-                                                  padding:
-                                                  const EdgeInsets.only(
-                                                      top: 8.0),
-                                                  child: SizedBox(
-                                                    width: 100,
-                                                    height: 100,
-                                                    child:
-                                                    MyImages.normalImage(
-                                                        reply
-                                                            .replyAttachment!),
-                                                  ),
+                                        );
+                                        final messageBubble = Flexible(
+                                          child: Container(
+                                            padding: const EdgeInsets.symmetric(
+                                              horizontal: 14,
+                                              vertical: 10,
+                                            ),
+                                            decoration: BoxDecoration(
+                                              color:
+                                                  isMyReply
+                                                      ? MyTheme.app_accent_color
+                                                      : MyTheme.zircon
+                                                          .withOpacity(0.8),
+                                              borderRadius: BorderRadius.only(
+                                                topLeft: const Radius.circular(
+                                                  16,
                                                 ),
+                                                topRight: const Radius.circular(
+                                                  16,
+                                                ),
+                                                bottomLeft:
+                                                    isMyReply
+                                                        ? const Radius.circular(
+                                                          16,
+                                                        )
+                                                        : Radius.zero,
+                                                bottomRight:
+                                                    isMyReply
+                                                        ? Radius.zero
+                                                        : const Radius.circular(
+                                                          16,
+                                                        ),
+                                              ),
+                                            ),
+                                            child: Column(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
+                                              children: [
+                                                Html(
+                                                  data: reply.reply ?? '',
+                                                  style: {
+                                                    "body": Style(
+                                                      color:
+                                                          isMyReply
+                                                              ? Colors.white
+                                                              : Colors.black,
+                                                    ),
+                                                  },
+                                                ),
+                                                if (reply.replyAttachment !=
+                                                        null &&
+                                                    reply
+                                                        .replyAttachment!
+                                                        .isNotEmpty)
+                                                  Padding(
+                                                    padding:
+                                                        const EdgeInsets.only(
+                                                          top: 8.0,
+                                                        ),
+                                                    child: SizedBox(
+                                                      width: 100,
+                                                      height: 100,
+                                                      child: MyImages.normalImage(
+                                                        reply.replyAttachment!,
+                                                      ),
+                                                    ),
+                                                  ),
+                                              ],
+                                            ),
+                                          ),
+                                        );
+                                        return Padding(
+                                          padding: const EdgeInsets.symmetric(
+                                            vertical: 4.0,
+                                          ),
+                                          child: Row(
+                                            mainAxisAlignment:
+                                                isMyReply
+                                                    ? MainAxisAlignment.end
+                                                    : MainAxisAlignment.start,
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.end,
+                                            children: [
+                                              if (!isMyReply) ...[
+                                                avatar,
+                                                const SizedBox(width: 8),
+                                              ],
+                                              messageBubble,
+                                              if (isMyReply) ...[
+                                                const SizedBox(width: 8),
+                                                avatar,
+                                              ],
                                             ],
                                           ),
-                                        ),
-                                      );
-                                      return Padding(
-                                        padding: const EdgeInsets.symmetric(
-                                            vertical: 4.0),
-                                        child: Row(
-                                          mainAxisAlignment: isMyReply
-                                              ? MainAxisAlignment.end
-                                              : MainAxisAlignment.start,
-                                          crossAxisAlignment:
-                                          CrossAxisAlignment.end,
-                                          children: [
-                                            if (!isMyReply) ...[
-                                              avatar,
-                                              const SizedBox(width: 8),
-                                            ],
-                                            messageBubble,
-                                            if (isMyReply) ...[
-                                              const SizedBox(width: 8),
-                                              avatar,
-                                            ],
-                                          ],
-                                        ),
-                                      );
-                                    }),
+                                        );
+                                      },
+                                    ),
                                 ],
                               ),
                               const Divider(height: 10),
@@ -432,20 +481,28 @@ class _SupportTicketState extends State<SupportTicket> {
                                 children: [
                                   CircleAvatar(
                                     radius: 25,
-                                    foregroundImage: state.accountState!
-                                        .profileData!.memberPhoto ==
-                                        null
-                                        ? const AssetImage(
-                                        'assets/images/default_avater.png')
-                                        : NetworkImage(state.accountState!
-                                        .profileData!.memberPhoto!)
-                                    as ImageProvider,
+                                    foregroundImage:
+                                        state
+                                                    .accountState!
+                                                    .profileData!
+                                                    .memberPhoto ==
+                                                null
+                                            ? const AssetImage(
+                                              'assets/images/default_avater.png',
+                                            )
+                                            : NetworkImage(
+                                                  state
+                                                      .accountState!
+                                                      .profileData!
+                                                      .memberPhoto!,
+                                                )
+                                                as ImageProvider,
                                   ),
                                   const SizedBox(width: 10),
                                   Expanded(
                                     child: Column(
                                       crossAxisAlignment:
-                                      CrossAxisAlignment.start,
+                                          CrossAxisAlignment.start,
                                       children: [
                                         Html(data: detail.description ?? ''),
                                         const SizedBox(height: 10),
@@ -455,7 +512,8 @@ class _SupportTicketState extends State<SupportTicket> {
                                             width: 100,
                                             height: 100,
                                             child: MyImages.normalImage(
-                                                detail.attachments!),
+                                              detail.attachments!,
+                                            ),
                                           ),
                                       ],
                                     ),
@@ -494,6 +552,7 @@ class _SupportTicketState extends State<SupportTicket> {
       ),
     );
   }
+
   Widget buildCreateTicket(AppState state, BuildContext context) {
     return InkWell(
       onTap: () => buildCreateTicketShowDialog(state, context),
@@ -531,11 +590,12 @@ class _SupportTicketState extends State<SupportTicket> {
   }
 
   Future<dynamic> buildCreateTicketShowDialog(
-      AppState state, BuildContext context) {
+    AppState state,
+    BuildContext context,
+  ) {
     return OneContext().showDialog(
       builder: (context) {
         return Dialog(
-
           insetPadding: EdgeInsets.zero,
           backgroundColor: Colors.transparent,
           child: SizedBox(
@@ -549,8 +609,10 @@ class _SupportTicketState extends State<SupportTicket> {
               child: Column(
                 children: [
                   Padding(
-                    padding:
-                    const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 16.0,
+                      vertical: 8.0,
+                    ),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
@@ -643,11 +705,14 @@ class _CreateTicketFormState extends State<CreateTicketForm> {
         mainAxisSize: MainAxisSize.min,
         children: [
           /// subject
-
           RichText(
-              text:TextSpan(text: AppLocalizations.of(context)!.support_ticket_subject,style: Styles.bold_arsenic_16,
-              children: [TextSpan(text: ' *',style: TextStyle(color: Colors.red)),]),
-
+            text: TextSpan(
+              text: AppLocalizations.of(context)!.support_ticket_subject,
+              style: Styles.bold_arsenic_16,
+              children: [
+                TextSpan(text: ' *', style: TextStyle(color: Colors.red)),
+              ],
+            ),
           ),
           const SizedBox(height: 8),
           TextFormField(
@@ -664,9 +729,13 @@ class _CreateTicketFormState extends State<CreateTicketForm> {
           ),
           const SizedBox(height: 15),
           RichText(
-            text:TextSpan(text: AppLocalizations.of(context)!.support_ticket_sub_category,style: Styles.bold_arsenic_16,
-                children: [TextSpan(text: ' *',style: TextStyle(color: Colors.red)),]),
-
+            text: TextSpan(
+              text: AppLocalizations.of(context)!.support_ticket_sub_category,
+              style: Styles.bold_arsenic_16,
+              children: [
+                TextSpan(text: ' *', style: TextStyle(color: Colors.red)),
+              ],
+            ),
           ),
           const SizedBox(height: 8),
 
@@ -679,16 +748,18 @@ class _CreateTicketFormState extends State<CreateTicketForm> {
               decoration: InputStyle.inputDecoration_text_field(
                 suffixIcon: const Icon(Icons.keyboard_arrow_down),
               ),
-              items: widget.state.supportTicketState!.ticketCategories!
-                  .map<DropdownMenuItem<dynamic>>((e) {
-                return DropdownMenuItem<dynamic>(
-                  value: e.id,
-                  child: Text(
-                    e.name,
-                    style: Styles.regular_gull_grey_12,
-                  ),
-                );
-              }).toList(),
+              items:
+                  widget.state.supportTicketState!.ticketCategories!
+                      .map<DropdownMenuItem<dynamic>>((e) {
+                        return DropdownMenuItem<dynamic>(
+                          value: e.id,
+                          child: Text(
+                            e.name,
+                            style: Styles.regular_gull_grey_12,
+                          ),
+                        );
+                      })
+                      .toList(),
               validator: (value) {
                 if (value == null) {
                   return 'Please select a category.';
@@ -730,44 +801,46 @@ class _CreateTicketFormState extends State<CreateTicketForm> {
           const SizedBox(height: 15),
           StoreConnector<AppState, AppState>(
             converter: (store) => store.state,
-            builder: (context, state2) => Stack(
-              alignment: AlignmentDirectional.topEnd,
-              children: [
-                TextFormField(
-                  readOnly: true,
-                  decoration: InputStyle.inputDecoration_text_field(
-                    hint: state2.supportTicketCreateState!.img_name != ''
-                        ? state2.supportTicketCreateState!.img_name
-                        : "Choose file",
-                  ),
-                ),
-                Positioned(
-                  right: 5,
-                  child: SizedBox(
-                    width: 100,
-                    child: TextButton(
-                      style: ButtonStyle(
-                        backgroundColor: MaterialStateProperty.all<Color>(
-                          MyTheme.white,
-                        ),
-                        shape: MaterialStateProperty.all(
-                          const RoundedRectangleBorder(
-                            borderRadius: BorderRadius.only(
-                              topRight: Radius.circular(8),
-                              bottomRight: Radius.circular(8),
+            builder:
+                (context, state2) => Stack(
+                  alignment: AlignmentDirectional.topEnd,
+                  children: [
+                    TextFormField(
+                      readOnly: true,
+                      decoration: InputStyle.inputDecoration_text_field(
+                        hint:
+                            state2.supportTicketCreateState!.img_name != ''
+                                ? state2.supportTicketCreateState!.img_name
+                                : "Choose file",
+                      ),
+                    ),
+                    Positioned(
+                      right: 5,
+                      child: SizedBox(
+                        width: 100,
+                        child: TextButton(
+                          style: ButtonStyle(
+                            backgroundColor: MaterialStateProperty.all<Color>(
+                              MyTheme.white,
+                            ),
+                            shape: MaterialStateProperty.all(
+                              const RoundedRectangleBorder(
+                                borderRadius: BorderRadius.only(
+                                  topRight: Radius.circular(8),
+                                  bottomRight: Radius.circular(8),
+                                ),
+                              ),
                             ),
                           ),
+                          onPressed: () {
+                            getImage();
+                          },
+                          child: const Text('Browse'),
                         ),
                       ),
-                      onPressed: () {
-                        getImage();
-                      },
-                      child: const Text('Browse'),
                     ),
-                  ),
+                  ],
                 ),
-              ],
-            ),
           ),
 
           const SizedBox(height: 15),
@@ -776,7 +849,7 @@ class _CreateTicketFormState extends State<CreateTicketForm> {
             onTap: () async {
               if (_formKey.currentState!.validate()) {
                 final String? details =
-                await _summernoteKey.currentState?.getText();
+                    await _summernoteKey.currentState?.getText();
 
                 store.dispatch(
                   supportTicketCreateMiddleware(
@@ -794,8 +867,7 @@ class _CreateTicketFormState extends State<CreateTicketForm> {
               }
             },
             child: Container(
-              padding:
-              const EdgeInsets.symmetric(horizontal: 45, vertical: 7),
+              padding: const EdgeInsets.symmetric(horizontal: 45, vertical: 7),
               decoration: BoxDecoration(
                 gradient: Styles.buildLinearGradient(
                   begin: Alignment.topCenter,
@@ -818,7 +890,6 @@ class _CreateTicketFormState extends State<CreateTicketForm> {
   }
 }
 
-
 class SupportTicketReplyState {
   ImagePicker? replyImagePicker = ImagePicker();
   File? image;
@@ -839,9 +910,9 @@ class StoreReplyImageAction {
 class ResetReplyStateAction {}
 
 SupportTicketReplyState? support_ticket_reply_reducer(
-    SupportTicketReplyState? state,
-    dynamic action,
-    ) {
+  SupportTicketReplyState? state,
+  dynamic action,
+) {
   if (action is StoreReplyImageAction) {
     state!.image = action.image;
     state.img_name = action.image_name;

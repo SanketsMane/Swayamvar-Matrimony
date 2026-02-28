@@ -1,389 +1,300 @@
-// Sanket: Updated Profile Verification screen — premium 2026 design system
-import 'package:active_matrimonial_flutter_app/components/common_widget.dart';
+import 'dart:io';
+import 'package:active_matrimonial_flutter_app/l10n/app_localizations.dart';
 import 'package:active_matrimonial_flutter_app/const/my_theme.dart';
-import 'package:active_matrimonial_flutter_app/const/style.dart';
-import 'package:active_matrimonial_flutter_app/helpers/main_helpers.dart';
-import 'package:active_matrimonial_flutter_app/models_response/others/common_response.dart';
 import 'package:active_matrimonial_flutter_app/screens/core.dart';
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
-import '../../../app_config.dart';
 import 'verify_action.dart';
-import 'verify_state.dart';
 
-class VerifyPage extends StatelessWidget {
+class VerifyPage extends StatefulWidget {
   const VerifyPage({super.key});
 
-  onVerify(BuildContext context) async {
-    Map<String, String> data = {};
-    Uri url = Uri.parse("${AppConfig.BASE_URL}/member/verification-info-store");
-    Map<String, String> header = {
-      "Authorization": "Bearer $getToken",
-      "Accept": "application/json",
-      "Content-Type": "application/json",
-    };
+  @override
+  State<VerifyPage> createState() => _VerifyPageState();
+}
 
-    final httpReq = http.MultipartRequest("POST", url);
-    httpReq.headers.addAll(header);
+class _VerifyPageState extends State<VerifyPage> {
+  final PageController _pageController = PageController();
+  int _currentPage = 0;
 
-    for (VerificationModel element in store.state.userVerifyState!.formList!) {
-      if (element.type == "text") {
-        if (element.data.text.trim().toString().isEmpty) {
-          store.dispatch(ShowMessageAction(msg: "${element.title} is Empty", color: MyTheme.failure));
-          return;
-        }
-        data.addAll({element.key!: element.data.text.trim().toString()});
-      } else if (element.type == "select" || element.type == "radio") {
-        if (element.data == null || element.data.toString().isEmpty) {
-          store.dispatch(ShowMessageAction(msg: "${element.title} is Empty", color: MyTheme.failure));
-          return;
-        }
-        data.addAll({element.key!: element.data.toString()});
-      } else if (element.type == "multi_select") {
-        if (element.data == null || element.data.isEmpty) {
-          store.dispatch(ShowMessageAction(msg: "${element.title} is Empty", color: MyTheme.failure));
-          return;
-        }
-        data.addAll({element.key!: element.data.join(",").toString()});
-      } else if (element.type == "file") {
-        if (element.data == null || element.data.toString().isEmpty) {
-          store.dispatch(ShowMessageAction(msg: "${element.title} is Empty", color: MyTheme.failure));
-          return;
-        }
-        final image = await http.MultipartFile.fromPath(element.key!, element.data.path);
-        httpReq.files.add(image);
-      }
+  void _nextPage() {
+    if (_currentPage < 2) {
+      _pageController.nextPage(
+        duration: const Duration(milliseconds: 300),
+        curve: Curves.easeInOut,
+      );
     }
-    httpReq.fields.addAll(data);
-    var response = await httpReq.send();
-    response.stream.bytesToString().then((value) {
-      var res = commonResponseFromJson(value);
-      store.dispatch(ShowMessageAction(msg: res.message, color: res.result ? MyTheme.success : MyTheme.failure));
-      if (res.result) {
-        store.dispatch(getUserIsApproveAction());
-        Navigator.pop(context);
-      }
-    });
+  }
+
+  void _prevPage() {
+    if (_currentPage > 0) {
+      _pageController.previousPage(
+        duration: const Duration(milliseconds: 300),
+        curve: Curves.easeInOut,
+      );
+    }
   }
 
   @override
   Widget build(BuildContext context) {
+    final l = AppLocalizations.of(context)!;
     return StoreConnector<AppState, AppState>(
       converter: (store) => store.state,
       onInit: (store) {
         if (store.state.userVerifyState!.verificationInfo!) {
-          Navigator.pop(context);
-          store.dispatch(ShowMessageAction(msg: "Verification request already sent.", color: MyTheme.failure));
-        } else {
-          store.dispatch(getFormDataAction());
+          WidgetsBinding.instance.addPostFrameCallback((_) {
+            Navigator.pop(context);
+            store.dispatch(
+              ShowMessageAction(
+                msg: l.verify_already_sent,
+                color: MyTheme.failure,
+              ),
+            );
+          });
         }
       },
       builder: (_, state) {
         return Scaffold(
           backgroundColor: MyTheme.background,
-          appBar: _buildHeader(context),
-          body: state.userVerifyState!.isFetching!
-              ? const Center(child: CircularProgressIndicator(color: MyTheme.primary))
-              : Stack(
+          appBar: _buildHeader(context, l),
+          body: Column(
+            children: [
+              _buildProgressStepper(l),
+              Expanded(
+                child: PageView(
+                  controller: _pageController,
+                  physics: const NeverScrollableScrollPhysics(),
+                  onPageChanged: (page) => setState(() => _currentPage = page),
                   children: [
-                    SingleChildScrollView(
-                      padding: const EdgeInsets.all(16.0),
-                      child: Column(
-                        children: [
-                          _buildTrustCard(),
-                          const SizedBox(height: 16),
-                          _buildStepsCard(),
-                          const SizedBox(height: 16),
-                          ..._buildFormFields(state),
-                          _buildStatusSection(state),
-                          const SizedBox(height: 100), // Space for sticky button
-                        ],
-                      ),
-                    ),
-                    _buildStickySubmitButton(context, state),
+                    _buildStep1(state, l),
+                    _buildStep2(state, l),
+                    _buildStep3(state, l),
                   ],
                 ),
+              ),
+              _buildBottomNav(context, state, l),
+            ],
+          ),
         );
       },
     );
   }
 
-  PreferredSizeWidget _buildHeader(BuildContext context) {
+  PreferredSizeWidget _buildHeader(BuildContext context, AppLocalizations l) {
     return AppBar(
       backgroundColor: MyTheme.white,
       elevation: 0,
       leading: IconButton(
-        icon: const Icon(Icons.arrow_back, color: MyTheme.text_primary),
+        icon: const Icon(Icons.close, color: MyTheme.text_primary),
         onPressed: () => Navigator.pop(context),
       ),
-      title: const Text("Profile Verification", 
-          style: TextStyle(color: MyTheme.text_primary, fontSize: 18, fontWeight: FontWeight.bold)),
+      title: Text(
+        l.verify_title,
+        style: const TextStyle(
+          color: MyTheme.text_primary,
+          fontSize: 18,
+          fontWeight: FontWeight.bold,
+        ),
+      ),
       centerTitle: true,
-      bottom: PreferredSize(
-        preferredSize: const Size.fromHeight(1),
-        child: Container(color: MyTheme.border, height: 1),
-      ),
     );
   }
 
-  Widget _buildTrustCard() {
+  Widget _buildProgressStepper(AppLocalizations l) {
     return Container(
-      width: double.infinity,
       padding: const EdgeInsets.all(20),
-      decoration: BoxDecoration(
-        color: MyTheme.white,
-        borderRadius: BorderRadius.circular(16),
-        boxShadow: [BoxShadow(color: Colors.black.withOpacity(0.02), blurRadius: 10, offset: const Offset(0, 4))],
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
+      color: MyTheme.white,
+      child: Row(
         children: [
-          Row(
-            children: [
-              const Text("Get Verified ✔", style: TextStyle(color: MyTheme.text_primary, fontSize: 18, fontWeight: FontWeight.bold)),
-              const Spacer(),
-              Icon(Icons.verified_user, color: MyTheme.primary.withOpacity(0.1), size: 40),
-            ],
-          ),
-          const SizedBox(height: 8),
-          const Text("Verified profiles receive more matches and build higher trust with potential partners.", 
-              style: TextStyle(color: MyTheme.text_secondary, fontSize: 14)),
-          const SizedBox(height: 20),
-          _benefitRow("Higher search visibility"),
-          const SizedBox(height: 10),
-          _benefitRow("More responses from serious members"),
-          const SizedBox(height: 10),
-          _benefitRow("Exclusive \"Trusted\" profile badge"),
+          _stepIndicator(1, l.verify_step_id, _currentPage >= 0),
+          _stepLine(_currentPage >= 1),
+          _stepIndicator(2, l.verify_step_selfie, _currentPage >= 1),
+          _stepLine(_currentPage >= 2),
+          _stepIndicator(3, l.verify_step_review, _currentPage >= 2),
         ],
       ),
     );
   }
 
-  Widget _benefitRow(String text) {
-    return Row(
-      children: [
-        const Icon(Icons.check_circle_outline, color: MyTheme.success, size: 16),
-        const SizedBox(width: 8),
-        Text(text, style: const TextStyle(color: MyTheme.text_primary, fontSize: 13)),
-      ],
-    );
-  }
-
-  Widget _buildStepsCard() {
-    return Container(
-      width: double.infinity,
-      padding: const EdgeInsets.all(20),
-      decoration: BoxDecoration(
-        color: MyTheme.white,
-        borderRadius: BorderRadius.circular(16),
-        boxShadow: [BoxShadow(color: Colors.black.withOpacity(0.02), blurRadius: 10)],
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          const Text("Verification Steps", style: TextStyle(color: MyTheme.text_primary, fontSize: 16, fontWeight: FontWeight.bold)),
-          const SizedBox(height: 20),
-          Row(
-            children: [
-              _stepItem("1", "Upload ID", true),
-              _stepDivider(),
-              _stepItem("2", "Selfie", false),
-              _stepDivider(),
-              _stepItem("3", "Review", false),
-            ],
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _stepItem(String number, String label, bool isActive) {
+  Widget _stepIndicator(int step, String label, bool isActive) {
     return Column(
       children: [
-        Container(
-          height: 32, width: 32,
-          alignment: Alignment.center,
+        AnimatedContainer(
+          duration: const Duration(milliseconds: 300),
+          height: 32,
+          width: 32,
           decoration: BoxDecoration(
             color: isActive ? MyTheme.primary : MyTheme.solitude,
             shape: BoxShape.circle,
+            boxShadow:
+                isActive
+                    ? [
+                      BoxShadow(
+                        color: MyTheme.primary.withOpacity(0.3),
+                        blurRadius: 8,
+                        offset: const Offset(0, 4),
+                      ),
+                    ]
+                    : [],
           ),
-          child: Text(number, style: TextStyle(color: isActive ? Colors.white : MyTheme.text_secondary, fontWeight: FontWeight.bold)),
+          child: Center(
+            child:
+                isActive && _currentPage > step - 1
+                    ? const Icon(Icons.check, color: Colors.white, size: 16)
+                    : Text(
+                      "$step",
+                      style: TextStyle(
+                        color: isActive ? Colors.white : MyTheme.text_secondary,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+          ),
         ),
-        const SizedBox(height: 8),
-        Text(label, style: TextStyle(color: isActive ? MyTheme.text_primary : MyTheme.text_secondary, fontSize: 10)),
+        const SizedBox(height: 4),
+        Text(
+          label,
+          style: TextStyle(
+            color: isActive ? MyTheme.text_primary : MyTheme.text_secondary,
+            fontSize: 10,
+            fontWeight: isActive ? FontWeight.bold : FontWeight.normal,
+          ),
+        ),
       ],
     );
   }
 
-  Widget _stepDivider() {
+  Widget _stepLine(bool isActive) {
     return Expanded(
-      child: Container(height: 1, color: MyTheme.border, margin: const EdgeInsets.only(left: 8, right: 8, bottom: 20)),
-    );
-  }
-
-  List<Widget> _buildFormFields(AppState state) {
-    List<Widget> widgets = [];
-    final formList = state.userVerifyState!.formList!;
-
-    for (int i = 0; i < formList.length; i++) {
-      final field = formList[i];
-      widgets.add(
-        Container(
-          width: double.infinity,
-          margin: const EdgeInsets.only(bottom: 16),
-          padding: const EdgeInsets.all(20),
-          decoration: BoxDecoration(
-            color: MyTheme.white,
-            borderRadius: BorderRadius.circular(16),
-            boxShadow: [BoxShadow(color: Colors.black.withOpacity(0.02), blurRadius: 10)],
-          ),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(field.title ?? "", style: const TextStyle(color: MyTheme.text_primary, fontSize: 15, fontWeight: FontWeight.bold)),
-              if (field.type == "file") 
-                const Text("Upload a clear document for faster approval.", style: TextStyle(color: MyTheme.text_secondary, fontSize: 12)),
-              const SizedBox(height: 16),
-              _renderField(i, field),
-            ],
-          ),
-        ),
-      );
-    }
-    return widgets;
-  }
-
-  Widget _renderField(int index, VerificationModel field) {
-    switch (field.type) {
-      case "text":
-        return _buildTextField(field.data);
-      case "select":
-        return _buildDropdownField(index, field as VerificationModel<String?>);
-      case "file":
-        return _buildFileUploadArea(index, field);
-      default:
-        return const SizedBox.shrink();
-    }
-  }
-
-  Widget _buildTextField(TextEditingController controller) {
-    return Container(
-      height: 48,
-      decoration: BoxDecoration(color: MyTheme.solitude, borderRadius: BorderRadius.circular(12)),
-      child: TextField(
-        controller: controller,
-        style: const TextStyle(fontSize: 14),
-        decoration: const InputDecoration(
-          hintText: "Enter details",
-          border: InputBorder.none,
-          contentPadding: EdgeInsets.symmetric(horizontal: 16),
-        ),
+      child: Container(
+        height: 2,
+        margin: const EdgeInsets.only(bottom: 16, left: 8, right: 8),
+        color: isActive ? MyTheme.primary : MyTheme.solitude,
       ),
     );
   }
 
-  Widget _buildDropdownField(int index, VerificationModel<String?> model) {
-    return Container(
-      height: 48,
-      padding: const EdgeInsets.symmetric(horizontal: 16),
-      decoration: BoxDecoration(color: MyTheme.solitude, borderRadius: BorderRadius.circular(12)),
-      child: DropdownButtonHideUnderline(
-        child: DropdownButton<String>(
-          isExpanded: true,
-          value: model.data,
-          hint: const Text("Select option", style: TextStyle(fontSize: 14)),
-          items: model.options!.map((val) => DropdownMenuItem<String>(value: val.toString(), child: Text(val.toString(), style: const TextStyle(fontSize: 14)))).toList(),
-          onChanged: (val) => store.dispatch(SetSelectValueAction(payload: val, index: index)),
-        ),
-      ),
-    );
-  }
-
-  Widget _buildFileUploadArea(int index, VerificationModel field) {
-    return Column(
-      children: [
-        GestureDetector(
-          onTap: () => store.dispatch(getVerifyImageAction(index)),
-          child: Container(
-            height: 120,
-            width: double.infinity,
-            decoration: BoxDecoration(
-              color: MyTheme.solitude,
-              borderRadius: BorderRadius.circular(12),
-              border: Border.all(color: MyTheme.border, style: BorderStyle.solid), // Note: Flutter doesn't support dashed borders natively without CustomPainter
-            ),
-            child: field.data == null
-                ? Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      const Icon(Icons.cloud_upload_outlined, color: MyTheme.primary, size: 32),
-                      const SizedBox(height: 8),
-                      const Text("Tap to upload photo", style: TextStyle(color: MyTheme.text_secondary, fontSize: 13)),
-                    ],
-                  )
-                : Stack(
-                    children: [
-                      ClipRRect(
-                        borderRadius: BorderRadius.circular(12),
-                        child: Image.file(field.data, width: double.infinity, height: 120, fit: BoxFit.cover),
-                      ),
-                      Positioned(
-                        top: 8, right: 8,
-                        child: CircleAvatar(
-                          radius: 14, backgroundColor: MyTheme.primary,
-                          child: const Icon(Icons.edit, color: Colors.white, size: 14),
-                        ),
-                      ),
-                    ],
-                  ),
-          ),
-        ),
-        if (field.data != null)
-          Container(
-            margin: const EdgeInsets.only(top: 8),
-            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
-            decoration: BoxDecoration(color: MyTheme.success.withOpacity(0.1), borderRadius: BorderRadius.circular(20)),
-            child: const Row(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Icon(Icons.check, color: MyTheme.success, size: 12),
-                SizedBox(width: 4),
-                Text("Uploaded", style: TextStyle(color: MyTheme.success, fontSize: 10, fontWeight: FontWeight.bold)),
-              ],
-            ),
-          ),
-      ],
-    );
-  }
-
-  Widget _buildStatusSection(AppState state) {
-    return Container(
-      width: double.infinity,
+  Widget _buildStep1(AppState state, AppLocalizations l) {
+    final v = state.userVerifyState!;
+    return SingleChildScrollView(
       padding: const EdgeInsets.all(20),
-      decoration: BoxDecoration(
-        color: MyTheme.white,
-        borderRadius: BorderRadius.circular(16),
-        boxShadow: [BoxShadow(color: Colors.black.withOpacity(0.02), blurRadius: 10)],
-      ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Text("Verification Status", style: TextStyle(color: MyTheme.text_primary, fontSize: 16, fontWeight: FontWeight.bold)),
-          const SizedBox(height: 12),
-          Container(
-            padding: const EdgeInsets.all(12),
-            decoration: BoxDecoration(color: MyTheme.solitude, borderRadius: BorderRadius.circular(12)),
-            child: const Row(
+          _sectionTitle(l.verify_step_1_title),
+          const SizedBox(height: 16),
+          _buildGlassCard(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Icon(Icons.info_outline, color: MyTheme.text_secondary, size: 20),
-                SizedBox(width: 12),
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text("Pending Submission", style: TextStyle(color: MyTheme.text_primary, fontSize: 14, fontWeight: FontWeight.bold)),
-                      Text("Verification usually takes 24-48 hours.", style: TextStyle(color: MyTheme.text_secondary, fontSize: 12)),
-                    ],
+                Text(
+                  l.verify_select_id_type,
+                  style: const TextStyle(fontWeight: FontWeight.bold),
+                ),
+                const SizedBox(height: 10),
+                DropdownButtonFormField<String>(
+                  value: v.idType,
+                  decoration: _inputDecoration(),
+                  items:
+                      ["Aadhaar", "PAN Card", "Passport", "Voter ID"]
+                          .map(
+                            (e) => DropdownMenuItem(value: e, child: Text(e)),
+                          )
+                          .toList(),
+                  onChanged:
+                      (val) => store.dispatch(SetVerifyIdType(payload: val!)),
+                ),
+                const SizedBox(height: 20),
+                Text(
+                  l.verify_enter_id_number,
+                  style: const TextStyle(fontWeight: FontWeight.bold),
+                ),
+                const SizedBox(height: 10),
+                TextFormField(
+                  initialValue: v.idNumber,
+                  decoration: _inputDecoration(hint: l.verify_id_hint),
+                  onChanged:
+                      (val) => store.dispatch(SetVerifyIdNumber(payload: val)),
+                ),
+              ],
+            ),
+          ),
+          const SizedBox(height: 24),
+          _sectionTitle(l.verify_upload_id),
+          const SizedBox(height: 16),
+          Row(
+            children: [
+              Expanded(
+                child: _buildUploadBox(
+                  l.verify_front_side,
+                  v.idFront,
+                  'front',
+                  l,
+                ),
+              ),
+              const SizedBox(width: 16),
+              Expanded(
+                child: _buildUploadBox(l.verify_back_side, v.idBack, 'back', l),
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildStep2(AppState state, AppLocalizations l) {
+    final v = state.userVerifyState!;
+    return SingleChildScrollView(
+      padding: const EdgeInsets.all(20),
+      child: Column(
+        children: [
+          _sectionTitle(l.verify_step_2_title),
+          const SizedBox(height: 16),
+          _buildGlassCard(
+            child: Column(
+              children: [
+                const Icon(Icons.face, size: 80, color: MyTheme.primary),
+                const SizedBox(height: 16),
+                Text(
+                  l.verify_selfie_desc,
+                  textAlign: TextAlign.center,
+                  style: const TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                const SizedBox(height: 8),
+                Text(
+                  l.verify_selfie_instruction,
+                  textAlign: TextAlign.center,
+                  style: const TextStyle(
+                    fontSize: 12,
+                    color: MyTheme.text_secondary,
+                  ),
+                ),
+                const SizedBox(height: 24),
+                GestureDetector(
+                  onTap: () => store.dispatch(pickVerifyImage('selfie')),
+                  child: Container(
+                    height: 200,
+                    width: 200,
+                    decoration: BoxDecoration(
+                      color: MyTheme.solitude,
+                      borderRadius: BorderRadius.circular(100),
+                      border: Border.all(color: MyTheme.primary, width: 2),
+                    ),
+                    child:
+                        v.selfie == null
+                            ? const Center(
+                              child: Icon(
+                                Icons.camera_alt,
+                                size: 40,
+                                color: MyTheme.primary,
+                              ),
+                            )
+                            : ClipRRect(
+                              borderRadius: BorderRadius.circular(100),
+                              child: Image.file(v.selfie!, fit: BoxFit.cover),
+                            ),
                   ),
                 ),
               ],
@@ -394,26 +305,233 @@ class VerifyPage extends StatelessWidget {
     );
   }
 
-  Widget _buildStickySubmitButton(BuildContext context, AppState state) {
-    return Positioned(
-      bottom: 0, left: 0, right: 0,
-      child: Container(
-        padding: EdgeInsets.fromLTRB(16, 16, 16, 16 + MediaQuery.of(context).padding.bottom),
-        decoration: BoxDecoration(
-          color: MyTheme.white,
-          boxShadow: [BoxShadow(color: Colors.black.withOpacity(0.05), blurRadius: 10, offset: const Offset(0, -4))],
-        ),
-        child: ElevatedButton(
-          onPressed: () => onVerify(context),
-          style: ElevatedButton.styleFrom(
-            backgroundColor: MyTheme.primary,
-            minimumSize: const Size(double.infinity, 56),
-            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-            elevation: 0,
+  Widget _buildStep3(AppState state, AppLocalizations l) {
+    final v = state.userVerifyState!;
+    return SingleChildScrollView(
+      padding: const EdgeInsets.all(20),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          _sectionTitle(l.verify_step_3_title),
+          const SizedBox(height: 16),
+          _buildGlassCard(
+            child: Column(
+              children: [
+                _reviewRow(l.verify_id_type_label, v.idType),
+                _divider(),
+                _reviewRow(l.verify_id_number_label, v.idNumber),
+                _divider(),
+                _reviewRow(
+                  l.verify_documents_label,
+                  v.idFront != null && v.selfie != null
+                      ? l.verify_attached
+                      : l.verify_missing,
+                ),
+              ],
+            ),
           ),
-          child: const Text("Submit Verification", style: TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.bold)),
-        ),
+          const SizedBox(height: 24),
+          Text(
+            l.verify_review_desc,
+            style: const TextStyle(fontSize: 12, color: MyTheme.text_secondary),
+            textAlign: TextAlign.center,
+          ),
+        ],
       ),
     );
+  }
+
+  Widget _buildUploadBox(
+    String label,
+    File? file,
+    String type,
+    AppLocalizations l,
+  ) {
+    return Column(
+      children: [
+        Text(
+          label,
+          style: const TextStyle(fontSize: 12, fontWeight: FontWeight.bold),
+        ),
+        const SizedBox(height: 8),
+        GestureDetector(
+          onTap: () => store.dispatch(pickVerifyImage(type)),
+          child: Container(
+            height: 120,
+            width: double.infinity,
+            decoration: BoxDecoration(
+              color: MyTheme.white,
+              borderRadius: BorderRadius.circular(12),
+              border: Border.all(color: MyTheme.border),
+            ),
+            child:
+                file == null
+                    ? Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        const Icon(
+                          Icons.add_a_photo_outlined,
+                          color: MyTheme.primary,
+                        ),
+                        const SizedBox(height: 4),
+                        Text(
+                          l.verify_upload,
+                          style: const TextStyle(
+                            fontSize: 10,
+                            color: MyTheme.primary,
+                          ),
+                        ),
+                      ],
+                    )
+                    : ClipRRect(
+                      borderRadius: BorderRadius.circular(12),
+                      child: Image.file(file, fit: BoxFit.cover),
+                    ),
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildBottomNav(
+    BuildContext context,
+    AppState state,
+    AppLocalizations l,
+  ) {
+    final v = state.userVerifyState!;
+    return Container(
+      padding: EdgeInsets.fromLTRB(
+        20,
+        20,
+        20,
+        20 + MediaQuery.of(context).padding.bottom,
+      ),
+      decoration: BoxDecoration(
+        color: MyTheme.white,
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.05),
+            blurRadius: 10,
+            offset: const Offset(0, -4),
+          ),
+        ],
+      ),
+      child: Row(
+        children: [
+          if (_currentPage > 0)
+            Expanded(
+              child: OutlinedButton(
+                onPressed: _prevPage,
+                style: OutlinedButton.styleFrom(
+                  minimumSize: const Size(0, 50),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                ),
+                child: Text(l.verify_back),
+              ),
+            ),
+          if (_currentPage > 0) const SizedBox(width: 16),
+          Expanded(
+            flex: 2,
+            child: ElevatedButton(
+              onPressed:
+                  v.isSubmitting
+                      ? null
+                      : () {
+                        if (_currentPage < 2) {
+                          _nextPage();
+                        } else {
+                          store.dispatch(submitVerifyFormAction(context));
+                        }
+                      },
+              style: ElevatedButton.styleFrom(
+                backgroundColor: MyTheme.primary,
+                minimumSize: const Size(0, 50),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                elevation: 0,
+              ),
+              child:
+                  v.isSubmitting
+                      ? const SizedBox(
+                        height: 20,
+                        width: 20,
+                        child: CircularProgressIndicator(
+                          color: Colors.white,
+                          strokeWidth: 2,
+                        ),
+                      )
+                      : Text(
+                        _currentPage == 2
+                            ? l.verify_submit_for_review
+                            : l.verify_next,
+                        style: const TextStyle(
+                          color: Colors.white,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _sectionTitle(String title) {
+    return Text(
+      title,
+      style: const TextStyle(
+        fontSize: 16,
+        fontWeight: FontWeight.bold,
+        color: MyTheme.text_primary,
+      ),
+    );
+  }
+
+  Widget _buildGlassCard({required Widget child}) {
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.all(20),
+      decoration: BoxDecoration(
+        color: MyTheme.white,
+        borderRadius: BorderRadius.circular(16),
+        boxShadow: [
+          BoxShadow(color: Colors.black.withOpacity(0.02), blurRadius: 10),
+        ],
+      ),
+      child: child,
+    );
+  }
+
+  InputDecoration _inputDecoration({String? hint}) {
+    return InputDecoration(
+      hintText: hint,
+      filled: true,
+      fillColor: MyTheme.solitude,
+      border: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(12),
+        borderSide: BorderSide.none,
+      ),
+      contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+    );
+  }
+
+  Widget _reviewRow(String label, String value) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 8),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Text(label, style: const TextStyle(color: MyTheme.text_secondary)),
+          Text(value, style: const TextStyle(fontWeight: FontWeight.bold)),
+        ],
+      ),
+    );
+  }
+
+  Widget _divider() {
+    return Divider(color: MyTheme.solitude, height: 24);
   }
 }

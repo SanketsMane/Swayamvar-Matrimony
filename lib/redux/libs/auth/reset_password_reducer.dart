@@ -3,7 +3,9 @@ import 'package:active_matrimonial_flutter_app/redux/libs/auth/reset_password_st
 enum ResetPasswordActions { passwordObscure, confirmPasswordObscure }
 
 ResetPasswordState? reset_password_reducer(
-    ResetPasswordState? state, dynamic action) {
+  ResetPasswordState? state,
+  dynamic action,
+) {
   if (action == ResetPasswordActions.passwordObscure) {
     return password_obscure(state!, action);
   }

@@ -5,10 +5,7 @@ import 'package:flutter/material.dart';
 class MyGradientContainer extends StatelessWidget {
   final Widget text;
 
-  const MyGradientContainer({
-    required this.text,
-    super.key,
-  });
+  const MyGradientContainer({required this.text, super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -17,14 +14,12 @@ class MyGradientContainer extends StatelessWidget {
       width: DeviceInfo(context).width,
       decoration: BoxDecoration(
         gradient: Styles.buildLinearGradient(
-            begin: Alignment.centerLeft, end: Alignment.centerRight),
-        borderRadius: const BorderRadius.all(
-          Radius.circular(12),
+          begin: Alignment.centerLeft,
+          end: Alignment.centerRight,
         ),
+        borderRadius: const BorderRadius.all(Radius.circular(12)),
       ),
-      child: Center(
-        child: text,
-      ),
+      child: Center(child: text),
     );
   }
 }

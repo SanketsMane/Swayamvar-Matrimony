@@ -123,7 +123,6 @@ class _MyHappyStoriesState extends State<MyHappyStories> {
 
   send() async {
     if (!_formKey.currentState!.validate()) {
-
     } else {
       store.dispatch(
         happystorystoreMiddleware(
@@ -277,7 +276,7 @@ class _MyHappyStoriesState extends State<MyHappyStories> {
 
         /// photos upload
         GroupItemWithChild(
-          title: AppLocalizations.of(context)!.happy_stories_form_photos+ '*',
+          title: AppLocalizations.of(context)!.happy_stories_form_photos + '*',
           child: InkWell(
             onTap: () {
               getImage();

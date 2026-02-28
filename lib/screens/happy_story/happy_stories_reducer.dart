@@ -4,7 +4,9 @@ import 'package:active_matrimonial_flutter_app/screens/happy_story/happy_stories
 import '../../enums/enums.dart';
 
 HappyStoriesState? happy_stories_reducer(
-    HappyStoriesState? state, dynamic action) {
+  HappyStoriesState? state,
+  dynamic action,
+) {
   if (action == Reset.happyStories) {
     return reset(state, action);
   }

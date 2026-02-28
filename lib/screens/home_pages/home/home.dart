@@ -1,4 +1,5 @@
 import 'package:active_matrimonial_flutter_app/l10n/app_localizations.dart';
+import 'package:active_matrimonial_flutter_app/helpers/profile_completeness_helper.dart';
 
 import 'dart:io';
 import 'dart:ui';
@@ -9,43 +10,43 @@ import 'package:active_matrimonial_flutter_app/const/style.dart';
 import 'package:active_matrimonial_flutter_app/helpers/device_info.dart';
 import 'package:active_matrimonial_flutter_app/helpers/navigator_push.dart';
 import 'package:active_matrimonial_flutter_app/middleware/profile_view_middleware.dart';
+import 'package:active_matrimonial_flutter_app/redux/libs/profile_picture_view_request/profile_picture_view_get_middleware.dart';
+import 'package:active_matrimonial_flutter_app/screens/my_dashboard_pages/interest_request/interest_request_middleware.dart';
+import 'package:active_matrimonial_flutter_app/screens/my_dashboard_pages/interest_request/interest_requests.dart';
+import 'package:active_matrimonial_flutter_app/screens/profile_and_gallery_picure_rqst/profile_picture_view_rqst.dart';
 import 'package:active_matrimonial_flutter_app/redux/app/app_state.dart';
 import 'package:active_matrimonial_flutter_app/redux/libs/auth/auth_middleware.dart';
 import 'package:active_matrimonial_flutter_app/redux/libs/manage_profile/manage_profiles_state/manage_profile_combine_state.dart';
-import 'package:active_matrimonial_flutter_app/models_response/account_response.dart';
-import 'package:active_matrimonial_flutter_app/screens/core.dart';
+import 'package:active_matrimonial_flutter_app/screens/home_pages/home/activity_pages/new_matches.dart';
 import 'package:active_matrimonial_flutter_app/screens/user_pages/user_public_profile.dart';
+import 'package:active_matrimonial_flutter_app/screens/core.dart';
+import 'package:active_matrimonial_flutter_app/models_response/account_response.dart';
+import 'package:active_matrimonial_flutter_app/components/container_with_icon.dart';
+import 'package:active_matrimonial_flutter_app/components/my_images.dart';
+import 'package:active_matrimonial_flutter_app/components/common_widget.dart';
+import 'package:active_matrimonial_flutter_app/helpers/main_helpers.dart';
+import 'package:active_matrimonial_flutter_app/screens/auth/verify/verify_action.dart';
+import 'package:active_matrimonial_flutter_app/screens/manage_profiles/manage_profile.dart';
+import 'package:active_matrimonial_flutter_app/screens/settings/settings.dart';
+import 'package:active_matrimonial_flutter_app/screens/account/account_middleware.dart';
 import 'package:flutter/material.dart';
-import 'package:active_matrimonial_flutter_app/components/main_drawer.dart';
 import 'package:flutter/services.dart';
+import 'package:active_matrimonial_flutter_app/components/main_drawer.dart';
+import 'package:active_matrimonial_flutter_app/components/deactivate_Massage.dart';
+import 'package:active_matrimonial_flutter_app/helpers/aiz_route.dart';
+import 'package:active_matrimonial_flutter_app/redux/libs/report/report_middleware.dart';
+import 'package:active_matrimonial_flutter_app/redux/libs/auth/signout_middleware.dart';
+import 'package:active_matrimonial_flutter_app/helpers/shared_pref.dart';
 import 'package:one_context/one_context.dart';
-import '../../../components/common_widget.dart';
-import '../../../components/container_with_icon.dart';
-import '../../../components/custom_popup.dart';
-import '../../../components/deactivate_Massage.dart';
-import '../../../components/my_circular_indicator.dart';
-import '../../../components/my_images.dart';
-import '../../../helpers/aiz_route.dart';
-import '../../../helpers/main_helpers.dart';
-import '../../../helpers/shared_pref.dart';
-import '../../../l10n/app_localizations.dart';
-import '../../../redux/libs/report/report_middleware.dart';
-import '../../../redux/libs/auth/signout_middleware.dart';
-import '../../account/account_middleware.dart';
-import '../../auth/verify/verify_action.dart';
-import '../../manage_profiles/manage_profile.dart';
-import '../../my_dashboard_pages/interest/my_interest.dart';
-import '../../my_dashboard_pages/shortlist/my_shortlist.dart';
-import '../../package/premium_plans.dart';
-import '../../settings/settings.dart';
-import '../../support_ticket/support_ticket.dart';
-import '../../my_dashboard_pages/interest/express_interest_middleware.dart';
-import '../../my_dashboard_pages/shortlist/add_shortlist_middleware.dart';
-import '../../notifications/notifications.dart';
-import '../../search_screens/search.dart';
-import '../../search_screens/advanced_search.dart';
+import 'package:active_matrimonial_flutter_app/redux/libs/profile_picture_view_request/profile_picture_view_get_middleware.dart';
+import 'package:active_matrimonial_flutter_app/screens/my_dashboard_pages/shortlist/my_shortlist.dart';
+import 'package:active_matrimonial_flutter_app/screens/my_dashboard_pages/interest/express_interest_middleware.dart';
+import 'package:active_matrimonial_flutter_app/screens/my_dashboard_pages/shortlist/add_shortlist_middleware.dart';
+import 'package:active_matrimonial_flutter_app/screens/notifications/notifications.dart';
+import 'package:active_matrimonial_flutter_app/screens/search_screens/search.dart';
 import 'home_action.dart';
 import 'home_middleware.dart';
+
 class Home extends StatefulWidget {
   const Home({super.key});
   @override
@@ -74,7 +75,6 @@ class _HomeState extends State<Home> {
     super.dispose();
   }
 
-
   // Sanket: Removed legacy swipe cards mapping methods
 
   @override
@@ -85,19 +85,34 @@ class _HomeState extends State<Home> {
 
     return StoreConnector<AppState, HomeViewModel>(
       converter: (store) => HomeViewModel.fromStore(store),
-      builder: (_, HomeViewModel vm) => Scaffold(
-          backgroundColor: MyTheme.background,
-          appBar: buildAppBar(context),
-          drawer: MainDrawer(),
-          body: SafeArea(
-            bottom: false,
-            child: vm.isAccountDataLoading
-                ? const Center(child: CircularProgressIndicator(color: MyTheme.primary))
-                : vm.isDeactivated
-                    ? Center(child: Padding(padding: const EdgeInsets.symmetric(horizontal: 24), child: const DeactivatedAccountMessage()))
-                    : RefreshIndicator(
-                        onRefresh: () {
-                          onRefresh();
+      builder:
+          (_, HomeViewModel vm) => Scaffold(
+            backgroundColor: MyTheme.background,
+            appBar: buildAppBar(context),
+            drawer: MainDrawer(),
+            body: SafeArea(
+              bottom: false,
+              child:
+                  vm.isAccountDataLoading
+                      ? const Center(
+                        child: CircularProgressIndicator(
+                          color: MyTheme.primary,
+                        ),
+                      )
+                      : vm.isDeactivated
+                      ? Center(
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 24),
+                          child: const DeactivatedAccountMessage(),
+                        ),
+                      )
+                      : RefreshIndicator(
+                        onRefresh: () async {
+                          store.dispatch(homeMiddleware());
+                          store.dispatch(
+                            getProfilePictureViewRequestMiddleware(),
+                          );
+                          store.dispatch(interestRequestMiddleware());
                           return Future.delayed(const Duration(seconds: 1));
                         },
                         child: SingleChildScrollView(
@@ -109,24 +124,38 @@ class _HomeState extends State<Home> {
                               const SizedBox(height: 24),
                               _buildQuickActionHub(context),
                               const SizedBox(height: 32),
-                              if (vm.activeMembers != null && vm.activeMembers!.isNotEmpty)
-                                _buildHorizontalRecommended(context, vm.activeMembers!),
+                              if (vm.activeMembers != null &&
+                                  vm.activeMembers!.isNotEmpty)
+                                _buildHorizontalRecommended(
+                                  context,
+                                  vm.activeMembers!,
+                                ),
                               const SizedBox(height: 32),
-                              _buildActivityInsights(),
+
+                              _buildActivityInsights(context, vm),
                               const SizedBox(height: 32),
                               _buildPremiumCTA(),
-                              const SizedBox(height: 100), // Bottom padding for navbar
+                              const SizedBox(
+                                height: 100,
+                              ), // Bottom padding for navbar
                             ],
                           ),
                         ),
                       ),
+            ),
           ),
-      ),
     );
   }
 
   Widget _buildFilterChips() {
-    final filters = ["सर्व", "नवीन", "माझ्या जवळ", "पडताळणी केलेले", "ऑनलाइन"];
+    final l = AppLocalizations.of(context)!;
+    final filters = [
+      l.home_filter_all,
+      l.home_filter_new,
+      l.home_filter_near_me,
+      l.home_filter_verified,
+      l.home_filter_online,
+    ];
     return SizedBox(
       height: 50,
       child: ListView.separated(
@@ -145,7 +174,10 @@ class _HomeState extends State<Home> {
             label: Text(
               filters[index],
               style: TextStyle(
-                color: isFirst ? Colors.white : MyTheme.text_deep_maroon.withOpacity(0.8),
+                color:
+                    isFirst
+                        ? Colors.white
+                        : MyTheme.text_deep_maroon.withOpacity(0.8),
                 fontWeight: isFirst ? FontWeight.bold : FontWeight.normal,
                 fontFamily: 'Noto Sans Devanagari',
                 fontSize: 13,
@@ -153,7 +185,12 @@ class _HomeState extends State<Home> {
             ),
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(25),
-              side: BorderSide(color: isFirst ? Colors.transparent : MyTheme.warm_rose.withOpacity(0.3)),
+              side: BorderSide(
+                color:
+                    isFirst
+                        ? Colors.transparent
+                        : MyTheme.warm_rose.withOpacity(0.3),
+              ),
             ),
           );
         },
@@ -169,10 +206,11 @@ class _HomeState extends State<Home> {
       toolbarHeight: 56,
       shape: Border(bottom: BorderSide(color: MyTheme.border, width: 1)),
       leading: Builder(
-        builder: (context) => IconButton(
-          icon: const Icon(Icons.menu, color: MyTheme.text_primary),
-          onPressed: () => Scaffold.of(context).openDrawer(),
-        ),
+        builder:
+            (context) => IconButton(
+              icon: const Icon(Icons.menu, color: MyTheme.text_primary),
+              onPressed: () => Scaffold.of(context).openDrawer(),
+            ),
       ),
       centerTitle: true,
       title: Image.asset(
@@ -182,40 +220,36 @@ class _HomeState extends State<Home> {
       ),
       actions: [
         IconButton(
-          icon: const Icon(Icons.notifications_none, color: MyTheme.text_primary),
+          icon: const Icon(
+            Icons.notifications_none,
+            color: MyTheme.text_primary,
+          ),
           onPressed: () => AIZRoute.push(context, const Notifications()),
         ),
         const SizedBox(width: 8),
       ],
     );
   }
+
   Widget _buildGreetingSection(BuildContext context, HomeViewModel vm) {
-    String name = vm.profileData?.memberName?.split(" ")[0] ?? 
-                  store.state.authState?.userData?.name?.split(" ")[0] ?? "वापरकर्ता";
-    
+    String name =
+        vm.profileData?.memberName?.split(" ")[0] ??
+        store.state.authState?.userData?.name?.split(" ")[0] ??
+        "वापरकर्ता";
+
     int hour = DateTime.now().hour;
     String greeting;
     if (hour >= 5 && hour < 12) {
-      greeting = "शुभ प्रभात";
+      greeting = AppLocalizations.of(context)!.home_greeting_morning;
     } else if (hour >= 12 && hour < 17) {
-      greeting = "शुभ दुपार";
+      greeting = AppLocalizations.of(context)!.home_greeting_afternoon;
     } else {
-      greeting = "शुभ संध्याकाळ";
+      greeting = AppLocalizations.of(context)!.home_greeting_evening;
     }
 
-    // Sanket: Safe profile completeness — only uses verified state properties
-    double completeness = 0.15; // Base: user signed up
-    final ps = vm.profileState;
-    if (ps != null) {
-      if (ps.basicInfoState?.basicInfo != null) completeness += 0.15;
-      if (ps.educationState?.list.isNotEmpty ?? false) completeness += 0.15;
-      if (ps.careerState?.list.isNotEmpty ?? false) completeness += 0.15;
-      if (vm.profileData?.memberPhoto != null) completeness += 0.20;
-      completeness += 0.20; // Partner prefs assumed partially filled
-    }
-    
-    int percent = (completeness * 100).toInt();
-    if (percent == 0) percent = 15; // Initial score for basic signup
+    // Sanket: Use centralized granular real-time profile completeness
+    int percent = ProfileCompletenessHelper.calculate(store.state);
+    if (percent == 0) percent = 15; // Initial fallback for basic signup
 
     return Container(
       padding: const EdgeInsets.fromLTRB(24, 20, 24, 32),
@@ -244,14 +278,21 @@ class _HomeState extends State<Home> {
                 children: [
                   Text(
                     greeting,
-                    style: Styles.body.copyWith(color: MyTheme.text_secondary, fontSize: 13, fontWeight: FontWeight.w500),
+                    style: Styles.body.copyWith(
+                      color: MyTheme.text_secondary,
+                      fontSize: 13,
+                      fontWeight: FontWeight.w500,
+                    ),
                   ),
                   const SizedBox(height: 4),
                   Row(
                     children: [
                       Text(
                         "$name ✨",
-                        style: Styles.h1.copyWith(fontSize: 26, color: MyTheme.text_primary),
+                        style: Styles.h1.copyWith(
+                          fontSize: 26,
+                          color: MyTheme.text_primary,
+                        ),
                       ),
                     ],
                   ),
@@ -260,18 +301,28 @@ class _HomeState extends State<Home> {
               InkWell(
                 onTap: () => NavigatorPush.push(context, const MyProfile()),
                 child: Container(
-                   height: 52,
-                   width: 52,
-                   decoration: BoxDecoration(
-                     shape: BoxShape.circle,
-                     border: Border.all(color: MyTheme.primary.withOpacity(0.2), width: 2),
-                     image: vm.profileData?.memberPhoto != null 
-                        ? DecorationImage(image: MyImage.imageProvider(vm.profileData!.memberPhoto), fit: BoxFit.cover)
-                        : null,
-                   ),
-                   child: vm.profileData?.memberPhoto == null 
-                      ? Icon(Icons.person_outline, color: MyTheme.primary) 
-                      : null,
+                  height: 52,
+                  width: 52,
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    border: Border.all(
+                      color: MyTheme.primary.withOpacity(0.2),
+                      width: 2,
+                    ),
+                    image:
+                        vm.profileData?.memberPhoto != null
+                            ? DecorationImage(
+                              image: MyImage.imageProvider(
+                                vm.profileData!.memberPhoto,
+                              ),
+                              fit: BoxFit.cover,
+                            )
+                            : null,
+                  ),
+                  child:
+                      vm.profileData?.memberPhoto == null
+                          ? Icon(Icons.person_outline, color: MyTheme.primary)
+                          : null,
                 ),
               ),
             ],
@@ -280,7 +331,9 @@ class _HomeState extends State<Home> {
           Container(
             padding: const EdgeInsets.all(20),
             decoration: BoxDecoration(
-              color: const Color(0xFFFFF7F8), // Subtle premium pinkish background
+              color: const Color(
+                0xFFFFF7F8,
+              ), // Subtle premium pinkish background
               borderRadius: BorderRadius.circular(24),
               border: Border.all(color: MyTheme.primary.withOpacity(0.08)),
             ),
@@ -291,12 +344,20 @@ class _HomeState extends State<Home> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(
-                      "तुमची प्रोफाइल $percent% पूर्ण आहे",
-                      style: Styles.body.copyWith(color: MyTheme.text_primary, fontWeight: FontWeight.w600),
+                      AppLocalizations.of(
+                        context,
+                      )!.home_profile_completeness(percent.toString()),
+                      style: Styles.body.copyWith(
+                        color: MyTheme.text_primary,
+                        fontWeight: FontWeight.w600,
+                      ),
                     ),
                     Text(
                       "$percent%",
-                      style: Styles.h2.copyWith(color: MyTheme.primary, fontSize: 14),
+                      style: Styles.h2.copyWith(
+                        color: MyTheme.primary,
+                        fontSize: 14,
+                      ),
                     ),
                   ],
                 ),
@@ -314,12 +375,22 @@ class _HomeState extends State<Home> {
                     AnimatedContainer(
                       duration: const Duration(milliseconds: 500),
                       height: 8,
-                      width: (DeviceInfo(context).width! - 88) * (percent / 100),
+                      width:
+                          (DeviceInfo(context).width! - 88) * (percent / 100),
                       decoration: BoxDecoration(
-                        gradient: LinearGradient(colors: [MyTheme.primary, MyTheme.primary.withOpacity(0.7)]),
+                        gradient: LinearGradient(
+                          colors: [
+                            MyTheme.primary,
+                            MyTheme.primary.withOpacity(0.7),
+                          ],
+                        ),
                         borderRadius: BorderRadius.circular(4),
                         boxShadow: [
-                          BoxShadow(color: MyTheme.primary.withOpacity(0.2), blurRadius: 4, offset: const Offset(0, 2)),
+                          BoxShadow(
+                            color: MyTheme.primary.withOpacity(0.2),
+                            blurRadius: 4,
+                            offset: const Offset(0, 2),
+                          ),
                         ],
                       ),
                     ),
@@ -331,12 +402,23 @@ class _HomeState extends State<Home> {
                     onTap: () => NavigatorPush.push(context, const MyProfile()),
                     child: Row(
                       children: [
-                        Text(
-                          "अधिक माहिती भरा आणि चांगली जुळणी मिळवा",
-                          style: Styles.caption.copyWith(color: MyTheme.text_secondary, fontStyle: FontStyle.italic),
+                        Expanded(
+                          child: Text(
+                            AppLocalizations.of(
+                              context,
+                            )!.home_increase_matches_3x,
+                            style: Styles.caption.copyWith(
+                              color: MyTheme.text_secondary,
+                              fontStyle: FontStyle.italic,
+                            ),
+                          ),
                         ),
-                        const Spacer(),
-                        Icon(Icons.arrow_forward_ios, color: MyTheme.primary, size: 12),
+                        const SizedBox(width: 8),
+                        Icon(
+                          Icons.arrow_forward_ios,
+                          color: MyTheme.primary,
+                          size: 12,
+                        ),
                       ],
                     ),
                   ),
@@ -349,78 +431,34 @@ class _HomeState extends State<Home> {
     );
   }
 
-  Widget _buildWhyRecommended(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.fromLTRB(24, 16, 24, 0),
-      child: Container(
-        padding: const EdgeInsets.all(16),
-        decoration: BoxDecoration(
-          color: MyTheme.primary.withOpacity(0.05),
-          borderRadius: BorderRadius.circular(Styles.br_card),
-          border: Border.all(color: MyTheme.primary.withOpacity(0.1)),
-        ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text("हे प्रोफाइल का सुचवले आहे?", style: Styles.body.copyWith(color: MyTheme.text_primary, fontWeight: FontWeight.w600)),
-            const SizedBox(height: 12),
-            Wrap(
-              spacing: 8,
-              runSpacing: 8,
-              children: [
-                _buildReasonChip("✔ सारखा धर्म"),
-                _buildReasonChip("✔ सारखे शहर"),
-                _buildReasonChip("✔ सारखे शिक्षण"),
-              ],
-            ),
-            const SizedBox(height: 8),
-            Text("हे प्रोफाइल तुमच्या जोडीदाराच्या पसंतीशी मिळतेजुळते आहे.", style: Styles.caption.copyWith(fontSize: 11)),
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget _buildReasonChip(String label) {
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-      decoration: BoxDecoration(
-        color: MyTheme.white,
-        borderRadius: BorderRadius.circular(Styles.br_pill),
-        border: Border.all(color: MyTheme.border),
-      ),
-      child: Text(label, style: Styles.bold_arsenic_12.copyWith(color: MyTheme.text_secondary, fontSize: 11)),
-    );
-  }
-
   // Sanket: Section 2 - Quick Action Hub (2026 premium redesign)
   Widget _buildQuickActionHub(BuildContext context) {
     final actions = [
       _ActionItem(
         icon: Icons.search_rounded,
-        label: "शोधा",
-        sub: "नवीन जोडीदार",
+        label: AppLocalizations.of(context)!.home_action_search,
+        sub: AppLocalizations.of(context)!.home_new_partner,
         gradient: const [Color(0xFFFF6B9D), Color(0xFFFF8E53)],
         onTap: () => AIZRoute.push(context, const Search()),
       ),
       _ActionItem(
         icon: Icons.favorite_rounded,
-        label: "आवडले",
-        sub: "पसंती मिळाल्या",
+        label: AppLocalizations.of(context)!.home_action_liked,
+        sub: AppLocalizations.of(context)!.home_received_likes,
         gradient: const [Color(0xFFE040FB), Color(0xFF7C4DFF)],
-        onTap: () => AIZRoute.push(context, const MyInterest()),
+        onTap: () => AIZRoute.push(context, const InterestRequest()),
       ),
       _ActionItem(
         icon: Icons.remove_red_eye_rounded,
-        label: "पाहिले",
-        sub: "प्रोफाईल पाहिले",
+        label: AppLocalizations.of(context)!.home_action_viewed,
+        sub: AppLocalizations.of(context)!.home_profiles_viewed,
         gradient: const [Color(0xFF00BCD4), Color(0xFF2979FF)],
-        onTap: () {},
+        onTap: () => AIZRoute.push(context, const PictureProfileViewRqst()),
       ),
       _ActionItem(
         icon: Icons.star_rounded,
-        label: "शॉर्टलिस्ट",
-        sub: "निवडलेले",
+        label: AppLocalizations.of(context)!.home_action_shortlist,
+        sub: AppLocalizations.of(context)!.home_selected,
         gradient: const [Color(0xFF43E97B), Color(0xFF38F9D7)],
         onTap: () => AIZRoute.push(context, const MyShortlist()),
       ),
@@ -434,7 +472,8 @@ class _HomeState extends State<Home> {
           child: Row(
             children: [
               Container(
-                width: 4, height: 20,
+                width: 4,
+                height: 20,
                 decoration: BoxDecoration(
                   gradient: const LinearGradient(
                     colors: [Color(0xFFFF6B9D), Color(0xFF7C4DFF)],
@@ -445,7 +484,13 @@ class _HomeState extends State<Home> {
                 ),
               ),
               const SizedBox(width: 10),
-              Text("त्वरित क्रिया", style: Styles.h2.copyWith(fontWeight: FontWeight.w800, letterSpacing: -0.5)),
+              Text(
+                AppLocalizations.of(context)!.home_quick_actions,
+                style: Styles.h2.copyWith(
+                  fontWeight: FontWeight.w800,
+                  letterSpacing: -0.5,
+                ),
+              ),
             ],
           ),
         ),
@@ -478,26 +523,54 @@ class _HomeState extends State<Home> {
             end: Alignment.bottomRight,
           ),
           borderRadius: BorderRadius.circular(20),
-          border: Border.all(color: item.gradient.first.withOpacity(0.25), width: 1.5),
+          border: Border.all(
+            color: item.gradient.first.withOpacity(0.25),
+            width: 1.5,
+          ),
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Container(
-              width: 42, height: 42,
+              width: 42,
+              height: 42,
               decoration: BoxDecoration(
-                gradient: LinearGradient(colors: item.gradient, begin: Alignment.topLeft, end: Alignment.bottomRight),
+                gradient: LinearGradient(
+                  colors: item.gradient,
+                  begin: Alignment.topLeft,
+                  end: Alignment.bottomRight,
+                ),
                 borderRadius: BorderRadius.circular(14),
-                boxShadow: [BoxShadow(color: item.gradient.last.withOpacity(0.4), blurRadius: 8, offset: const Offset(0, 4))],
+                boxShadow: [
+                  BoxShadow(
+                    color: item.gradient.last.withOpacity(0.4),
+                    blurRadius: 8,
+                    offset: const Offset(0, 4),
+                  ),
+                ],
               ),
               child: Icon(item.icon, color: Colors.white, size: 22),
             ),
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(item.label, style: Styles.body.copyWith(fontWeight: FontWeight.w700, fontSize: 14, color: MyTheme.text_primary)),
-                Text(item.sub, style: Styles.caption.copyWith(fontSize: 10, color: MyTheme.text_secondary, height: 1.3)),
+                Text(
+                  item.label,
+                  style: Styles.body.copyWith(
+                    fontWeight: FontWeight.w700,
+                    fontSize: 14,
+                    color: MyTheme.text_primary,
+                  ),
+                ),
+                Text(
+                  item.sub,
+                  style: Styles.caption.copyWith(
+                    fontSize: 10,
+                    color: MyTheme.text_secondary,
+                    height: 1.3,
+                  ),
+                ),
               ],
             ),
           ],
@@ -516,8 +589,17 @@ class _HomeState extends State<Home> {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text("तुमच्यासाठी शिफारस केलेले", style: Styles.h2),
-              Text("सर्व पहा", style: Styles.caption.copyWith(color: MyTheme.primary, fontWeight: FontWeight.bold)),
+              Text(
+                AppLocalizations.of(context)!.home_recommended_for_you,
+                style: Styles.h2,
+              ),
+              Text(
+                AppLocalizations.of(context)!.home_see_all,
+                style: Styles.caption.copyWith(
+                  color: MyTheme.primary,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
             ],
           ),
         ),
@@ -553,7 +635,9 @@ class _HomeState extends State<Home> {
                   child: Column(
                     children: [
                       ClipRRect(
-                        borderRadius: const BorderRadius.vertical(top: Radius.circular(16)),
+                        borderRadius: const BorderRadius.vertical(
+                          top: Radius.circular(16),
+                        ),
                         child: Image(
                           image: MyImage.imageProvider(member.photo),
                           height: 100,
@@ -565,8 +649,19 @@ class _HomeState extends State<Home> {
                         padding: const EdgeInsets.all(8.0),
                         child: Column(
                           children: [
-                            Text(member.name ?? '', style: Styles.body.copyWith(fontWeight: FontWeight.w600, fontSize: 13), maxLines: 1, overflow: TextOverflow.ellipsis),
-                            Text("${member.age} वर्षे", style: Styles.caption.copyWith(fontSize: 11)),
+                            Text(
+                              member.name ?? '',
+                              style: Styles.body.copyWith(
+                                fontWeight: FontWeight.w600,
+                                fontSize: 13,
+                              ),
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                            Text(
+                              "${member.age} ${AppLocalizations.of(context)!.pub_profile_age_years}",
+                              style: Styles.body.copyWith(fontSize: 11),
+                            ),
                           ],
                         ),
                       ),
@@ -582,13 +677,16 @@ class _HomeState extends State<Home> {
   }
 
   // Sanket: Section 4 - Activity Insights
-  Widget _buildActivityInsights() {
+  Widget _buildActivityInsights(BuildContext context, HomeViewModel vm) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 24),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text("अलीकडील हालचाली", style: Styles.h2),
+          Text(
+            AppLocalizations.of(context)!.home_recent_activity,
+            style: Styles.h2,
+          ),
           const SizedBox(height: 16),
           Container(
             padding: const EdgeInsets.all(16),
@@ -599,11 +697,34 @@ class _HomeState extends State<Home> {
             ),
             child: Column(
               children: [
-                _insightRow(Icons.visibility_outlined, "३ लोक", "तुमचे प्रोफाइल पहिले"),
+                _insightRow(
+                  icon: Icons.visibility_outlined,
+                  highlight:
+                      "${vm.profileViewCount} ${AppLocalizations.of(context)!.home_people}",
+                  description:
+                      AppLocalizations.of(context)!.home_viewed_your_profile,
+                  onTap:
+                      () => AIZRoute.push(
+                        context,
+                        const PictureProfileViewRqst(),
+                      ),
+                ),
                 const Divider(height: 24),
-                _insightRow(Icons.favorite_border, "१ नवीन", "मिळालेली आवड"),
+                _insightRow(
+                  icon: Icons.favorite_border,
+                  highlight: "${vm.likesReceivedCount} नवीन",
+                  description:
+                      AppLocalizations.of(context)!.home_new_like_received,
+                  onTap: () => AIZRoute.push(context, const InterestRequest()),
+                ),
                 const Divider(height: 24),
-                _insightRow(Icons.person_add_alt, "५ नवीन", "मिळणारे प्रोफाइल"),
+                _insightRow(
+                  icon: Icons.person_add_alt,
+                  highlight: "${vm.newMatchesCount} नवीन",
+                  description:
+                      AppLocalizations.of(context)!.home_new_profiles_available,
+                  onTap: () => AIZRoute.push(context, const NewMatchesPage()),
+                ),
               ],
             ),
           ),
@@ -612,21 +733,42 @@ class _HomeState extends State<Home> {
     );
   }
 
-  Widget _insightRow(IconData icon, String highlight, String description) {
-    return Row(
-      children: [
-        Container(
-          padding: const EdgeInsets.all(8),
-          decoration: BoxDecoration(color: MyTheme.background, shape: BoxShape.circle),
-          child: Icon(icon, color: MyTheme.primary, size: 20),
-        ),
-        const SizedBox(width: 16),
-        Text(highlight, style: Styles.body.copyWith(fontWeight: FontWeight.w700)),
-        const SizedBox(width: 4),
-        Text(description, style: Styles.body.copyWith(color: MyTheme.text_secondary)),
-        const Spacer(),
-        const Icon(Icons.chevron_right, color: MyTheme.text_secondary, size: 20),
-      ],
+  Widget _insightRow({
+    required IconData icon,
+    required String highlight,
+    required String description,
+    required VoidCallback onTap,
+  }) {
+    return InkWell(
+      onTap: onTap,
+      child: Row(
+        children: [
+          Container(
+            padding: const EdgeInsets.all(8),
+            decoration: BoxDecoration(
+              color: MyTheme.background,
+              shape: BoxShape.circle,
+            ),
+            child: Icon(icon, color: MyTheme.primary, size: 20),
+          ),
+          const SizedBox(width: 16),
+          Text(
+            highlight,
+            style: Styles.body.copyWith(fontWeight: FontWeight.w700),
+          ),
+          const SizedBox(width: 4),
+          Text(
+            description,
+            style: Styles.body.copyWith(color: MyTheme.text_secondary),
+          ),
+          const Spacer(),
+          const Icon(
+            Icons.chevron_right,
+            color: MyTheme.text_secondary,
+            size: 20,
+          ),
+        ],
+      ),
     );
   }
 
@@ -637,23 +779,42 @@ class _HomeState extends State<Home> {
       child: Container(
         padding: const EdgeInsets.all(20),
         decoration: BoxDecoration(
-          gradient: const LinearGradient(colors: [Color(0xFFF9A826), Color(0xFFFF7B00)]),
+          gradient: const LinearGradient(
+            colors: [Color(0xFFF9A826), Color(0xFFFF7B00)],
+          ),
           borderRadius: BorderRadius.circular(16),
           boxShadow: [
-            BoxShadow(color: const Color(0xFFFF7B00).withOpacity(0.3), blurRadius: 15, offset: const Offset(0, 8)),
+            BoxShadow(
+              color: const Color(0xFFFF7B00).withOpacity(0.3),
+              blurRadius: 15,
+              offset: const Offset(0, 8),
+            ),
           ],
         ),
         child: Row(
           children: [
-            const Icon(Icons.workspace_premium_rounded, color: Colors.white, size: 40),
+            const Icon(
+              Icons.workspace_premium_rounded,
+              color: Colors.white,
+              size: 40,
+            ),
             const SizedBox(width: 16),
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text("प्लॅटिनमवर अपग्रेड करा", style: Styles.h2.copyWith(color: Colors.white)),
+                  Text(
+                    AppLocalizations.of(context)!.home_upgrade_to_platinum,
+                    style: Styles.h2.copyWith(color: Colors.white),
+                  ),
                   const SizedBox(height: 4),
-                  Text("तुमच्या प्रोफाईलला प्राधान्य द्या आणि अधिक जुळण्या मिळवा.", style: Styles.caption.copyWith(color: Colors.white, fontSize: 11)),
+                  Text(
+                    AppLocalizations.of(context)!.home_prioritize_profile,
+                    style: Styles.caption.copyWith(
+                      color: Colors.white,
+                      fontSize: 11,
+                    ),
+                  ),
                 ],
               ),
             ),
@@ -663,7 +824,11 @@ class _HomeState extends State<Home> {
     );
   }
 
-  Widget _buildSmartMatches(BuildContext context, List smartMatches, HomeViewModel vm) {
+  Widget _buildSmartMatches(
+    BuildContext context,
+    List smartMatches,
+    HomeViewModel vm,
+  ) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -701,30 +866,52 @@ class _HomeState extends State<Home> {
           borderRadius: BorderRadius.circular(Styles.br_card),
           border: Border.all(color: MyTheme.primary.withOpacity(0.3)),
           boxShadow: [
-            BoxShadow(color: MyTheme.primary.withOpacity(0.05), blurRadius: 20, offset: const Offset(0, 10)),
+            BoxShadow(
+              color: MyTheme.primary.withOpacity(0.05),
+              blurRadius: 20,
+              offset: const Offset(0, 10),
+            ),
           ],
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text("तुमची प्रोफाइल पूर्ण करा", style: Styles.h2.copyWith(color: MyTheme.primary)),
+            Text(
+              AppLocalizations.of(context)!.home_complete_profile_now,
+              style: Styles.h2.copyWith(color: MyTheme.primary),
+            ),
             const SizedBox(height: 4),
-            Text("तुमचे तपशील जोडून ३ पट अधिक चांगले प्रोफाइल मिळवा.", style: Styles.caption),
+            Text(
+              AppLocalizations.of(context)!.home_increase_matches_3x,
+              style: Styles.caption,
+            ),
             const SizedBox(height: 16),
-            _buildBoostBtn("Add Education Details"),
+            _buildBoostBtn(
+              AppLocalizations.of(context)!.home_add_education,
+              () =>
+                  NavigatorPush.push(context, const MyProfile(initialStep: 1)),
+            ),
             const SizedBox(height: 8),
-            _buildBoostBtn("Add Photos"),
+            _buildBoostBtn(
+              AppLocalizations.of(context)!.home_add_photos,
+              () =>
+                  NavigatorPush.push(context, const MyProfile(initialStep: 2)),
+            ),
             const SizedBox(height: 8),
-            _buildBoostBtn("Add Partner Preferences"),
+            _buildBoostBtn(
+              AppLocalizations.of(context)!.home_add_partner_prefs,
+              () =>
+                  NavigatorPush.push(context, const MyProfile(initialStep: 3)),
+            ),
           ],
         ),
       ),
     );
   }
 
-  Widget _buildBoostBtn(String title) {
+  Widget _buildBoostBtn(String title, VoidCallback onTap) {
     return InkWell(
-      onTap: () => NavigatorPush.push(context, const MyProfile()),
+      onTap: onTap,
       borderRadius: BorderRadius.circular(8),
       child: Container(
         padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
@@ -751,15 +938,25 @@ class _HomeState extends State<Home> {
         children: [
           Icon(Icons.person_search_rounded, size: 64, color: MyTheme.border),
           const SizedBox(height: 16),
-          Text("No matches yet.", style: Styles.h2.copyWith(color: MyTheme.text_secondary)),
-          Text("Complete your preferences to find the perfect match.", style: Styles.body.copyWith(color: MyTheme.text_secondary), textAlign: TextAlign.center),
+          Text(
+            "No matches yet.",
+            style: Styles.h2.copyWith(color: MyTheme.text_secondary),
+          ),
+          Text(
+            "Complete your preferences to find the perfect match.",
+            style: Styles.body.copyWith(color: MyTheme.text_secondary),
+            textAlign: TextAlign.center,
+          ),
         ],
       ),
     );
   }
 
-  Widget _buildHeroMatchCard(dynamic member, BuildContext context, HomeViewModel vm) {
-
+  Widget _buildHeroMatchCard(
+    dynamic member,
+    BuildContext context,
+    HomeViewModel vm,
+  ) {
     return Container(
       width: double.infinity,
       height: 420,
@@ -772,7 +969,7 @@ class _HomeState extends State<Home> {
             color: MyTheme.black.withOpacity(0.1),
             blurRadius: 20,
             offset: const Offset(0, 10),
-          )
+          ),
         ],
       ),
       child: Stack(
@@ -784,7 +981,9 @@ class _HomeState extends State<Home> {
               child: Image(
                 image: MyImage.imageProvider(member.photo),
                 fit: BoxFit.cover,
-                errorBuilder: (context, error, stackTrace) => Container(color: MyTheme.border),
+                errorBuilder:
+                    (context, error, stackTrace) =>
+                        Container(color: MyTheme.border),
               ),
             ),
           ),
@@ -816,26 +1015,39 @@ class _HomeState extends State<Home> {
               children: [
                 Row(
                   children: [
-                    Flexible( // Sanket: prevent overflow when name+age text is wide
+                    Flexible(
+                      // Sanket: prevent overflow when name+age text is wide
                       child: Text(
                         "${member.name ?? ''}, ${member.age ?? ''}",
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
-                        style: Styles.profileName.copyWith(color: Colors.white, fontSize: 24),
+                        style: Styles.profileName.copyWith(
+                          color: Colors.white,
+                          fontSize: 24,
+                        ),
                       ),
                     ),
                     const SizedBox(width: 8),
                     if (member.membership != null && member.membership != 1)
                       Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 10,
+                          vertical: 4,
+                        ),
                         decoration: BoxDecoration(
                           color: Colors.white.withOpacity(0.2),
                           borderRadius: BorderRadius.circular(Styles.br_pill),
-                          border: Border.all(color: Colors.white.withOpacity(0.4)),
+                          border: Border.all(
+                            color: Colors.white.withOpacity(0.4),
+                          ),
                         ),
                         child: Text(
-                          "प्रीमियम",
-                          style: Styles.caption.copyWith(color: Colors.white, fontSize: 10, fontWeight: FontWeight.bold),
+                          AppLocalizations.of(context)!.home_premium_label,
+                          style: Styles.caption.copyWith(
+                            color: Colors.white,
+                            fontSize: 10,
+                            fontWeight: FontWeight.bold,
+                          ),
                         ),
                       ),
                   ],
@@ -843,21 +1055,37 @@ class _HomeState extends State<Home> {
                 const SizedBox(height: 4),
                 Text(
                   member.country ?? 'ठाणे',
-                  style: Styles.body.copyWith(color: Colors.white.withOpacity(0.9), fontSize: 15),
+                  style: Styles.body.copyWith(
+                    color: Colors.white.withOpacity(0.9),
+                    fontSize: 15,
+                  ),
                 ),
                 const SizedBox(height: 4),
                 Text(
-                  "${member.religion ?? ''} • ${member.profession ?? ''}".trim().replaceAll(RegExp(r'^•|•$'), ''),
-                  style: Styles.body.copyWith(color: Colors.white.withOpacity(0.9), fontWeight: FontWeight.w500, fontSize: 13),
+                  "${member.religion ?? ''} • ${member.profession ?? ''}"
+                      .trim()
+                      .replaceAll(RegExp(r'^•|•$'), ''),
+                  style: Styles.body.copyWith(
+                    color: Colors.white.withOpacity(0.9),
+                    fontWeight: FontWeight.w500,
+                    fontSize: 13,
+                  ),
                 ),
                 const SizedBox(height: 10),
                 Row(
                   children: [
-                    const Icon(Icons.verified, color: Colors.greenAccent, size: 16),
+                    const Icon(
+                      Icons.verified,
+                      color: Colors.greenAccent,
+                      size: 16,
+                    ),
                     const SizedBox(width: 6),
                     Text(
-                      "पडताळणी केलेले प्रोफाईल",
-                      style: Styles.caption.copyWith(color: Colors.white, fontWeight: FontWeight.w600),
+                      AppLocalizations.of(context)!.home_verified_profile,
+                      style: Styles.caption.copyWith(
+                        color: Colors.white,
+                        fontWeight: FontWeight.w600,
+                      ),
                     ),
                   ],
                 ),
@@ -872,19 +1100,36 @@ class _HomeState extends State<Home> {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                _buildHeroActionBtn(Icons.close, "नको", () {}),
-                _buildHeroActionBtn(Icons.star_border, "शॉर्टलिस्ट", () => vm.addShortlist!(user: member.userId)),
-                _buildHeroActionBtn(Icons.favorite_border, "आवडले", () => vm.expressInterest(userId: member.userId), isPrimary: true),
-                _buildHeroActionBtn(Icons.visibility_outlined, "पहा", () {
-                  AIZRoute.push(
-                    context,
-                    UserPublicProfile(userId: member.userId),
-                    middleware: ProfileViewMiddleware(
-                      context: context,
-                      user: store.state.authState?.userData,
-                    ),
-                  );
-                }),
+                _buildHeroActionBtn(
+                  Icons.close,
+                  AppLocalizations.of(context)!.home_action_no,
+                  () {},
+                ),
+                _buildHeroActionBtn(
+                  Icons.star_border,
+                  AppLocalizations.of(context)!.drawer_shortlist,
+                  () => vm.addShortlist!(user: member.userId),
+                ),
+                _buildHeroActionBtn(
+                  Icons.favorite_border,
+                  AppLocalizations.of(context)!.home_action_liked,
+                  () => vm.expressInterest(userId: member.userId),
+                  isPrimary: true,
+                ),
+                _buildHeroActionBtn(
+                  Icons.visibility_outlined,
+                  AppLocalizations.of(context)!.home_action_view,
+                  () {
+                    AIZRoute.push(
+                      context,
+                      UserPublicProfile(userId: member.userId),
+                      middleware: ProfileViewMiddleware(
+                        context: context,
+                        user: store.state.authState?.userData,
+                      ),
+                    );
+                  },
+                ),
               ],
             ),
           ),
@@ -894,7 +1139,12 @@ class _HomeState extends State<Home> {
   }
 
   // Sanket: Changed to column layout (icon + label) with fixed width to eliminate Row overflow on narrow screens
-  Widget _buildHeroActionBtn(IconData icon, String label, VoidCallback onTap, {bool isPrimary = false}) {
+  Widget _buildHeroActionBtn(
+    IconData icon,
+    String label,
+    VoidCallback onTap, {
+    bool isPrimary = false,
+  }) {
     return InkWell(
       onTap: onTap,
       borderRadius: BorderRadius.circular(Styles.br_pill),
@@ -915,7 +1165,11 @@ class _HomeState extends State<Home> {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Icon(icon, color: isPrimary ? MyTheme.primary : MyTheme.text_secondary, size: 18),
+            Icon(
+              icon,
+              color: isPrimary ? MyTheme.primary : MyTheme.text_secondary,
+              size: 18,
+            ),
             const SizedBox(height: 2),
             Text(
               label,
@@ -943,12 +1197,12 @@ class _HomeState extends State<Home> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                "तुमच्यासाठी निवडलेले जुळणारे प्रोफाइल",
+                AppLocalizations.of(context)!.home_matches_for_you,
                 style: Styles.h2,
               ),
               const SizedBox(height: 4),
               Text(
-                "Handpicked based on your interests",
+                AppLocalizations.of(context)!.home_handpicked_interests,
                 style: Styles.caption,
               ),
             ],
@@ -995,7 +1249,9 @@ class _HomeState extends State<Home> {
               child: Image(
                 image: MyImage.imageProvider(member.photo),
                 fit: BoxFit.cover,
-                errorBuilder: (context, error, stackTrace) => Container(color: MyTheme.border),
+                errorBuilder:
+                    (context, error, stackTrace) =>
+                        Container(color: MyTheme.border),
               ),
             ),
           ),
@@ -1021,14 +1277,20 @@ class _HomeState extends State<Home> {
               children: [
                 Text(
                   member.name ?? '',
-                  style: Styles.profileName.copyWith(color: Colors.white, fontSize: 14),
+                  style: Styles.profileName.copyWith(
+                    color: Colors.white,
+                    fontSize: 14,
+                  ),
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
                 ),
                 const SizedBox(height: 2),
                 Text(
                   "${member.age ?? ''} वर्षे",
-                  style: Styles.caption.copyWith(color: Colors.white.withOpacity(0.8), fontSize: 11),
+                  style: Styles.caption.copyWith(
+                    color: Colors.white.withOpacity(0.8),
+                    fontSize: 11,
+                  ),
                 ),
               ],
             ),
@@ -1038,8 +1300,12 @@ class _HomeState extends State<Home> {
     );
   }
 
-
-  Widget _buildActionBtn({required IconData icon, required Color color, required Color iconColor, required VoidCallback onTap}) {
+  Widget _buildActionBtn({
+    required IconData icon,
+    required Color color,
+    required Color iconColor,
+    required VoidCallback onTap,
+  }) {
     return GestureDetector(
       onTap: onTap,
       child: Container(
@@ -1055,14 +1321,20 @@ class _HomeState extends State<Home> {
     );
   }
 
-  void _showFullProfileSheet(BuildContext context, dynamic member, HomeViewModel vm) {
+  void _showFullProfileSheet(
+    BuildContext context,
+    dynamic member,
+    HomeViewModel vm,
+  ) {
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
       backgroundColor: Colors.transparent,
       builder: (context) {
         return Container(
-          height: MediaQuery.of(context).size.height * 0.90, // Takes up 90% of screen height
+          height:
+              MediaQuery.of(context).size.height *
+              0.90, // Takes up 90% of screen height
           decoration: const BoxDecoration(
             color: Colors.white,
             borderRadius: BorderRadius.only(
@@ -1145,6 +1417,10 @@ class HomeViewModel {
   final void Function()? goToNext;
   final void Function()? goToPrev;
 
+  final int profileViewCount;
+  final int likesReceivedCount;
+  final int newMatchesCount;
+
   final ManageProfileCombineState? profileState;
   final ProfileData? profileData;
 
@@ -1167,6 +1443,9 @@ class HomeViewModel {
     this.reportController,
     this.goToNext,
     this.goToPrev,
+    required this.profileViewCount,
+    required this.likesReceivedCount,
+    required this.newMatchesCount,
     this.profileState,
     this.profileData,
   });
@@ -1184,23 +1463,41 @@ class HomeViewModel {
         "1",
       ),
       activeMembers: store.state.homeState!.homeDataList,
-      activeNowList: store.state.homeState!.homeDataList, // TODO: Assuming standard list for now, will refine if there's a specific 'activeNow' list in state later.
+      activeNowList:
+          store
+              .state
+              .homeState!
+              .homeDataList, // TODO: Assuming standard list for now, will refine if there's a specific 'activeNow' list in state later.
       isFetch: store.state.homeState!.isFetching,
       packageExpire:
-      store.state.accountState!.profileData?.currentPackageInfo?.packageExpiry,
+          store
+              .state
+              .accountState!
+              .profileData
+              ?.currentPackageInfo
+              ?.packageExpiry,
       myInterestStateLoading: store.state.myInterestState?.isLoading,
       shortlistStateLoading: store.state.shortlistState?.isLoading,
+      profileViewCount:
+          store.state.pictureProfileViewState?.pictureProfileList?.length ?? 0,
+      likesReceivedCount:
+          store.state.interestRequestState?.interestRequestList?.length ?? 0,
+      newMatchesCount: store.state.homeState?.newMatches?.length ?? 0,
       myMembershipType: store.state.packageDetailsState?.data?.name,
       controller: store.state.homeState?.controller,
       reportController: store.state.homeState?.reportController,
-      userReport: ({dynamic user, dynamic reason}) =>
-          store.dispatch(reportMiddleware(userId: user, reason: reason)),
-      addShortlist: ({dynamic user}) =>
-          store.dispatch(addShortlistMiddleware(userId: user)),
-      expressInterest: ({required int userId}) =>
-          store.dispatch(expressInterestMiddleware(userId: userId)),
-      ignoreUser: ({dynamic user}) =>
-          store.dispatch(AddToIgnoreListFromHome(user: user)),
+      userReport:
+          ({dynamic user, dynamic reason}) =>
+              store.dispatch(reportMiddleware(userId: user, reason: reason)),
+      addShortlist:
+          ({dynamic user}) =>
+              store.dispatch(addShortlistMiddleware(userId: user)),
+      expressInterest:
+          ({required int userId}) =>
+              store.dispatch(expressInterestMiddleware(userId: userId)),
+      ignoreUser:
+          ({dynamic user}) =>
+              store.dispatch(AddToIgnoreListFromHome(user: user)),
       goToNext: () => store.dispatch(GoNextPage()),
       goToPrev: () => store.dispatch(GoPrevPage()),
     );
@@ -1214,5 +1511,11 @@ class _ActionItem {
   final String sub;
   final List<Color> gradient;
   final VoidCallback onTap;
-  const _ActionItem({required this.icon, required this.label, required this.sub, required this.gradient, required this.onTap});
+  const _ActionItem({
+    required this.icon,
+    required this.label,
+    required this.sub,
+    required this.gradient,
+    required this.onTap,
+  });
 }

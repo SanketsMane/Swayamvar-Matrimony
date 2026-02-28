@@ -18,16 +18,14 @@ class HobbiesInterestGetResponse {
 
   factory HobbiesInterestGetResponse.fromJson(Map<String, dynamic> json) =>
       HobbiesInterestGetResponse(
-        data: json["data"] == null
-            ? null
-            : HobbiesInterestData.fromJson(json["data"]),
+        data:
+            json["data"] == null
+                ? null
+                : HobbiesInterestData.fromJson(json["data"]),
         result: json["result"],
       );
 
-  Map<String, dynamic> toJson() => {
-        "data": data?.toJson(),
-        "result": result,
-      };
+  Map<String, dynamic> toJson() => {"data": data?.toJson(), "result": result};
 }
 
 class HobbiesInterestData {
@@ -70,15 +68,15 @@ class HobbiesInterestData {
       );
 
   Map<String, dynamic> toJson() => {
-        "hobbies": hobbies,
-        "interests": interests,
-        "music": music,
-        "books": books,
-        "movies": movies,
-        "tv_shows": tvShows,
-        "sports": sports,
-        "fitness_activities": fitnessActivities,
-        "cuisines": cuisines,
-        "dress_styles": dressStyles,
-      };
+    "hobbies": hobbies,
+    "interests": interests,
+    "music": music,
+    "books": books,
+    "movies": movies,
+    "tv_shows": tvShows,
+    "sports": sports,
+    "fitness_activities": fitnessActivities,
+    "cuisines": cuisines,
+    "dress_styles": dressStyles,
+  };
 }

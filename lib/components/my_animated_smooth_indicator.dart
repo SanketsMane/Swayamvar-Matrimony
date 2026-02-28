@@ -14,8 +14,7 @@ class MyAnimatedSmoothIndicator extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     if (images.isEmpty) {
-      return SizedBox
-          .shrink();
+      return SizedBox.shrink();
     }
 
     return AnimatedSmoothIndicator(
@@ -25,8 +24,7 @@ class MyAnimatedSmoothIndicator extends StatelessWidget {
         dotHeight: 8,
         dotWidth: 8,
       ),
-      activeIndex: (carouselIndex ?? 0)
-          .clamp(0, images.length - 1),
+      activeIndex: (carouselIndex ?? 0).clamp(0, images.length - 1),
       count: images.length,
     );
   }

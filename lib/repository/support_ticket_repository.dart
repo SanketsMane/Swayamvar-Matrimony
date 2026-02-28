@@ -11,11 +11,14 @@ class SupportTicketRepository {
     var baseUrl = "${AppConfig.BASE_URL}/member/my-tickets";
     var accessToken = getToken;
 
-    var response = await http.get(Uri.parse(baseUrl), headers: {
-      "Accept": "application/json",
-      "Content-Type": "application/json",
-      "Authorization": "Bearer $accessToken"
-    });
+    var response = await http.get(
+      Uri.parse(baseUrl),
+      headers: {
+        "Accept": "application/json",
+        "Content-Type": "application/json",
+        "Authorization": "Bearer $accessToken",
+      },
+    );
 
     var data = myTicketResponseFromJson(response.body);
     print('my_supppppoooo--${response.body}');
@@ -26,11 +29,14 @@ class SupportTicketRepository {
     var baseUrl = "${AppConfig.BASE_URL}/member/support-ticket/categories";
     var accessToken = getToken;
 
-    var response = await http.get(Uri.parse(baseUrl), headers: {
-      "Accept": "application/json",
-      "Content-Type": "application/json",
-      "Authorization": "Bearer $accessToken"
-    });
+    var response = await http.get(
+      Uri.parse(baseUrl),
+      headers: {
+        "Accept": "application/json",
+        "Content-Type": "application/json",
+        "Authorization": "Bearer $accessToken",
+      },
+    );
 
     var data = myTicketCategoriesResponseFromJson(response.body);
     return data;
@@ -67,11 +73,13 @@ class SupportTicketRepository {
     var data = commonResponseFromJson(responseString);
 
     return data;
-
   }
 
-  Future<CommonResponse> replySupportTicket(
-      {ticket_id, reply, attachment}) async {
+  Future<CommonResponse> replySupportTicket({
+    ticket_id,
+    reply,
+    attachment,
+  }) async {
     var baseUrl = "${AppConfig.BASE_URL}/member/ticket-reply";
     var accessToken = getToken;
 
@@ -82,8 +90,10 @@ class SupportTicketRepository {
     request.fields["reply"] = reply;
 
     if (attachment != null) {
-      var pic =
-          await http.MultipartFile.fromPath("attachment", attachment.path);
+      var pic = await http.MultipartFile.fromPath(
+        "attachment",
+        attachment.path,
+      );
       request.files.add(pic);
     }
 

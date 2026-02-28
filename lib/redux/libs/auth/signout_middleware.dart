@@ -10,17 +10,17 @@ import 'package:redux_thunk/redux_thunk.dart';
 
 import '../../../helpers/auth_helper.dart';
 import '../helpers/show_message_state.dart';
+import 'package:active_matrimonial_flutter_app/redux/store.dart';
 
-ThunkAction<AppState> signOutMiddleware(
-  ctx,
-) {
+ThunkAction<AppState> signOutMiddleware(ctx) {
   return (Store<AppState> store) async {
     try {
       var data = await AuthRepository().logout();
 
       if (data.result) {
         store.dispatch(
-            ShowMessageAction(msg: data.message, color: MyTheme.success));
+          ShowMessageAction(msg: data.message, color: MyTheme.success),
+        );
 
         /// cleaning auth data after logout
         clearUserData();
@@ -29,7 +29,8 @@ ThunkAction<AppState> signOutMiddleware(
         SystemHelper.isBlockScreenShown = false;
       } else {
         store.dispatch(
-            ShowMessageAction(msg: data.message, color: MyTheme.failure));
+          ShowMessageAction(msg: data.message, color: MyTheme.failure),
+        );
       }
     } catch (e) {
       debugPrint(e.toString());

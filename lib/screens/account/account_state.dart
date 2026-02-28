@@ -1,4 +1,3 @@
-
 import 'package:active_matrimonial_flutter_app/models_response/account_response.dart';
 import 'package:flutter/material.dart';
 
@@ -16,14 +15,11 @@ class AccountState {
   });
 
   AccountState.initialState()
-      : profileData = null,
-        error = '',
-        matched_profile_controller = PageController(),
-        gridScrollController = ScrollController();
-  AccountState copyWith({
-    ProfileData? profileData,
-    String? error,
-  }) {
+    : profileData = null,
+      error = '',
+      matched_profile_controller = PageController(),
+      gridScrollController = ScrollController();
+  AccountState copyWith({ProfileData? profileData, String? error}) {
     return AccountState(
       profileData: profileData ?? this.profileData,
       error: error ?? this.error,

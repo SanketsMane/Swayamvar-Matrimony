@@ -12,11 +12,14 @@ class IgnoreRepository {
     var baseUrl = "${AppConfig.BASE_URL}/member/ignored-user-list?page=$page";
     var accessToken = getToken;
 
-    var response = await http.get(Uri.parse(baseUrl), headers: {
-      "Accept": "application/json",
-      "Content-Type": "application/json",
-      "Authorization": "Bearer $accessToken",
-    });
+    var response = await http.get(
+      Uri.parse(baseUrl),
+      headers: {
+        "Accept": "application/json",
+        "Content-Type": "application/json",
+        "Authorization": "Bearer $accessToken",
+      },
+    );
 
     var data = ignoreResponseFromJson(response.body);
 
@@ -30,13 +33,15 @@ class IgnoreRepository {
     var accessToken = getToken;
     var postBody = jsonEncode({"user_id": userId});
 
-    var response = await http.post(Uri.parse(baseUrl),
-        headers: {
-          "Accept": "application/json",
-          "Content-Type": "application/json",
-          "Authorization": "Bearer $accessToken",
-        },
-        body: postBody);
+    var response = await http.post(
+      Uri.parse(baseUrl),
+      headers: {
+        "Accept": "application/json",
+        "Content-Type": "application/json",
+        "Authorization": "Bearer $accessToken",
+      },
+      body: postBody,
+    );
 
     var data = commonResponseFromJson(response.body);
 
@@ -50,13 +55,15 @@ class IgnoreRepository {
     var accessToken = getToken;
     var postBody = jsonEncode({"user_id": user.userId});
 
-    var response = await http.post(Uri.parse(baseUrl),
-        headers: {
-          "Accept": "application/json",
-          "Content-Type": "application/json",
-          "Authorization": "Bearer $accessToken",
-        },
-        body: postBody);
+    var response = await http.post(
+      Uri.parse(baseUrl),
+      headers: {
+        "Accept": "application/json",
+        "Content-Type": "application/json",
+        "Authorization": "Bearer $accessToken",
+      },
+      body: postBody,
+    );
 
     var data = commonResponseFromJson(response.body);
 

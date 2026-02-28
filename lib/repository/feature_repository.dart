@@ -8,12 +8,15 @@ class FeatureRepository {
   Future<SystemSettingResponse> fetchFeature() async {
     var baseUrl = "${AppConfig.BASE_URL}/feature-check";
 
-    var response = await http.get(Uri.parse(baseUrl), headers: {
-      "Accept": "application/json",
-      "Content-Type": "application/json",
-    });
+    var response = await http.get(
+      Uri.parse(baseUrl),
+      headers: {
+        "Accept": "application/json",
+        "Content-Type": "application/json",
+      },
+    );
     var data = systemSettingResponseFromJson(response.body);
-   // print('SystemSettingResponse---${response.body}');
+    // print('SystemSettingResponse---${response.body}');
 
     return data;
   }

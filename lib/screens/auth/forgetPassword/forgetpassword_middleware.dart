@@ -9,30 +9,37 @@ import 'package:redux_thunk/redux_thunk.dart';
 
 import '../../../redux/libs/helpers/show_message_state.dart';
 import 'forgetpassword_action.dart';
+import 'package:active_matrimonial_flutter_app/redux/store.dart';
 
-ThunkAction<AppState> forgetPasswordMiddleware(
-    {email, send_by, bool isResend = false, context}) {
+ThunkAction<AppState> forgetPasswordMiddleware({
+  email,
+  send_by,
+  bool isResend = false,
+  context,
+}) {
   return (Store<AppState> store) async {
     store.dispatch(FpLoader());
 
     try {
-      var data =
-          await AuthRepository().forgetPassword(email: email, send_by: send_by);
+      var data = await AuthRepository().forgetPassword(
+        email: email,
+        send_by: send_by,
+      );
 
       if (data.result) {
         store.dispatch(
-            ShowMessageAction(msg: data.message, color: MyTheme.success));
+          ShowMessageAction(msg: data.message, color: MyTheme.success),
+        );
         if (!isResend) {
           NavigatorPush.push(
-              context,
-              NewPassword(
-                sendBy: send_by,
-                emailOrPhone: email,
-              ));
+            context,
+            NewPassword(sendBy: send_by, emailOrPhone: email),
+          );
         }
       } else {
         store.dispatch(
-            ShowMessageAction(msg: data.message, color: MyTheme.failure));
+          ShowMessageAction(msg: data.message, color: MyTheme.failure),
+        );
       }
     } catch (e) {
       debugPrint(e.toString());

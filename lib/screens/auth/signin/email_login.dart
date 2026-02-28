@@ -14,24 +14,33 @@ import 'package:active_matrimonial_flutter_app/components/social_login_widget.da
 import 'package:active_matrimonial_flutter_app/helpers/main_helpers.dart';
 import 'package:active_matrimonial_flutter_app/redux/libs/staticPage/static_page.dart';
 import 'package:active_matrimonial_flutter_app/screens/auth/signin/signin_reducer.dart';
+import 'package:active_matrimonial_flutter_app/redux/store.dart';
 
-class Login extends StatefulWidget {
-  const Login({super.key});
+class EmailLogin extends StatefulWidget {
+  const EmailLogin({super.key});
 
   @override
-  State<Login> createState() => _LoginState();
+  State<EmailLogin> createState() => _EmailLoginState();
 }
 
-class _LoginState extends State<Login> {
+class _EmailLoginState extends State<EmailLogin> {
   final Color primaryColor = const Color(0xFFE54861);
   final Color backgroundColor = const Color(0xFFF9FAFB);
   final Color textPrimary = const Color(0xFF1A1A1A);
   final Color textSecondary = const Color(0xFF6B7280);
   final Color borderColor = const Color(0xFFECECEC);
 
-  bool? isGoogle = settingIsActive('google_login_activation', '1');
-  bool? isFacebook = settingIsActive('facebook_login_activation', '1');
-  bool? isTwitter = settingIsActive('twitter_login_activation', "1");
+  bool? isGoogle;
+  bool? isFacebook;
+  bool? isTwitter;
+
+  @override
+  void initState() {
+    super.initState();
+    isGoogle = settingIsActive('google_login_activation', '1');
+    isFacebook = settingIsActive('facebook_login_activation', '1');
+    isTwitter = settingIsActive('twitter_login_activation', "1");
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -39,11 +48,12 @@ class _LoginState extends State<Login> {
       backgroundColor: backgroundColor,
       body: StoreConnector<AppState, AppState>(
         converter: (store) => store.state,
-        onInit: (store) => [
-          store.dispatch(fetchStaticPageAction()),
-          SharedPref().isView = true,
-          store.dispatch(featureCheckMiddleware()),
-        ],
+        onInit:
+            (store) => [
+              store.dispatch(fetchStaticPageAction()),
+              SharedPref().isView = true,
+              store.dispatch(featureCheckMiddleware()),
+            ],
         builder: (_, state) => _buildBody(context, state),
       ),
     );
@@ -65,9 +75,7 @@ class _LoginState extends State<Login> {
             const SizedBox(height: 16),
             Text(
               'तुमचा योग्य जीवनसाथी शोधा ❤️',
-              style: Styles.body.copyWith(
-                color: textSecondary,
-              ),
+              style: Styles.body.copyWith(color: textSecondary),
             ),
             const SizedBox(height: 40),
             _buildLoginCard(context, state),
@@ -94,10 +102,11 @@ class _LoginState extends State<Login> {
                   style: Styles.body.copyWith(color: textSecondary),
                 ),
                 TextButton(
-                  onPressed: () => Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => const SignUp()),
-                  ),
+                  onPressed:
+                      () => Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => const SignUp()),
+                      ),
                   child: const Text('नोंदणी करा'), // Register/Sign Up
                   style: TextButton.styleFrom(
                     foregroundColor: primaryColor,
@@ -115,9 +124,7 @@ class _LoginState extends State<Login> {
               child: Text(
                 'सुरू ठेवून तुम्ही अटी आणि गोपनीयता धोरणाशी सहमत आहात', // Terms & Privacy
                 textAlign: TextAlign.center,
-                style: Styles.caption.copyWith(
-                  color: textSecondary,
-                ),
+                style: Styles.caption.copyWith(color: textSecondary),
               ),
             ),
             const SizedBox(height: 32),
@@ -153,10 +160,7 @@ class _LoginState extends State<Login> {
           Text(
             'लॉगिन करा', // Sign In
             textAlign: TextAlign.center,
-          style: Styles.h2.copyWith(
-            fontSize: 20,
-            color: textPrimary,
-          ),
+            style: Styles.h2.copyWith(fontSize: 20, color: textPrimary),
           ),
           const SizedBox(height: 24),
           _buildInputField(
@@ -169,10 +173,13 @@ class _LoginState extends State<Login> {
           Align(
             alignment: Alignment.centerRight,
             child: TextButton(
-              onPressed: () => Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => const ForgetPassword()),
-              ),
+              onPressed:
+                  () => Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const ForgetPassword(),
+                    ),
+                  ),
               child: Text(
                 "पासवर्ड विसरलात?", // Forgot Password?
                 style: Styles.buttonText.copyWith(
@@ -187,7 +194,8 @@ class _LoginState extends State<Login> {
           SizedBox(
             height: 52,
             child: ElevatedButton(
-              onPressed: () => store.dispatch(LoginRequest(payloadContext: context)),
+              onPressed:
+                  () => store.dispatch(LoginRequest(payloadContext: context)),
               style: ElevatedButton.styleFrom(
                 backgroundColor: primaryColor,
                 foregroundColor: Colors.white,
@@ -196,22 +204,23 @@ class _LoginState extends State<Login> {
                 ),
                 elevation: 0,
               ),
-              child: state.signInState!.isLogin == false
-                  ? Text(
-                      'लॉगिन करा',
-                      style: Styles.buttonText.copyWith(
-                        fontSize: 16,
-                        fontWeight: FontWeight.w700,
+              child:
+                  state.signInState!.isLogin == false
+                      ? Text(
+                        'लॉगिन करा',
+                        style: Styles.buttonText.copyWith(
+                          fontSize: 16,
+                          fontWeight: FontWeight.w700,
+                        ),
+                      )
+                      : const SizedBox(
+                        width: 20,
+                        height: 20,
+                        child: CircularProgressIndicator(
+                          color: Colors.white,
+                          strokeWidth: 2,
+                        ),
                       ),
-                    )
-                  : const SizedBox(
-                      width: 20,
-                      height: 20,
-                      child: CircularProgressIndicator(
-                        color: Colors.white,
-                        strokeWidth: 2,
-                      ),
-                    ),
             ),
           ),
         ],
@@ -233,7 +242,10 @@ class _LoginState extends State<Login> {
         hintStyle: Styles.body.copyWith(color: textSecondary.withOpacity(0.5)),
         filled: true,
         fillColor: const Color(0xFFF5F5F5),
-        contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+        contentPadding: const EdgeInsets.symmetric(
+          horizontal: 16,
+          vertical: 12,
+        ),
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12),
           borderSide: BorderSide(color: borderColor),
@@ -263,14 +275,19 @@ class _LoginState extends State<Login> {
         suffixIcon: GestureDetector(
           onTap: () => store.dispatch(IsObscureAction()),
           child: Icon(
-            state.signInState!.isObscure! ? Icons.visibility_off : Icons.visibility,
+            state.signInState!.isObscure!
+                ? Icons.visibility_off
+                : Icons.visibility,
             color: textSecondary,
             size: 20,
           ),
         ),
         filled: true,
         fillColor: const Color(0xFFF5F5F5),
-        contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+        contentPadding: const EdgeInsets.symmetric(
+          horizontal: 16,
+          vertical: 12,
+        ),
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12),
           borderSide: BorderSide(color: borderColor),

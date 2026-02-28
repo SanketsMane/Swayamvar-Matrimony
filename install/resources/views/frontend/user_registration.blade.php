@@ -73,40 +73,39 @@
 									</div>
 								</div>
 							</div>
-							@if(addon_activation('otp_system'))
-								<div>
-									<div class="d-flex justify-content-between align-items-start">
-										<label class="form-label" for="email">{{ translate('Email / Phone') }}</label>
-										<button class="btn btn-link p-0 opacity-50 text-reset fs-12" type="button" onclick="toggleEmailPhone(this)">{{ translate('Use Email Instead') }}</button>
+							<div>
+								<div class="row">
+									<div class="col-lg-12">
+										<div class="form-group mb-3">
+											<label class="form-label" for="phone">{{ translate('Phone') }}</label>
+											<div class="input-group">
+												<div class="input-group-prepend">
+													<span class="input-group-text">+91</span>
+												</div>
+												<input type="tel" id="phone-code" class="form-control{{ $errors->has('phone') ? ' is-invalid' : '' }}" value="{{ old('phone') }}" placeholder="" name="phone" autocomplete="off" required>
+											</div>
+											<input type="hidden" name="country_code" value="91">
+											@if ($errors->has('phone'))
+												<span class="invalid-feedback" role="alert">
+													<strong>{{ $errors->first('phone') }}</strong>
+												</span>
+											@endif
+										</div>
 									</div>
-									<div class="form-group phone-form-group mb-1">
-							            <input type="tel" id="phone-code" class="form-control{{ $errors->has('phone') ? ' is-invalid' : '' }}" value="{{ old('phone') }}" placeholder="" name="phone" autocomplete="off">
-							        </div>
-
-							        <input type="hidden" name="country_code" value="">
-
-							        <div class="form-group email-form-group mb-1 d-none">
-							            <input type="email" class="form-control {{ $errors->has('email') ? ' is-invalid' : '' }}" value="{{ old('email') }}" placeholder="{{  translate('Email') }}" name="email"  autocomplete="off">
-							            @if ($errors->has('email'))
-							                <span class="invalid-feedback" role="alert">
-							                    <strong>{{ $errors->first('email') }}</strong>
-							                </span>
-							            @endif
-							        </div>
-							    </div>
-							@else
+								</div>
+								
 								<div class="row">
 									<div class="col-lg-12">
 									  <div class="form-group mb-3">
 											<label class="form-label" for="email">{{ translate('Email address') }}</label>
-											<input type="email" class="form-control @error('email') is-invalid @enderror" name="email" id="signinSrEmail" placeholder="{{ translate('Email Address') }}" >
+											<input type="email" class="form-control @error('email') is-invalid @enderror" value="{{ old('email') }}" name="email" id="signinSrEmail" placeholder="{{ translate('Email Address') }}" required>
 									        @error('email')
 									            <span class="invalid-feedback" role="alert">{{ $message }}</span>
 									        @enderror
 									  </div>
 									</div>
 								</div>
-							@endif
+							</div>
 							<div class="row">
 								<div class="col-lg-6">
 									<div class="form-group mb-3">
@@ -215,8 +214,5 @@
 @section('script')
 	@if(get_setting('google_recaptcha_activation') == 1)
 		@include('partials.recaptcha')
-	@endif
-	@if(addon_activation('otp_system'))
-		@include('partials.emailOrPhone')
 	@endif
 @endsection

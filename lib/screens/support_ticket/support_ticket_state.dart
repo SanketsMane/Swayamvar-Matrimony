@@ -17,9 +17,9 @@ class SupportTicketState {
   });
 
   SupportTicketState.initialState()
-      : myTickets = [],
-        ticketCategories = [],
-        error = '',
-        ticketReplyResponse = TicketReplyResponse.initialState(),
-        isFetching = true;
+    : myTickets = [],
+      ticketCategories = [],
+      error = '',
+      ticketReplyResponse = TicketReplyResponse.initialState(),
+      isFetching = true;
 }

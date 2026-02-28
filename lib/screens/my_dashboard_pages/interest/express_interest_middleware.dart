@@ -15,13 +15,15 @@ ThunkAction<AppState> expressInterestMiddleware({required int userId}) {
 
       if (data.result) {
         store.dispatch(
-            ShowMessageAction(msg: data.message, color: MyTheme.success));
+          ShowMessageAction(msg: data.message, color: MyTheme.success),
+        );
         // store.dispatch(ShortListReset());
         store.dispatch(homeMiddleware());
         store.dispatch(memberInfoMiddleware(userId: userId));
       } else {
         store.dispatch(
-            ShowMessageAction(msg: data.message, color: MyTheme.failure));
+          ShowMessageAction(msg: data.message, color: MyTheme.failure),
+        );
       }
     } catch (e) {
       //debugPrint(e.toString());

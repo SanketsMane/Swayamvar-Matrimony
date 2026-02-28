@@ -18,25 +18,18 @@ class PresentAddressGetResponse {
 
   factory PresentAddressGetResponse.fromJson(Map<String, dynamic> json) =>
       PresentAddressGetResponse(
-        data: json["data"] == null
-            ? null
-            : PresentAddressData.fromJson(json["data"]),
+        data:
+            json["data"] == null
+                ? null
+                : PresentAddressData.fromJson(json["data"]),
         result: json["result"],
       );
 
-  Map<String, dynamic> toJson() => {
-        "data": data?.toJson(),
-        "result": result,
-      };
+  Map<String, dynamic> toJson() => {"data": data?.toJson(), "result": result};
 }
 
 class PresentAddressData {
-  PresentAddressData({
-    this.country,
-    this.state,
-    this.city,
-    this.postalCode,
-  });
+  PresentAddressData({this.country, this.state, this.city, this.postalCode});
 
   String? country;
   String? state;
@@ -52,9 +45,9 @@ class PresentAddressData {
       );
 
   Map<String, dynamic> toJson() => {
-        "country": country,
-        "state": state,
-        "city": city,
-        "postal_code": postalCode,
-      };
+    "country": country,
+    "state": state,
+    "city": city,
+    "postal_code": postalCode,
+  };
 }

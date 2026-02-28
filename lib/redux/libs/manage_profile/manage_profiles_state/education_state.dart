@@ -31,12 +31,12 @@ class EducationState {
   });
 
   EducationState.initialState()
-      : update_changes = false,
-        degreeController = TextEditingController(text: ''),
-        institutionController = TextEditingController(text: ''),
-        startController = TextEditingController(text: ''),
-        endController = TextEditingController(text: ''),
-        isLoading = false,
-        isDelete = false,
-        saveChanges = false;
+    : update_changes = false,
+      degreeController = TextEditingController(text: ''),
+      institutionController = TextEditingController(text: ''),
+      startController = TextEditingController(text: ''),
+      endController = TextEditingController(text: ''),
+      isLoading = false,
+      isDelete = false,
+      saveChanges = false;
 }

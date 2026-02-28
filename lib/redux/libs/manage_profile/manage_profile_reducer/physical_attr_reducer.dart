@@ -3,13 +3,16 @@ import 'package:active_matrimonial_flutter_app/models_response/manage_profile/ge
 import 'package:active_matrimonial_flutter_app/redux/libs/manage_profile/manage_profiles_state/physical_attr_state.dart';
 import 'package:flutter/material.dart';
 
-import '../../../../main.dart';
+import '../../../../redux/store.dart';
 import '../manage_profile_middleware/manage_profile_update_middlewares.dart';
+import 'package:active_matrimonial_flutter_app/redux/store.dart';
 
 class PhysicalAttrLoader {}
 
 PhysicalAttrState? physical_attr_reducer(
-    PhysicalAttrState? state, dynamic action) {
+  PhysicalAttrState? state,
+  dynamic action,
+) {
   if (action is PhysicalAttrLoader) {
     state!.isLoading = !state.isLoading!;
     return state;
@@ -23,21 +26,8 @@ PhysicalAttrState? physical_attr_reducer(
 
   if (action == UpdateInfo.physicalAttr) {
     FocusManager.instance.primaryFocus?.unfocus();
-    if (state!.formKey.currentState!.validate()) {
-      store.dispatch(
-        physicalAttrMiddleware(
-          height: state.heightController!.text,
-          weight: state.weightController!.text,
-          eye_color: state.eyeColorController!.text,
-          hair_color: state.hairColorController!.text,
-          complexion: state.complexionController!.text,
-          body_type: state.bodyTypeController!.text,
-          body_art: state.bodyArtController!.text,
-          disability: state.disabilityController!.text,
-          blood_group: state.bloodController!.text,
-        ),
-      );
-    }
+    // Sanket: Side effect removed from reducer.
+    // store.dispatch(physicalAttrMiddleware(...)) must be called from the UI or a thunk.
   }
 
   return state;

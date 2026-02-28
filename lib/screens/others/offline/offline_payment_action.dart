@@ -16,11 +16,7 @@ class OfflineBuyPackageAction {
   String? packageId;
   String? amount;
   String? manualPaymentId;
-  OfflineBuyPackageAction({
-    this.amount,
-    this.packageId,
-    this.manualPaymentId,
-  });
+  OfflineBuyPackageAction({this.amount, this.packageId, this.manualPaymentId});
 
   @override
   String toString() {

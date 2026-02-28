@@ -10,47 +10,35 @@ FamilyResponse familyResponseFromJson(String str) =>
 String familyResponseToJson(FamilyResponse data) => json.encode(data.toJson());
 
 class FamilyResponse {
-  FamilyResponse({
-    this.data,
-  });
+  FamilyResponse({this.data});
 
   List<Data>? data;
 
   factory FamilyResponse.fromJson(Map<String, dynamic> json) => FamilyResponse(
-        data: json["data"] == null
+    data:
+        json["data"] == null
             ? null
             : List<Data>.from(json["data"].map((x) => Data.fromJson(x))),
-      );
+  );
 
   Map<String, dynamic> toJson() => {
-        "data": data == null
-            ? null
-            : List<dynamic>.from(data!.map((x) => x.toJson())),
-      };
+    "data":
+        data == null ? null : List<dynamic>.from(data!.map((x) => x.toJson())),
+  };
 
   FamilyResponse.initialState() : data = [];
 }
 
 class Data {
-  Data({
-    this.id,
-    this.name,
-  });
+  Data({this.id, this.name});
 
   int? id;
   String? name;
 
-  factory Data.fromJson(Map<String, dynamic> json) => Data(
-        name: json["name"],
-        id: json["id"],
-      );
+  factory Data.fromJson(Map<String, dynamic> json) =>
+      Data(name: json["name"], id: json["id"]);
 
-  Map<String, dynamic> toJson() => {
-        "name": name,
-        "id": id,
-      };
+  Map<String, dynamic> toJson() => {"name": name, "id": id};
 
-  Data.initialState()
-      : name = '',
-        id = 0;
+  Data.initialState() : name = '', id = 0;
 }

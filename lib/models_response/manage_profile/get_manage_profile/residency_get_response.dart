@@ -22,14 +22,11 @@ class ResidencyGetResponse {
         result: json["result"],
       );
 
-  Map<String, dynamic> toJson() => {
-        "data": data?.toJson(),
-        "result": result,
-      };
+  Map<String, dynamic> toJson() => {"data": data?.toJson(), "result": result};
 
   ResidencyGetResponse.initialState()
-      : data = Data.initialState(),
-        result = false;
+    : data = Data.initialState(),
+      result = false;
 }
 
 class Data {
@@ -46,22 +43,22 @@ class Data {
   String? immigrationStatus;
 
   factory Data.fromJson(Map<String, dynamic> json) => Data(
-        birthCountry: json["birth_country"],
-        recidencyCountry: json["recidency_country"],
-        growupCountry: json["growup_country"],
-        immigrationStatus: json["immigration_status"],
-      );
+    birthCountry: json["birth_country"],
+    recidencyCountry: json["recidency_country"],
+    growupCountry: json["growup_country"],
+    immigrationStatus: json["immigration_status"],
+  );
 
   Map<String, dynamic> toJson() => {
-        "birth_country": birthCountry,
-        "recidency_country": recidencyCountry,
-        "growup_country": growupCountry,
-        "immigration_status": immigrationStatus,
-      };
+    "birth_country": birthCountry,
+    "recidency_country": recidencyCountry,
+    "growup_country": growupCountry,
+    "immigration_status": immigrationStatus,
+  };
 
   Data.initialState()
-      : birthCountry = '',
-        recidencyCountry = '',
-        growupCountry = '',
-        immigrationStatus = '';
+    : birthCountry = '',
+      recidencyCountry = '',
+      growupCountry = '',
+      immigrationStatus = '';
 }

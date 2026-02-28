@@ -6,7 +6,7 @@ import 'package:image_picker/image_picker.dart';
 class OfflinePaymentState {
   TextEditingController? idController = TextEditingController();
   TextEditingController? detailController = TextEditingController();
-// image
+  // image
   final ImagePicker picker = ImagePicker();
   File? image;
   String? imgName;
@@ -20,8 +20,8 @@ class OfflinePaymentState {
   });
 
   OfflinePaymentState.initialState()
-      : idController = TextEditingController(text: ''),
-        imgName = null,
-        isSubmit = false,
-        detailController = TextEditingController(text: '');
+    : idController = TextEditingController(text: ''),
+      imgName = null,
+      isSubmit = false,
+      detailController = TextEditingController(text: '');
 }

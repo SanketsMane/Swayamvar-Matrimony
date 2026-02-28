@@ -9,6 +9,7 @@ import 'package:redux_thunk/redux_thunk.dart';
 
 import '../../../helpers/navigator_push.dart';
 import '../helpers/show_message_state.dart';
+import 'package:active_matrimonial_flutter_app/redux/store.dart';
 
 ThunkAction<AppState> verifyMiddleware({code, var fromPage}) {
   return (Store<AppState> store) async {
@@ -19,11 +20,13 @@ ThunkAction<AppState> verifyMiddleware({code, var fromPage}) {
 
       if (data.result) {
         store.dispatch(
-            ShowMessageAction(msg: data.message, color: MyTheme.success));
+          ShowMessageAction(msg: data.message, color: MyTheme.success),
+        );
         NavigatorPush.push_remove_untill(page: AppNavigation());
       } else {
         store.dispatch(
-            ShowMessageAction(msg: data.message, color: MyTheme.failure));
+          ShowMessageAction(msg: data.message, color: MyTheme.failure),
+        );
       }
     } catch (e) {
       debugPrint(e.toString());
@@ -38,10 +41,12 @@ ThunkAction<AppState> resendVerifyCodeMiddleware() {
     var data = await AuthRepository().resendVerifyCode();
     if (data.result) {
       store.dispatch(
-          ShowMessageAction(msg: data.message, color: MyTheme.success));
+        ShowMessageAction(msg: data.message, color: MyTheme.success),
+      );
     } else {
       store.dispatch(
-          ShowMessageAction(msg: data.message, color: MyTheme.failure));
+        ShowMessageAction(msg: data.message, color: MyTheme.failure),
+      );
     }
   };
 }

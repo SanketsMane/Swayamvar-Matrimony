@@ -17,10 +17,7 @@ class IsApprovedResponse {
   int? isApproved;
   bool? verificationInfo;
 
-  IsApprovedResponse({
-    this.isApproved,
-    this.verificationInfo,
-  });
+  IsApprovedResponse({this.isApproved, this.verificationInfo});
 
   factory IsApprovedResponse.fromJson(Map<String, dynamic> json) =>
       IsApprovedResponse(
@@ -29,7 +26,7 @@ class IsApprovedResponse {
       );
 
   Map<String, dynamic> toJson() => {
-        "is_approved": isApproved,
-        "verification_info": verificationInfo,
-      };
+    "is_approved": isApproved,
+    "verification_info": verificationInfo,
+  };
 }

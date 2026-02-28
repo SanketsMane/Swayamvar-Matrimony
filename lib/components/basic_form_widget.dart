@@ -11,16 +11,17 @@ class BasicFormWidget extends StatelessWidget {
   final validator;
   final style;
 
-  const BasicFormWidget(
-      {super.key,
-      this.text,
-      this.hint,
-      this.controller,
-      this.min_line,
-      this.max_line,
-      this.keyboard_type,
-      this.validator,
-      this.style});
+  const BasicFormWidget({
+    super.key,
+    this.text,
+    this.hint,
+    this.controller,
+    this.min_line,
+    this.max_line,
+    this.keyboard_type,
+    this.validator,
+    this.style,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -28,15 +29,8 @@ class BasicFormWidget extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.start,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        text != null
-            ? Text(
-                text,
-                style: style,
-              )
-            : const SizedBox(),
-        const SizedBox(
-          height: 5,
-        ),
+        text != null ? Text(text, style: style) : const SizedBox(),
+        const SizedBox(height: 5),
         SizedBox(
           child: TextFormField(
             validator: validator,
@@ -69,22 +63,23 @@ class EducationViewModel {
   final validator;
   final style;
 
-  EducationViewModel(
-      {this.degree_hint,
-      this.id,
-      this.present,
-      this.institute_hint,
-      this.start_hint,
-      this.end_hint,
-      this.degree_controller,
-      this.institute_controller,
-      this.start_controller,
-      this.end_controller,
-      this.min_line,
-      this.max_line,
-      this.keyboard_type,
-      this.validator,
-      this.style});
+  EducationViewModel({
+    this.degree_hint,
+    this.id,
+    this.present,
+    this.institute_hint,
+    this.start_hint,
+    this.end_hint,
+    this.degree_controller,
+    this.institute_controller,
+    this.start_controller,
+    this.end_controller,
+    this.min_line,
+    this.max_line,
+    this.keyboard_type,
+    this.validator,
+    this.style,
+  });
 }
 
 class CareerViewModel {
@@ -99,15 +94,16 @@ class CareerViewModel {
   final start_controller;
   final end_controller;
 
-  CareerViewModel(
-      {this.designation_text,
-      this.id,
-      this.present,
-      this.company_text,
-      this.start,
-      this.end,
-      this.designation_controller,
-      this.company_controller,
-      this.start_controller,
-      this.end_controller});
+  CareerViewModel({
+    this.designation_text,
+    this.id,
+    this.present,
+    this.company_text,
+    this.start,
+    this.end,
+    this.designation_controller,
+    this.company_controller,
+    this.start_controller,
+    this.end_controller,
+  });
 }

@@ -21,9 +21,9 @@ class GalleryImageState {
   });
 
   GalleryImageState.initialState()
-      : isFetching = true,
-        galleryImageList = [],
-        error = '',
-        imgName = null,
-        isLoading = false;
+    : isFetching = true,
+      galleryImageList = [],
+      error = '',
+      imgName = null,
+      isLoading = false;
 }

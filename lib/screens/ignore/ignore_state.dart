@@ -5,15 +5,12 @@ class IgnoreState {
   List<dynamic>? ignoreList = [];
   String? error;
 
-  IgnoreState({
-    this.ignoreList,
-    this.error,
-  });
+  IgnoreState({this.ignoreList, this.error});
 
   IgnoreState.initialState()
-      : isFetching = true,
-        page = 1,
-        hasMore = true,
-        ignoreList = [],
-        error = '';
+    : isFetching = true,
+      page = 1,
+      hasMore = true,
+      ignoreList = [],
+      error = '';
 }

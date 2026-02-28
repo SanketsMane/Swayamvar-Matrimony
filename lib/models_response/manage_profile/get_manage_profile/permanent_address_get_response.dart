@@ -22,23 +22,15 @@ class PermanentGetResponse {
         result: json["result"],
       );
 
-  Map<String, dynamic> toJson() => {
-        "data": data?.toJson(),
-        "result": result,
-      };
+  Map<String, dynamic> toJson() => {"data": data?.toJson(), "result": result};
 
   PermanentGetResponse.initialState()
-      : data = Data.initialState(),
-        result = false;
+    : data = Data.initialState(),
+      result = false;
 }
 
 class Data {
-  Data({
-    this.country,
-    this.state,
-    this.city,
-    this.postalCode,
-  });
+  Data({this.country, this.state, this.city, this.postalCode});
 
   String? country;
   String? state;
@@ -46,22 +38,18 @@ class Data {
   String? postalCode;
 
   factory Data.fromJson(Map<String, dynamic> json) => Data(
-        country: json["country"],
-        state: json["state"],
-        city: json["city"],
-        postalCode: json["postal_code"],
-      );
+    country: json["country"],
+    state: json["state"],
+    city: json["city"],
+    postalCode: json["postal_code"],
+  );
 
   Map<String, dynamic> toJson() => {
-        "country": country,
-        "state": state,
-        "city": city,
-        "postal_code": postalCode,
-      };
+    "country": country,
+    "state": state,
+    "city": city,
+    "postal_code": postalCode,
+  };
 
-  Data.initialState()
-      : country = '',
-        state = '',
-        city = '',
-        postalCode = '';
+  Data.initialState() : country = '', state = '', city = '', postalCode = '';
 }

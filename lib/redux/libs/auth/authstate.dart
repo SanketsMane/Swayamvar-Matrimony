@@ -16,12 +16,8 @@ class AuthState {
 
   const AuthState({this.userData});
 
-  AuthState copyWith({
-    User? userData,
-  }) {
-    return AuthState(
-      userData: userData ?? this.userData,
-    );
+  AuthState copyWith({User? userData}) {
+    return AuthState(userData: userData ?? this.userData);
   }
 }
 

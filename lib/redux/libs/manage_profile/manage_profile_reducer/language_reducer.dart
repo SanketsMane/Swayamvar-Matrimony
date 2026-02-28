@@ -4,7 +4,7 @@ import 'package:active_matrimonial_flutter_app/redux/libs/manage_profile/manage_
 
 class LanguageLoader {}
 
-class UpdateKnowLanguage{
+class UpdateKnowLanguage {
   List<DDown> data;
 
   UpdateKnowLanguage(this.data);
@@ -19,8 +19,8 @@ class GetLanguageListAction {
 }
 
 LanguageState? language_reducer(LanguageState? state, dynamic action) {
-  if(action is UpdateKnowLanguage){
-    return state?.update(selectedKnowLanguage:action.data);
+  if (action is UpdateKnowLanguage) {
+    return state?.update(selectedKnowLanguage: action.data);
   }
   if (action is LanguageLoader) {
     return language_loader(state!, action);

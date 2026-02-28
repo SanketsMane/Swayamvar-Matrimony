@@ -2,6 +2,7 @@ import 'package:active_matrimonial_flutter_app/redux/libs/matched_profile/matche
 
 import '../../../repository/matched_profile_repository.dart';
 import '../../../screens/core.dart';
+import 'package:active_matrimonial_flutter_app/redux/store.dart';
 
 ThunkAction<AppState> matchedProfileFetchAction() {
   return (Store<AppState> store) async {

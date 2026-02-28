@@ -58,7 +58,6 @@ import '../libs/matched_profile/matched_profile_reducer.dart';
 import '../libs/member_info/member_info.dart';
 
 AppState reducer(AppState state, dynamic action) {
-
   return AppState(
     signUpState: sign_up_reducer(state.signUpState!, action),
     userVerifyState: userVerifyReducer(state.userVerifyState!, action),
@@ -130,7 +129,10 @@ AppState reducer(AppState state, dynamic action) {
     ),
     galleryImageState: gallery_image_reducer(state.galleryImageState, action),
     // accountState: account_reducer(state.accountState, action),
-    accountState: account_reducer(state.accountState ?? AccountState.initialState(), action),
+    accountState: account_reducer(
+      state.accountState ?? AccountState.initialState(),
+      action,
+    ),
     blogState: blog_reducer(state.blogState, action),
     exploreState: explore_reducer(state.exploreState, action),
     homeState: homeReducer(state.homeState ?? HomeState.initial(), action),
@@ -146,10 +148,14 @@ AppState reducer(AppState state, dynamic action) {
     addonState: addon_reducer(state.addonState, action),
     happyStoriesState: happy_stories_reducer(state.happyStoriesState, action),
     chatState: chat_reducer(state.chatState, action),
-       supportTicketCreateState:
-          support_ticket_create_reducer(state.supportTicketCreateState, action),
-     supportTicketReplyState:
-        support_ticket_reply_reducer(state.supportTicketReplyState, action),
+    supportTicketCreateState: support_ticket_create_reducer(
+      state.supportTicketCreateState,
+      action,
+    ),
+    supportTicketReplyState: support_ticket_reply_reducer(
+      state.supportTicketReplyState,
+      action,
+    ),
     galleryPictureViewState: gallery_picture_view_reducer(
       state.galleryPictureViewState,
       action,

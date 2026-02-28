@@ -389,152 +389,239 @@ class _SearchState extends State<Search> {
     return StoreConnector<AppState, AppState>(
       converter: (store) => store.state,
       onInit: (store) => store.dispatch(profiledropdownMiddleware()),
-      builder: (_, state) => Scaffold(
-        body: SingleChildScrollView(
-          child: SafeArea(
-            child: Padding(
-              padding: EdgeInsets.symmetric(
-                horizontal: screenSize.width * 0.06, // Proportional padding
-              ),
-              child: SizedBox(
-                width: screenSize.width,
-                child: Column(
-                  children: [
-                    SizedBox(height: screenSize.height * 0.02),
-                    SizedBox(
-                      height: screenSize.height * 0.04,
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Image.asset(
-                            'assets/icon/icon_search__.png',
-                            height: screenSize.height * 0.025, // Proportional icon size
-                          ),
-                          SizedBox(width: screenSize.width * 0.02),
-                          Text(
-                            AppLocalizations.of(context)!.search_screen_title,
-                            style: Styles.h2.copyWith(
-                              fontSize: screenSize.width * 0.05,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                    SizedBox(height: screenSize.height * 0.03),
-                    Form(
-                      key: _formKey,
-                      child: Column(
-                        children: [
-                          Row(
+      builder:
+          (_, state) => Scaffold(
+            body: SingleChildScrollView(
+              child: SafeArea(
+                child: Padding(
+                  padding: EdgeInsets.symmetric(
+                    horizontal: screenSize.width * 0.06, // Proportional padding
+                  ),
+                  child: SizedBox(
+                    width: screenSize.width,
+                    child: Column(
+                      children: [
+                        SizedBox(height: screenSize.height * 0.02),
+                        SizedBox(
+                          height: screenSize.height * 0.04,
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
                             children: [
-                              Expanded(
-                                child: BasicFormWidget(
-                                  keyboard_type: TextInputType.number,
-                                  text: AppLocalizations.of(context)!.search_secreen_age_from,
-                                  controller: _ageFromController,
-                                  style: Styles.body.copyWith(fontSize: screenSize.width * 0.035, fontWeight: FontWeight.bold), // Responsive font
-                                ),
+                              Image.asset(
+                                'assets/icon/icon_search__.png',
+                                height:
+                                    screenSize.height *
+                                    0.025, // Proportional icon size
                               ),
-                              SizedBox(width: screenSize.width * 0.03),
-                              Expanded(
-                                child: BasicFormWidget(
-                                  keyboard_type: TextInputType.number,
-                                  text: AppLocalizations.of(context)!.search_screen_to,
-                                  controller: _ageToController,
-                                  style: Styles.body.copyWith(fontSize: screenSize.width * 0.035, fontWeight: FontWeight.bold), // Responsive font
+                              SizedBox(width: screenSize.width * 0.02),
+                              Text(
+                                AppLocalizations.of(
+                                  context,
+                                )!.search_screen_title,
+                                style: Styles.h2.copyWith(
+                                  fontSize: screenSize.width * 0.05,
                                 ),
                               ),
                             ],
                           ),
-                          SizedBox(height: screenSize.height * 0.015),
-                          buildDropdown(
-                            context: context,
-                            screenSize: screenSize,
-                            title: AppLocalizations.of(context)!.search_screen_religion,
-                            value: state.basicSearchState!.religion_value,
-                            items: state.manageProfileCombineState!.profiledropdownResponseData!.data!.religionList!
-                                .map<DropdownMenuItem<dynamic>>((e) {
-                              return DropdownMenuItem<dynamic>(
-                                value: e.id,
-                                child: Text(e.name!, style: Styles.regular_gull_grey_12.copyWith(fontSize: screenSize.width * 0.035)),
-                              );
-                            }).toList(),
-                            onChanged: (dynamic newValue) {
-                              store.dispatch(BasicSearchReligionAdd(value: newValue));
-                            },
-                          ),
-                          SizedBox(height: screenSize.height * 0.015),
-                          buildDropdown(
-                            context: context,
-                            screenSize: screenSize,
-                            title: AppLocalizations.of(context)!.search_screen_mother_tongue,
-                            value: state.basicSearchState!.mother_tongue,
-                            items: state.manageProfileCombineState!.profiledropdownResponseData!.data!.languageList!
-                                .map<DropdownMenuItem<dynamic>>((e) {
-                              return DropdownMenuItem<dynamic>(
-                                value: e.id,
-                                child: Text(e.name!, style: Styles.regular_gull_grey_12.copyWith(fontSize: screenSize.width * 0.035)),
-                              );
-                            }).toList(),
-                            onChanged: (dynamic newValue) {
-                              store.dispatch(BasicSearchMotherTongueAdd(value: newValue));
-                            },
-                          ),
-                          SizedBox(height: screenSize.height * 0.04),
-                          InkWell(
-                            onTap: () {
-                              FocusManager.instance.primaryFocus?.unfocus();
-                              if (_formKey.currentState!.validate()) {
-                                store.dispatch(Reset.search);
-                                store.dispatch(
-                                  searchMiddleware(
-                                    age: _ageFromController.text,
-                                    to: _ageToController.text,
-                                    religion: state.basicSearchState!.religion_value,
-                                    motherTongue: state.basicSearchState!.mother_tongue,
+                        ),
+                        SizedBox(height: screenSize.height * 0.03),
+                        Form(
+                          key: _formKey,
+                          child: Column(
+                            children: [
+                              Row(
+                                children: [
+                                  Expanded(
+                                    child: BasicFormWidget(
+                                      keyboard_type: TextInputType.number,
+                                      text:
+                                          AppLocalizations.of(
+                                            context,
+                                          )!.search_secreen_age_from,
+                                      controller: _ageFromController,
+                                      style: Styles.body.copyWith(
+                                        fontSize: screenSize.width * 0.035,
+                                        fontWeight: FontWeight.bold,
+                                      ), // Responsive font
+                                    ),
                                   ),
-                                );
-                                NavigatorPush.push(context, const ShowBasicSearch());
-                              }
-                            },
-                            child: Container(
-                              height: screenSize.height * 0.06,
-                              width: screenSize.width,
-                              decoration: BoxDecoration(
-                                color: MyTheme.primary,
-                                borderRadius: const BorderRadius.all(Radius.circular(12)),
+                                  SizedBox(width: screenSize.width * 0.03),
+                                  Expanded(
+                                    child: BasicFormWidget(
+                                      keyboard_type: TextInputType.number,
+                                      text:
+                                          AppLocalizations.of(
+                                            context,
+                                          )!.search_screen_to,
+                                      controller: _ageToController,
+                                      style: Styles.body.copyWith(
+                                        fontSize: screenSize.width * 0.035,
+                                        fontWeight: FontWeight.bold,
+                                      ), // Responsive font
+                                    ),
+                                  ),
+                                ],
                               ),
-                              child: Center(
-                                child: Text(
-                                  AppLocalizations.of(context)!.advanced_search_screen_btn_text,
-                                  style: Styles.buttonText.copyWith(fontSize: screenSize.width * 0.04, color: Colors.white),
+                              SizedBox(height: screenSize.height * 0.015),
+                              buildDropdown(
+                                context: context,
+                                screenSize: screenSize,
+                                title:
+                                    AppLocalizations.of(
+                                      context,
+                                    )!.search_screen_religion,
+                                value: state.basicSearchState!.religion_value,
+                                items:
+                                    state
+                                        .manageProfileCombineState!
+                                        .profiledropdownResponseData!
+                                        .data!
+                                        .religionList!
+                                        .map<DropdownMenuItem<dynamic>>((e) {
+                                          return DropdownMenuItem<dynamic>(
+                                            value: e.id,
+                                            child: Text(
+                                              e.name!,
+                                              style: Styles.regular_gull_grey_12
+                                                  .copyWith(
+                                                    fontSize:
+                                                        screenSize.width *
+                                                        0.035,
+                                                  ),
+                                            ),
+                                          );
+                                        })
+                                        .toList(),
+                                onChanged: (dynamic newValue) {
+                                  store.dispatch(
+                                    BasicSearchReligionAdd(value: newValue),
+                                  );
+                                },
+                              ),
+                              SizedBox(height: screenSize.height * 0.015),
+                              buildDropdown(
+                                context: context,
+                                screenSize: screenSize,
+                                title:
+                                    AppLocalizations.of(
+                                      context,
+                                    )!.search_screen_mother_tongue,
+                                value: state.basicSearchState!.mother_tongue,
+                                items:
+                                    state
+                                        .manageProfileCombineState!
+                                        .profiledropdownResponseData!
+                                        .data!
+                                        .languageList!
+                                        .map<DropdownMenuItem<dynamic>>((e) {
+                                          return DropdownMenuItem<dynamic>(
+                                            value: e.id,
+                                            child: Text(
+                                              e.name!,
+                                              style: Styles.regular_gull_grey_12
+                                                  .copyWith(
+                                                    fontSize:
+                                                        screenSize.width *
+                                                        0.035,
+                                                  ),
+                                            ),
+                                          );
+                                        })
+                                        .toList(),
+                                onChanged: (dynamic newValue) {
+                                  store.dispatch(
+                                    BasicSearchMotherTongueAdd(value: newValue),
+                                  );
+                                },
+                              ),
+                              SizedBox(height: screenSize.height * 0.04),
+                              InkWell(
+                                onTap: () {
+                                  FocusManager.instance.primaryFocus?.unfocus();
+                                  if (_formKey.currentState!.validate()) {
+                                    store.dispatch(Reset.search);
+                                    store.dispatch(
+                                      searchMiddleware(
+                                        age: _ageFromController.text,
+                                        to: _ageToController.text,
+                                        religion:
+                                            state
+                                                .basicSearchState!
+                                                .religion_value,
+                                        motherTongue:
+                                            state
+                                                .basicSearchState!
+                                                .mother_tongue,
+                                      ),
+                                    );
+                                    NavigatorPush.push(
+                                      context,
+                                      const ShowBasicSearch(),
+                                    );
+                                  }
+                                },
+                                child: Container(
+                                  height: screenSize.height * 0.06,
+                                  width: screenSize.width,
+                                  decoration: BoxDecoration(
+                                    color: MyTheme.primary,
+                                    borderRadius: const BorderRadius.all(
+                                      Radius.circular(12),
+                                    ),
+                                  ),
+                                  child: Center(
+                                    child: Text(
+                                      AppLocalizations.of(
+                                        context,
+                                      )!.advanced_search_screen_btn_text,
+                                      style: Styles.buttonText.copyWith(
+                                        fontSize: screenSize.width * 0.04,
+                                        color: Colors.white,
+                                      ),
+                                    ),
+                                  ),
                                 ),
                               ),
-                            ),
+                              SizedBox(height: screenSize.height * 0.03),
+                              InkWell(
+                                onTap: () {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder:
+                                          (context) => const AdvancedSearch(),
+                                    ),
+                                  );
+                                  store.dispatch(
+                                    BasicSearchRemove.motherTongueClear,
+                                  );
+                                  store.dispatch(
+                                    BasicSearchRemove.religionClear,
+                                  );
+                                },
+                                child: Text(
+                                  AppLocalizations.of(
+                                    context,
+                                  )!.common_advanced_search_switch,
+                                  style: Styles.body.copyWith(
+                                    fontSize: screenSize.width * 0.035,
+                                    color: MyTheme.primary,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                              ),
+                              SizedBox(height: screenSize.height * 0.04),
+                            ],
                           ),
-                          SizedBox(height: screenSize.height * 0.03),
-                          InkWell(
-                            onTap: () {
-                              Navigator.push(context, MaterialPageRoute(builder: (context) => const AdvancedSearch()));
-                              store.dispatch(BasicSearchRemove.motherTongueClear);
-                              store.dispatch(BasicSearchRemove.religionClear);
-                            },
-                            child: Text(
-                              AppLocalizations.of(context)!.common_advanced_search_switch,
-                              style: Styles.body.copyWith(fontSize: screenSize.width * 0.035, color: MyTheme.primary, fontWeight: FontWeight.bold),
-                            ),
-                          ),
-                          SizedBox(height: screenSize.height * 0.04),
-                        ],
-                      ),
+                        ),
+                      ],
                     ),
-                  ],
+                  ),
                 ),
               ),
             ),
           ),
-        ),
-      ),
     );
   }
 
@@ -552,7 +639,10 @@ class _SearchState extends State<Search> {
       children: [
         Text(
           title,
-          style: Styles.body.copyWith(fontSize: screenSize.width * 0.038, fontWeight: FontWeight.bold),
+          style: Styles.body.copyWith(
+            fontSize: screenSize.width * 0.038,
+            fontWeight: FontWeight.bold,
+          ),
         ),
         SizedBox(height: screenSize.height * 0.007),
         Container(
@@ -569,9 +659,15 @@ class _SearchState extends State<Search> {
             decoration: InputDecoration(
               hintText: "निवडा",
               isDense: true,
-              hintStyle: Styles.body.copyWith(fontSize: screenSize.width * 0.035, color: MyTheme.text_secondary),
+              hintStyle: Styles.body.copyWith(
+                fontSize: screenSize.width * 0.035,
+                color: MyTheme.text_secondary,
+              ),
               border: const OutlineInputBorder(borderSide: BorderSide.none),
-              suffixIcon: Icon(Icons.keyboard_arrow_down, color: MyTheme.gull_grey),
+              suffixIcon: Icon(
+                Icons.keyboard_arrow_down,
+                color: MyTheme.gull_grey,
+              ),
             ),
             items: items,
             onChanged: onChanged,

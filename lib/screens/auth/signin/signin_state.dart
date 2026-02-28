@@ -26,12 +26,12 @@ class SignInState {
   });
 
   SignInState.initialState()
-      : isPhone = true,
-        emailErrorText = '',
-        passwordErrorText = '',
-        isObscure = true,
-        isCustomLogin = false,
-        emailController = TextEditingController(text: ''),
-        passwordController = TextEditingController(text: ''),
-        isLogin = false;
+    : isPhone = true,
+      emailErrorText = '',
+      passwordErrorText = '',
+      isObscure = true,
+      isCustomLogin = false,
+      emailController = TextEditingController(text: ''),
+      passwordController = TextEditingController(text: ''),
+      isLogin = false;
 }

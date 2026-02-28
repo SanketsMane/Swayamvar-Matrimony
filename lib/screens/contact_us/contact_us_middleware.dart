@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import '../../const/my_theme.dart';
 import '../../repository/contact_us_repository.dart';
 import '../core.dart';
+import 'package:active_matrimonial_flutter_app/redux/store.dart';
 
 ThunkAction<AppState> contactUsMiddleware({postBody, context}) {
   return (Store<AppState> store) async {
@@ -11,9 +12,12 @@ ThunkAction<AppState> contactUsMiddleware({postBody, context}) {
     try {
       var data = await ContactUsRepository().sendHelp(postBody: postBody);
 
-      store.dispatch(ShowMessageAction(
+      store.dispatch(
+        ShowMessageAction(
           msg: data.message,
-          color: data.result == true ? MyTheme.success : MyTheme.failure));
+          color: data.result == true ? MyTheme.success : MyTheme.failure,
+        ),
+      );
       if (data.result) {
         store.state.contactUsState!.nameController!.clear();
         store.state.contactUsState!.emailController!.clear();

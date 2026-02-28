@@ -2,7 +2,11 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 
 class MyImages {
-  static Widget normalImage(String? url, {BoxFit fit = BoxFit.cover, Alignment alignment = Alignment.center}) {
+  static Widget normalImage(
+    String? url, {
+    BoxFit fit = BoxFit.cover,
+    Alignment alignment = Alignment.center,
+  }) {
     if (url == null || url.isEmpty) {
       return Image.asset(
         'assets/images/342x200.png',

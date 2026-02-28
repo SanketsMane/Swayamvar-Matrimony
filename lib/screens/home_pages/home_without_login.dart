@@ -1,4 +1,3 @@
-
 import 'dart:io';
 
 import 'package:active_matrimonial_flutter_app/app_config.dart';
@@ -23,18 +22,30 @@ class HomeWithoutLogin extends StatefulWidget {
 }
 
 class _HomeWithoutLoginState extends State<HomeWithoutLogin> {
-  final PageController controller = PageController(initialPage: 0, viewportFraction: 1);
+  final PageController controller = PageController(
+    initialPage: 0,
+    viewportFraction: 1,
+  );
   int current_page = 0;
 
   void goNextPage() {
-    if (current_page < (store.state.exploreState!.premiumMemberList!.length - 1)) {
-      controller.animateToPage(current_page + 1, duration: const Duration(milliseconds: 500), curve: Curves.ease);
+    if (current_page <
+        (store.state.exploreState!.premiumMemberList!.length - 1)) {
+      controller.animateToPage(
+        current_page + 1,
+        duration: const Duration(milliseconds: 500),
+        curve: Curves.ease,
+      );
     }
   }
 
   void goPrevPage() {
     if (current_page > 0) {
-      controller.animateToPage(current_page - 1, duration: const Duration(milliseconds: 500), curve: Curves.ease);
+      controller.animateToPage(
+        current_page - 1,
+        duration: const Duration(milliseconds: 500),
+        curve: Curves.ease,
+      );
     }
   }
 
@@ -51,62 +62,90 @@ class _HomeWithoutLoginState extends State<HomeWithoutLogin> {
     return StoreConnector<AppState, AppState>(
       converter: (store) => store.state,
       onInit: (store) => [store.dispatch(fetchPremiumMembersAction())],
-      builder: (_, state) => WillPopScope(
-        onWillPop: () async {
-          final shouldPop = (await OneContext().showDialog<bool>(
-            builder: (BuildContext context) => exit_dialog(context, screenSize),
-          )) ?? false;
-          return shouldPop;
-        },
-        child: Scaffold(
-          resizeToAvoidBottomInset: false,
-          appBar: buildAppBar(context, screenSize) as PreferredSizeWidget?,
-          body: SafeArea(
-            child: Padding(
-              padding: EdgeInsets.symmetric(
-                horizontal: screenSize.width * 0.05,
-                vertical: screenSize.height * 0.01,
-              ),
-              child: Column(
-                children: [
-                  SizedBox(height: screenSize.height * 0.01),
-                  Expanded(
-                    child: state.exploreState!.isFetchingPremiumMembers!
-                        ? CommonWidget.circularIndicator
-                        : state.exploreState!.premiumMemberList!.isNotEmpty
-                        ? PageView.builder(
-                      controller: controller,
-                      itemCount: state.exploreState!.premiumMemberList!.length,
-                      itemBuilder: (listViewContext, index) {
-                        var members = state.exploreState!.premiumMemberList!;
-                        return Padding(
-                          padding: EdgeInsets.symmetric(horizontal: screenSize.width * 0.01),
-                          child: Stack(
-                            children: [
-                              image_container(members, index),
-                              transparent_black_shade_over(),
-                              user_info_box_with(context, members, index, state, screenSize),
-                            ],
-                          ),
-                        );
-                      },
-                      onPageChanged: (index) {
-                        setState(() => current_page = index);
-                        SharedPref().showDialog = false;
-                      },
-                    )
-                        : CommonWidget.noData,
+      builder:
+          (_, state) => WillPopScope(
+            onWillPop: () async {
+              final shouldPop =
+                  (await OneContext().showDialog<bool>(
+                    builder:
+                        (BuildContext context) =>
+                            exit_dialog(context, screenSize),
+                  )) ??
+                  false;
+              return shouldPop;
+            },
+            child: Scaffold(
+              resizeToAvoidBottomInset: false,
+              appBar: buildAppBar(context, screenSize) as PreferredSizeWidget?,
+              body: SafeArea(
+                child: Padding(
+                  padding: EdgeInsets.symmetric(
+                    horizontal: screenSize.width * 0.05,
+                    vertical: screenSize.height * 0.01,
                   ),
-                ],
+                  child: Column(
+                    children: [
+                      SizedBox(height: screenSize.height * 0.01),
+                      Expanded(
+                        child:
+                            state.exploreState!.isFetchingPremiumMembers!
+                                ? CommonWidget.circularIndicator
+                                : state
+                                    .exploreState!
+                                    .premiumMemberList!
+                                    .isNotEmpty
+                                ? PageView.builder(
+                                  controller: controller,
+                                  itemCount:
+                                      state
+                                          .exploreState!
+                                          .premiumMemberList!
+                                          .length,
+                                  itemBuilder: (listViewContext, index) {
+                                    var members =
+                                        state.exploreState!.premiumMemberList!;
+                                    return Padding(
+                                      padding: EdgeInsets.symmetric(
+                                        horizontal: screenSize.width * 0.01,
+                                      ),
+                                      child: Stack(
+                                        children: [
+                                          image_container(members, index),
+                                          transparent_black_shade_over(),
+                                          user_info_box_with(
+                                            context,
+                                            members,
+                                            index,
+                                            state,
+                                            screenSize,
+                                          ),
+                                        ],
+                                      ),
+                                    );
+                                  },
+                                  onPageChanged: (index) {
+                                    setState(() => current_page = index);
+                                    SharedPref().showDialog = false;
+                                  },
+                                )
+                                : CommonWidget.noData,
+                      ),
+                    ],
+                  ),
+                ),
               ),
             ),
           ),
-        ),
-      ),
     );
   }
 
-  Widget user_info_box_with(BuildContext context, var members, int index, AppState state, Size screenSize) {
+  Widget user_info_box_with(
+    BuildContext context,
+    var members,
+    int index,
+    AppState state,
+    Size screenSize,
+  ) {
     return Positioned(
       bottom: 0,
       right: 0,
@@ -122,7 +161,12 @@ class _HomeWithoutLoginState extends State<HomeWithoutLogin> {
             SizedBox(height: screenSize.height * 0.005),
             btn_and_age_country_row(members, index, context, screenSize),
             SizedBox(height: screenSize.height * 0.02),
-            buildPageNavigatorWithSubscribeLoveFollow(context, members[index], state, screenSize),
+            buildPageNavigatorWithSubscribeLoveFollow(
+              context,
+              members[index],
+              state,
+              screenSize,
+            ),
           ],
         ),
       ),
@@ -133,23 +177,40 @@ class _HomeWithoutLoginState extends State<HomeWithoutLogin> {
     return AlertDialog(
       title: Text(
         AppLocalizations.of(context)!.exit,
-        style: Styles.bold_arsenic_14.copyWith(fontSize: screenSize.width * 0.04),
+        style: Styles.bold_arsenic_14.copyWith(
+          fontSize: screenSize.width * 0.04,
+        ),
       ),
       content: Text("Are you sure you want to exit?"),
       actions: [
         TextButton(
           onPressed: () => Navigator.pop(context, false),
-          child: Text('No', style: Styles.regular_arsenic_14.copyWith(fontSize: screenSize.width * 0.035)),
+          child: Text(
+            'No',
+            style: Styles.regular_arsenic_14.copyWith(
+              fontSize: screenSize.width * 0.035,
+            ),
+          ),
         ),
         TextButton(
           onPressed: () => Platform.isAndroid ? SystemNavigator.pop() : exit(0),
-          child: Text('Yes', style: Styles.regular_arsenic_14.copyWith(fontSize: screenSize.width * 0.035)),
+          child: Text(
+            'Yes',
+            style: Styles.regular_arsenic_14.copyWith(
+              fontSize: screenSize.width * 0.035,
+            ),
+          ),
         ),
       ],
     );
   }
 
-  Widget btn_and_age_country_row(var members, int index, BuildContext context, Size screenSize) {
+  Widget btn_and_age_country_row(
+    var members,
+    int index,
+    BuildContext context,
+    Size screenSize,
+  ) {
     double responsiveFontSize = screenSize.width * 0.035;
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -159,17 +220,44 @@ class _HomeWithoutLoginState extends State<HomeWithoutLogin> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Row(children: [
-                ImageIcon(AssetImage('assets/icon/icon_person.png'), size: responsiveFontSize, color: MyTheme.white),
-                SizedBox(width: screenSize.width * 0.015),
-                Text('${members[index].age ?? ''} yrs, ${members[index].height ?? ''} ft', style: TextStyle(color: Colors.white, fontSize: responsiveFontSize)),
-              ]),
+              Row(
+                children: [
+                  ImageIcon(
+                    AssetImage('assets/icon/icon_person.png'),
+                    size: responsiveFontSize,
+                    color: MyTheme.white,
+                  ),
+                  SizedBox(width: screenSize.width * 0.015),
+                  Text(
+                    '${members[index].age ?? ''} yrs, ${members[index].height ?? ''} ft',
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: responsiveFontSize,
+                    ),
+                  ),
+                ],
+              ),
               SizedBox(height: screenSize.height * 0.005),
-              Row(children: [
-                ImageIcon(AssetImage('assets/icon/icon_location.png'), size: responsiveFontSize, color: MyTheme.white),
-                SizedBox(width: screenSize.width * 0.015),
-                Flexible(child: Text(members[index].country ?? '', style: TextStyle(color: Colors.white, fontSize: responsiveFontSize), overflow: TextOverflow.ellipsis)),
-              ]),
+              Row(
+                children: [
+                  ImageIcon(
+                    AssetImage('assets/icon/icon_location.png'),
+                    size: responsiveFontSize,
+                    color: MyTheme.white,
+                  ),
+                  SizedBox(width: screenSize.width * 0.015),
+                  Flexible(
+                    child: Text(
+                      members[index].country ?? '',
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: responsiveFontSize,
+                      ),
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                  ),
+                ],
+              ),
             ],
           ),
         ),
@@ -177,26 +265,49 @@ class _HomeWithoutLoginState extends State<HomeWithoutLogin> {
           onPressed: () => CustomPopUp(context).loginDialog(context),
           style: TextButton.styleFrom(
             backgroundColor: Colors.white.withOpacity(0.1),
-            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30.0)),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(30.0),
+            ),
             side: const BorderSide(color: Colors.white),
-            padding: EdgeInsets.symmetric(horizontal: screenSize.width * 0.04, vertical: screenSize.height * 0.01),
+            padding: EdgeInsets.symmetric(
+              horizontal: screenSize.width * 0.04,
+              vertical: screenSize.height * 0.01,
+            ),
           ),
-          child: Text(AppLocalizations.of(context)!.home_screen_full_profile, style: TextStyle(color: MyTheme.white, fontSize: responsiveFontSize * 0.9)),
+          child: Text(
+            AppLocalizations.of(context)!.home_screen_full_profile,
+            style: TextStyle(
+              color: MyTheme.white,
+              fontSize: responsiveFontSize * 0.9,
+            ),
+          ),
         ),
       ],
     );
   }
 
-  Widget member_id_row(BuildContext context, var members, int index, Size screenSize) {
+  Widget member_id_row(
+    BuildContext context,
+    var members,
+    int index,
+    Size screenSize,
+  ) {
     return Row(
       children: [
         Text(
           "${AppLocalizations.of(context)!.common_screen_member_id} ",
-          style: TextStyle(color: MyTheme.white, fontSize: screenSize.width * 0.035),
+          style: TextStyle(
+            color: MyTheme.white,
+            fontSize: screenSize.width * 0.035,
+          ),
         ),
         Text(
           members[index].code ?? '',
-          style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: screenSize.width * 0.035), // Responsive font
+          style: TextStyle(
+            color: Colors.white,
+            fontWeight: FontWeight.bold,
+            fontSize: screenSize.width * 0.035,
+          ), // Responsive font
         ),
       ],
     );
@@ -208,7 +319,9 @@ class _HomeWithoutLoginState extends State<HomeWithoutLogin> {
         Flexible(
           child: Text(
             members[index].name ?? '',
-            style: Styles.bold_white_16.copyWith(fontSize: screenSize.width * 0.05),
+            style: Styles.bold_white_16.copyWith(
+              fontSize: screenSize.width * 0.05,
+            ),
             overflow: TextOverflow.ellipsis,
           ),
         ),
@@ -229,7 +342,9 @@ class _HomeWithoutLoginState extends State<HomeWithoutLogin> {
         image: DecorationImage(
           image: NetworkImage(members[index].photo ?? ''),
           fit: BoxFit.cover,
-          onError: (exception, stackTrace) => AssetImage('assets/images/220x320.png'),
+          onError:
+              (exception, stackTrace) =>
+                  AssetImage('assets/images/220x320.png'),
         ),
         borderRadius: const BorderRadius.all(Radius.circular(16.0)),
       ),
@@ -263,31 +378,55 @@ class _HomeWithoutLoginState extends State<HomeWithoutLogin> {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Row(children: [
-              Image.asset('assets/logo/appbar_logo.png', fit: BoxFit.contain, height: screenSize.height * 0.04), // Proportional size
-              SizedBox(width: screenSize.width * 0.02),
-              Text(AppConfig.app_name, style: Styles.bold_app_accent_16.copyWith(fontSize: screenSize.width * 0.045)), // Responsive font
-            ]),
-            Row(children: [
-              CommonWidget.social_button(
-                gradient: Styles.buildLinearGradient(begin: Alignment.topLeft, end: Alignment.bottomRight),
-                icon: "icon_bell.png",
-                onpressed: () => CustomPopUp(context).loginDialog(context),
-              ),
-              SizedBox(width: screenSize.width * 0.02),
-              CommonWidget.social_button(
-                gradient: Styles.buildLinearGradient(begin: Alignment.topLeft, end: Alignment.bottomRight),
-                icon: "icon_search.png",
-                onpressed: () => CustomPopUp(context).loginDialog(context),
-              ),
-            ]),
+            Row(
+              children: [
+                Image.asset(
+                  'assets/logo/appbar_logo.png',
+                  fit: BoxFit.contain,
+                  height: screenSize.height * 0.04,
+                ), // Proportional size
+                SizedBox(width: screenSize.width * 0.02),
+                Text(
+                  AppConfig.app_name,
+                  style: Styles.bold_app_accent_16.copyWith(
+                    fontSize: screenSize.width * 0.045,
+                  ),
+                ), // Responsive font
+              ],
+            ),
+            Row(
+              children: [
+                CommonWidget.social_button(
+                  gradient: Styles.buildLinearGradient(
+                    begin: Alignment.topLeft,
+                    end: Alignment.bottomRight,
+                  ),
+                  icon: "icon_bell.png",
+                  onpressed: () => CustomPopUp(context).loginDialog(context),
+                ),
+                SizedBox(width: screenSize.width * 0.02),
+                CommonWidget.social_button(
+                  gradient: Styles.buildLinearGradient(
+                    begin: Alignment.topLeft,
+                    end: Alignment.bottomRight,
+                  ),
+                  icon: "icon_search.png",
+                  onpressed: () => CustomPopUp(context).loginDialog(context),
+                ),
+              ],
+            ),
           ],
         ),
       ),
     );
   }
 
-  Widget buildPageNavigatorWithSubscribeLoveFollow(BuildContext context, dynamic user, AppState state, Size screenSize) {
+  Widget buildPageNavigatorWithSubscribeLoveFollow(
+    BuildContext context,
+    dynamic user,
+    AppState state,
+    Size screenSize,
+  ) {
     // Proportional button sizes
     double mainButtonSize = screenSize.width * 0.12;
     double navButtonSize = screenSize.width * 0.11;
@@ -334,7 +473,10 @@ class _HomeWithoutLoginState extends State<HomeWithoutLogin> {
       width: size,
       height: size,
       radius: size / 2,
-      gradient: Styles.buildLinearGradient(begin: Alignment.topLeft, end: Alignment.bottomRight),
+      gradient: Styles.buildLinearGradient(
+        begin: Alignment.topLeft,
+        end: Alignment.bottomRight,
+      ),
     );
   }
 }

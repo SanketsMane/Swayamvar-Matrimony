@@ -8,8 +8,7 @@ class GroupItem extends StatelessWidget {
 
   final String? hintText;
   final String? helperText;
-  final int?
-      minLines;
+  final int? minLines;
   final keyboardType;
   final int? maxLines;
   final TextEditingController? controller;
@@ -55,14 +54,10 @@ class GroupItem extends StatelessWidget {
               borderSide: BorderSide.none,
               borderRadius: BorderRadius.circular(12),
             ),
-            border: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(12),
-            ),
+            border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
             focusedBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(12),
-              borderSide: const BorderSide(
-                color: MyTheme.app_accent_color,
-              ),
+              borderSide: const BorderSide(color: MyTheme.app_accent_color),
             ),
           ),
         ),

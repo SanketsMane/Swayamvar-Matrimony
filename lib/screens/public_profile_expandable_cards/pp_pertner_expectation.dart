@@ -12,7 +12,7 @@ class PP_PartnerExpectation extends StatelessWidget {
       converter: (store) => store.state,
       builder:
           (_, state) =>
-              state.publicProfileState!.partner != null
+              state.publicProfileState!.partnerExpectation != null
                   ? SingleChildScrollView(
                     child: Padding(
                       padding: const EdgeInsets.symmetric(
@@ -27,7 +27,11 @@ class PP_PartnerExpectation extends StatelessWidget {
                                 AppLocalizations.of(
                                   context,
                                 )!.public_profile_general,
-                            data: state.publicProfileState!.partner.general,
+                            data:
+                                state
+                                    .publicProfileState!
+                                    .partnerExpectation
+                                    .general,
                           ),
                           const SizedBox(height: 10),
                           buildRow(
@@ -39,7 +43,7 @@ class PP_PartnerExpectation extends StatelessWidget {
                             data:
                                 state
                                     .publicProfileState!
-                                    .partner
+                                    .partnerExpectation
                                     .residenceCountryId ??
                                 "",
                           ),
@@ -51,7 +55,7 @@ class PP_PartnerExpectation extends StatelessWidget {
                                   context,
                                 )!.public_profile_height,
                             data:
-                                "${state.publicProfileState!.partner.height.toString() ?? ''} ft",
+                                "${state.publicProfileState!.partnerExpectation.height.toString() ?? ''} ft",
                           ),
                           const SizedBox(height: 10),
                           buildRow(
@@ -61,7 +65,10 @@ class PP_PartnerExpectation extends StatelessWidget {
                                   context,
                                 )!.public_profile_weight,
                             data:
-                                state.publicProfileState!.partner.weight
+                                state
+                                    .publicProfileState!
+                                    .partnerExpectation
+                                    .weight
                                     .toString() ??
                                 '',
                           ),
@@ -73,7 +80,10 @@ class PP_PartnerExpectation extends StatelessWidget {
                                   context,
                                 )!.public_profile_religion,
                             data:
-                                state.publicProfileState!.partner.religionId ??
+                                state
+                                    .publicProfileState!
+                                    .partnerExpectation
+                                    .religionId ??
                                 "",
                           ),
                           const SizedBox(height: 10),
@@ -84,7 +94,11 @@ class PP_PartnerExpectation extends StatelessWidget {
                                   context,
                                 )!.manage_profile_caste,
                             data:
-                                state.publicProfileState!.partner.casteId ?? "",
+                                state
+                                    .publicProfileState!
+                                    .partnerExpectation
+                                    .casteId ??
+                                "",
                           ),
                           const SizedBox(height: 10),
                           buildRow(
@@ -94,7 +108,10 @@ class PP_PartnerExpectation extends StatelessWidget {
                                   context,
                                 )!.manage_profile_sub_caste,
                             data:
-                                state.publicProfileState!.partner.subCasteId ??
+                                state
+                                    .publicProfileState!
+                                    .partnerExpectation
+                                    .subCasteId ??
                                 "",
                           ),
                           const SizedBox(height: 10),
@@ -105,7 +122,7 @@ class PP_PartnerExpectation extends StatelessWidget {
                                   context,
                                 )!.public_profile_marital_status,
                             data:
-                                "${state.publicProfileState!.partner.maritalStatus ?? ''}",
+                                "${state.publicProfileState!.partnerExpectation.maritalStatus ?? ''}",
                           ),
                           const SizedBox(height: 10),
                           buildRow(
@@ -117,13 +134,13 @@ class PP_PartnerExpectation extends StatelessWidget {
                             data:
                                 state
                                             .publicProfileState!
-                                            .partner
+                                            .partnerExpectation
                                             .childrenAcceptable ==
                                         'dose_not_matter'
                                     ? 'Does not matter'
                                     : state
                                         .publicProfileState!
-                                        .partner
+                                        .partnerExpectation
                                         .childrenAcceptable,
                           ),
                           const SizedBox(height: 10),
@@ -134,7 +151,7 @@ class PP_PartnerExpectation extends StatelessWidget {
                                   context,
                                 )!.public_profile_Lang,
                             data:
-                                "${state.publicProfileState!.partner.language ?? ''}",
+                                "${state.publicProfileState!.partnerExpectation.language ?? ''}",
                           ),
                           const SizedBox(height: 10),
                           buildRow(
@@ -144,7 +161,7 @@ class PP_PartnerExpectation extends StatelessWidget {
                                   context,
                                 )!.manage_profile_education,
                             data:
-                                "${state.publicProfileState!.partner.education ?? ""}",
+                                "${state.publicProfileState!.partnerExpectation.education ?? ""}",
                           ),
                           const SizedBox(height: 10),
                           buildRow(
@@ -154,7 +171,7 @@ class PP_PartnerExpectation extends StatelessWidget {
                                   context,
                                 )!.manage_profile_profession,
                             data:
-                                "${state.publicProfileState!.partner.profession ?? ''}",
+                                "${state.publicProfileState!.partnerExpectation.profession ?? ''}",
                           ),
                           const SizedBox(height: 10),
                           buildRow(
@@ -166,13 +183,13 @@ class PP_PartnerExpectation extends StatelessWidget {
                             data:
                                 state
                                             .publicProfileState!
-                                            .partner
+                                            .partnerExpectation
                                             .smokingAcceptable ==
                                         'dose_not_matter'
                                     ? 'Does not matter'
                                     : state
                                         .publicProfileState!
-                                        .partner
+                                        .partnerExpectation
                                         .smokingAcceptable,
                           ),
                           const SizedBox(height: 10),
@@ -185,13 +202,13 @@ class PP_PartnerExpectation extends StatelessWidget {
                             data:
                                 state
                                             .publicProfileState!
-                                            .partner
+                                            .partnerExpectation
                                             .drinkingAcceptable ==
                                         'dose_not_matter'
                                     ? 'Does not matter'
                                     : state
                                         .publicProfileState!
-                                        .partner
+                                        .partnerExpectation
                                         .drinkingAcceptable,
                           ),
                           const SizedBox(height: 10),
@@ -202,7 +219,7 @@ class PP_PartnerExpectation extends StatelessWidget {
                                   context,
                                 )!.manage_profile_diet,
                             data:
-                                "${state.publicProfileState!.partner.diet == 'dose_not_matter' ? 'Does not matter' : state.publicProfileState!.partner.diet}",
+                                "${state.publicProfileState!.partnerExpectation.diet == 'dose_not_matter' ? 'Does not matter' : state.publicProfileState!.partnerExpectation.diet}",
                           ),
                           const SizedBox(height: 10),
                           buildRow(
@@ -212,7 +229,7 @@ class PP_PartnerExpectation extends StatelessWidget {
                                   context,
                                 )!.public_profile_body_type,
                             data:
-                                "${state.publicProfileState!.partner.bodyType ?? ''}",
+                                "${state.publicProfileState!.partnerExpectation.bodyType ?? ''}",
                           ),
                           const SizedBox(height: 10),
                           buildRow(
@@ -222,7 +239,7 @@ class PP_PartnerExpectation extends StatelessWidget {
                                   context,
                                 )!.manage_profile_personal_value,
                             data:
-                                "${state.publicProfileState!.partner.personalValue ?? ''}",
+                                "${state.publicProfileState!.partnerExpectation.personalValue ?? ''}",
                           ),
                           const SizedBox(height: 10),
                           buildRow(
@@ -232,7 +249,7 @@ class PP_PartnerExpectation extends StatelessWidget {
                                   context,
                                 )!.manage_profile_manglik,
                             data:
-                                "${state.publicProfileState!.partner.manglik == 'dose_not_matter' ? 'Does not matter' : state.publicProfileState!.partner.manglik}",
+                                "${state.publicProfileState!.partnerExpectation.manglik == 'dose_not_matter' ? 'Does not matter' : state.publicProfileState!.partnerExpectation.manglik}",
                           ),
                           const SizedBox(height: 10),
                           buildRow(
@@ -244,7 +261,7 @@ class PP_PartnerExpectation extends StatelessWidget {
                             data:
                                 state
                                     .publicProfileState!
-                                    .partner
+                                    .partnerExpectation
                                     .preferredCountryId ??
                                 "",
                           ),
@@ -258,7 +275,7 @@ class PP_PartnerExpectation extends StatelessWidget {
                             data:
                                 state
                                     .publicProfileState!
-                                    .partner
+                                    .partnerExpectation
                                     .preferredStateId ??
                                 "",
                           ),
@@ -272,7 +289,7 @@ class PP_PartnerExpectation extends StatelessWidget {
                             data:
                                 state
                                     .publicProfileState!
-                                    .partner
+                                    .partnerExpectation
                                     .familyValueId ??
                                 "",
                           ),
@@ -284,7 +301,7 @@ class PP_PartnerExpectation extends StatelessWidget {
                                   context,
                                 )!.public_profile_complexion,
                             data:
-                                "${state.publicProfileState!.partner.complexion ?? ''}",
+                                "${state.publicProfileState!.partnerExpectation.complexion ?? ''}",
                           ),
                           const SizedBox(height: 10),
                         ],

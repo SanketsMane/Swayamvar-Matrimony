@@ -20,11 +20,11 @@ class ContactUsState {
   });
 
   ContactUsState.initialState()
-      : nameController = TextEditingController(text: ''),
-        isSubmit = false,
-        emailController = TextEditingController(text: ''),
-        subjectController = TextEditingController(text: ''),
-        isCaptchaShowing = false,
-        googleRecaptchaKey = "",
-        descriptionController = TextEditingController(text: '');
+    : nameController = TextEditingController(text: ''),
+      isSubmit = false,
+      emailController = TextEditingController(text: ''),
+      subjectController = TextEditingController(text: ''),
+      isCaptchaShowing = false,
+      googleRecaptchaKey = "",
+      descriptionController = TextEditingController(text: '');
 }

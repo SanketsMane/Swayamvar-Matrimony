@@ -13,14 +13,8 @@ class Shades {
           gradient: LinearGradient(
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,
-            stops: [
-              0.4,
-              0.8,
-            ],
-            colors: [
-              Colors.transparent,
-              Colors.black,
-            ],
+            stops: [0.4, 0.8],
+            colors: [Colors.transparent, Colors.black],
           ),
         ),
       ),

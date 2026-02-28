@@ -1,4 +1,3 @@
-
 import 'package:active_matrimonial_flutter_app/models_response/drop_down/on_behalf.dart';
 // ADD THIS IMPORT
 import 'package:intl_phone_number_input/intl_phone_number_input.dart';
@@ -15,7 +14,6 @@ class SignUpRequestAction {
 
   @override
   String toString() {
-
     return 'SignUpRequestAction{payloadContext: $payloadContext, phoneNumber: $phoneNumber}';
   }
 }

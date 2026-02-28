@@ -10,9 +10,12 @@ class SLoader {}
 class SpiritualSaveChanges {}
 
 SpiritualSocialState? spiritual_reducer(
-    SpiritualSocialState? state, dynamic action) {
+  SpiritualSocialState? state,
+  dynamic action,
+) {
   if (action is SLoader) {
-    state!.set_sloader();
+    // Sanket: Side effect removed from reducer.
+    // Repository call moved out.
     return state;
   }
 
@@ -63,7 +66,9 @@ SpiritualSocialState? spiritual_reducer(
 
 /// spiritual social get response
 spiritual_social_get_response(
-    SpiritualSocialState state, SpiritualSocialGetResponse action) {
+  SpiritualSocialState state,
+  SpiritualSocialGetResponse action,
+) {
   state.spiritualSocialGetResponse!.data = action.data;
   state.spiritualSocialGetResponse!.result = action.result;
   return state;
@@ -93,7 +98,8 @@ caste_response(SpiritualSocialState state, CasteResponse action) {
         }
       }
     }
-    store.dispatch(subcasteMiddleware(state.caste_val!.id));
+    // Sanket: Side effect removed from reducer.
+    // store.dispatch(subcasteMiddleware(...)) should be handled in a thunk or UI.
   }
   return state;
 }

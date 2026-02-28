@@ -9,9 +9,12 @@ import 'package:image_picker/image_picker.dart';
 import '../../core.dart';
 import '../../my_dashboard_pages/wallet/wallet_recharge_middleware.dart';
 import 'offline_payment_middleware.dart';
+import 'package:active_matrimonial_flutter_app/redux/store.dart';
 
 OfflinePaymentState? offlinePaymentReducer(
-    OfflinePaymentState? state, dynamic action) {
+  OfflinePaymentState? state,
+  dynamic action,
+) {
   if (action is SetImageName) {
     state!.image = action.image;
     state.imgName = action.imageName;
@@ -36,7 +39,9 @@ OfflinePaymentState? offlinePaymentReducer(
 }
 
 offLineWalletRecharge(
-    OfflinePaymentState? state, OfflineRechargeWalletAction action) {
+  OfflinePaymentState? state,
+  OfflineRechargeWalletAction action,
+) {
   if (!requiredFieldVerification(state)) {
     return;
   }
@@ -47,7 +52,7 @@ offLineWalletRecharge(
     "manual_payment_id": action.manualPaymentId,
     "transaction_id": state!.idController!.text,
     "payment_proof": state.image,
-    "payment_details": state.detailController!.text
+    "payment_details": state.detailController!.text,
   });
   store.dispatch(walletRechargeMiddleware(postBody: postValue));
   return state;
@@ -56,8 +61,9 @@ offLineWalletRecharge(
 ThunkAction<AppState> getImageAction() {
   return (Store<AppState> store) async {
     try {
-      final image = await store.state.offlinePaymentState!.picker
-          .pickImage(source: ImageSource.gallery);
+      final image = await store.state.offlinePaymentState!.picker.pickImage(
+        source: ImageSource.gallery,
+      );
       if (image == null) return;
       final tmpImage = File(image.path);
       store.dispatch(SetImageName(tmpImage.path.split('/').last, tmpImage));
@@ -68,7 +74,9 @@ ThunkAction<AppState> getImageAction() {
 }
 
 offlineBuyPackage(
-    OfflinePaymentState? state, OfflineBuyPackageAction action) async {
+  OfflinePaymentState? state,
+  OfflineBuyPackageAction action,
+) async {
   if (!requiredFieldVerification(state)) {
     return;
   }
@@ -81,7 +89,7 @@ offlineBuyPackage(
     "manual_payment_id": action.manualPaymentId,
     "transaction_id": state!.idController!.text,
     "payment_proof": state.image,
-    "payment_details": state.detailController!.text
+    "payment_details": state.detailController!.text,
   });
 
   store.dispatch(offlinePaymentMiddleware(postBody: postValue));

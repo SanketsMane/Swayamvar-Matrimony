@@ -5,11 +5,14 @@ class AstronomicState {
   bool? pageloader;
   final AstronomicGetResponse? astronomicGetResponse;
 
-  AstronomicState(
-      {this.isloading, this.pageloader, this.astronomicGetResponse});
+  AstronomicState({
+    this.isloading,
+    this.pageloader,
+    this.astronomicGetResponse,
+  });
 
   AstronomicState.initialState()
-      : astronomicGetResponse = AstronomicGetResponse.initialState(),
-        isloading = false,
-        pageloader = false;
+    : astronomicGetResponse = AstronomicGetResponse.initialState(),
+      isloading = false,
+      pageloader = false;
 }

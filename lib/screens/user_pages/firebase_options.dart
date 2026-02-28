@@ -44,28 +44,29 @@ class DefaultFirebaseOptions {
   }
 
   static const FirebaseOptions web = FirebaseOptions(
-    apiKey: 'AIzaSyD_vwo1U5DTOu3XOQLxBuly8c_Wvz07fM4',
-    appId: '1:546131385866:web:783f30cf04a4e0baaf986c', // Guessed web ID based on pattern, but focusing on Android
-    messagingSenderId: '546131385866',
-    projectId: 'matri-24e1f',
-    authDomain: 'matri-24e1f.firebaseapp.com',
-    storageBucket: 'matri-24e1f.appspot.com',
+    apiKey: 'AIzaSyDkkMtp-S32Sgz8wbH7Tmo7RE82IdUwP90',
+    appId: '1:927257142657:web:4c4ce6e334ac7668717480', // Sanket: Updated to match project number, needs verification from Firebase Console
+    messagingSenderId: '927257142657',
+    projectId: 'swayamvar-e2a6d',
+    authDomain: 'swayamvar-e2a6d.firebaseapp.com',
+    storageBucket: 'swayamvar-e2a6d.firebasestorage.app',
   );
 
   static const FirebaseOptions android = FirebaseOptions(
-    apiKey: 'AIzaSyD_vwo1U5DTOu3XOQLxBuly8c_Wvz07fM4',
-    appId: '1:546131385866:android:6a322f568dee5d13f189f3',
-    messagingSenderId: '546131385866',
-    projectId: 'matri-24e1f',
-    storageBucket: 'matri-24e1f.appspot.com',
+    apiKey: 'AIzaSyDkkMtp-S32Sgz8wbH7Tmo7RE82IdUwP90',
+    appId: '1:927257142657:android:4c4ce6e334ac7668717480',
+    messagingSenderId: '927257142657',
+    projectId: 'swayamvar-e2a6d',
+    storageBucket: 'swayamvar-e2a6d.firebasestorage.app',
   );
 
   static const FirebaseOptions ios = FirebaseOptions(
-    apiKey: 'AIzaSyD_vwo1U5DTOu3XOQLxBuly8c_Wvz07fM4',
-    appId: '1:546131385866:ios:c6a14d063ab8ed51af986c', // Guessed iOS ID, but focussing on Android
-    messagingSenderId: '546131385866',
-    projectId: 'matri-24e1f',
-    storageBucket: 'matri-24e1f.appspot.com',
-    iosBundleId: 'com.activeitzone.active_matrimonial_flutter_app.active_matrimonial_flutter_app',
+    apiKey: 'AIzaSyDkkMtp-S32Sgz8wbH7Tmo7RE82IdUwP90',
+    appId: '1:927257142657:ios:4c4ce6e334ac7668717480', // Sanket: Updated to match project number, needs verification from Firebase Console
+    messagingSenderId: '927257142657',
+    projectId: 'swayamvar-e2a6d',
+    storageBucket: 'swayamvar-e2a6d.firebasestorage.app',
+    iosBundleId:
+        'com.activeitzone.active_matrimonial_flutter_app.active_matrimonial_flutter_app',
   );
 }

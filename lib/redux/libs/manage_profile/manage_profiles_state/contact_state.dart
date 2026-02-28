@@ -5,13 +5,7 @@ class ContactState {
   bool? cdsave;
   ContactData? contactData;
 
-  ContactState({
-    this.cdloading,
-    this.cdsave,
-    this.contactData,
-  });
+  ContactState({this.cdloading, this.cdsave, this.contactData});
 
-  ContactState.initialState()
-      : cdloading = false,
-        cdsave = false;
+  ContactState.initialState() : cdloading = false, cdsave = false;
 }

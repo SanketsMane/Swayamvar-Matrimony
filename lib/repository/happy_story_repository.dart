@@ -28,10 +28,13 @@ class HappyStoryRepository {
   Future<HappyStoriesResponse> fetchHappyStories({page}) async {
     var baseUrl = "${AppConfig.BASE_URL}/happy-stories?page=$page";
 
-    var response = await http.get(Uri.parse(baseUrl), headers: {
-      "Accept": "application/json",
-      "Content-Type": "application/json",
-    });
+    var response = await http.get(
+      Uri.parse(baseUrl),
+      headers: {
+        "Accept": "application/json",
+        "Content-Type": "application/json",
+      },
+    );
 
     var data = happyStoriesResponseFromJson(response.body);
     return data;

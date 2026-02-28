@@ -37,13 +37,7 @@ enum Reset {
   offlinePayment,
 }
 
-enum SaveChanges {
-  introduction,
-  basicInfo,
-  contact,
-  contactUs,
-  familyInfo,
-}
+enum SaveChanges { introduction, basicInfo, contact, contactUs, familyInfo }
 
 enum UpdateInfo {
   family,

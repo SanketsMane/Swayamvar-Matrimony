@@ -1,4 +1,4 @@
-import 'package:active_matrimonial_flutter_app/main.dart';
+import 'package:active_matrimonial_flutter_app/redux/store.dart';
 import 'package:active_matrimonial_flutter_app/screens/my_dashboard_pages/shortlist/removeFromShortlistMiddleware.dart';
 import 'package:active_matrimonial_flutter_app/screens/my_dashboard_pages/shortlist/shortlist_action.dart';
 import 'package:active_matrimonial_flutter_app/screens/my_dashboard_pages/shortlist/shortlist_state.dart';
@@ -57,8 +57,9 @@ delete_from_shortlist(ShortlistState state, DeleteShortlist action) {
 
 deleteShortlistItem(ShortlistState state, RemoveShortlistAction action) {
   state.shortlistData!.remove(action.data);
-  store.dispatch(removeFromShortlistMiddleware(
-      context: action.context, user: action.data));
+  store.dispatch(
+    removeFromShortlistMiddleware(context: action.context, user: action.data),
+  );
   return state;
 }
 

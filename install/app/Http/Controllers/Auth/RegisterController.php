@@ -73,8 +73,8 @@ class RegisterController extends Controller
             'last_name'            => ['required', 'string', 'max:255'],
             'gender'               => 'required',
             'date_of_birth'        => 'required|date',
-            'phone'                 => 'required_without:email|nullable|string|unique:users',
-            'email'                 => 'required_without:phone|nullable|email|unique:users',
+            'phone'                 => 'required|string|unique:users',
+            'email'                 => 'required|email|unique:users',
             'password'             => ['required', 'string', 'min:8', 'confirmed'],
             'g-recaptcha-response' => [
                 Rule::when(get_setting('google_recaptcha_activation') == 1, ['required', new RecaptchaRule()], ['sometimes'])
@@ -110,30 +110,17 @@ class RegisterController extends Controller
     protected function create(array $data)
     {
         $approval = get_setting('member_verification') == 1 ? 0 : 1;
-        if (filter_var($data['email'], FILTER_VALIDATE_EMAIL)) {
-            $user = User::create([
-                'first_name'  => $data['first_name'],
-                'last_name'   => $data['last_name'],
-                'membership'  => 1,
-                'email'       => $data['email'],
-                'password'    => Hash::make($data['password']),
-                'code'        => unique_code(),
-                'approved'    => $approval,
-            ]);
-        } else {
-            if (addon_activation('otp_system')) {
-                $user = User::create([
-                    'first_name'  => $data['first_name'],
-                    'last_name'   => $data['last_name'],
-                    'membership'  => 1,
-                    'phone'       => '+' . $data['country_code'] . $data['phone'],
-                    'password'    => Hash::make($data['password']),
-                    'code'        => unique_code(),
-                    'approved'    => $approval,
-                    'verification_code' => rand(100000, 999999)
-                ]);
-            }
-        }
+        $user = User::create([
+            'first_name'  => $data['first_name'],
+            'last_name'   => $data['last_name'],
+            'membership'  => 1,
+            'email'       => $data['email'],
+            'phone'       => '+' . $data['country_code'] . $data['phone'],
+            'password'    => Hash::make($data['password']),
+            'code'        => unique_code(),
+            'approved'    => $approval,
+            'verification_code' => addon_activation('otp_system') ? rand(100000, 999999) : null
+        ]);
         if (addon_activation('referral_system') && $data['referral_code'] != null) {
             $reffered_user = User::where('code', '!=', null)->where('code', $data['referral_code'])->first();
             if ($reffered_user != null) {
@@ -175,13 +162,14 @@ class RegisterController extends Controller
 
     public function register(Request $request)
     {
-        if (filter_var($request->email, FILTER_VALIDATE_EMAIL)) {
-            if (User::where('email', $request->email)->first() != null) {
-                flash(translate('Email or Phone already exists.'));
-                return back();
-            }
-        } elseif (User::where('phone', '+' . $request->country_code . $request->phone)->first() != null) {
-            flash(translate('Phone already exists.'));
+        if (User::where('email', $request->email)->exists()) {
+            flash(translate('Email already exists.'))->error();
+            return back();
+        }
+
+        $formattedPhone = '+' . $request->country_code . $request->phone;
+        if (User::where('phone', $formattedPhone)->exists()) {
+            flash(translate('Phone already exists.'))->error();
             return back();
         }
 

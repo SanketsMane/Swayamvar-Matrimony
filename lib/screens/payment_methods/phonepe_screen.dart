@@ -1,4 +1,3 @@
-
 import 'dart:convert';
 import 'dart:developer';
 import 'package:active_matrimonial_flutter_app/app_config.dart';
@@ -14,6 +13,7 @@ import 'package:http/http.dart' as http;
 import 'package:phonepe_payment_sdk/phonepe_payment_sdk.dart';
 
 import '../account/account.dart';
+import 'package:active_matrimonial_flutter_app/redux/store.dart';
 
 class PhonePeScreen extends StatefulWidget {
   final dynamic amount;
@@ -45,7 +45,8 @@ class _PhonePeScreenState extends State<PhonePeScreen> {
       _fetchCredentialsAndInitiatePayment();
     });
   }
-//Get Createdtials from Backend
+
+  //Get Createdtials from Backend
   Future<void> _fetchCredentialsAndInitiatePayment() async {
     var accessToken = SharedPref().accessToken;
     try {
@@ -74,7 +75,8 @@ class _PhonePeScreenState extends State<PhonePeScreen> {
       showError("A network error occurred while fetching credentials.");
     }
   }
-//Get token from backend
+
+  //Get token from backend
   Future<void> _initiateV2Payment(Map<String, dynamic> credentials) async {
     String merchantId = credentials["client_id"];
     _mode = credentials["mode"] ?? "SANDBOX";
@@ -93,7 +95,7 @@ class _PhonePeScreenState extends State<PhonePeScreen> {
           "user_id": store.state.authState?.userData?.id?.toString() ?? "0",
           "payment_type": widget.payment_type,
           "amount": widget.amount,
-          "package_id":widget.package_id
+          "package_id": widget.package_id,
         }),
       );
 
@@ -101,14 +103,25 @@ class _PhonePeScreenState extends State<PhonePeScreen> {
         final data = json.decode(response.body);
         final String token = data['token'];
         final String orderId = data['orderId'];
-        final String accessToken=data['accessToken'];
-        final String merchantTransactionId=data['merchantTransactionId'];
+        final String accessToken = data['accessToken'];
+        final String merchantTransactionId = data['merchantTransactionId'];
 
-        bool isInitialized =
-        await PhonePePaymentSdk.init(_mode, merchantId, _appSchema, true);
+        bool isInitialized = await PhonePePaymentSdk.init(
+          _mode,
+          merchantId,
+          _appSchema,
+          true,
+        );
         if (isInitialized) {
           log('PhonePe SDK Initialized for V2');
-          _startV2Transaction(token, orderId, merchantId, _appSchema,accessToken,merchantTransactionId);
+          _startV2Transaction(
+            token,
+            orderId,
+            merchantId,
+            _appSchema,
+            accessToken,
+            merchantTransactionId,
+          );
         } else {
           showError("Failed to initialize PhonePe SDK for V2 payment.");
         }
@@ -121,26 +134,27 @@ class _PhonePeScreenState extends State<PhonePeScreen> {
       showError("An error occurred. Please try again.");
     }
   }
+
   //Start Transection
   void _startV2Transaction(
-      String token,
-      String orderId,
-      String merchantId,
-      String appSchema,
-      String accessToken,
-      String merchantTransactionId,
-      ) async {
+    String token,
+    String orderId,
+    String merchantId,
+    String appSchema,
+    String accessToken,
+    String merchantTransactionId,
+  ) async {
     try {
       Map<String, dynamic> payload = {
         "orderId": orderId,
         "merchantId": merchantId,
         "token": token,
-        "paymentMode": {"type": "PAY_PAGE"}
+        "paymentMode": {"type": "PAY_PAGE"},
       };
       String requestPayload = jsonEncode(payload);
 
       Map<dynamic, dynamic>? response =
-      await PhonePePaymentSdk.startTransaction(requestPayload, appSchema);
+          await PhonePePaymentSdk.startTransaction(requestPayload, appSchema);
 
       if (response != null) {
         String status = response['status'].toString();
@@ -151,12 +165,10 @@ class _PhonePeScreenState extends State<PhonePeScreen> {
           Map<String, dynamic> dataPayload = {
             "merchantOrderId": orderId,
             "accessToken": accessToken,
-            "merchantTransactionId": merchantTransactionId
+            "merchantTransactionId": merchantTransactionId,
           };
 
-          Map<String, dynamic> callbackPayload = {
-            "data": dataPayload
-          };
+          Map<String, dynamic> callbackPayload = {"data": dataPayload};
           String jsonPayload = jsonEncode(callbackPayload);
           String base64Payload = base64Encode(utf8.encode(jsonPayload));
           await notifyServerOfSuccess(base64Payload);
@@ -174,7 +186,8 @@ class _PhonePeScreenState extends State<PhonePeScreen> {
       handlePaymentFailure();
     }
   }
-//notify the payment status
+
+  //notify the payment status
   Future<void> notifyServerOfSuccess(String encodedPayload) async {
     var accessToken = SharedPref().accessToken;
     try {
@@ -197,6 +210,7 @@ class _PhonePeScreenState extends State<PhonePeScreen> {
       log("Error notifying server via callback: $e");
     }
   }
+
   void navigateToSuccessScreen() {
     if (!mounted) return;
 
@@ -204,7 +218,7 @@ class _PhonePeScreenState extends State<PhonePeScreen> {
       Navigator.pushAndRemoveUntil(
         context,
         MaterialPageRoute(builder: (context) => const Account()),
-            (route) => false,
+        (route) => false,
       );
       Navigator.push(
         context,
@@ -214,7 +228,7 @@ class _PhonePeScreenState extends State<PhonePeScreen> {
       Navigator.pushAndRemoveUntil(
         context,
         MaterialPageRoute(builder: (context) => const Account()),
-            (route) => false,
+        (route) => false,
       );
       Navigator.push(
         context,
@@ -222,56 +236,59 @@ class _PhonePeScreenState extends State<PhonePeScreen> {
           builder: (context) => PackageHistory(from_package: true),
         ),
       );
-
     } else {
       Navigator.pop(context, true);
     }
   }
+
   void handlePaymentFailure() {
     if (!mounted) return;
     Navigator.pop(context);
   }
+
   void showError(String message) {
     if (!mounted) return;
     showDialog(
       context: context,
       barrierDismissible: false,
-      builder: (_) => AlertDialog(
-        title: const Text("Payment Error"),
-        content: Text(message),
-        actions: [
-          TextButton(
-            onPressed: () {
-              Navigator.of(context).pop();
-              Navigator.of(context).pop();
-            },
-            child: const Text("Close"),
+      builder:
+          (_) => AlertDialog(
+            title: const Text("Payment Error"),
+            content: Text(message),
+            actions: [
+              TextButton(
+                onPressed: () {
+                  Navigator.of(context).pop();
+                  Navigator.of(context).pop();
+                },
+                child: const Text("Close"),
+              ),
+            ],
           ),
-        ],
-      ),
     );
   }
 
   @override
   Widget build(BuildContext context) {
     return StoreConnector<AppState, AppState>(
-        converter: (store) => store.state,
-        builder: (_, state) {
-          return Scaffold(
-            appBar: CommonAppBar(
-              text: AppLocalizations.of(context)!.phonepe_screen_title,
-            ).build(context),
-            body: const Center(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  CircularProgressIndicator(),
-                  SizedBox(height: 20),
-                  Text("Initiating Payment..."),
-                ],
-              ),
+      converter: (store) => store.state,
+      builder: (_, state) {
+        return Scaffold(
+          appBar: CommonAppBar(
+            text: AppLocalizations.of(context)!.phonepe_screen_title,
+          ).build(context),
+          body: const Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                CircularProgressIndicator(),
+                SizedBox(height: 20),
+                Text("Initiating Payment..."),
+              ],
             ),
-          );
-        });
+          ),
+        );
+      },
+    );
   }
 }

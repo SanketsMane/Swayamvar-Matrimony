@@ -8,19 +8,31 @@ import 'package:redux_thunk/redux_thunk.dart';
 import '../../helpers/show_message_state.dart';
 import '../manage_profile_reducer/career_reducer.dart';
 import 'manage_profile_get_middlewares.dart';
+import 'package:active_matrimonial_flutter_app/redux/store.dart';
 
-ThunkAction<AppState> education_create_middleware(
-    {dynamic degree, dynamic institution, dynamic start, dynamic end}) {
+ThunkAction<AppState> education_create_middleware({
+  dynamic degree,
+  dynamic institution,
+  dynamic start,
+  dynamic end,
+}) {
   return (Store<AppState> store) async {
     store.dispatch(Edusavechanges());
 
     try {
       var data = await ManageProfileRepository().educationCreate(
-          degree: degree, institution: institution, start: start, end: end);
+        degree: degree,
+        institution: institution,
+        start: start,
+        end: end,
+      );
 
-      store.dispatch(ShowMessageAction(
+      store.dispatch(
+        ShowMessageAction(
           msg: data.message,
-          color: data.result == true ? MyTheme.success : MyTheme.failure));
+          color: data.result == true ? MyTheme.success : MyTheme.failure,
+        ),
+      );
       store.dispatch(educationGetMiddleware());
     } catch (e) {
       print("error ${e.toString()}");
@@ -30,8 +42,12 @@ ThunkAction<AppState> education_create_middleware(
   };
 }
 
-ThunkAction<AppState> careerCreateMiddleware(
-    {dynamic designation, dynamic company, dynamic start, dynamic end}) {
+ThunkAction<AppState> careerCreateMiddleware({
+  dynamic designation,
+  dynamic company,
+  dynamic start,
+  dynamic end,
+}) {
   return (Store<AppState> store) async {
     store.dispatch(CareerLoader.save_changes);
 
@@ -43,9 +59,12 @@ ThunkAction<AppState> careerCreateMiddleware(
         end: end,
       );
 
-      store.dispatch(ShowMessageAction(
+      store.dispatch(
+        ShowMessageAction(
           msg: data.message,
-          color: data.result == true ? MyTheme.success : MyTheme.failure));
+          color: data.result == true ? MyTheme.success : MyTheme.failure,
+        ),
+      );
       store.dispatch(careerGetMiddleware());
     } catch (e) {
       print("error ${e.toString()}");

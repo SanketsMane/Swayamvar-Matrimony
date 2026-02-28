@@ -6,7 +6,9 @@ import '../../enums/enums.dart';
 import 'search_action.dart';
 
 BasicSearchState? basic_search_reducer(
-    BasicSearchState? state, dynamic action) {
+  BasicSearchState? state,
+  dynamic action,
+) {
   // store search data
   if (action is SearchStoreAction) {
     state!.isFetching = false;
@@ -79,7 +81,8 @@ BasicSearchState? basic_search_reducer(
     state.maxAge = action.maxAge ?? state.maxAge;
     state.religion_value = action.religion ?? state.religion_value;
     state.caste_value = action.caste ?? state.caste_value;
-    state.marital_status_value = action.maritalStatus ?? state.marital_status_value;
+    state.marital_status_value =
+        action.maritalStatus ?? state.marital_status_value;
     state.country_value = action.country ?? state.country_value;
     state.state_value = action.state ?? state.state_value;
     state.city_value = action.city ?? state.city_value;

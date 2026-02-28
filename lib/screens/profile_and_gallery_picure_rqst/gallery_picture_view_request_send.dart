@@ -8,6 +8,7 @@ import 'package:redux/redux.dart';
 import 'package:redux_thunk/redux_thunk.dart';
 
 import '../../repository/public_profile_and_gallery_view_request_repository.dart';
+import 'package:active_matrimonial_flutter_app/redux/store.dart';
 
 ThunkAction<AppState> sendGalleryPictureViewRequestAction({required int id}) {
   return (Store<AppState> store) async {
@@ -19,10 +20,12 @@ ThunkAction<AppState> sendGalleryPictureViewRequestAction({required int id}) {
         store.dispatch(accountMiddleware());
 
         store.dispatch(
-            ShowMessageAction(msg: data.message, color: MyTheme.success));
+          ShowMessageAction(msg: data.message, color: MyTheme.success),
+        );
       } else {
         store.dispatch(
-            ShowMessageAction(msg: data.message, color: MyTheme.failure));
+          ShowMessageAction(msg: data.message, color: MyTheme.failure),
+        );
       }
     } catch (e) {
       //debugPrint(e.toString());

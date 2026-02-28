@@ -21,6 +21,7 @@ class AccountFailureAction {
     return 'AccountFailureAction{error: $error}';
   }
 }
+
 class UpdateDeactivatedStatusAction {
   final int newStatus;
 

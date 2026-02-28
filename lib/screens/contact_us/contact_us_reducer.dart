@@ -13,7 +13,6 @@ ContactUsState? contact_us_reducer(ContactUsState? state, dynamic action) {
     return state;
   }
   if (action is SetContactUsIsCaptchaShowingAction) {
-
     state!.isCaptchaShowing = action.payload;
     return state;
   }

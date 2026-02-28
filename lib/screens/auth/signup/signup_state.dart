@@ -1,6 +1,5 @@
-
-
 import 'package:flutter/material.dart';
+
 class SignUpState {
   bool? isLoading;
   List? onBehalfList = [];
@@ -87,22 +86,29 @@ class SignUpState {
       isLoading: isLoading ?? this.isLoading,
       onBehalfList: onBehalfList ?? this.onBehalfList,
       firstNameController: TextEditingController(
-          text: firstNameController ?? this.firstNameController?.text),
+        text: firstNameController ?? this.firstNameController?.text,
+      ),
       lastNameController: TextEditingController(
-          text: lastNameController ?? this.lastNameController?.text),
+        text: lastNameController ?? this.lastNameController?.text,
+      ),
       emailController: TextEditingController(
-          text: emailController ?? this.emailController?.text),
+        text: emailController ?? this.emailController?.text,
+      ),
       passwordController: TextEditingController(
-          text: passwordController ?? this.passwordController?.text),
+        text: passwordController ?? this.passwordController?.text,
+      ),
       confirmPasswordController: TextEditingController(
-          text:
-          confirmPasswordController ?? this.confirmPasswordController?.text),
-      dobController:
-      TextEditingController(text: dobController ?? this.dobController?.text),
+        text: confirmPasswordController ?? this.confirmPasswordController?.text,
+      ),
+      dobController: TextEditingController(
+        text: dobController ?? this.dobController?.text,
+      ),
       referController: TextEditingController(
-          text: referController ?? this.referController?.text),
+        text: referController ?? this.referController?.text,
+      ),
       genderController: TextEditingController(
-          text: genderController ?? this.genderController?.text),
+        text: genderController ?? this.genderController?.text,
+      ),
       phoneNumber: phoneNumber ?? this.phoneNumber,
       date: date ?? this.date,
       on_behalves_value: on_behalves_value ?? this.on_behalves_value,
@@ -113,7 +119,7 @@ class SignUpState {
       isCaptchaShowing: isCaptchaShowing ?? this.isCaptchaShowing,
       googleRecaptchaKey: googleRecaptchaKey ?? this.googleRecaptchaKey,
       verificationCodeController:
-      verificationCodeController ?? this.verificationCodeController,
+          verificationCodeController ?? this.verificationCodeController,
       isCodeSent: isCodeSent ?? this.isCodeSent,
       isVerified: isVerified ?? this.isVerified,
       isSendingCode: isSendingCode ?? this.isSendingCode,
@@ -122,15 +128,15 @@ class SignUpState {
   }
 
   SignUpState.initialState()
-      : checkBox = false,
-        emailOrPhone = true,
-        isCaptchaShowing = false,
-        googleRecaptchaKey = "",
-        onBehalfList = [],
-        isLoading = false,
-        verificationCodeController = TextEditingController(),
-        isCodeSent = false,
-        isVerified = false,
-        isSendingCode = false,
-        isVerifyingCode = false;
+    : checkBox = false,
+      emailOrPhone = true,
+      isCaptchaShowing = false,
+      googleRecaptchaKey = "",
+      onBehalfList = [],
+      isLoading = false,
+      verificationCodeController = TextEditingController(),
+      isCodeSent = false,
+      isVerified = false,
+      isSendingCode = false,
+      isVerifyingCode = false;
 }

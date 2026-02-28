@@ -3,7 +3,9 @@ import 'package:active_matrimonial_flutter_app/screens/payment_methods/payment_t
 import 'package:active_matrimonial_flutter_app/screens/payment_methods/payment_types_state.dart';
 
 PaymentTypesState? payment_types_reducer(
-    PaymentTypesState? state, dynamic action) {
+  PaymentTypesState? state,
+  dynamic action,
+) {
   if (action is AddPaymentMethodKeyAction) {
     return add_payment_method_key(state!, action);
   }
@@ -29,7 +31,9 @@ PaymentTypesState? payment_types_reducer(
 }
 
 add_payment_method_key(
-    PaymentTypesState state, AddPaymentMethodKeyAction action) {
+  PaymentTypesState state,
+  AddPaymentMethodKeyAction action,
+) {
   state.selected_payment_method = action.method;
   state.selected_payment_method_key = action.key;
 
@@ -37,7 +41,9 @@ add_payment_method_key(
 }
 
 update_payment_method_key(
-    PaymentTypesState state, UpdatePaymentMethodKeyAction action) {
+  PaymentTypesState state,
+  UpdatePaymentMethodKeyAction action,
+) {
   state.selected_payment_method_index = action.index;
   // package payment or not
   state.selected_payment_method = action.method;

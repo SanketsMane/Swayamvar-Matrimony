@@ -33,7 +33,9 @@ class GetGalleryPictureViewFailureAction {
 }
 
 GalleryPictureViewState? gallery_picture_view_reducer(
-    GalleryPictureViewState? state, dynamic action) {
+  GalleryPictureViewState? state,
+  dynamic action,
+) {
   if (action is GetGalleryPictureViewAction) {
     state!.galleryStatus = GalleryStatus.loading;
     return state;

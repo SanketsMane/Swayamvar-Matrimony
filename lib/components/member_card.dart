@@ -1,6 +1,5 @@
-
 import 'package:active_matrimonial_flutter_app/helpers/aiz_route.dart';
-import 'package:active_matrimonial_flutter_app/main.dart';
+import 'package:active_matrimonial_flutter_app/redux/store.dart';
 import 'package:active_matrimonial_flutter_app/middleware/profile_view_middleware.dart';
 import 'package:active_matrimonial_flutter_app/models_response/common_models/member_data.dart';
 import 'package:active_matrimonial_flutter_app/redux/libs/helpers/show_message_state.dart';
@@ -39,106 +38,106 @@ class MemberCard extends StatelessWidget {
     return SizedBox(
       height: 360,
       child:
-      isFetching
-          ? CommonWidget.circularIndicator
-          : memberList.isNotEmpty
-          ? ListView.separated(
-        padding: EdgeInsets.symmetric(
-          horizontal: Const.kPaddingHorizontal,
-        ),
-        controller: controller,
-        scrollDirection: Axis.horizontal,
-        itemCount: memberList.length,
-        separatorBuilder:
-            (BuildContext context, int index) =>
-        const SizedBox(width: 20),
-        itemBuilder: (BuildContext context, int index) {
-          return GestureDetector(
-            onTap:
-                () =>
-                SharedPref().isLoggedIn
-                ? isProfileView && (memberType == 'Free')
-                ? store.dispatch(
-              ShowMessageAction(
-                msg: "Please update your package.",
-              ),
-            )
-                : AIZRoute.push(
-              context,
-              UserPublicProfile(
-                userId: memberList[index].userId!,
-              ),
-              middleware: ProfileViewMiddleware(
-                context: context,
-                user: store.state.authState?.userData,
-              ),
-            )
-                : CustomPopUp(context).loginDialog(context),
-            child: Container(
-              height: 360,
-              width: 220,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(16.0),
-                image: DecorationImage(
-                  fit: BoxFit.cover,
-                  image: MyImage.imageProvider(memberList[index].photo),
+          isFetching
+              ? CommonWidget.circularIndicator
+              : memberList.isNotEmpty
+              ? ListView.separated(
+                padding: EdgeInsets.symmetric(
+                  horizontal: Const.kPaddingHorizontal,
                 ),
-              ),
-              child: Container(
-                decoration: const BoxDecoration(
-                  borderRadius: BorderRadius.all(Radius.circular(16.0)),
-                  gradient: LinearGradient(
-                    begin: Alignment.topCenter,
-                    end: Alignment.bottomCenter,
-                    stops: [0.4, 1],
-                    colors: [Colors.transparent, Colors.black],
-                  ),
-                ),
-                child: Padding(
-                  padding: const EdgeInsets.all(14.0),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    mainAxisSize: MainAxisSize.min,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      // named row
-                      Text(
-                        memberList[index].name ?? "",
-                        style: Styles.bold_white_16,
+                controller: controller,
+                scrollDirection: Axis.horizontal,
+                itemCount: memberList.length,
+                separatorBuilder:
+                    (BuildContext context, int index) =>
+                        const SizedBox(width: 20),
+                itemBuilder: (BuildContext context, int index) {
+                  return GestureDetector(
+                    onTap:
+                        () =>
+                            SharedPref().isLoggedIn
+                                ? isProfileView && (memberType == 'Free')
+                                    ? store.dispatch(
+                                      ShowMessageAction(
+                                        msg: "Please update your package.",
+                                      ),
+                                    )
+                                    : AIZRoute.push(
+                                      context,
+                                      UserPublicProfile(
+                                        userId: memberList[index].userId!,
+                                      ),
+                                      middleware: ProfileViewMiddleware(
+                                        context: context,
+                                        user: store.state.authState?.userData,
+                                      ),
+                                    )
+                                : CustomPopUp(context).loginDialog(context),
+                    child: Container(
+                      height: 360,
+                      width: 220,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(16.0),
+                        image: DecorationImage(
+                          fit: BoxFit.cover,
+                          image: MyImage.imageProvider(memberList[index].photo),
+                        ),
                       ),
-                      const SizedBox(height: 2),
-                      //member id row
-                      Row(
-                        children: [
-                          Text(
-                            AppLocalizations.of(
-                              context,
-                            )!.common_screen_member_id,
-                            style: const TextStyle(
-                              color: MyTheme.white,
-                            ),
+                      child: Container(
+                        decoration: const BoxDecoration(
+                          borderRadius: BorderRadius.all(Radius.circular(16.0)),
+                          gradient: LinearGradient(
+                            begin: Alignment.topCenter,
+                            end: Alignment.bottomCenter,
+                            stops: [0.4, 1],
+                            colors: [Colors.transparent, Colors.black],
                           ),
-                          Text(
-                            memberList[index].code ?? "",
-                            style: const TextStyle(
-                              color: Colors.white,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                        ],
-                      ),
-                      // age, height, location and full profile row
+                        ),
+                        child: Padding(
+                          padding: const EdgeInsets.all(14.0),
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.end,
+                            mainAxisSize: MainAxisSize.min,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              // named row
+                              Text(
+                                memberList[index].name ?? "",
+                                style: Styles.bold_white_16,
+                              ),
+                              const SizedBox(height: 2),
+                              //member id row
+                              Row(
+                                children: [
+                                  Text(
+                                    AppLocalizations.of(
+                                      context,
+                                    )!.common_screen_member_id,
+                                    style: const TextStyle(
+                                      color: MyTheme.white,
+                                    ),
+                                  ),
+                                  Text(
+                                    memberList[index].code ?? "",
+                                    style: const TextStyle(
+                                      color: Colors.white,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              // age, height, location and full profile row
 
-                      // page navigator with subscribe, love and follow button
-                    ],
-                  ),
-                ),
-              ),
-            ),
-          );
-        },
-      )
-          : CommonWidget.noData,
+                              // page navigator with subscribe, love and follow button
+                            ],
+                          ),
+                        ),
+                      ),
+                    ),
+                  );
+                },
+              )
+              : CommonWidget.noData,
     );
   }
 }

@@ -43,7 +43,7 @@ class _SplashScreenState extends State<SplashScreen> {
     // 1. Initialize core services
     await SharedPref().init();
     await AuthService().init();
-    
+
     // 2. Fetch app version (Keep existing logic)
     _fetchAppVersion();
 
@@ -51,7 +51,7 @@ class _SplashScreenState extends State<SplashScreen> {
     store.dispatch(featureCheckMiddleware());
     store.dispatch(appInfoMiddleware());
     store.dispatch(addonCheckMiddleware());
-    
+
     // 4. Smart Routing Decision
     _checkAuthAndNavigate();
   }
@@ -98,94 +98,94 @@ class _SplashScreenState extends State<SplashScreen> {
   Widget build(BuildContext context) {
     return StoreConnector<AppState, AppState>(
       converter: (store) => store.state,
-      builder: (_, state) => Scaffold(
-        body: Stack(
-          children: [
-            // 1. Full Screen Background Image
-            Positioned.fill(
-              child: Image.asset(
-                'assets/images/splash_bg.jpg',
-                fit: BoxFit.cover,
-              ),
-            ),
-            
-            // 2. Dark Overlay for Text Readability
-            Positioned.fill(
-              child: Container(
-                decoration: BoxDecoration(
-                  gradient: LinearGradient(
-                    begin: Alignment.topCenter,
-                    end: Alignment.bottomCenter,
-                    colors: [
-                      Colors.black.withOpacity(0.3),
-                      Colors.black.withOpacity(0.6),
-                      Colors.black.withOpacity(0.8),
+      builder:
+          (_, state) => Scaffold(
+            body: Stack(
+              children: [
+                // 1. Full Screen Background Image
+                Positioned.fill(
+                  child: Image.asset(
+                    'assets/images/splash_bg.jpg',
+                    fit: BoxFit.cover,
+                  ),
+                ),
+
+                // 2. Dark Overlay for Text Readability
+                Positioned.fill(
+                  child: Container(
+                    decoration: BoxDecoration(
+                      gradient: LinearGradient(
+                        begin: Alignment.topCenter,
+                        end: Alignment.bottomCenter,
+                        colors: [
+                          Colors.black.withOpacity(0.3),
+                          Colors.black.withOpacity(0.6),
+                          Colors.black.withOpacity(0.8),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+
+                // 3. Central Content (Logo & Text)
+                Center(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      // Automated Animation for Logo (Scale + Fade)
+                      TweenAnimationBuilder<double>(
+                        tween: Tween<double>(begin: 0.0, end: 1.0),
+                        duration: const Duration(milliseconds: 1500),
+                        curve: Curves.elasticOut,
+                        builder: (context, value, child) {
+                          return Transform.scale(
+                            scale: value,
+                            child: Opacity(
+                              opacity: value.clamp(0.0, 1.0),
+                              child: child,
+                            ),
+                          );
+                        },
+                        child: Image.asset(
+                          'assets/logo/app_logo.png',
+                          height: 250,
+                          width: 250,
+                        ),
+                      ),
+
+                      // Logo Only
                     ],
                   ),
                 ),
-              ),
-            ),
 
-            // 3. Central Content (Logo & Text)
-            Center(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  // Automated Animation for Logo (Scale + Fade)
-                  TweenAnimationBuilder<double>(
-                    tween: Tween<double>(begin: 0.0, end: 1.0),
-                    duration: const Duration(milliseconds: 1500),
-                    curve: Curves.elasticOut,
-                    builder: (context, value, child) {
-                      return Transform.scale(
-                        scale: value,
-                        child: Opacity(
-                          opacity: value.clamp(0.0, 1.0),
-                          child: child,
+                // 4. Footer info
+                Positioned(
+                  bottom: 40,
+                  left: 0,
+                  right: 0,
+                  child: Column(
+                    children: [
+                      Text(
+                        'v $_appVersion',
+                        style: const TextStyle(
+                          color: Colors.white54,
+                          fontSize: 12,
                         ),
-                      );
-                    },
-                      child: Image.asset(
-                        'assets/logo/app_logo.png',
-                        height: 250,
-                        width: 250,
                       ),
+                      const SizedBox(height: 5),
+                      Text(
+                        AppConfig.copyright_text,
+                        style: const TextStyle(
+                          color: Colors.white38,
+                          fontSize: 10,
+                        ),
+                      ),
+                    ],
                   ),
-
-                  // Logo Only
-
-                ],
-              ),
+                ),
+              ],
             ),
-
-            // 4. Footer info
-            Positioned(
-              bottom: 40,
-              left: 0,
-              right: 0,
-              child: Column(
-                children: [
-                  Text(
-                    'v $_appVersion',
-                    style: const TextStyle(
-                      color: Colors.white54,
-                      fontSize: 12,
-                    ),
-                  ),
-                  const SizedBox(height: 5),
-                  Text(
-                    AppConfig.copyright_text,
-                    style: const TextStyle(
-                      color: Colors.white38,
-                      fontSize: 10,
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ],
-        ),
-      ),
+          ),
     );
   }
 }

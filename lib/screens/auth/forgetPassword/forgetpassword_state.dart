@@ -16,7 +16,7 @@ class ForgetPasswordState {
   });
 
   ForgetPasswordState.initialState()
-      : fp_loader = false,
-        valueChanger = true,
-        forgetpasswordController = TextEditingController(text: '');
+    : fp_loader = false,
+      valueChanger = true,
+      forgetpasswordController = TextEditingController(text: '');
 }

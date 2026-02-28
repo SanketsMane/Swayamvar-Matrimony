@@ -11,26 +11,19 @@ String myHappyStoryCheckResponseToJson(MyHappyStoryCheckResponse data) =>
     json.encode(data.toJson());
 
 class MyHappyStoryCheckResponse {
-  MyHappyStoryCheckResponse({
-    this.result,
-    this.data,
-  });
+  MyHappyStoryCheckResponse({this.result, this.data});
 
   bool? result;
   MyHappyStoryData? data;
 
-  factory MyHappyStoryCheckResponse.fromJson(Map<String, dynamic> json) =>
-      MyHappyStoryCheckResponse(
-        result: json["result"],
-        data: json["data"] == null
-            ? null
-            : MyHappyStoryData.fromJson(json["data"]),
-      );
+  factory MyHappyStoryCheckResponse.fromJson(
+    Map<String, dynamic> json,
+  ) => MyHappyStoryCheckResponse(
+    result: json["result"],
+    data: json["data"] == null ? null : MyHappyStoryData.fromJson(json["data"]),
+  );
 
-  Map<String, dynamic> toJson() => {
-        "result": result,
-        "data": data?.toJson(),
-      };
+  Map<String, dynamic> toJson() => {"result": result, "data": data?.toJson()};
 }
 
 class MyHappyStoryData {
@@ -76,27 +69,27 @@ class MyHappyStoryData {
         details: json["details"],
         date: json["date"],
         thumbImg: json["thumb_img"],
-        photos: json["photos"] == null
-            ? null
-            : List<String>.from(json["photos"].map((x) => x)),
+        photos:
+            json["photos"] == null
+                ? null
+                : List<String>.from(json["photos"].map((x) => x)),
         videoProvider: json["video_provider"],
         videoLink: json["video_link"],
       );
 
   Map<String, dynamic> toJson() => {
-        "id": id,
-        "user_id": userId,
-        "package_update_alert": packageUpdateAlert,
-        "user_first_name": userFirstName,
-        "user_last_name": userLastName,
-        "partner_name": partnerName,
-        "title": title,
-        "details": details,
-        "date": date,
-        "thumb_img": thumbImg,
-        "photos":
-            photos == null ? null : List<dynamic>.from(photos!.map((x) => x)),
-        "video_provider": videoProvider,
-        "video_link": videoLink,
-      };
+    "id": id,
+    "user_id": userId,
+    "package_update_alert": packageUpdateAlert,
+    "user_first_name": userFirstName,
+    "user_last_name": userLastName,
+    "partner_name": partnerName,
+    "title": title,
+    "details": details,
+    "date": date,
+    "thumb_img": thumbImg,
+    "photos": photos == null ? null : List<dynamic>.from(photos!.map((x) => x)),
+    "video_provider": videoProvider,
+    "video_link": videoLink,
+  };
 }

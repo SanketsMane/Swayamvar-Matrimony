@@ -19,8 +19,8 @@ class CareerState {
   });
 
   CareerState.initialState()
-      : isLoading = false,
-        update_changes = false,
-        saveChanges = false,
-        isDelete = false;
+    : isLoading = false,
+      update_changes = false,
+      saveChanges = false,
+      isDelete = false;
 }

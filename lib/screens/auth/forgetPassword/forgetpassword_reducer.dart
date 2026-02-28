@@ -2,12 +2,15 @@ import 'package:active_matrimonial_flutter_app/helpers/shared_pref.dart';
 import 'package:active_matrimonial_flutter_app/screens/auth/forgetPassword/forgetpassword_state.dart';
 import 'package:flutter/cupertino.dart';
 
-import '../../../main.dart';
+import '../../../redux/store.dart';
 import 'forgetpassword_action.dart';
 import 'forgetpassword_middleware.dart';
+import 'package:active_matrimonial_flutter_app/redux/store.dart';
 
 ForgetPasswordState? forgetpassword_reducer(
-    ForgetPasswordState? state, dynamic action) {
+  ForgetPasswordState? state,
+  dynamic action,
+) {
   if (action is FpLoader) {
     return loader(state!, action);
   }
@@ -23,12 +26,18 @@ ForgetPasswordState? forgetpassword_reducer(
     FocusManager.instance.primaryFocus?.unfocus();
     if (state!.formKey.currentState!.validate()) {
       var sendBy = state.valueChanger! ? "phone" : "email";
-      var email = state.valueChanger!
-          ? state.phoneNumber
-          : state.forgetpasswordController!.text;
+      var email =
+          state.valueChanger!
+              ? state.phoneNumber
+              : state.forgetpasswordController!.text;
 
-      store.dispatch(forgetPasswordMiddleware(
-          send_by: sendBy, email: email, context: action.payloadContext));
+      store.dispatch(
+        forgetPasswordMiddleware(
+          send_by: sendBy,
+          email: email,
+          context: action.payloadContext,
+        ),
+      );
 
       SharedPref().resetSendBy = sendBy;
       SharedPref().resetEmail = email;

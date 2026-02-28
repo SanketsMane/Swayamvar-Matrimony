@@ -2,10 +2,10 @@ importScripts('https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js');
 importScripts('https://www.gstatic.com/firebasejs/8.10.1/firebase-messaging.js');
 
 firebase.initializeApp({
-  apiKey: "AIzaSyBO3tNdfCY8xuP0e5s3agDCt0vBO_iaOno",
-  projectId: "reword-fb707",
-  messagingSenderId: "230487143429",
-  appId: "1:230487143429:web:783f30cf04a4e0baaf986c",
+  apiKey: "AIzaSyDkkMtp-S32Sgz8wbH7Tmo7RE82IdUwP90",
+  projectId: "swayamvar-e2a6d",
+  messagingSenderId: "927257142657",
+  appId: "1:927257142657:web:4c4ce6e334ac7668717480", // Sanket: Should match firebase_options.dart
 });
 
 const messaging = firebase.messaging();

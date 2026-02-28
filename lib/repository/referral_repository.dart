@@ -16,11 +16,14 @@ class ReferralRepository {
         "${AppConfig.BASE_URL}/member/my-referral-earnings?page=$page";
     var accessToken = getToken;
 
-    var response = await http.get(Uri.parse(baseUrl), headers: {
-      "Accept": "application/json",
-      "Content-Type": "application/json",
-      "Authorization": "Bearer $accessToken",
-    });
+    var response = await http.get(
+      Uri.parse(baseUrl),
+      headers: {
+        "Accept": "application/json",
+        "Content-Type": "application/json",
+        "Authorization": "Bearer $accessToken",
+      },
+    );
 
     var data = referralEarningsResponseFromJson(response.body);
     return data;
@@ -31,11 +34,14 @@ class ReferralRepository {
 
     var accessToken = getToken;
 
-    var response = await http.get(Uri.parse(baseUrl), headers: {
-      "Accept": "application/json",
-      "Content-Type": "application/json",
-      "Authorization": "Bearer $accessToken",
-    });
+    var response = await http.get(
+      Uri.parse(baseUrl),
+      headers: {
+        "Accept": "application/json",
+        "Content-Type": "application/json",
+        "Authorization": "Bearer $accessToken",
+      },
+    );
 
     var data = referralCodeResponseFromJson(response.body);
     return data;
@@ -46,46 +52,56 @@ class ReferralRepository {
 
     var accessToken = getToken;
 
-    var response = await http.get(Uri.parse(baseUrl), headers: {
-      "Accept": "application/json",
-      "Content-Type": "application/json",
-      "Authorization": "Bearer $accessToken",
-    });
+    var response = await http.get(
+      Uri.parse(baseUrl),
+      headers: {
+        "Accept": "application/json",
+        "Content-Type": "application/json",
+        "Authorization": "Bearer $accessToken",
+      },
+    );
 
     var data = referralUsersResponseFromJson(response.body);
     return data;
   }
 
   Future<ReferralWithdrawRequestHistoryResponse>
-      fetchReferralWithdrawRequestHistory() async {
+  fetchReferralWithdrawRequestHistory() async {
     var baseUrl =
         "${AppConfig.BASE_URL}/member/wallet-withdraw-request-history";
 
     var accessToken = getToken;
 
-    var response = await http.get(Uri.parse(baseUrl), headers: {
-      "Accept": "application/json",
-      "Content-Type": "application/json",
-      "Authorization": "Bearer $accessToken",
-    });
+    var response = await http.get(
+      Uri.parse(baseUrl),
+      headers: {
+        "Accept": "application/json",
+        "Content-Type": "application/json",
+        "Authorization": "Bearer $accessToken",
+      },
+    );
 
     var data = referralWithdrawRequestHistoryResponseFromJson(response.body);
     return data;
   }
 
-  Future<CommonResponse> postReferralWithdrawRequest(
-      {dynamic amount, dynamic details}) async {
+  Future<CommonResponse> postReferralWithdrawRequest({
+    dynamic amount,
+    dynamic details,
+  }) async {
     var baseUrl = "${AppConfig.BASE_URL}/member/wallet-withdraw-request-store";
     var accessToken = getToken;
     var postBody = jsonEncode({"amount": amount, "details": details});
 
-    var response = await http.post(Uri.parse(baseUrl),
-        headers: {
-          "Accept": "application/json",
-          "Content-Type": "application/json",
-          "Authorization": "Bearer $accessToken"
-        },
-        body: postBody);
+    var response = await http.post(
+      Uri.parse(baseUrl),
+      headers: {
+        "Accept": "application/json",
+        "Content-Type": "application/json",
+        "Authorization": "Bearer $accessToken",
+      },
+      body: postBody,
+    );
 
     var data = commonResponseFromJson(response.body);
     return data;

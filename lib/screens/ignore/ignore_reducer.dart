@@ -8,8 +8,9 @@ import 'package:active_matrimonial_flutter_app/screens/app_navigation.dart';
 import 'package:flutter/material.dart';
 import 'package:one_context/one_context.dart';
 
-import '../../main.dart';
+import '../../redux/store.dart';
 import 'ignore_middleware.dart';
+import 'package:active_matrimonial_flutter_app/redux/store.dart';
 
 IgnoreState? ignore_reducer(IgnoreState? state, dynamic action) {
   if (action is IgnoreItemRemoveAction) {
@@ -46,7 +47,9 @@ backtomain(IgnoreState? state, AddIgnoreAction action) {
 
   Timer(Duration(seconds: 1), () {
     OneContext().navigator.pushAndRemoveUntil(
-        MaterialPageRoute(builder: (context) => AppNavigation()), (route) => false);
+      MaterialPageRoute(builder: (context) => AppNavigation()),
+      (route) => false,
+    );
   });
   return state;
 }

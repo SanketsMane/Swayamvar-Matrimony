@@ -1,5 +1,5 @@
 import 'package:active_matrimonial_flutter_app/enums/enums.dart';
-import 'package:active_matrimonial_flutter_app/main.dart';
+import 'package:active_matrimonial_flutter_app/redux/store.dart';
 import 'package:active_matrimonial_flutter_app/models_response/common_models/ddown.dart';
 import 'package:active_matrimonial_flutter_app/models_response/drop_down/state.dart';
 import 'package:active_matrimonial_flutter_app/models_response/manage_profile/get_manage_profile/present_address_get_response.dart';
@@ -51,7 +51,9 @@ class AddCountryValueAction {
 }
 
 PresentAddressState? present_address_reducer(
-    PresentAddressState? state, dynamic action) {
+  PresentAddressState? state,
+  dynamic action,
+) {
   if (action is PresentAddressLoader) {
     !state!.isLoading!;
     return state;
@@ -123,7 +125,8 @@ state_response(PresentAddressState state, StateResponse action) {
   }
 
   store.dispatch(
-      cityMiddleware(state.selected_state!.id, AppStates.presentAddress));
+    cityMiddleware(state.selected_state!.id, AppStates.presentAddress),
+  );
 
   return state;
 }

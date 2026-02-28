@@ -2,7 +2,9 @@ import 'package:active_matrimonial_flutter_app/redux/libs/matched_profile/matche
 import 'package:active_matrimonial_flutter_app/redux/libs/matched_profile/matched_profile_state.dart';
 
 MatchedProfileState? matched_profile_state(
-    MatchedProfileState? state, dynamic action) {
+  MatchedProfileState? state,
+  dynamic action,
+) {
   if (action is MatchedProfileStoreAction) {
     state!.isFetching = false;
     state.matchedProfiles = action.payload!.data;

@@ -39,7 +39,6 @@ class CommonWidget {
     );
   }
 
-
   static Widget manage_profile_update_box({required context, text}) {
     return Container(
       height: 45,
@@ -62,11 +61,11 @@ class CommonWidget {
   }
 
   DropdownButtonFormField<DDown> buildDropdownButtonFormField(
-      BuildContext context,
-      List<DDown> list,
-      dynamic f, {
-        dynamic value,
-      }) {
+    BuildContext context,
+    List<DDown> list,
+    dynamic f, {
+    dynamic value,
+  }) {
     final screenWidth = MediaQuery.of(context).size.width;
 
     return DropdownButtonFormField<DDown>(
@@ -86,18 +85,19 @@ class CommonWidget {
           size: screenWidth * 0.06,
         ),
       ),
-      items: list.map<DropdownMenuItem<DDown>>((e) {
-        return DropdownMenuItem<DDown>(
-          value: e,
-          child: Text(
-            e.name!,
-            style: Styles.regular_gull_grey_12.copyWith(
-              color: MyTheme.black,
-              fontSize: screenWidth * 0.035,
-            ),
-          ),
-        );
-      }).toList(),
+      items:
+          list.map<DropdownMenuItem<DDown>>((e) {
+            return DropdownMenuItem<DDown>(
+              value: e,
+              child: Text(
+                e.name!,
+                style: Styles.regular_gull_grey_12.copyWith(
+                  color: MyTheme.black,
+                  fontSize: screenWidth * 0.035,
+                ),
+              ),
+            );
+          }).toList(),
       onChanged: (DDown? newValue) {
         f(newValue);
       },

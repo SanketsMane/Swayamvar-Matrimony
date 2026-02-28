@@ -7,6 +7,7 @@ import 'package:redux/redux.dart';
 import 'package:redux_thunk/redux_thunk.dart';
 
 import '../../helpers/main_helpers.dart';
+import 'package:active_matrimonial_flutter_app/redux/store.dart';
 
 ThunkAction<AppState> getGalleryPictureViewRequestMiddleware({page = 1}) {
   return (Store<AppState> store) async {
@@ -15,7 +16,8 @@ ThunkAction<AppState> getGalleryPictureViewRequestMiddleware({page = 1}) {
       var data = await GalleryPictureViewRepository()
           .getGalleryPictureViewRequestList(page: page);
       store.dispatch(
-          GetGalleryPictureViewSucceededAction(gallerypictureviewlist: data));
+        GetGalleryPictureViewSucceededAction(gallerypictureviewlist: data),
+      );
     } catch (e) {
       store.dispatch(GetGalleryPictureViewFailureAction(error: e.toString()));
       return;
@@ -24,17 +26,20 @@ ThunkAction<AppState> getGalleryPictureViewRequestMiddleware({page = 1}) {
 }
 
 class GalleryPictureViewRepository {
-  Future<GalleryPictureViewRequestGetResponse> getGalleryPictureViewRequestList(
-      {page}) async {
+  Future<GalleryPictureViewRequestGetResponse>
+  getGalleryPictureViewRequestList({page}) async {
     var baseUrl =
         "${AppConfig.BASE_URL}/member/gallery-image-view-request?page=$page";
     var accessToken = getToken;
     try {
-      var response = await http.get(Uri.parse(baseUrl), headers: {
-        "Accept": "application/json",
-        "Content-Type": "application/json",
-        "Authorization": "Bearer $accessToken",
-      });
+      var response = await http.get(
+        Uri.parse(baseUrl),
+        headers: {
+          "Accept": "application/json",
+          "Content-Type": "application/json",
+          "Authorization": "Bearer $accessToken",
+        },
+      );
 
       // print(response.body);
       var data = galleryPictureViewRequestGetResponseFromJson(response.body);

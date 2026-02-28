@@ -206,7 +206,9 @@ class _NewPasswordState extends State<NewPassword> {
                                     width: DeviceInfo(context).width,
                                     child: Text(
                                       passwordErrorText!,
-                                      style: Styles.caption.copyWith(color: MyTheme.failure),
+                                      style: Styles.caption.copyWith(
+                                        color: MyTheme.failure,
+                                      ),
                                       textAlign: TextAlign.left,
                                     ),
                                   ),

@@ -24,10 +24,10 @@ class AttitudeBehaviorState {
   });
 
   AttitudeBehaviorState.initialState()
-      : isLoading = false,
-        attitudeBehaviorData = null,
-        affectionController = TextEditingController(text: ''),
-        humorController = TextEditingController(text: ''),
-        religiousServiceController = TextEditingController(text: ''),
-        politicalViewsController = TextEditingController(text: '');
+    : isLoading = false,
+      attitudeBehaviorData = null,
+      affectionController = TextEditingController(text: ''),
+      humorController = TextEditingController(text: ''),
+      religiousServiceController = TextEditingController(text: ''),
+      politicalViewsController = TextEditingController(text: '');
 }

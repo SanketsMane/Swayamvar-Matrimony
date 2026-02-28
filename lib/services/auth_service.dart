@@ -9,7 +9,7 @@ class AuthService {
 
   final _storage = const FlutterSecureStorage();
   final _tokenKey = 'auth_token';
-  
+
   // Cache the token in memory for faster access
   String? _cachedToken;
 
@@ -34,7 +34,7 @@ class AuthService {
   Future<void> logout() async {
     await _storage.delete(key: _tokenKey);
     _cachedToken = null;
-    
+
     // Optional: Clear SharedPreferences if needed, but keep Onboarding status
     // final prefs = await SharedPreferences.getInstance();
     // await prefs.clear(); // CAUTION: This might clear onboarding status too!

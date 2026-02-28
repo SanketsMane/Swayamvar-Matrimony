@@ -10,39 +10,37 @@ import 'package:redux_thunk/redux_thunk.dart';
 
 import '../../../helpers/shared_pref.dart';
 import '../../../screens/search_screens/search_action.dart';
+import 'package:active_matrimonial_flutter_app/redux/store.dart';
 
-ThunkAction<AppState> stateMiddleware(country,
-    {AppStates state = AppStates.presentAddress}) {
+ThunkAction<AppState> stateMiddleware(
+  country, {
+  AppStates state = AppStates.presentAddress,
+}) {
   return (Store<AppState> store) async {
     var baseUrl = "${AppConfig.BASE_URL}/member/states/$country";
     var accessToken = SharedPref().accessToken;
 
     try {
-      var response = await http.get(Uri.parse(baseUrl), headers: {
-        "Accept": "application/json",
-        "Content-Type": "application/json",
-        "Authorization": "Bearer $accessToken"
-      });
+      var response = await http.get(
+        Uri.parse(baseUrl),
+        headers: {
+          "Accept": "application/json",
+          "Content-Type": "application/json",
+          "Authorization": "Bearer $accessToken",
+        },
+      );
 
       var data = stateResponseFromJson(response.body);
       if (state == AppStates.partnerPreference) {
-        store.dispatch(StateResponseFromPartnerPref(
-          data: data.data,
-        ));
+        store.dispatch(StateResponseFromPartnerPref(data: data.data));
       } else if (state == AppStates.permanentAddress) {
-        store.dispatch(PermanentAddressStateListAction(
-          data.data,
-        ));
+        store.dispatch(PermanentAddressStateListAction(data.data));
       } else if (state == AppStates.advancedSearch) {
         store.dispatch(SearchGetStateValueAction(data.data));
       } else if (state == AppStates.presentAddress) {
-        store.dispatch(StateResponse(
-          data: data.data,
-        ));
+        store.dispatch(StateResponse(data: data.data));
       } else {
-        store.dispatch(StateResponse(
-          data: data.data,
-        ));
+        store.dispatch(StateResponse(data: data.data));
       }
     } catch (e) {
       debugPrint(e.toString());

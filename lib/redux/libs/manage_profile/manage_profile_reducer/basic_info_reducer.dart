@@ -10,6 +10,7 @@ import 'package:image_picker/image_picker.dart';
 import '../../../../models_response/drop_down/profile_dropdown_response.dart';
 import '../../../../screens/core.dart';
 import '../manage_profile_middleware/manage_profile_update_middlewares.dart';
+import 'package:active_matrimonial_flutter_app/redux/store.dart';
 
 BasicInfoState? basic_info_reducer(BasicInfoState? state, dynamic action) {
   if (action == SaveChanges.basicInfo) {
@@ -55,31 +56,20 @@ BasicInfoState? basic_info_reducer(BasicInfoState? state, dynamic action) {
   return state;
 }
 
-bir_basic_info_get_response(BasicInfoState state, BasicInfoStoreAction action) {
+BasicInfoState bir_basic_info_get_response(
+  BasicInfoState state,
+  BasicInfoStoreAction action,
+) {
   // store data to store
   state.basicInfo = action.payload!.data;
 
-  store.dispatch(authMiddleware());
+  // Sanket: Side effects removed from reducer.
+  // authMiddleware() and dropdown mapping moved to basicInfoGetMiddleware.
 
-  for (var element in store.state.manageProfileCombineState!
-      .profiledropdownResponseData!.data!.onbehalfList!) {
-    if (state.basicInfo!.onbehalf.id == element.id) {
-      state.on_behalves_value = element;
-    }
-  }
-
-  for (var element in store.state.manageProfileCombineState!
-      .profiledropdownResponseData!.data!.maritialStatus!) {
-    if (state.basicInfo!.maritialStatus == element.name) {
-      state.marital_status_value = element;
-    }
-  }
-  setBasicInfo(state);
-
-  return state;
+  return setBasicInfo(state);
 }
 
-setBasicInfo(BasicInfoState state) {
+BasicInfoState setBasicInfo(BasicInfoState state) {
   print(state.basicInfo);
   state.f_nameController!.text = state.basicInfo!.firsName!;
 
@@ -92,13 +82,17 @@ setBasicInfo(BasicInfoState state) {
   state.gendervalue = state.basicInfo!.gender!;
 
   state.date = DateTime.parse(state.basicInfo!.dateOfBirth.toString());
+  return state;
 }
 
 ThunkAction<AppState> getBasicGalleryImageAction() {
   return (Store<AppState> store) async {
     try {
       final image = await store
-          .state.manageProfileCombineState!.basicInfoState!.picker
+          .state
+          .manageProfileCombineState!
+          .basicInfoState!
+          .picker
           .pickImage(source: ImageSource.gallery);
       if (image == null) return;
       final tmpImage = File(image.path);

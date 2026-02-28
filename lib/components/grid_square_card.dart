@@ -1,4 +1,3 @@
-
 import 'package:active_matrimonial_flutter_app/const/my_theme.dart';
 import 'package:active_matrimonial_flutter_app/const/style.dart';
 import 'package:flutter/material.dart';
@@ -33,9 +32,7 @@ class GridSquareCard extends StatelessWidget {
               height: 40,
               decoration: const BoxDecoration(
                 color: MyTheme.app_accent_color,
-                borderRadius: BorderRadius.all(
-                  Radius.circular(12),
-                ),
+                borderRadius: BorderRadius.all(Radius.circular(12)),
               ),
               child: Center(
                 child: Image.asset(
@@ -46,17 +43,16 @@ class GridSquareCard extends StatelessWidget {
                 ),
               ),
             ),
-            const SizedBox(
-              height: 10,
-            ),
+            const SizedBox(height: 10),
             SizedBox(
               // Using fixed width
               width: 90,
               child: Text(
                 text,
-                style: isSmallScreen
-                    ? Styles.regular_arsenic_11
-                    : Styles.regular_arsenic_12,
+                style:
+                    isSmallScreen
+                        ? Styles.regular_arsenic_11
+                        : Styles.regular_arsenic_12,
                 textAlign: TextAlign.center,
                 maxLines: 2,
                 overflow: TextOverflow.ellipsis,
@@ -68,5 +64,3 @@ class GridSquareCard extends StatelessWidget {
     );
   }
 }
-
-

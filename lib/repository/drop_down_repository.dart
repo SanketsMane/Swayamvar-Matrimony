@@ -14,26 +14,34 @@ class DropDownRepository {
   Future<OnbehalfResponse> fetchOnBehalf() async {
     var baseUrl = "${AppConfig.BASE_URL}/on-behalf";
 
-    var response = await http.get(Uri.parse(baseUrl), headers: {
-      "Accept": "application/json",
-      "Content-Type": "application/json",
-    });
+    var response = await http.get(
+      Uri.parse(baseUrl),
+      headers: {
+        "Accept": "application/json",
+        "Content-Type": "application/json",
+      },
+    );
 
     var data = onbehalfResponseFromJson(response.body);
 
     return data;
   }
 
-  Future<CasteResponse> fetchCaste(religion,
-      {AppStates state = AppStates.manageProfile}) async {
+  Future<CasteResponse> fetchCaste(
+    religion, {
+    AppStates state = AppStates.manageProfile,
+  }) async {
     var baseUrl = "${AppConfig.BASE_URL}/member/casts/$religion";
     var accessToken = SharedPref().accessToken;
 
-    var response = await http.get(Uri.parse(baseUrl), headers: {
-      "Accept": "application/json",
-      "Content-Type": "application/json",
-      "Authorization": "Bearer $accessToken"
-    });
+    var response = await http.get(
+      Uri.parse(baseUrl),
+      headers: {
+        "Accept": "application/json",
+        "Content-Type": "application/json",
+        "Authorization": "Bearer $accessToken",
+      },
+    );
 
     var data = casteResponseFromJson(response.body);
     return data;
@@ -43,11 +51,14 @@ class DropDownRepository {
     var baseUrl = "${AppConfig.BASE_URL}/member/cities/$state";
     var accessToken = SharedPref().accessToken;
 
-    var response = await http.get(Uri.parse(baseUrl), headers: {
-      "Accept": "application/json",
-      "Content-Type": "application/json",
-      "Authorization": "Bearer $accessToken"
-    });
+    var response = await http.get(
+      Uri.parse(baseUrl),
+      headers: {
+        "Accept": "application/json",
+        "Content-Type": "application/json",
+        "Authorization": "Bearer $accessToken",
+      },
+    );
 
     var data = cityResponseFromJson(response.body);
     return data;
@@ -60,27 +71,34 @@ class DropDownRepository {
       return ProfiledropdownResponse.initialState();
     }
 
-    var response = await http.get(Uri.parse(baseUrl), headers: {
-      "Accept": "application/json",
-      "Content-Type": "application/json",
-      "Authorization": "Bearer $accessToken"
-    });
+    var response = await http.get(
+      Uri.parse(baseUrl),
+      headers: {
+        "Accept": "application/json",
+        "Content-Type": "application/json",
+        "Authorization": "Bearer $accessToken",
+      },
+    );
 
     var data = profiledropdownResponseFromJson(response.body);
     return data;
   }
 
-
-  Future<StateResponse> fetchState(country,
-      {AppStates state = AppStates.presentAddress}) async {
+  Future<StateResponse> fetchState(
+    country, {
+    AppStates state = AppStates.presentAddress,
+  }) async {
     var baseUrl = "${AppConfig.BASE_URL}/member/states/$country";
     var accessToken = SharedPref().accessToken;
 
-    var response = await http.get(Uri.parse(baseUrl), headers: {
-      "Accept": "application/json",
-      "Content-Type": "application/json",
-      "Authorization": "Bearer $accessToken"
-    });
+    var response = await http.get(
+      Uri.parse(baseUrl),
+      headers: {
+        "Accept": "application/json",
+        "Content-Type": "application/json",
+        "Authorization": "Bearer $accessToken",
+      },
+    );
 
     var data = stateResponseFromJson(response.body);
     return data;
@@ -90,11 +108,14 @@ class DropDownRepository {
     var baseUrl = "${AppConfig.BASE_URL}/member/sub-casts/$caste";
     var accessToken = SharedPref().accessToken;
 
-    var response = await http.get(Uri.parse(baseUrl), headers: {
-      "Accept": "application/json",
-      "Content-Type": "application/json",
-      "Authorization": "Bearer $accessToken"
-    });
+    var response = await http.get(
+      Uri.parse(baseUrl),
+      headers: {
+        "Accept": "application/json",
+        "Content-Type": "application/json",
+        "Authorization": "Bearer $accessToken",
+      },
+    );
 
     var data = subcasteResponseFromJson(response.body);
     return data;

@@ -15,23 +15,29 @@ import '../../../../models_response/manage_profile/get_manage_profile/partner_ex
 import '../../../../models_response/manage_profile/get_manage_profile/permanent_address_get_response.dart';
 import '../../../../models_response/manage_profile/get_manage_profile/residency_get_response.dart';
 import '../../../../models_response/manage_profile/get_manage_profile/spiritual_social_get_response.dart';
+import 'package:active_matrimonial_flutter_app/enums/enums.dart';
+import 'package:active_matrimonial_flutter_app/redux/libs/auth/auth_middleware.dart';
+import 'package:active_matrimonial_flutter_app/redux/libs/drop_down/caste_middleware.dart';
+import 'package:active_matrimonial_flutter_app/redux/libs/drop_down/state_middleware.dart';
+import 'package:active_matrimonial_flutter_app/redux/libs/drop_down/sub_caste_middleware.dart';
 import '../manage_profile_reducer/basic_info_reducer.dart';
 import '../manage_profile_reducer/career_reducer.dart';
 import '../manage_profile_reducer/contact_reducer.dart';
 import '../manage_profile_reducer/education_reducer.dart';
 import '../manage_profile_reducer/hobbies_interest_reducer.dart';
 import '../manage_profile_reducer/introduction_reducer.dart';
+import '../manage_profile_reducer/partner_expectation_reducer.dart';
 import '../manage_profile_reducer/present_address_reducer.dart';
+import 'package:active_matrimonial_flutter_app/redux/store.dart';
 
 ThunkAction<AppState> astronomicGetMiddleware() {
   return (Store<AppState> store) async {
     try {
       var data = await ManageProfileRepository().fetchAstronomicInfo();
 
-      store.dispatch(AstronomicGetResponse(
-        data: data.data,
-        result: data.result,
-      ));
+      store.dispatch(
+        AstronomicGetResponse(data: data.data, result: data.result),
+      );
     } catch (e) {
       debugPrint(e.toString());
 
@@ -59,6 +65,30 @@ ThunkAction<AppState> basicInfoGetMiddleware() {
     try {
       var data = await ManageProfileRepository().fetchBasicInfo();
       store.dispatch(BasicInfoStoreAction(payload: data));
+
+      // Sanket: Side effects moved from reducer to middleware.
+      store.dispatch(authMiddleware());
+
+      // Map dropdown values after state update
+      var basicState = store.state.manageProfileCombineState?.basicInfoState;
+      var dropdownData = store.state.manageProfileCombineState
+          ?.profiledropdownResponseData?.data;
+
+      if (basicState != null && dropdownData != null) {
+        // Map on behalf
+        for (var element in dropdownData.onbehalfList!) {
+          if (basicState.basicInfo?.onbehalf.id == element.id) {
+            basicState.on_behalves_value = element;
+          }
+        }
+
+        // Map marital status
+        for (var element in dropdownData.maritialStatus!) {
+          if (basicState.basicInfo?.maritialStatus == element.name) {
+            basicState.marital_status_value = element;
+          }
+        }
+      }
     } catch (e) {
       debugPrint(e.toString());
       return;
@@ -81,11 +111,13 @@ ThunkAction<AppState> careerGetMiddleware() {
             company_text: 'Company',
             start: '2016',
             end: '2023',
-            designation_controller:
-                TextEditingController(text: element.designation),
+            designation_controller: TextEditingController(
+              text: element.designation,
+            ),
             company_controller: TextEditingController(text: element.company),
-            start_controller:
-                TextEditingController(text: element.start.toString()),
+            start_controller: TextEditingController(
+              text: element.start.toString(),
+            ),
             end_controller: TextEditingController(text: element.end.toString()),
           ),
         );
@@ -128,10 +160,12 @@ ThunkAction<AppState> educationGetMiddleware() {
             end_hint: '2023',
             present: element.present,
             degree_controller: TextEditingController(text: element.degree),
-            institute_controller:
-                TextEditingController(text: element.institution),
-            start_controller:
-                TextEditingController(text: element.start.toString()),
+            institute_controller: TextEditingController(
+              text: element.institution,
+            ),
+            start_controller: TextEditingController(
+              text: element.start.toString(),
+            ),
             end_controller: TextEditingController(text: element.end.toString()),
           ),
         );
@@ -205,8 +239,9 @@ ThunkAction<AppState> lifeStyleGetMiddleware() {
   return (Store<AppState> store) async {
     try {
       var data = await ManageProfileRepository().fetchLifeStyle();
-      store
-          .dispatch(LifeStyleGetResponse(data: data.data, result: data.result));
+      store.dispatch(
+        LifeStyleGetResponse(data: data.data, result: data.result),
+      );
     } catch (e) {
       debugPrint(e.toString());
 
@@ -220,9 +255,40 @@ ThunkAction<AppState> partnerExpectationGetMiddleware() {
     try {
       var data = await ManageProfileRepository().getPartnerExpectation();
 
-      store.dispatch(PartnerExpectationGetResponse(
-        data: data.data,
-      ));
+      store.dispatch(PartnerExpectationGetResponse(data: data.data));
+
+      // Sanket: Side effects moved from reducer to middleware.
+      var pexState = store.state.manageProfileCombineState?.partnerExpectationState;
+      var dropdownData = store.state.manageProfileCombineState
+          ?.profiledropdownResponseData?.data;
+
+      if (pexState != null && dropdownData != null) {
+        pexprofile_drop_down_response(pexState, dropdownData);
+
+        // Dependent middleware dispatches
+        if (pexState.religion_val != null) {
+          store.dispatch(
+            casteMiddleware(pexState.religion_val!.id,
+                state: AppStates.partnerPreference),
+          );
+        }
+
+        if (pexState.caste_val != null) {
+          store.dispatch(
+            subcasteMiddleware(
+              pexState.caste_val!.id,
+              appStates: AppStates.partnerPreference,
+            ),
+          );
+        }
+
+        if (pexState.preferred_country != null) {
+          store.dispatch(
+            stateMiddleware(pexState.preferred_country!.id,
+                state: AppStates.partnerPreference),
+          );
+        }
+      }
     } catch (e) {
       debugPrint(e.toString());
       return;
@@ -235,8 +301,9 @@ ThunkAction<AppState> permanentAddressGetMiddleware() {
     try {
       var data = await ManageProfileRepository().fetchPermanentAddress();
 
-      store
-          .dispatch(PermanentGetResponse(data: data.data, result: data.result));
+      store.dispatch(
+        PermanentGetResponse(data: data.data, result: data.result),
+      );
     } catch (e) {
       debugPrint(e.toString());
 
@@ -276,8 +343,9 @@ ThunkAction<AppState> residencyGetMiddleware() {
     try {
       var data = await ManageProfileRepository().fetchResidency();
 
-      store
-          .dispatch(ResidencyGetResponse(data: data.data, result: data.result));
+      store.dispatch(
+        ResidencyGetResponse(data: data.data, result: data.result),
+      );
     } catch (e) {
       debugPrint(e.toString());
 
@@ -292,10 +360,16 @@ ThunkAction<AppState> spiritualSocialGetMiddleware() {
       var data = await ManageProfileRepository().fetchSpiritualBackground();
 
       store.dispatch(
-          SpiritualSocialGetResponse(data: data.data, result: data.result));
+        SpiritualSocialGetResponse(data: data.data, result: data.result),
+      );
+
+      // Sanket: Side effects moved from reducer to middleware.
+      var spiritualState = store.state.manageProfileCombineState?.spiritualSocialState;
+      if (spiritualState != null && spiritualState.caste_val != null) {
+        store.dispatch(subcasteMiddleware(spiritualState.caste_val!.id));
+      }
     } catch (e) {
       debugPrint(e.toString());
-
       return;
     }
   };

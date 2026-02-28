@@ -29,9 +29,10 @@ class ExpandableLists extends StatelessWidget {
     return SingleChildScrollView(
       child: Padding(
         padding: EdgeInsets.only(
-            right: Const.kPaddingHorizontal,
-            left: Const.kPaddingHorizontal,
-            bottom: 10),
+          right: Const.kPaddingHorizontal,
+          left: Const.kPaddingHorizontal,
+          bottom: 10,
+        ),
         child: ListView(
           padding: const EdgeInsets.only(top: 10.0, bottom: 10.0),
           shrinkWrap: true,
@@ -124,7 +125,9 @@ class ExpandableLists extends StatelessWidget {
                 ],
               ),
             if (settingIsActive(
-                "member_personal_attitude_and_behavior_section", "on"))
+              "member_personal_attitude_and_behavior_section",
+              "on",
+            ))
               Column(
                 children: [
                   MyProfileListData(
@@ -147,7 +150,9 @@ class ExpandableLists extends StatelessWidget {
                 ],
               ),
             if (settingIsActive(
-                "member_spiritual_and_social_background_section", "on"))
+              "member_spiritual_and_social_background_section",
+              "on",
+            ))
               Column(
                 children: [
                   MyProfileListData(
@@ -201,7 +206,7 @@ class ExpandableLists extends StatelessWidget {
                   ).getExpandableWidget(context),
                   Const.height20,
                 ],
-              )
+              ),
           ],
         ),
       ),

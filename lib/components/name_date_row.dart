@@ -19,18 +19,8 @@ class NameDataRow extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Expanded(
-          child: Text(
-            name,
-            style: Styles.regular_arsenic_12,
-          ),
-        ),
-        Expanded(
-          child: Text(
-            data,
-            style: style,
-          ),
-        )
+        Expanded(child: Text(name, style: Styles.regular_arsenic_12)),
+        Expanded(child: Text(data, style: style)),
       ],
     );
   }

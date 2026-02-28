@@ -22,14 +22,11 @@ class SpiritualSocialGetResponse {
         result: json["result"],
       );
 
-  Map<String, dynamic> toJson() => {
-        "data": data?.toJson(),
-        "result": result,
-      };
+  Map<String, dynamic> toJson() => {"data": data?.toJson(), "result": result};
 
   SpiritualSocialGetResponse.initialState()
-      : data = Data.initialState(),
-        result = false;
+    : data = Data.initialState(),
+      result = false;
 }
 
 class Data {
@@ -52,31 +49,31 @@ class Data {
   dynamic communityValue;
 
   factory Data.fromJson(Map<String, dynamic> json) => Data(
-        religionId: json["religion_id"],
-        casteId: json["caste_id"],
-        subCasteId: json["sub_caste_id"],
-        ethnicity: json["ethnicity"],
-        personalValue: json["personal_value"],
-        familyValueId: json["family_value_id"],
-        communityValue: json["community_value"],
-      );
+    religionId: json["religion_id"],
+    casteId: json["caste_id"],
+    subCasteId: json["sub_caste_id"],
+    ethnicity: json["ethnicity"],
+    personalValue: json["personal_value"],
+    familyValueId: json["family_value_id"],
+    communityValue: json["community_value"],
+  );
 
   Map<String, dynamic> toJson() => {
-        "religion_id": religionId,
-        "caste_id": casteId,
-        "sub_caste_id": subCasteId,
-        "ethnicity": ethnicity,
-        "personal_value": personalValue,
-        "family_value_id": familyValueId,
-        "community_value": communityValue,
-      };
+    "religion_id": religionId,
+    "caste_id": casteId,
+    "sub_caste_id": subCasteId,
+    "ethnicity": ethnicity,
+    "personal_value": personalValue,
+    "family_value_id": familyValueId,
+    "community_value": communityValue,
+  };
 
   Data.initialState()
-      : religionId = '',
-        casteId = '',
-        subCasteId = '',
-        ethnicity = '',
-        personalValue = '',
-        familyValueId = '',
-        communityValue = '';
+    : religionId = '',
+      casteId = '',
+      subCasteId = '',
+      ethnicity = '',
+      personalValue = '',
+      familyValueId = '',
+      communityValue = '';
 }

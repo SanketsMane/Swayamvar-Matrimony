@@ -13,7 +13,7 @@ class PP_LifeStyle extends StatelessWidget {
       converter: (store) => store.state,
       builder:
           (_, state) =>
-              state.publicProfileState!.lifestyle != null
+              state.publicProfileState!.lifeStyle != null
                   ? Column(
                     children: [
                       buildRow(
@@ -21,7 +21,7 @@ class PP_LifeStyle extends StatelessWidget {
                         localization_text:
                             AppLocalizations.of(context)!.manage_profile_diet,
                         data:
-                            "${state.publicProfileState!.lifestyle.diet ?? ''}",
+                            "${state.publicProfileState!.lifeStyle.diet ?? ''}",
                       ),
                       SizedBox(height: 10),
                       buildRow(
@@ -29,7 +29,7 @@ class PP_LifeStyle extends StatelessWidget {
                         localization_text:
                             AppLocalizations.of(context)!.manage_profile_smoke,
                         data:
-                            "${state.publicProfileState!.lifestyle.smoke ?? ''}",
+                            "${state.publicProfileState!.lifeStyle.smoke ?? ''}",
                       ),
                       SizedBox(height: 10),
                       buildRow(
@@ -37,7 +37,7 @@ class PP_LifeStyle extends StatelessWidget {
                         localization_text:
                             AppLocalizations.of(context)!.manage_profile_drink,
                         data:
-                            "${state.publicProfileState!.lifestyle.drink ?? ''}",
+                            "${state.publicProfileState!.lifeStyle.drink ?? ''}",
                       ),
                       SizedBox(height: 10),
                       buildRow(
@@ -47,7 +47,7 @@ class PP_LifeStyle extends StatelessWidget {
                               context,
                             )!.manage_profile_living_with,
                         data:
-                            "${state.publicProfileState!.lifestyle.livingWith ?? ''}",
+                            "${state.publicProfileState!.lifeStyle.livingWith ?? ''}",
                       ),
                     ],
                   )

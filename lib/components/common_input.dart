@@ -47,7 +47,10 @@ class InputStyle {
       isDense: true,
       contentPadding: const EdgeInsets.symmetric(horizontal: 8),
       hintText: hint,
-      hintStyle: Styles.body.copyWith(color: MyTheme.text_secondary, fontSize: 12),
+      hintStyle: Styles.body.copyWith(
+        color: MyTheme.text_secondary,
+        fontSize: 12,
+      ),
       border: const OutlineInputBorder(
         borderRadius: BorderRadius.all(Radius.circular(12)),
       ),

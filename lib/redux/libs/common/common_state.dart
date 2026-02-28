@@ -7,7 +7,7 @@ class CommonState {
     this.countries = countries ?? this.countries;
   }
 
-//get country code as list of string
+  //get country code as list of string
   List<String>? countriesToString() {
     return countries?.map<String>((e) => e.code ?? "").toList();
   }

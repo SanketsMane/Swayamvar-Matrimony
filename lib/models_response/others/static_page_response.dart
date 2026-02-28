@@ -13,9 +13,7 @@ String staticPageResponseToJson(StaticPageResponse data) =>
 class StaticPageResponse {
   List<Datum>? data;
 
-  StaticPageResponse({
-    this.data,
-  });
+  StaticPageResponse({this.data});
 
   factory StaticPageResponse.fromJson(Map<String, dynamic> json) =>
       StaticPageResponse(
@@ -23,26 +21,18 @@ class StaticPageResponse {
       );
 
   Map<String, dynamic> toJson() => {
-        "data": List<dynamic>.from(data!.map((x) => x.toJson())),
-      };
+    "data": List<dynamic>.from(data!.map((x) => x.toJson())),
+  };
 }
 
 class Datum {
   String? title;
   String? content;
 
-  Datum({
-    this.title,
-    this.content,
-  });
+  Datum({this.title, this.content});
 
-  factory Datum.fromJson(Map<String, dynamic> json) => Datum(
-        title: json["title"],
-        content: json["content"],
-      );
+  factory Datum.fromJson(Map<String, dynamic> json) =>
+      Datum(title: json["title"], content: json["content"]);
 
-  Map<String, dynamic> toJson() => {
-        "title": title,
-        "content": content,
-      };
+  Map<String, dynamic> toJson() => {"title": title, "content": content};
 }

@@ -3,7 +3,6 @@ import 'package:active_matrimonial_flutter_app/models_response/chat/chat_respons
 class ChatStoreAction {
   ChatResponse? payload;
 
-
   @override
   String toString() {
     return 'ChatStoreAction{payload: $payload}';

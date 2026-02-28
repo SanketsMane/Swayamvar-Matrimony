@@ -3,7 +3,9 @@ import 'package:active_matrimonial_flutter_app/models_response/package/package_l
 import 'package:active_matrimonial_flutter_app/screens/package/premium_plans_state.dart';
 
 PremiumPlansState? premium_plans_reducer(
-    PremiumPlansState? state, dynamic action) {
+  PremiumPlansState? state,
+  dynamic action,
+) {
   if (action is PackageListStoreAction) {
     state!.isFetching = false;
     state.premiumList = action.payload!.data;

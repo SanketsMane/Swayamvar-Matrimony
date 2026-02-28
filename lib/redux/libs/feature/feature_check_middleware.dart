@@ -3,6 +3,7 @@ import 'package:active_matrimonial_flutter_app/redux/libs/feature/feature_reduce
 import 'package:active_matrimonial_flutter_app/repository/feature_repository.dart';
 import 'package:redux/redux.dart';
 import 'package:redux_thunk/redux_thunk.dart';
+import 'package:active_matrimonial_flutter_app/redux/store.dart';
 
 ThunkAction<AppState> featureCheckMiddleware() {
   return (Store<AppState> store) async {

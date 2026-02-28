@@ -8,6 +8,7 @@ import 'package:http/http.dart' as http;
 import '../../../helpers/main_helpers.dart';
 import '../../core.dart';
 import 'my_happy_story_action.dart';
+import 'package:active_matrimonial_flutter_app/redux/store.dart';
 
 ThunkAction<AppState> happystorystoreMiddleware({
   context,
@@ -49,8 +50,12 @@ ThunkAction<AppState> happystorystoreMiddleware({
     store.dispatch(happyStoryCheckMiddleware());
 
     if (response.statusCode == 200) {
-      store.dispatch(ShowMessageAction(
-          msg: "Information Successfully saved!", color: MyTheme.success));
+      store.dispatch(
+        ShowMessageAction(
+          msg: "Information Successfully saved!",
+          color: MyTheme.success,
+        ),
+      );
     } else {
       var message = await response.stream.bytesToString();
       var errors = jsonDecode(message)['message'];

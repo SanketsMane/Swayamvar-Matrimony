@@ -3,7 +3,9 @@ import 'package:active_matrimonial_flutter_app/screens/referral/referral_earning
 import 'package:active_matrimonial_flutter_app/screens/referral/referral_earning_state.dart';
 
 ReferralEarningState? referralEarningReducer(
-    ReferralEarningState? state, dynamic action) {
+  ReferralEarningState? state,
+  dynamic action,
+) {
   if (action is ReferralEarningStoreAction) {
     state!.isFetching = false;
     if (action.payload!.meta!.lastPage != state.page) {

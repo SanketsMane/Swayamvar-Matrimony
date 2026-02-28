@@ -1,4 +1,4 @@
-// Sanket: Profile (Account) screen — premium 2026 layout
+import 'package:active_matrimonial_flutter_app/components/main_drawer.dart';
 import 'package:active_matrimonial_flutter_app/components/my_images.dart';
 import 'package:active_matrimonial_flutter_app/const/my_theme.dart';
 import 'package:active_matrimonial_flutter_app/const/style.dart';
@@ -17,6 +17,7 @@ import 'package:active_matrimonial_flutter_app/screens/referral/referral.dart';
 import 'package:active_matrimonial_flutter_app/screens/settings/settings.dart';
 import 'package:flutter/material.dart';
 import 'package:active_matrimonial_flutter_app/l10n/app_localizations.dart';
+import 'package:active_matrimonial_flutter_app/helpers/profile_completeness_helper.dart';
 
 class Account extends StatefulWidget {
   const Account({super.key});
@@ -30,20 +31,20 @@ class _AccountState extends State<Account> {
   Widget build(BuildContext context) {
     return StoreConnector<AppState, AppState>(
       converter: (store) => store.state,
-      onInit: (store) => [
-        store.dispatch(accountMiddleware()),
-      ],
+      onInit: (store) => [store.dispatch(accountMiddleware())],
       builder: (_, state) {
+        final l = AppLocalizations.of(context)!;
         final profileData = state.accountState?.profileData;
         final userData = state.authState?.userData;
-        
+
         return Scaffold(
           backgroundColor: MyTheme.background,
+          drawer: MainDrawer(),
           body: Column(
             children: [
               // Sanket: Fixed 56px header
-              _buildHeader(context),
-              
+              _buildHeader(context, l),
+
               Expanded(
                 child: RefreshIndicator(
                   color: MyTheme.primary,
@@ -56,25 +57,25 @@ class _AccountState extends State<Account> {
                     child: Column(
                       children: [
                         const SizedBox(height: 16),
-                        
+
                         // 1. Profile Card
                         _buildProfileCard(context, profileData, userData),
-                        
+
                         const SizedBox(height: 16),
-                        
+
                         // 2. Membership Card
                         _buildMembershipCard(context, profileData),
-                        
+
                         const SizedBox(height: 16),
-                        
+
                         // 3. Quick Actions Grid
                         _buildQuickActionsGrid(context),
-                        
+
                         const SizedBox(height: 16),
-                        
+
                         // 4. Settings Section
                         _buildSettingsSection(context),
-                        
+
                         const SizedBox(height: 60),
                       ],
                     ),
@@ -88,7 +89,7 @@ class _AccountState extends State<Account> {
     );
   }
 
-  Widget _buildHeader(BuildContext context) {
+  Widget _buildHeader(BuildContext context, AppLocalizations l) {
     return Container(
       height: 56 + MediaQuery.of(context).padding.top,
       padding: EdgeInsets.only(top: MediaQuery.of(context).padding.top),
@@ -100,17 +101,25 @@ class _AccountState extends State<Account> {
         padding: const EdgeInsets.symmetric(horizontal: 16),
         child: Row(
           children: [
-            _headerIconBtn(Icons.menu_rounded, () {}),
+            Builder(
+              builder:
+                  (context) => _headerIconBtn(Icons.menu_rounded, () {
+                    Scaffold.of(context).openDrawer();
+                  }),
+            ),
             const Spacer(),
             Text(
-              "Profile",
+              l.profile_title,
               style: Styles.bold_arsenic_16.copyWith(
                 fontSize: 18,
                 color: MyTheme.text_primary,
               ),
             ),
             const Spacer(),
-            _headerIconBtn(Icons.settings_outlined, () => NavigatorPush.push(context, const SettingsScreen())),
+            _headerIconBtn(
+              Icons.settings_outlined,
+              () => NavigatorPush.push(context, const SettingsScreen()),
+            ),
           ],
         ),
       ),
@@ -134,9 +143,14 @@ class _AccountState extends State<Account> {
     );
   }
 
-  Widget _buildProfileCard(BuildContext context, dynamic profileData, dynamic userData) {
-    const int completion = 85; // Mock progress
-    
+  Widget _buildProfileCard(
+    BuildContext context,
+    dynamic profileData,
+    dynamic userData,
+  ) {
+    final l = AppLocalizations.of(context)!;
+    final int completion = ProfileCompletenessHelper.calculate(store.state);
+
     return Container(
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
@@ -161,7 +175,10 @@ class _AccountState extends State<Account> {
                 width: 80,
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
-                  border: Border.all(color: MyTheme.primary.withOpacity(0.2), width: 2),
+                  border: Border.all(
+                    color: MyTheme.primary.withOpacity(0.2),
+                    width: 2,
+                  ),
                 ),
                 child: ClipRRect(
                   borderRadius: BorderRadius.circular(40),
@@ -178,13 +195,19 @@ class _AccountState extends State<Account> {
                         Flexible(
                           child: Text(
                             userData?.name ?? "User Name",
-                            style: Styles.bold_arsenic_16.copyWith(fontSize: 18),
+                            style: Styles.bold_arsenic_16.copyWith(
+                              fontSize: 18,
+                            ),
                             maxLines: 1,
                             overflow: TextOverflow.ellipsis,
                           ),
                         ),
                         const SizedBox(width: 8),
-                        const Icon(Icons.verified, color: MyTheme.success, size: 20),
+                        const Icon(
+                          Icons.verified,
+                          color: MyTheme.success,
+                          size: 20,
+                        ),
                       ],
                     ),
                     const SizedBox(height: 4),
@@ -195,7 +218,11 @@ class _AccountState extends State<Account> {
                     const SizedBox(height: 4),
                     Row(
                       children: [
-                        const Icon(Icons.location_on_outlined, size: 14, color: MyTheme.text_secondary),
+                        const Icon(
+                          Icons.location_on_outlined,
+                          size: 14,
+                          color: MyTheme.text_secondary,
+                        ),
                         const SizedBox(width: 4),
                         Text(
                           "Pune, Maharashtra",
@@ -209,7 +236,7 @@ class _AccountState extends State<Account> {
             ],
           ),
           const SizedBox(height: 20),
-          
+
           // Profile Completion Bar
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -217,8 +244,18 @@ class _AccountState extends State<Account> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text("Profile Completion", style: Styles.bold_arsenic_12.copyWith(color: MyTheme.text_primary)),
-                  Text("$completion%", style: Styles.bold_arsenic_12.copyWith(color: MyTheme.primary)),
+                  Text(
+                    l.profile_completion ?? "Profile Completion",
+                    style: Styles.bold_arsenic_12.copyWith(
+                      color: MyTheme.text_primary,
+                    ),
+                  ),
+                  Text(
+                    "$completion%",
+                    style: Styles.bold_arsenic_12.copyWith(
+                      color: MyTheme.primary,
+                    ),
+                  ),
                 ],
               ),
               const SizedBox(height: 8),
@@ -243,7 +280,7 @@ class _AccountState extends State<Account> {
             ],
           ),
           const SizedBox(height: 20),
-          
+
           // Edit Profile Button
           SizedBox(
             width: double.infinity,
@@ -251,12 +288,17 @@ class _AccountState extends State<Account> {
               onPressed: () => NavigatorPush.push(context, MyProfile()),
               style: OutlinedButton.styleFrom(
                 side: const BorderSide(color: MyTheme.primary),
-                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(12),
+                ),
                 padding: const EdgeInsets.symmetric(vertical: 12),
               ),
-              child: const Text(
-                "Edit Profile",
-                style: TextStyle(color: MyTheme.primary, fontWeight: FontWeight.bold),
+              child: Text(
+                l.profile_edit ?? "Edit Profile",
+                style: const TextStyle(
+                  color: MyTheme.primary,
+                  fontWeight: FontWeight.bold,
+                ),
               ),
             ),
           ),
@@ -266,8 +308,10 @@ class _AccountState extends State<Account> {
   }
 
   Widget _buildMembershipCard(BuildContext context, dynamic profileData) {
-    final packageName = profileData?.currentPackageInfo?.packageName ?? "Free Member";
-    
+    final l = AppLocalizations.of(context)!;
+    final packageName =
+        profileData?.currentPackageInfo?.packageName ?? "Free Member";
+
     return Container(
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
@@ -284,21 +328,39 @@ class _AccountState extends State<Account> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text("Membership Status", style: Styles.regular_gull_grey_12),
+          Text(
+            l.profile_membership_status ?? "Membership Status",
+            style: Styles.regular_gull_grey_12,
+          ),
           const SizedBox(height: 4),
-          Text(packageName, style: Styles.bold_arsenic_16.copyWith(fontSize: 18)),
+          Text(
+            packageName,
+            style: Styles.bold_arsenic_16.copyWith(fontSize: 18),
+          ),
           const SizedBox(height: 16),
-          
+
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              _creditItem(Icons.favorite_outline, "12", "Interests"),
-              _creditItem(Icons.visibility_outlined, "5", "Contacts"),
-              _creditItem(Icons.photo_library_outlined, "3", "Gallery"),
+              _creditItem(
+                Icons.favorite_outline,
+                "12",
+                l.profile_interests ?? "Interests",
+              ),
+              _creditItem(
+                Icons.visibility_outlined,
+                "5",
+                l.profile_contacts ?? "Contacts",
+              ),
+              _creditItem(
+                Icons.photo_library_outlined,
+                "3",
+                l.profile_gallery ?? "Gallery",
+              ),
             ],
           ),
           const SizedBox(height: 20),
-          
+
           SizedBox(
             width: double.infinity,
             child: ElevatedButton(
@@ -307,10 +369,15 @@ class _AccountState extends State<Account> {
                 backgroundColor: MyTheme.primary,
                 foregroundColor: MyTheme.white,
                 elevation: 0,
-                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(12),
+                ),
                 padding: const EdgeInsets.symmetric(vertical: 14),
               ),
-              child: const Text("Upgrade Plan", style: TextStyle(fontWeight: FontWeight.bold)),
+              child: Text(
+                l.profile_upgrade ?? "Upgrade Plan",
+                style: const TextStyle(fontWeight: FontWeight.bold),
+              ),
             ),
           ),
         ],
@@ -330,13 +397,38 @@ class _AccountState extends State<Account> {
   }
 
   Widget _buildQuickActionsGrid(BuildContext context) {
+    final l = AppLocalizations.of(context)!;
     final List<Map<String, dynamic>> items = [
-      {'title': 'Shortlist', 'icon': Icons.star_outline, 'onTap': () => NavigatorPush.push(context, MyShortlist())},
-      {'title': 'Interests Sent', 'icon': Icons.favorite_outline, 'onTap': () => NavigatorPush.push(context, MyInterest())},
-      {'title': 'Gallery', 'icon': Icons.photo_library_outlined, 'onTap': () => NavigatorPush.push(context, const MyGallery())},
-      {'title': 'Packages', 'icon': Icons.card_membership_rounded, 'onTap': () => NavigatorPush.push(context, PremiumPlans())},
-      {'title': 'Preferences', 'icon': Icons.settings_accessibility_rounded, 'onTap': () => NavigatorPush.push(context, const MyProfile())},
-      {'title': 'Referral', 'icon': Icons.share_outlined, 'onTap': () => NavigatorPush.push(context, Referral())},
+      {
+        'title': l.profile_shortlist ?? 'Shortlist',
+        'icon': Icons.star_outline,
+        'onTap': () => NavigatorPush.push(context, MyShortlist()),
+      },
+      {
+        'title': l.profile_interests_sent ?? 'Interests Sent',
+        'icon': Icons.favorite_outline,
+        'onTap': () => NavigatorPush.push(context, MyInterest()),
+      },
+      {
+        'title': l.profile_gallery ?? 'Gallery',
+        'icon': Icons.photo_library_outlined,
+        'onTap': () => NavigatorPush.push(context, const MyGallery()),
+      },
+      {
+        'title': l.profile_packages ?? 'Packages',
+        'icon': Icons.card_membership_rounded,
+        'onTap': () => NavigatorPush.push(context, PremiumPlans()),
+      },
+      {
+        'title': l.settings_item_language ?? 'Preferences',
+        'icon': Icons.settings_accessibility_rounded,
+        'onTap': () => NavigatorPush.push(context, const SettingsScreen()),
+      },
+      {
+        'title': l.profile_referral ?? 'Referral',
+        'icon': Icons.share_outlined,
+        'onTap': () => NavigatorPush.push(context, Referral()),
+      },
     ];
 
     return GridView.builder(
@@ -358,7 +450,11 @@ class _AccountState extends State<Account> {
               color: MyTheme.white,
               borderRadius: BorderRadius.circular(16),
               boxShadow: [
-                BoxShadow(color: Colors.black.withOpacity(0.03), blurRadius: 10, offset: const Offset(0, 2)),
+                BoxShadow(
+                  color: Colors.black.withOpacity(0.03),
+                  blurRadius: 10,
+                  offset: const Offset(0, 2),
+                ),
               ],
             ),
             child: Column(
@@ -366,7 +462,12 @@ class _AccountState extends State<Account> {
               children: [
                 Icon(items[index]['icon'], color: MyTheme.primary, size: 24),
                 const SizedBox(height: 8),
-                Text(items[index]['title'], style: Styles.bold_arsenic_12.copyWith(color: MyTheme.text_primary)),
+                Text(
+                  items[index]['title'],
+                  style: Styles.bold_arsenic_12.copyWith(
+                    color: MyTheme.text_primary,
+                  ),
+                ),
               ],
             ),
           ),
@@ -376,32 +477,66 @@ class _AccountState extends State<Account> {
   }
 
   Widget _buildSettingsSection(BuildContext context) {
+    final l = AppLocalizations.of(context)!;
     return Container(
       decoration: BoxDecoration(
         color: MyTheme.white,
         borderRadius: BorderRadius.circular(16),
         boxShadow: [
-          BoxShadow(color: Colors.black.withOpacity(0.03), blurRadius: 10, offset: const Offset(0, 2)),
+          BoxShadow(
+            color: Colors.black.withOpacity(0.03),
+            blurRadius: 10,
+            offset: const Offset(0, 2),
+          ),
         ],
       ),
       child: Column(
         children: [
-          _settingsItem(Icons.lock_outline, "Change Password", () => NavigatorPush.push(context, const SettingsScreen())),
+          _settingsItem(
+            Icons.lock_outline,
+            l.settings_item_change_password,
+            () => NavigatorPush.push(context, const SettingsScreen()),
+          ),
           _settingsDivider(),
-          _settingsItem(Icons.settings_outlined, "Settings", () => NavigatorPush.push(context, const SettingsScreen())),
+          _settingsItem(
+            Icons.settings_outlined,
+            l.settings_title,
+            () => NavigatorPush.push(context, const SettingsScreen()),
+          ),
           _settingsDivider(),
-          _settingsItem(Icons.logout_rounded, "Logout", () => store.dispatch(signOutMiddleware(context)), color: MyTheme.primary),
+          _settingsItem(
+            Icons.logout_rounded,
+            l.settings_logout,
+            () => store.dispatch(signOutMiddleware(context)),
+            color: MyTheme.primary,
+          ),
         ],
       ),
     );
   }
 
-  Widget _settingsItem(IconData icon, String title, VoidCallback onTap, {Color? color}) {
+  Widget _settingsItem(
+    IconData icon,
+    String title,
+    VoidCallback onTap, {
+    Color? color,
+  }) {
     return ListTile(
       onTap: onTap,
       leading: Icon(icon, color: color ?? MyTheme.text_secondary, size: 22),
-      title: Text(title, style: TextStyle(color: color ?? MyTheme.text_primary, fontWeight: FontWeight.w500, fontSize: 14)),
-      trailing: const Icon(Icons.chevron_right_rounded, size: 20, color: MyTheme.text_secondary),
+      title: Text(
+        title,
+        style: TextStyle(
+          color: color ?? MyTheme.text_primary,
+          fontWeight: FontWeight.w500,
+          fontSize: 14,
+        ),
+      ),
+      trailing: const Icon(
+        Icons.chevron_right_rounded,
+        size: 20,
+        color: MyTheme.text_secondary,
+      ),
     );
   }
 

@@ -6,6 +6,7 @@ import 'package:redux_thunk/redux_thunk.dart';
 
 import '../../const/my_theme.dart';
 import '../../redux/libs/helpers/show_message_state.dart';
+import 'package:active_matrimonial_flutter_app/redux/store.dart';
 
 ThunkAction<AppState> ignoreMiddleware() {
   return (Store<AppState> store) async {
@@ -27,9 +28,12 @@ ThunkAction<AppState> removeIgnoreMiddleware({dynamic user}) {
     try {
       var data = await IgnoreRepository().removeFromIgnore(user: user);
 
-      store.dispatch(ShowMessageAction(
+      store.dispatch(
+        ShowMessageAction(
           msg: data.message,
-          color: data.result == true ? MyTheme.success : MyTheme.failure));
+          color: data.result == true ? MyTheme.success : MyTheme.failure,
+        ),
+      );
     } catch (e) {
       //debugPrint(e);
       return;

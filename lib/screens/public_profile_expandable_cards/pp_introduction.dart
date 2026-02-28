@@ -12,10 +12,10 @@ class PP_Information extends StatelessWidget {
       converter: (store) => store.state,
       builder:
           (_, state) =>
-              state.publicProfileState!.intro != null
+              state.publicProfileState!.introduction != null
                   ? Container(
                     child: Text(
-                      '${state.publicProfileState!.intro.introduction ?? ''}',
+                      '${state.publicProfileState!.introduction.introduction ?? ''}',
                     ),
                   )
                   : Center(

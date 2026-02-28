@@ -24,19 +24,14 @@ class AppInfoState {
   });
 
   AppInfoState.initialState()
-      : list = [],
-        isFetching = true,
-        showGetStarted = false,
-        error = '';
+    : list = [],
+      isFetching = true,
+      showGetStarted = false,
+      error = '';
 }
 
 class AppInfoViewModel {
-  AppInfoViewModel({
-    this.icon,
-    this.steps,
-    this.hwt_title,
-    this.hwt_subtitle,
-  });
+  AppInfoViewModel({this.icon, this.steps, this.hwt_title, this.hwt_subtitle});
 
   final icon;
   final steps;

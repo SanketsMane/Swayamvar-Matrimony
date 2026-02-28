@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+
 enum PictureProfileStatus { initial, loading, success, failure }
 
 // state

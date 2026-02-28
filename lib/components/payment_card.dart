@@ -2,9 +2,10 @@ import 'package:flutter/material.dart';
 
 import '../const/my_theme.dart';
 import '../const/style.dart';
-import '../main.dart';
+import '../redux/store.dart';
 import '../screens/payment_methods/payment_types_action.dart';
 import 'common_widget.dart';
+import 'package:active_matrimonial_flutter_app/redux/store.dart';
 
 class PaymentCard extends StatelessWidget {
   final int? index;
@@ -25,12 +26,16 @@ class PaymentCard extends StatelessWidget {
         store.state.paymentTypesState!.paymentTypes![index].paymentType) {
       store.dispatch(
         UpdatePaymentMethodKeyAction(
-            index: store.state.paymentTypesState!.paymentTypes![index],
-            method: paymentType,
-            key: store
-                .state.paymentTypesState!.paymentTypes![index].paymentTypeKey,
-            type: store
-                .state.paymentTypesState!.paymentTypes![index].paymentType),
+          index: store.state.paymentTypesState!.paymentTypes![index],
+          method: paymentType,
+          key:
+              store
+                  .state
+                  .paymentTypesState!
+                  .paymentTypes![index]
+                  .paymentTypeKey,
+          type: store.state.paymentTypesState!.paymentTypes![index].paymentType,
+        ),
       );
     }
   }
@@ -43,7 +48,9 @@ class PaymentCard extends StatelessWidget {
         height: 16,
         width: 16,
         decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(16.0), color: Colors.green),
+          borderRadius: BorderRadius.circular(16.0),
+          color: Colors.green,
+        ),
         child: const Padding(
           padding: EdgeInsets.all(3),
           child: Icon(Icons.check, color: Colors.white, size: 10),
@@ -57,7 +64,6 @@ class PaymentCard extends StatelessWidget {
     return GestureDetector(
       onTap: () {
         onPaymentMethodItemTap(index);
-
       },
       child: Container(
         margin: const EdgeInsets.symmetric(horizontal: 17, vertical: 3),
@@ -67,9 +73,10 @@ class PaymentCard extends StatelessWidget {
               duration: const Duration(milliseconds: 400),
               height: 100,
               decoration: BoxDecoration(
-                  color: MyTheme.white,
-                  borderRadius: BorderRadius.circular(12.0),
-                  boxShadow: [CommonWidget.box_shadow()]),
+                color: MyTheme.white,
+                borderRadius: BorderRadius.circular(12.0),
+                boxShadow: [CommonWidget.box_shadow()],
+              ),
               child: Row(
                 children: [
                   SizedBox(
@@ -77,10 +84,7 @@ class PaymentCard extends StatelessWidget {
                     height: 100,
                     child: Padding(
                       padding: const EdgeInsets.all(16.0),
-                      child: Image.network(
-                        image ?? "",
-                        fit: BoxFit.contain,
-                      ),
+                      child: Image.network(image ?? "", fit: BoxFit.contain),
                     ),
                   ),
                   SizedBox(
@@ -109,14 +113,16 @@ class PaymentCard extends StatelessWidget {
               top: 16,
               child: buildPaymentMethodCheckContainer(
                 store.state.paymentTypesState!.selected_payment_method_key ==
-                    store.state.paymentTypesState!.paymentTypes![index!]
+                    store
+                        .state
+                        .paymentTypesState!
+                        .paymentTypes![index!]
                         .paymentTypeKey,
               ),
-            )
+            ),
           ],
         ),
       ),
     );
   }
 }
-

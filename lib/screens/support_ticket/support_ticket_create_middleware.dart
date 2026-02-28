@@ -3,6 +3,7 @@ import '../../repository/support_ticket_repository.dart';
 import '../core.dart';
 import 'support_ticket_middleware.dart';
 import 'support_ticket_reducer.dart';
+import 'package:active_matrimonial_flutter_app/redux/store.dart';
 
 ThunkAction<AppState> supportTicketCreateMiddleware({
   dynamic subject,
@@ -22,11 +23,16 @@ ThunkAction<AppState> supportTicketCreateMiddleware({
 
     if (response.result) {
       store.dispatch(getSupportTicketMiddleware());
-      store.dispatch(ShowMessageAction(
-          msg: "Information Successfully saved!", color: MyTheme.success));
+      store.dispatch(
+        ShowMessageAction(
+          msg: "Information Successfully saved!",
+          color: MyTheme.success,
+        ),
+      );
     } else {
       store.dispatch(
-          ShowMessageAction(msg: "Something is wrong", color: MyTheme.failure));
+        ShowMessageAction(msg: "Something is wrong", color: MyTheme.failure),
+      );
     }
     store.dispatch(SupportLoader());
   };

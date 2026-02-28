@@ -1,9 +1,7 @@
-
 import 'dart:convert';
-
 import 'package:active_matrimonial_flutter_app/components/common_app_bar.dart';
 import 'package:active_matrimonial_flutter_app/helpers/navigator_push.dart';
-import 'package:active_matrimonial_flutter_app/main.dart';
+import 'package:active_matrimonial_flutter_app/redux/store.dart';
 import 'package:active_matrimonial_flutter_app/repository/payment_repository.dart';
 import 'package:active_matrimonial_flutter_app/screens/account/account_middleware.dart';
 import 'package:active_matrimonial_flutter_app/screens/my_dashboard_pages/wallet/my_wallet.dart';
@@ -39,12 +37,14 @@ class InstamojoScreen extends StatefulWidget {
 class _InstamojoScreenState extends State<InstamojoScreen> {
   String? _initial_url;
   var accessToken = getToken;
-  var userId = store.state.authState!.userData!.id!;
+  late var userId;
+
   late final WebViewController _webViewController;
 
   @override
   void initState() {
     super.initState();
+    userId = store.state.authState!.userData!.id!;
     _webViewController = WebViewController();
     getSetInitialUrl();
   }
@@ -61,8 +61,7 @@ class _InstamojoScreenState extends State<InstamojoScreen> {
             }
             return NavigationDecision.navigate;
           },
-          onWebResourceError: (error) {
-          },
+          onWebResourceError: (error) {},
           onPageFinished: (page) {
             if (page.contains("/instamojo/payment/done")) {
               getData();
@@ -76,14 +75,14 @@ class _InstamojoScreenState extends State<InstamojoScreen> {
 
   getSetInitialUrl() async {
     try {
-      Map instamojoUrlResponse =
-      await (PaymentRepository().getInstamojoUrlResponse(
-        amount: widget.amount.toString(),
-        payment_method: widget.payment_method_key,
-        payment_type: widget.payment_type,
-        package_id: widget.package_id,
-        userId: userId,
-      ));
+      Map instamojoUrlResponse = await (PaymentRepository()
+          .getInstamojoUrlResponse(
+            amount: widget.amount.toString(),
+            payment_method: widget.payment_method_key,
+            payment_type: widget.payment_type,
+            package_id: widget.package_id,
+            userId: userId,
+          ));
 
       if (instamojoUrlResponse.keys.first == false) {
         store.dispatch(
@@ -111,7 +110,9 @@ class _InstamojoScreenState extends State<InstamojoScreen> {
           setState(() {});
         }
       } else {
-        store.dispatch(ShowMessageAction(msg: "Could not retrieve payment URL."));
+        store.dispatch(
+          ShowMessageAction(msg: "Could not retrieve payment URL."),
+        );
         if (mounted) {
           Navigator.of(context).pop();
         }
@@ -138,42 +139,41 @@ class _InstamojoScreenState extends State<InstamojoScreen> {
     _webViewController
         .runJavaScriptReturningResult("document.body.innerText")
         .then((data) {
-      var decodedJSON = jsonDecode(data as String);
-      Map<String, dynamic> responseJSON = jsonDecode(decodedJSON);
-      if (responseJSON["result"] == false) {
-        store.dispatch(ShowMessageAction(msg: responseJSON["message"]));
-        Navigator.pop(context);
-      } else if (responseJSON["result"] == true) {
-        store.dispatch(ShowMessageAction(msg: responseJSON["message"]));
-        if (widget.payment_type == "wallet_payment") {
-          OneContext().navigator.pushReplacement(
-            MaterialPageRoute(
-              builder: (context) => MyWallet(from_wallet: true),
-            ),
-          );
-        } else if (widget.payment_type == "package_payment") {
-          store.dispatch(accountMiddleware());
-          NavigatorPush.push_replace(
-            page: PackageHistory(from_package: true),
-          );
-        }
-      }
-    });
+          var decodedJSON = jsonDecode(data as String);
+          Map<String, dynamic> responseJSON = jsonDecode(decodedJSON);
+          if (responseJSON["result"] == false) {
+            store.dispatch(ShowMessageAction(msg: responseJSON["message"]));
+            Navigator.pop(context);
+          } else if (responseJSON["result"] == true) {
+            store.dispatch(ShowMessageAction(msg: responseJSON["message"]));
+            if (widget.payment_type == "wallet_payment") {
+              OneContext().navigator.pushReplacement(
+                MaterialPageRoute(
+                  builder: (context) => MyWallet(from_wallet: true),
+                ),
+              );
+            } else if (widget.payment_type == "package_payment") {
+              store.dispatch(accountMiddleware());
+              NavigatorPush.push_replace(
+                page: PackageHistory(from_package: true),
+              );
+            }
+          }
+        });
   }
 
   Future<void> _launchExternalURL(String url) async {
     final uri = Uri.parse(url);
     if (await canLaunchUrl(uri)) {
-      await launchUrl(
-        uri,
-        mode: LaunchMode.externalApplication,
-      );
+      await launchUrl(uri, mode: LaunchMode.externalApplication);
     } else {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(
-              content: Text(
-                  'Could not open the payment app. Please ensure it is installed.')),
+            content: Text(
+              'Could not open the payment app. Please ensure it is installed.',
+            ),
+          ),
         );
       }
     }
@@ -182,8 +182,6 @@ class _InstamojoScreenState extends State<InstamojoScreen> {
   Widget buildBody() {
     return _initial_url != null && _initial_url!.isNotEmpty
         ? WebViewWidget(controller: _webViewController)
-        : const Center(
-      child: CircularProgressIndicator(),
-    );
+        : const Center(child: CircularProgressIndicator());
   }
 }

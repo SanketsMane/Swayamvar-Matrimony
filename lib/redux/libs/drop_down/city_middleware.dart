@@ -9,6 +9,7 @@ import 'package:redux/redux.dart';
 import 'package:redux_thunk/redux_thunk.dart';
 
 import '../../../screens/search_screens/search_action.dart';
+import 'package:active_matrimonial_flutter_app/redux/store.dart';
 
 ThunkAction<AppState> cityMiddleware(state, AppStates appStates) {
   return (Store<AppState> store) async {
@@ -20,13 +21,9 @@ ThunkAction<AppState> cityMiddleware(state, AppStates appStates) {
       } else if (appStates == AppStates.permanentAddress) {
         store.dispatch(PermanentAddressCityListAction(data.data));
       } else if (appStates == AppStates.advancedSearch) {
-        store.dispatch(SearchGetCityValueAction(
-          data.data,
-        ));
+        store.dispatch(SearchGetCityValueAction(data.data));
       } else {
-        store.dispatch(CityResponse(
-          data: data.data,
-        ));
+        store.dispatch(CityResponse(data: data.data));
       }
     } catch (e) {
       debugPrint(e.toString());

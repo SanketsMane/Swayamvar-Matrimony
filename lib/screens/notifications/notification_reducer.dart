@@ -4,7 +4,9 @@ import 'package:active_matrimonial_flutter_app/screens/notifications/notificatio
 import '../../enums/enums.dart';
 
 NotificationState? notification_reducer(
-    NotificationState? state, dynamic action) {
+  NotificationState? state,
+  dynamic action,
+) {
   if (action == Reset.notification) {
     return reset(state, action);
   }
@@ -21,7 +23,8 @@ NotificationState? notification_reducer(
 
 store_notification(NotificationState state, StoreNotification action) {
   state.isFetching = false;
-  if (action.payload?.meta != null && action.payload!.meta!.lastPage != state.page) {
+  if (action.payload?.meta != null &&
+      action.payload!.meta!.lastPage != state.page) {
     state.page += 1;
   } else {
     state.hasMore = false;

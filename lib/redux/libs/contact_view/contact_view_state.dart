@@ -6,7 +6,10 @@ class ContactViewState {
   ContactViewState.initialState() : isviewed = false;
 }
 
-ContactViewState? contact_view_reducer(ContactViewState? state, dynamic action) {
+ContactViewState? contact_view_reducer(
+  ContactViewState? state,
+  dynamic action,
+) {
   if (action is ContactViewAction) {
     return contact_view(state!, action);
   }

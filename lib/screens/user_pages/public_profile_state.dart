@@ -6,22 +6,22 @@ class PublicProfileState {
   late BuildContext galleryLoadingContext;
   var introduction;
   var basic;
-  var presentaddress;
-  var permanentaddress;
+  var presentAddress;
+  var permanentAddress;
   var education;
   var career;
   var physical;
   var language;
-  var mothertongue;
+  var motherTongue;
   var hobbies;
   var attitude;
-  var resi;
+  var residency;
   var spiritual;
-  var lifestyle;
-  var astrologies;
-  var families;
-  var partner;
-  bool profilePicRequest=false;
+  var lifeStyle;
+  var astronomy;
+  var family;
+  var partnerExpectation;
+  bool profilePicRequest = false;
   List? photogallery = [];
   var profilematch;
   var contact;
@@ -30,32 +30,32 @@ class PublicProfileState {
   var viewContactCheck;
 
   PublicProfileState.initialState()
-      : isFetching = true,
-        error = '',
-        photogallery = [];
+    : isFetching = true,
+      error = '',
+      photogallery = [];
 
   PublicProfileState({
     this.loadingContext,
     this.isFetching,
     this.introduction,
     this.basic,
-    this.presentaddress,
-    this.permanentaddress,
+    this.presentAddress,
+    this.permanentAddress,
     this.education,
     this.error,
     this.career,
     this.viewContactCheck,
     this.physical,
     this.language,
-    this.mothertongue,
+    this.motherTongue,
     this.hobbies,
     this.attitude,
-    this.resi,
+    this.residency,
     this.spiritual,
-    this.lifestyle,
-    this.astrologies,
-    this.families,
-    this.partner,
+    this.lifeStyle,
+    this.astronomy,
+    this.family,
+    this.partnerExpectation,
     this.photogallery,
     this.profilematch,
     this.profilePicRequest = false,

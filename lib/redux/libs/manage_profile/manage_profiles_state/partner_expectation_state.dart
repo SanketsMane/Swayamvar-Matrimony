@@ -16,7 +16,7 @@ class PartnerExpectationState {
   List<CommonDropDownValue> commonYesNoList = [
     CommonDropDownValue("yes", "Yes"),
     CommonDropDownValue("no", "No"),
-    CommonDropDownValue("dose_not_matter", "Does Not Matter")
+    CommonDropDownValue("dose_not_matter", "Does Not Matter"),
   ];
 
   DDown? religion_val;
@@ -54,11 +54,11 @@ class PartnerExpectationState {
   });
 
   PartnerExpectationState.initialState()
-      : isloading = false,
-        partner_expectation_save_changes = false,
-        casteResponse = CasteResponse.initialState(),
-        partnerExpectationGetResponse =
-            PartnerExpectationGetResponse.initialState(),
-        stateResponse = StateResponse.initialState(),
-        subcasteResponse = SubcasteResponse.initialState();
+    : isloading = false,
+      partner_expectation_save_changes = false,
+      casteResponse = CasteResponse.initialState(),
+      partnerExpectationGetResponse =
+          PartnerExpectationGetResponse.initialState(),
+      stateResponse = StateResponse.initialState(),
+      subcasteResponse = SubcasteResponse.initialState();
 }

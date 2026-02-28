@@ -11,10 +11,7 @@ String basicInfoGetResponseToJson(BasicInfoGetResponse data) =>
     json.encode(data.toJson());
 
 class BasicInfoGetResponse {
-  BasicInfoGetResponse({
-    this.data,
-    this.result,
-  });
+  BasicInfoGetResponse({this.data, this.result});
 
   BasicInfoData? data;
   bool? result;
@@ -25,10 +22,7 @@ class BasicInfoGetResponse {
         result: json["result"],
       );
 
-  Map<String, dynamic> toJson() => {
-        "data": data!.toJson(),
-        "result": result,
-      };
+  Map<String, dynamic> toJson() => {"data": data!.toJson(), "result": result};
 }
 
 class BasicInfoData {
@@ -55,46 +49,38 @@ class BasicInfoData {
   dynamic photo;
 
   factory BasicInfoData.fromJson(Map<String, dynamic> json) => BasicInfoData(
-        firsName: json["firs_name"],
-        lastName: json["last_name"],
-        dateOfBirth: DateTime.parse(json["date_of_birth"]),
-        onbehalf: Onbehalf.fromJson(json["onbehalf"]),
-        noOfChildren: json["no_of_children"],
-        gender: json["gender"],
-        phone: json["phone"],
-        maritialStatus: json["maritial_status"],
-        photo: json["photo"],
-      );
+    firsName: json["firs_name"],
+    lastName: json["last_name"],
+    dateOfBirth: DateTime.parse(json["date_of_birth"]),
+    onbehalf: Onbehalf.fromJson(json["onbehalf"]),
+    noOfChildren: json["no_of_children"],
+    gender: json["gender"],
+    phone: json["phone"],
+    maritialStatus: json["maritial_status"],
+    photo: json["photo"],
+  );
 
   Map<String, dynamic> toJson() => {
-        "firs_name": firsName,
-        "last_name": lastName,
-        "date_of_birth": dateOfBirth!.toIso8601String(),
-        "onbehalf": onbehalf.toJson(),
-        "no_of_children": noOfChildren,
-        "gender": gender,
-        "phone": phone,
-        "maritial_status": maritialStatus,
-        "photo": photo,
-      };
+    "firs_name": firsName,
+    "last_name": lastName,
+    "date_of_birth": dateOfBirth!.toIso8601String(),
+    "onbehalf": onbehalf.toJson(),
+    "no_of_children": noOfChildren,
+    "gender": gender,
+    "phone": phone,
+    "maritial_status": maritialStatus,
+    "photo": photo,
+  };
 }
 
 class Onbehalf {
-  Onbehalf({
-    this.id,
-    this.name,
-  });
+  Onbehalf({this.id, this.name});
 
   int? id;
   String? name;
 
-  factory Onbehalf.fromJson(Map<String, dynamic> json) => Onbehalf(
-        id: json["id"],
-        name: json["name"],
-      );
+  factory Onbehalf.fromJson(Map<String, dynamic> json) =>
+      Onbehalf(id: json["id"], name: json["name"]);
 
-  Map<String, dynamic> toJson() => {
-        "id": id,
-        "name": name,
-      };
+  Map<String, dynamic> toJson() => {"id": id, "name": name};
 }

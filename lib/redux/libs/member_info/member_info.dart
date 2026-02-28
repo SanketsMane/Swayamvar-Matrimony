@@ -4,6 +4,7 @@ import 'package:http/http.dart' as http;
 
 import '../../../app_config.dart';
 import '../../../screens/core.dart';
+import 'package:active_matrimonial_flutter_app/redux/store.dart';
 
 class MemberInfoStoreAction {
   MemberInfoResponse? payload;
@@ -32,16 +33,12 @@ class MemberInfoState {
   MemberInfoData? memberInfo;
   String? error;
 
-  MemberInfoState({
-    this.isFetching,
-    this.memberInfo,
-    this.error,
-  });
+  MemberInfoState({this.isFetching, this.memberInfo, this.error});
 
   MemberInfoState.initialState()
-      : isFetching = true,
-        memberInfo = null,
-        error = '';
+    : isFetching = true,
+      memberInfo = null,
+      error = '';
 }
 
 MemberInfoState? member_info_reducer(MemberInfoState? state, dynamic action) {
@@ -68,11 +65,14 @@ class MemberInfoRepository {
     var baseUrl = "${AppConfig.BASE_URL}/member/member-info/$userId";
     var accessToken = SharedPref().accessToken;
 
-    var response = await http.get(Uri.parse(baseUrl), headers: {
-      "Accept": "application/json",
-      "Content-Type": "application/json",
-      "Authorization": "Bearer $accessToken",
-    });
+    var response = await http.get(
+      Uri.parse(baseUrl),
+      headers: {
+        "Accept": "application/json",
+        "Content-Type": "application/json",
+        "Authorization": "Bearer $accessToken",
+      },
+    );
 
     var data = memberInfoResponseFromJson(response.body);
 

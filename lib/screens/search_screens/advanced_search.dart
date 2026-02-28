@@ -26,7 +26,7 @@ class _AdvancedSearchState extends State<AdvancedSearch> {
   // Selection States
   RangeValues _ageRange = const RangeValues(21, 40);
   RangeValues _heightRange = const RangeValues(5.0, 6.2);
-  
+
   List<String> _selectedQuickFilters = [];
   dynamic _religion_id;
   dynamic _marital_status_value;
@@ -36,7 +36,7 @@ class _AdvancedSearchState extends State<AdvancedSearch> {
   dynamic _caste_value;
   dynamic _education_value;
   dynamic _income_value;
-  
+
   bool _isManglik = false;
   bool _isIntercaste = false;
   bool _isDisabled = false;
@@ -48,13 +48,17 @@ class _AdvancedSearchState extends State<AdvancedSearch> {
     super.initState();
     final searchState = store.state.basicSearchState!;
     _ageRange = RangeValues(searchState.minAge ?? 21, searchState.maxAge ?? 40);
-    _heightRange = RangeValues(searchState.minHeight ?? 5.0, searchState.maxHeight ?? 6.2);
+    _heightRange = RangeValues(
+      searchState.minHeight ?? 5.0,
+      searchState.maxHeight ?? 6.2,
+    );
     _selectedQuickFilters = List.from(searchState.quickFilters ?? []);
-    
+
     // Map state to local variables (Fallback to SharedPrefs if app restarted)
     _religion_id = searchState.religion_value ?? SharedPref().advReligionId;
     _caste_value = searchState.caste_value ?? SharedPref().advCasteId;
-    _marital_status_value = searchState.marital_status_value ?? SharedPref().advMaritalStatus;
+    _marital_status_value =
+        searchState.marital_status_value ?? SharedPref().advMaritalStatus;
     _country_value = searchState.country_value ?? SharedPref().advCountryId;
     _state_value = searchState.state_value ?? SharedPref().advStateId;
     _city_value = searchState.city_value ?? SharedPref().advCityId;
@@ -71,7 +75,9 @@ class _AdvancedSearchState extends State<AdvancedSearch> {
       store.dispatch(casteMiddleware(_religion_id));
     }
     if (_country_value != null && _country_value is int) {
-      store.dispatch(stateMiddleware(_country_value, state: AppStates.advancedSearch));
+      store.dispatch(
+        stateMiddleware(_country_value, state: AppStates.advancedSearch),
+      );
     }
     if (_state_value != null && _state_value is int) {
       store.dispatch(cityMiddleware(_state_value, AppStates.advancedSearch));
@@ -83,7 +89,6 @@ class _AdvancedSearchState extends State<AdvancedSearch> {
     if (list == null || id == null) return null;
     return list.firstWhereOrNull((e) => e.id == id)?.name;
   }
-
 
   void _handleReset() {
     setState(() {
@@ -105,7 +110,7 @@ class _AdvancedSearchState extends State<AdvancedSearch> {
       _recentlyJoined = false;
     });
     store.dispatch(SearchClearFiltersAction());
-    
+
     // Clear persisted filters
     SharedPref().advReligionId = null;
     SharedPref().advCasteId = null;
@@ -116,24 +121,26 @@ class _AdvancedSearchState extends State<AdvancedSearch> {
   }
 
   void _handleApply(AppState state) {
-    store.dispatch(SearchSaveAdvancedFiltersAction(
-      minAge: _ageRange.start,
-      maxAge: _ageRange.end,
-      religion: _religion_id,
-      caste: _caste_value,
-      maritalStatus: _marital_status_value,
-      country: _country_value,
-      state: _state_value,
-      city: _city_value,
-      quickFilters: _selectedQuickFilters,
-      education: _education_value,
-      income: _income_value,
-      isManglik: _isManglik,
-      isIntercaste: _isIntercaste,
-      isDisabled: _isDisabled,
-      hasPhoto: _hasPhoto,
-      recentlyJoined: _recentlyJoined,
-    ));
+    store.dispatch(
+      SearchSaveAdvancedFiltersAction(
+        minAge: _ageRange.start,
+        maxAge: _ageRange.end,
+        religion: _religion_id,
+        caste: _caste_value,
+        maritalStatus: _marital_status_value,
+        country: _country_value,
+        state: _state_value,
+        city: _city_value,
+        quickFilters: _selectedQuickFilters,
+        education: _education_value,
+        income: _income_value,
+        isManglik: _isManglik,
+        isIntercaste: _isIntercaste,
+        isDisabled: _isDisabled,
+        hasPhoto: _hasPhoto,
+        recentlyJoined: _recentlyJoined,
+      ),
+    );
 
     // Save to SharedPreferences for app restart persistence
     SharedPref().advReligionId = _religion_id;
@@ -166,10 +173,13 @@ class _AdvancedSearchState extends State<AdvancedSearch> {
         memberType: _selectedQuickFilters.contains("Premium Members") ? 1 : 2,
       ),
     );
-    
+
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
-        content: Text(AppLocalizations.of(context)!.common_success_msg ?? "Filters applied successfully"),
+        content: Text(
+          AppLocalizations.of(context)!.common_success_msg ??
+              "Filters applied successfully",
+        ),
         backgroundColor: MyTheme.success,
         behavior: SnackBarBehavior.floating,
       ),
@@ -194,17 +204,19 @@ class _AdvancedSearchState extends State<AdvancedSearch> {
                     _buildSectionHeader("मूळ माहिती (Basic Info)"),
                     _buildBasicFilters(context, state),
                     const SizedBox(height: 16),
-                    
+
                     _buildSectionHeader("श्रेणी (Ranges)"),
                     _buildAgeRange(context),
                     const SizedBox(height: 16),
                     _buildHeightRange(context),
                     const SizedBox(height: 16),
-                    
-                    _buildSectionHeader("शिक्षण आणि उत्पन्न (Education & Income)"),
+
+                    _buildSectionHeader(
+                      "शिक्षण आणि उत्पन्न (Education & Income)",
+                    ),
                     _buildEduIncomeSection(context),
                     const SizedBox(height: 16),
-                    
+
                     _buildSectionHeader("इतर निवडी (Other Preferences)"),
                     _buildCheckboxSection(context),
                     const SizedBox(height: 100), // Space for sticky button
@@ -228,16 +240,19 @@ class _AdvancedSearchState extends State<AdvancedSearch> {
         onPressed: () => Navigator.pop(context),
       ),
       title: Text(
-        "फिल्टर्स (शोध)", 
-        style: Styles.h2.copyWith(color: MyTheme.text_primary, fontSize: 18)
+        "फिल्टर्स (शोध)",
+        style: Styles.h2.copyWith(color: MyTheme.text_primary, fontSize: 18),
       ),
       centerTitle: true,
       actions: [
         TextButton(
           onPressed: _handleReset,
           child: Text(
-            "रिसेट करा", 
-            style: Styles.body.copyWith(color: MyTheme.primary, fontWeight: FontWeight.bold)
+            "रिसेट करा",
+            style: Styles.body.copyWith(
+              color: MyTheme.primary,
+              fontWeight: FontWeight.bold,
+            ),
           ),
         ),
       ],
@@ -249,96 +264,111 @@ class _AdvancedSearchState extends State<AdvancedSearch> {
       padding: const EdgeInsets.only(bottom: 12, left: 4),
       child: Row(
         children: [
-          Container(width: 4, height: 16, decoration: BoxDecoration(color: MyTheme.primary, borderRadius: BorderRadius.circular(2))),
+          Container(
+            width: 4,
+            height: 16,
+            decoration: BoxDecoration(
+              color: MyTheme.primary,
+              borderRadius: BorderRadius.circular(2),
+            ),
+          ),
           const SizedBox(width: 8),
-          Text(title, style: Styles.body.copyWith(color: MyTheme.text_primary, fontWeight: FontWeight.bold)),
+          Text(
+            title,
+            style: Styles.body.copyWith(
+              color: MyTheme.text_primary,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
         ],
       ),
     );
   }
 
   Widget _buildBasicFilters(BuildContext context, AppState state) {
-    final manageData = state.manageProfileCombineState?.profiledropdownResponseData?.data;
+    final manageData =
+        state.manageProfileCombineState?.profiledropdownResponseData?.data;
     return _filterCard(
       child: Column(
         children: [
           // Marital Status
           _dropdownInput(
             context,
-            AppLocalizations.of(context)!.filter_marital_status, 
-            _marital_status_value, [
-              "Never Married", "Divorced", "Widow / Widower", "Separated"
-            ], 
-            (val) => setState(() => _marital_status_value = val)
+            AppLocalizations.of(context)!.filter_marital_status,
+            _marital_status_value,
+            ["Never Married", "Divorced", "Widow / Widower", "Separated"],
+            (val) => setState(() => _marital_status_value = val),
           ),
           const SizedBox(height: 12),
-          
+
           // Religion
           _dropdownWithId(
             context,
-            AppLocalizations.of(context)!.filter_religion, 
-            _religion_id, 
-            manageData?.religionList ?? [], 
+            AppLocalizations.of(context)!.filter_religion,
+            _religion_id,
+            manageData?.religionList ?? [],
             (id) {
               setState(() {
                 _religion_id = id;
                 _caste_value = null;
               });
               store.dispatch(casteMiddleware(id));
-            }
+            },
           ),
           const SizedBox(height: 12),
 
           // Caste
           _dropdownWithId(
             context,
-            AppLocalizations.of(context)!.filter_caste, 
-            _caste_value, 
-            state.basicSearchState?.casteResponse?.data ?? [], 
-            (id) => setState(() => _caste_value = id)
+            AppLocalizations.of(context)!.filter_caste,
+            _caste_value,
+            state.basicSearchState?.casteResponse?.data ?? [],
+            (id) => setState(() => _caste_value = id),
           ),
           const SizedBox(height: 12),
 
           // Country (added for flow)
           _dropdownWithId(
             context,
-            AppLocalizations.of(context)!.advanced_search_screen_country, 
-            _country_value, 
-            state.commonState?.countries ?? [], 
+            AppLocalizations.of(context)!.advanced_search_screen_country,
+            _country_value,
+            state.commonState?.countries ?? [],
             (id) {
               setState(() {
                 _country_value = id;
                 _state_value = null;
                 _city_value = null;
               });
-              store.dispatch(stateMiddleware(id, state: AppStates.advancedSearch));
-            }
+              store.dispatch(
+                stateMiddleware(id, state: AppStates.advancedSearch),
+              );
+            },
           ),
           const SizedBox(height: 12),
 
           // State
           _dropdownWithId(
             context,
-            AppLocalizations.of(context)!.advanced_search_screen_state, 
-            _state_value, 
-            state.basicSearchState?.stateResponse?.data ?? [], 
+            AppLocalizations.of(context)!.advanced_search_screen_state,
+            _state_value,
+            state.basicSearchState?.stateResponse?.data ?? [],
             (id) {
               setState(() {
                 _state_value = id;
                 _city_value = null;
               });
               store.dispatch(cityMiddleware(id, AppStates.advancedSearch));
-            }
+            },
           ),
           const SizedBox(height: 12),
 
           // City
           _dropdownWithId(
             context,
-            AppLocalizations.of(context)!.filter_city, 
-            _city_value, 
-            state.basicSearchState?.cityResponse?.data ?? [], 
-            (id) => setState(() => _city_value = id)
+            AppLocalizations.of(context)!.filter_city,
+            _city_value,
+            state.basicSearchState?.cityResponse?.data ?? [],
+            (id) => setState(() => _city_value = id),
           ),
         ],
       ),
@@ -353,8 +383,17 @@ class _AdvancedSearchState extends State<AdvancedSearch> {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text(AppLocalizations.of(context)!.filter_age_range, style: Styles.body.copyWith(fontWeight: FontWeight.w600)),
-              Text("${_ageRange.start.round()} - ${_ageRange.end.round()} वर्षे", style: Styles.body.copyWith(color: MyTheme.primary, fontWeight: FontWeight.bold)),
+              Text(
+                AppLocalizations.of(context)!.filter_age_range,
+                style: Styles.body.copyWith(fontWeight: FontWeight.w600),
+              ),
+              Text(
+                "${_ageRange.start.round()} - ${_ageRange.end.round()} वर्षे",
+                style: Styles.body.copyWith(
+                  color: MyTheme.primary,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
             ],
           ),
           RangeSlider(
@@ -378,8 +417,17 @@ class _AdvancedSearchState extends State<AdvancedSearch> {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text("उंचीची श्रेणी", style: Styles.body.copyWith(fontWeight: FontWeight.w600)),
-              Text("${_heightRange.start.toStringAsFixed(1)} - ${_heightRange.end.toStringAsFixed(1)} फूट", style: Styles.body.copyWith(color: MyTheme.primary, fontWeight: FontWeight.bold)),
+              Text(
+                "उंचीची श्रेणी",
+                style: Styles.body.copyWith(fontWeight: FontWeight.w600),
+              ),
+              Text(
+                "${_heightRange.start.toStringAsFixed(1)} - ${_heightRange.end.toStringAsFixed(1)} फूट",
+                style: Styles.body.copyWith(
+                  color: MyTheme.primary,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
             ],
           ),
           RangeSlider(
@@ -402,20 +450,18 @@ class _AdvancedSearchState extends State<AdvancedSearch> {
         children: [
           _dropdownInput(
             context,
-            AppLocalizations.of(context)!.filter_education, 
-            _education_value, [
-              "१०वी", "१२वी", "ITI", "डिप्लोमा", "पदवीधर", "पदव्युत्तर", "PhD"
-            ], 
-            (val) => setState(() => _education_value = val)
+            AppLocalizations.of(context)!.filter_education,
+            _education_value,
+            ["१०वी", "१२वी", "ITI", "डिप्लोमा", "पदवीधर", "पदव्युत्तर", "PhD"],
+            (val) => setState(() => _education_value = val),
           ),
           const SizedBox(height: 12),
           _dropdownInput(
             context,
-            AppLocalizations.of(context)!.filter_income, 
-            _income_value, [
-              "० – २ लाख", "२ – ५ लाख", "५ – १० लाख", "१०+ लाख"
-            ], 
-            (val) => setState(() => _income_value = val)
+            AppLocalizations.of(context)!.filter_income,
+            _income_value,
+            ["० – २ लाख", "२ – ५ लाख", "५ – १० लाख", "१०+ लाख"],
+            (val) => setState(() => _income_value = val),
           ),
         ],
       ),
@@ -426,15 +472,35 @@ class _AdvancedSearchState extends State<AdvancedSearch> {
     return _filterCard(
       child: Column(
         children: [
-          _checkboxRow(AppLocalizations.of(context)!.filter_manglik, _isManglik, (val) => setState(() => _isManglik = val!)),
+          _checkboxRow(
+            AppLocalizations.of(context)!.filter_manglik,
+            _isManglik,
+            (val) => setState(() => _isManglik = val!),
+          ),
           const Divider(height: 24),
-          _checkboxRow(AppLocalizations.of(context)!.filter_intercaste, _isIntercaste, (val) => setState(() => _isIntercaste = val!)),
+          _checkboxRow(
+            AppLocalizations.of(context)!.filter_intercaste,
+            _isIntercaste,
+            (val) => setState(() => _isIntercaste = val!),
+          ),
           const Divider(height: 24),
-          _checkboxRow(AppLocalizations.of(context)!.filter_disability, _isDisabled, (val) => setState(() => _isDisabled = val!)),
+          _checkboxRow(
+            AppLocalizations.of(context)!.filter_disability,
+            _isDisabled,
+            (val) => setState(() => _isDisabled = val!),
+          ),
           const Divider(height: 24),
-          _checkboxRow("प्रोफाइल फोटो आवश्यक (Must have Photo)", _hasPhoto, (val) => setState(() => _hasPhoto = val!)),
+          _checkboxRow(
+            "प्रोफाइल फोटो आवश्यक (Must have Photo)",
+            _hasPhoto,
+            (val) => setState(() => _hasPhoto = val!),
+          ),
           const Divider(height: 24),
-          _checkboxRow("अलीकडेच सामील झालेले (Recently Joined)", _recentlyJoined, (val) => setState(() => _recentlyJoined = val!)),
+          _checkboxRow(
+            "अलीकडेच सामील झालेले (Recently Joined)",
+            _recentlyJoined,
+            (val) => setState(() => _recentlyJoined = val!),
+          ),
         ],
       ),
     );
@@ -445,7 +511,13 @@ class _AdvancedSearchState extends State<AdvancedSearch> {
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         Expanded(
-          child: Text(title, style: Styles.body.copyWith(fontSize: 14, fontWeight: FontWeight.w500)),
+          child: Text(
+            title,
+            style: Styles.body.copyWith(
+              fontSize: 14,
+              fontWeight: FontWeight.w500,
+            ),
+          ),
         ),
         const SizedBox(width: 8),
         Switch.adaptive(
@@ -459,23 +531,36 @@ class _AdvancedSearchState extends State<AdvancedSearch> {
 
   Widget _buildStickyApplyButton(BuildContext context, AppState state) {
     return Positioned(
-      bottom: 0, left: 0, right: 0,
+      bottom: 0,
+      left: 0,
+      right: 0,
       child: Container(
         padding: const EdgeInsets.all(16),
         decoration: BoxDecoration(
           color: MyTheme.white,
-          boxShadow: [BoxShadow(color: Colors.black.withOpacity(0.05), blurRadius: 10, offset: const Offset(0, -4))],
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withOpacity(0.05),
+              blurRadius: 10,
+              offset: const Offset(0, -4),
+            ),
+          ],
         ),
         child: ElevatedButton(
           onPressed: () => _handleApply(state),
           style: ElevatedButton.styleFrom(
             backgroundColor: MyTheme.primary,
             minimumSize: const Size(double.infinity, 54),
-            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(12),
+            ),
           ),
           child: Text(
-            AppLocalizations.of(context)!.filter_apply, 
-            style: Styles.buttonText.copyWith(color: Colors.white, fontSize: 16)
+            AppLocalizations.of(context)!.filter_apply,
+            style: Styles.buttonText.copyWith(
+              color: Colors.white,
+              fontSize: 16,
+            ),
           ),
         ),
       ),
@@ -489,34 +574,68 @@ class _AdvancedSearchState extends State<AdvancedSearch> {
       decoration: BoxDecoration(
         color: MyTheme.white,
         borderRadius: BorderRadius.circular(16),
-        boxShadow: [BoxShadow(color: Colors.black.withOpacity(0.02), blurRadius: 10, offset: const Offset(0, 4))],
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.02),
+            blurRadius: 10,
+            offset: const Offset(0, 4),
+          ),
+        ],
       ),
       child: child,
     );
   }
 
-  Widget _dropdownWithId(BuildContext context, String label, dynamic selectedId, List<dynamic> items, Function(dynamic) onChanged) {
+  Widget _dropdownWithId(
+    BuildContext context,
+    String label,
+    dynamic selectedId,
+    List<dynamic> items,
+    Function(dynamic) onChanged,
+  ) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(label, style: Styles.caption.copyWith(fontSize: 12, color: MyTheme.text_secondary, fontWeight: FontWeight.w500)),
+        Text(
+          label,
+          style: Styles.caption.copyWith(
+            fontSize: 12,
+            color: MyTheme.text_secondary,
+            fontWeight: FontWeight.w500,
+          ),
+        ),
         const SizedBox(height: 6),
         Container(
           height: 48,
           padding: const EdgeInsets.symmetric(horizontal: 12),
-          decoration: BoxDecoration(color: MyTheme.solitude, borderRadius: BorderRadius.circular(10)),
+          decoration: BoxDecoration(
+            color: MyTheme.solitude,
+            borderRadius: BorderRadius.circular(10),
+          ),
           child: DropdownButtonHideUnderline(
             child: DropdownButton<dynamic>(
               isExpanded: true,
               value: (items.any((e) => e.id == selectedId)) ? selectedId : null,
-              hint: Text("निवडा", style: Styles.body.copyWith(fontSize: 14, color: MyTheme.text_secondary)),
-              items: items.map((item) {
-                return DropdownMenuItem<dynamic>(
-                  value: item.id, 
-                  child: Text(item.name ?? "", style: Styles.body.copyWith(fontSize: 14))
-                );
-              }).toList(),
-              onChanged: (val) { if (val != null) onChanged(val); },
+              hint: Text(
+                "निवडा",
+                style: Styles.body.copyWith(
+                  fontSize: 14,
+                  color: MyTheme.text_secondary,
+                ),
+              ),
+              items:
+                  items.map((item) {
+                    return DropdownMenuItem<dynamic>(
+                      value: item.id,
+                      child: Text(
+                        item.name ?? "",
+                        style: Styles.body.copyWith(fontSize: 14),
+                      ),
+                    );
+                  }).toList(),
+              onChanged: (val) {
+                if (val != null) onChanged(val);
+              },
             ),
           ),
         ),
@@ -524,25 +643,52 @@ class _AdvancedSearchState extends State<AdvancedSearch> {
     );
   }
 
-  Widget _dropdownInput(BuildContext context, String label, dynamic value, List<String> items, Function(String) onChanged) {
+  Widget _dropdownInput(
+    BuildContext context,
+    String label,
+    dynamic value,
+    List<String> items,
+    Function(String) onChanged,
+  ) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(label, style: const TextStyle(fontSize: 12, color: MyTheme.text_secondary, fontWeight: FontWeight.w500)),
+        Text(
+          label,
+          style: const TextStyle(
+            fontSize: 12,
+            color: MyTheme.text_secondary,
+            fontWeight: FontWeight.w500,
+          ),
+        ),
         const SizedBox(height: 6),
         Container(
           height: 48,
           padding: const EdgeInsets.symmetric(horizontal: 12),
-          decoration: BoxDecoration(color: MyTheme.solitude, borderRadius: BorderRadius.circular(10)),
+          decoration: BoxDecoration(
+            color: MyTheme.solitude,
+            borderRadius: BorderRadius.circular(10),
+          ),
           child: DropdownButtonHideUnderline(
             child: DropdownButton<String>(
               isExpanded: true,
               value: (items.contains(value)) ? value : null,
-              hint: Text(AppLocalizations.of(context)!.filter_select ?? "Select"),
-              items: items.map((String item) {
-                return DropdownMenuItem<String>(value: item, child: Text(item, style: Styles.body.copyWith(fontSize: 14)));
-              }).toList(),
-              onChanged: (val) { if (val != null) onChanged(val); },
+              hint: Text(
+                AppLocalizations.of(context)!.filter_select ?? "Select",
+              ),
+              items:
+                  items.map((String item) {
+                    return DropdownMenuItem<String>(
+                      value: item,
+                      child: Text(
+                        item,
+                        style: Styles.body.copyWith(fontSize: 14),
+                      ),
+                    );
+                  }).toList(),
+              onChanged: (val) {
+                if (val != null) onChanged(val);
+              },
             ),
           ),
         ),

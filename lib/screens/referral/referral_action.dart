@@ -1,7 +1,6 @@
 import 'package:active_matrimonial_flutter_app/models_response/referral/referral_code_response.dart';
 import 'package:active_matrimonial_flutter_app/models_response/referral/referral_users_response.dart';
 
-
 // referral user actions
 class ReferralUserStoreAction {
   ReferralUsersResponse? payload;
@@ -24,6 +23,7 @@ class ReferralUserFailureAction {
     return 'ReferralUserFailureAction{error: $error}';
   }
 }
+
 // referral code actions
 class ReferralCodeStoreAction {
   ReferralCodeResponse? payload;

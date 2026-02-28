@@ -89,14 +89,19 @@ class MatchedProfileWidget extends StatelessWidget {
                 padding: const EdgeInsets.all(2),
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
-                  border: Border.all(color: MyTheme.primary.withOpacity(0.3), width: 1.5),
+                  border: Border.all(
+                    color: MyTheme.primary.withOpacity(0.3),
+                    width: 1.5,
+                  ),
                 ),
                 child: ClipRRect(
                   borderRadius: BorderRadius.circular(30),
                   child: Image.network(
                     user.photo ?? "",
                     fit: BoxFit.cover,
-                    errorBuilder: (context, error, stackTrace) => Container(color: MyTheme.background),
+                    errorBuilder:
+                        (context, error, stackTrace) =>
+                            Container(color: MyTheme.background),
                   ),
                 ),
               ),

@@ -1,16 +1,19 @@
 import 'package:active_matrimonial_flutter_app/enums/enums.dart';
-import 'package:active_matrimonial_flutter_app/main.dart';
+import 'package:active_matrimonial_flutter_app/redux/store.dart';
 import 'package:active_matrimonial_flutter_app/screens/my_dashboard_pages/interest/my_interest_action.dart';
 import 'package:active_matrimonial_flutter_app/screens/my_dashboard_pages/interest_request/interest_request_action.dart';
 import 'package:active_matrimonial_flutter_app/screens/my_dashboard_pages/interest_request/interest_request_state.dart';
 import 'package:active_matrimonial_flutter_app/screens/my_dashboard_pages/interest_request/reject_interest_middleware.dart';
 
 InterestRequestState? interest_request_reducer(
-    InterestRequestState? state, dynamic action) {
+  InterestRequestState? state,
+  dynamic action,
+) {
   if (action is RemoveItem) {
     state!.interestRequestList!.remove(action.item);
     store.dispatch(
-        rejectInterestMiddleware(ctx: action.context, userId: action.item.id));
+      rejectInterestMiddleware(ctx: action.context, userId: action.item.id),
+    );
     return state;
   }
   if (action == AcceptRejectActions.accept) {

@@ -8,6 +8,7 @@ import 'package:image_picker/image_picker.dart';
 
 import '../../core.dart';
 import 'gallery_image_middleware.dart';
+import 'package:active_matrimonial_flutter_app/redux/store.dart';
 
 GalleryImageState? gallery_image_reducer(GalleryImageState? state, action) {
   if (action is GalleryImageStoreAction) {
@@ -55,8 +56,9 @@ set(setState, state, action) {
 ThunkAction<AppState> getGalleryImageAction(StateSetter setState) {
   return (Store<AppState> store) async {
     try {
-      final image = await store.state.galleryImageState!.picker
-          .pickImage(source: ImageSource.gallery);
+      final image = await store.state.galleryImageState!.picker.pickImage(
+        source: ImageSource.gallery,
+      );
       if (image == null) return;
       final tmpImage = File(image.path);
       store.dispatch(

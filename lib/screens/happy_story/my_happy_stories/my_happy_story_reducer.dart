@@ -3,7 +3,9 @@ import 'package:active_matrimonial_flutter_app/screens/happy_story/my_happy_stor
 import 'my_happy_story_action.dart';
 
 MyHappyStoryState? my_happy_story_reducer(
-    MyHappyStoryState? state, dynamic action) {
+  MyHappyStoryState? state,
+  dynamic action,
+) {
   if (action is HappyLoader) {
     state!.happyloader = !state.happyloader!;
 

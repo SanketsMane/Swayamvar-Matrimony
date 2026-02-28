@@ -11,28 +11,25 @@ String packageListResponseToJson(PackageListResponse data) =>
     json.encode(data.toJson());
 
 class PackageListResponse {
-  PackageListResponse({
-    this.data,
-    this.result,
-  });
+  PackageListResponse({this.data, this.result});
 
   List<Data>? data;
   bool? result;
 
   factory PackageListResponse.fromJson(Map<String, dynamic> json) =>
       PackageListResponse(
-        data: json["data"] == null
-            ? null
-            : List<Data>.from(json["data"].map((x) => Data.fromJson(x))),
+        data:
+            json["data"] == null
+                ? null
+                : List<Data>.from(json["data"].map((x) => Data.fromJson(x))),
         result: json["result"],
       );
 
   Map<String, dynamic> toJson() => {
-        "data": data == null
-            ? null
-            : List<dynamic>.from(data!.map((x) => x.toJson())),
-        "result": result,
-      };
+    "data":
+        data == null ? null : List<dynamic>.from(data!.map((x) => x.toJson())),
+    "result": result,
+  };
 }
 
 class Data {
@@ -65,32 +62,32 @@ class Data {
   int? validity;
 
   factory Data.fromJson(Map<String, dynamic> json) => Data(
-        packageId: json["package_id"],
-        name: json["name"],
-        image: json["image"],
-        expressInterest: json["express_interest"],
-        photoGallery: json["photo_gallery"],
-        contact: json["contact"],
-        profileImageView: json["profile_image_view"],
-        galleryImageView: json["gallery_image_view"],
-        autoProfileMatch: json["auto_profile_match"],
-        price: json["price"],
-        priceText: json["price_text"],
-        validity: json["validity"],
-      );
+    packageId: json["package_id"],
+    name: json["name"],
+    image: json["image"],
+    expressInterest: json["express_interest"],
+    photoGallery: json["photo_gallery"],
+    contact: json["contact"],
+    profileImageView: json["profile_image_view"],
+    galleryImageView: json["gallery_image_view"],
+    autoProfileMatch: json["auto_profile_match"],
+    price: json["price"],
+    priceText: json["price_text"],
+    validity: json["validity"],
+  );
 
   Map<String, dynamic> toJson() => {
-        "package_id": packageId,
-        "name": name,
-        "image": image,
-        "express_interest": expressInterest,
-        "photo_gallery": photoGallery,
-        "contact": contact,
-        "profile_image_view": profileImageView,
-        "gallery_image_view": galleryImageView,
-        "auto_profile_match": autoProfileMatch,
-        "price": price,
-        "priceText": price == null ? null : priceText,
-        "validity": validity,
-      };
+    "package_id": packageId,
+    "name": name,
+    "image": image,
+    "express_interest": expressInterest,
+    "photo_gallery": photoGallery,
+    "contact": contact,
+    "profile_image_view": profileImageView,
+    "gallery_image_view": galleryImageView,
+    "auto_profile_match": autoProfileMatch,
+    "price": price,
+    "priceText": price == null ? null : priceText,
+    "validity": validity,
+  };
 }

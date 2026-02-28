@@ -106,7 +106,8 @@ class _LanguageState extends State<Language> {
           ),
           height: 50,
           padding: EdgeInsets.symmetric(horizontal: 10),
-          child: CommonWidget().buildDropdownButtonFormField(context,
+          child: CommonWidget().buildDropdownButtonFormField(
+            context,
             store
                 .state
                 .manageProfileCombineState!

@@ -8,19 +8,22 @@ import 'package:redux/redux.dart';
 import 'package:redux_thunk/redux_thunk.dart';
 
 import '../../../enums/enums.dart';
+import 'package:active_matrimonial_flutter_app/redux/store.dart';
 
 ThunkAction<AppState> acceptInterestMiddleware({userId}) {
   return (Store<AppState> store) async {
     store.dispatch(AcceptRejectActions.accept);
 
     try {
-      var data =
-          await InterestRepository().accept_interest_requests(userId: userId);
+      var data = await InterestRepository().accept_interest_requests(
+        userId: userId,
+      );
       store.dispatch(AcceptRejectActions.accept);
 
       if (data.result) {
         store.dispatch(
-            ShowMessageAction(msg: data.message, color: MyTheme.success));
+          ShowMessageAction(msg: data.message, color: MyTheme.success),
+        );
         store.dispatch(Reset.interestRequestList);
         store.dispatch(interestRequestMiddleware());
       } else {

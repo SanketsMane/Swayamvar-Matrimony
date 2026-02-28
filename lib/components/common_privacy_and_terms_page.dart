@@ -6,19 +6,15 @@ import 'package:webview_flutter/webview_flutter.dart';
 class CommonPrivacyAndTerms extends StatefulWidget {
   final String? title;
   final String? content;
-  const CommonPrivacyAndTerms({
-    super.key,
-    this.title,
-    this.content,
-  });
+  const CommonPrivacyAndTerms({super.key, this.title, this.content});
 
   @override
   State<CommonPrivacyAndTerms> createState() => _CommonPrivacyAndTermsState();
 }
 
 class _CommonPrivacyAndTermsState extends State<CommonPrivacyAndTerms> {
-  WebViewController controller = WebViewController()
-    ..setJavaScriptMode(JavaScriptMode.unrestricted);
+  WebViewController controller =
+      WebViewController()..setJavaScriptMode(JavaScriptMode.unrestricted);
   @override
   void initState() {
     super.initState();
@@ -58,9 +54,7 @@ $body
       height: DeviceInfo(context).height,
       width: DeviceInfo(context).width,
       margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
-      child: WebViewWidget(
-        controller: controller,
-      ),
+      child: WebViewWidget(controller: controller),
     );
   }
 }

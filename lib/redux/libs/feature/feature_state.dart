@@ -5,12 +5,9 @@ class SystemSettingState {
 
   bool? isMinimumAge;
 
-  SystemSettingState({
-    this.settingResponse,
-    this.isMinimumAge,
-  });
+  SystemSettingState({this.settingResponse, this.isMinimumAge});
 
   SystemSettingState.initialState()
-      : settingResponse = null,
-        isMinimumAge = false;
+    : settingResponse = null,
+      isMinimumAge = false;
 }

@@ -19,10 +19,10 @@ class ResetPasswordState {
   });
 
   ResetPasswordState.initialState()
-      : passwordObscure = true,
-        rp_loader = false,
-        passwordController = TextEditingController(text: ''),
-        confirmPasswordController = TextEditingController(text: ''),
-        verifyController = TextEditingController(text: ''),
-        confirmPasswordObscure = true;
+    : passwordObscure = true,
+      rp_loader = false,
+      passwordController = TextEditingController(text: ''),
+      confirmPasswordController = TextEditingController(text: ''),
+      verifyController = TextEditingController(text: ''),
+      confirmPasswordObscure = true;
 }

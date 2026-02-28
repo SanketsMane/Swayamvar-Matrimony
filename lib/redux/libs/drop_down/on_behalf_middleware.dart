@@ -4,6 +4,7 @@ import 'package:active_matrimonial_flutter_app/screens/auth/signup/signup_action
 import 'package:flutter/material.dart';
 import 'package:redux/redux.dart';
 import 'package:redux_thunk/redux_thunk.dart';
+import 'package:active_matrimonial_flutter_app/redux/store.dart';
 
 ThunkAction<AppState> fetchOnbehalfMiddleware() {
   return (Store<AppState> store) async {

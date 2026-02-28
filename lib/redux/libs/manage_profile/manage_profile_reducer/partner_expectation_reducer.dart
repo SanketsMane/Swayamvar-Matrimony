@@ -1,5 +1,5 @@
 import 'package:active_matrimonial_flutter_app/enums/enums.dart';
-import 'package:active_matrimonial_flutter_app/main.dart';
+import 'package:active_matrimonial_flutter_app/redux/store.dart';
 import 'package:active_matrimonial_flutter_app/models_response/common_models/ddown.dart';
 import 'package:active_matrimonial_flutter_app/models_response/drop_down/caste.dart';
 import 'package:active_matrimonial_flutter_app/models_response/drop_down/state.dart';
@@ -8,77 +8,12 @@ import 'package:active_matrimonial_flutter_app/redux/libs/drop_down/caste_middle
 import 'package:active_matrimonial_flutter_app/redux/libs/drop_down/state_middleware.dart';
 import 'package:active_matrimonial_flutter_app/redux/libs/drop_down/sub_caste_middleware.dart';
 import 'package:active_matrimonial_flutter_app/redux/libs/manage_profile/manage_profiles_state/partner_expectation_state.dart';
-
-class Pexloader {}
-
-class Pexsave {
-  bool loaderValue;
-
-  Pexsave(this.loaderValue);
-}
-
-class PexReligionAddValueAction {
-  var value;
-
-  PexReligionAddValueAction({this.value});
-}
-
-class PexCasteAddValueAction {
-  var value;
-
-  PexCasteAddValueAction({this.value});
-}
-
-class PexSubCasteAddValueAction {
-  var value;
-  PexSubCasteAddValueAction({this.value});
-}
-
-class PexPreferredCountryAddValueAction {
-  var value;
-
-  PexPreferredCountryAddValueAction({this.value});
-}
-
-class PexPreferredStateAddValueAction {
-  var value;
-
-  PexPreferredStateAddValueAction({this.value});
-}
-
-class PexManglikAddValueAction {
-  var value;
-
-  PexManglikAddValueAction({this.value});
-}
-
-class PexResidencyCountryAddValueAction {
-  var value;
-  PexResidencyCountryAddValueAction({this.value});
-}
-
-class PexMaritalStatusAddValueAction {
-  var value;
-
-  PexMaritalStatusAddValueAction({this.value});
-}
-
-class PexEmptyCaste {}
-
-class PexEmptySubCaste {}
-
-class PexEmptyPreferredState {}
-
-class PartnerPrefInitValue {}
-
-class PartnerPrefSubCasteResponse {
-  List<DDown>? data;
-
-  PartnerPrefSubCasteResponse({this.data});
-}
+import 'partner_expectation_action.dart';
 
 PartnerExpectationState? partner_expectation_reducer(
-    PartnerExpectationState? state, dynamic action) {
+  PartnerExpectationState? state,
+  dynamic action,
+) {
   if (action is Pexloader) {
     return pex_loader_toggler(state!, action);
   }
@@ -139,45 +74,59 @@ PartnerExpectationState? partner_expectation_reducer(
 }
 
 pex_marital_status_value_add(
-    PartnerExpectationState state, PexMaritalStatusAddValueAction action) {
+  PartnerExpectationState state,
+  PexMaritalStatusAddValueAction action,
+) {
   state.martial_status_val = action.value;
   return state;
 }
 
 pex_add_residency_country(
-    PartnerExpectationState state, PexResidencyCountryAddValueAction action) {
+  PartnerExpectationState state,
+  PexResidencyCountryAddValueAction action,
+) {
   state.residency_country_val = action.value;
   return state;
 }
 
 pex_add_manglik(
-    PartnerExpectationState state, PexManglikAddValueAction action) {
+  PartnerExpectationState state,
+  PexManglikAddValueAction action,
+) {
   state.manglik_val = action.value;
   return state;
 }
 
 pex_state_state_list_clear(
-    PartnerExpectationState state, PexEmptyPreferredState action) {
+  PartnerExpectationState state,
+  PexEmptyPreferredState action,
+) {
   state.stateResponse!.data!.clear();
   state.preferred_state = null;
   return state;
 }
 
 pex_add_preferred_state(
-    PartnerExpectationState state, PexPreferredStateAddValueAction action) {
+  PartnerExpectationState state,
+  PexPreferredStateAddValueAction action,
+) {
   state.preferred_state = action.value;
 
   return state;
 }
 
 pex_add_preferred_country(
-    PartnerExpectationState state, PexPreferredCountryAddValueAction action) {
+  PartnerExpectationState state,
+  PexPreferredCountryAddValueAction action,
+) {
   state.preferred_country = action.value;
   return state;
 }
 
 pex_sub_caste_list_clear(
-    PartnerExpectationState state, PexEmptySubCaste action) {
+  PartnerExpectationState state,
+  PexEmptySubCaste action,
+) {
   state.subcasteResponse!.data!.clear();
   state.sub_caste_val = null;
   return state;
@@ -190,7 +139,9 @@ pex_caste_list_clear(PartnerExpectationState state, PexEmptyCaste action) {
 }
 
 pex_add_religion(
-    PartnerExpectationState state, PexReligionAddValueAction action) {
+  PartnerExpectationState state,
+  PexReligionAddValueAction action,
+) {
   state.religion_val = action.value;
   return state;
 }
@@ -201,13 +152,17 @@ pex_add_caste(PartnerExpectationState state, PexCasteAddValueAction action) {
 }
 
 pex_add_sub_caste(
-    PartnerExpectationState state, PexSubCasteAddValueAction action) {
+  PartnerExpectationState state,
+  PexSubCasteAddValueAction action,
+) {
   state.sub_caste_val = action.value;
   return state;
 }
 
 pex_partnerexpectation_get_response(
-    PartnerExpectationState state, PartnerExpectationGetResponse action) {
+  PartnerExpectationState state,
+  PartnerExpectationGetResponse action,
+) {
   // print(state.partnerExpectationGetResponse?.data?.toJson());
   state.partnerExpectationGetResponse!.data = action.data;
   state.general_requirement_controller.text =
@@ -226,7 +181,8 @@ pex_partnerexpectation_get_response(
       "${state.partnerExpectationGetResponse!.data!.complexion ?? ''}";
   state.body_controller.text =
       "${state.partnerExpectationGetResponse!.data!.bodyType ?? ''}";
-  pexprofile_drop_down_response(state);
+  // Sanket: Mapping now handled in partnerExpectationGetMiddleware.
+  // pexprofile_drop_down_response(state);
   //store.dispatch(profiledropdownMiddleware());
 
   // state.preferred_country= DDown(id: 0,name: "Bangladesh");
@@ -235,7 +191,9 @@ pex_partnerexpectation_get_response(
 }
 
 pex_state_response(
-    PartnerExpectationState state, StateResponseFromPartnerPref action) {
+  PartnerExpectationState state,
+  StateResponseFromPartnerPref action,
+) {
   state.stateResponse!.data!.addAll(action.data!);
 
   state.preferred_state = state.stateResponse!.data!.first;
@@ -252,7 +210,9 @@ pex_state_response(
 }
 
 pex_sub_caste_response(
-    PartnerExpectationState state, PartnerPrefSubCasteResponse action) {
+  PartnerExpectationState state,
+  PartnerPrefSubCasteResponse action,
+) {
   // print("PartnerPrefSubCasteResponse");
   state.subcasteResponse!.data!.clear();
   state.sub_caste_val = null;
@@ -272,8 +232,10 @@ pex_sub_caste_response(
   return state;
 }
 
-pex_caste_response(
-    PartnerExpectationState state, CasteResponseForPartnerPref action) {
+PartnerExpectationState pex_caste_response(
+  PartnerExpectationState state,
+  CasteResponseForPartnerPref action,
+) {
   state.casteResponse!.data!.clear();
 
   state.casteResponse!.data!.addAll(action.data!);
@@ -289,8 +251,8 @@ pex_caste_response(
         }
       }
     }
-    store.dispatch(subcasteMiddleware(state.caste_val!.id,
-        appStates: AppStates.partnerPreference));
+    // Sanket: Side effect removed from reducer.
+    // store.dispatch(subcasteMiddleware(...)) moved to middleware.
   }
   return state;
 }
@@ -306,11 +268,15 @@ pex_loader_toggler(PartnerExpectationState state, Pexloader action) {
   return state;
 }
 
-pexprofile_drop_down_response(PartnerExpectationState state) {
-  if (state.partnerExpectationGetResponse!.data?.residenceCountryId != null) {
-    for (var element in store.state.manageProfileCombineState!
-        .profiledropdownResponseData!.data!.countryList!) {
-      // print(element.name == store.state.manageProfileCombineState.partnerExpectationState.partnerExpectationGetResponse.data.preferredCountryId);
+PartnerExpectationState pexprofile_drop_down_response(
+  PartnerExpectationState state,
+  dynamic dropdownData,
+) {
+  // Sanket: Direct store access removed. Dropdown data passed as argument.
+
+  if (state.partnerExpectationGetResponse!.data?.residenceCountryId != null &&
+      dropdownData?.countryList != null) {
+    for (var element in dropdownData.countryList!) {
       if (element.name ==
           state.partnerExpectationGetResponse!.data!.residenceCountryId) {
         state.residency_country_val = element;
@@ -318,12 +284,9 @@ pexprofile_drop_down_response(PartnerExpectationState state) {
     }
   }
 
-  if (state.partnerExpectationGetResponse!.data?.maritalStatusId != null) {
-    for (var element in store.state.manageProfileCombineState!
-        .profiledropdownResponseData!.data!.maritialStatus!) {
-      print(element.name ==
-          state.partnerExpectationGetResponse!.data!.maritalStatusId);
-      // print(element.name == store.state.manageProfileCombineState.partnerExpectationState.partnerExpectationGetResponse.data.preferredCountryId);
+  if (state.partnerExpectationGetResponse!.data?.maritalStatusId != null &&
+      dropdownData?.maritialStatus != null) {
+    for (var element in dropdownData.maritialStatus!) {
       if (element.name ==
           state.partnerExpectationGetResponse!.data!.maritalStatusId) {
         state.martial_status_val = element;
@@ -335,7 +298,6 @@ pexprofile_drop_down_response(PartnerExpectationState state) {
 
   if (state.partnerExpectationGetResponse!.data?.childrenAcceptable != null) {
     for (var element in state.commonYesNoList) {
-      // print(element.name == store.state.manageProfileCombineState.partnerExpectationState.partnerExpectationGetResponse.data.preferredCountryId);
       if (element.key ==
           state.partnerExpectationGetResponse!.data!.childrenAcceptable) {
         state.children_value = element;
@@ -343,21 +305,21 @@ pexprofile_drop_down_response(PartnerExpectationState state) {
     }
   }
 
-  if (state.partnerExpectationGetResponse!.data?.religionId != null) {
-    for (var element in store.state.manageProfileCombineState!
-        .profiledropdownResponseData!.data!.religionList!) {
+  if (state.partnerExpectationGetResponse!.data?.religionId != null &&
+      dropdownData?.religionList != null) {
+    for (var element in dropdownData.religionList!) {
       if (element.name ==
           state.partnerExpectationGetResponse!.data!.religionId) {
         state.religion_val = element;
-        store.dispatch(
-            casteMiddleware(element.id, state: AppStates.partnerPreference));
+        // Sanket: Side effect removed from here.
+        // store.dispatch(casteMiddleware(...)) handled in middleware.
       }
     }
   }
 
-  if (state.partnerExpectationGetResponse!.data?.languageId != null) {
-    for (var element in store.state.manageProfileCombineState!
-        .profiledropdownResponseData!.data!.languageList!) {
+  if (state.partnerExpectationGetResponse!.data?.languageId != null &&
+      dropdownData?.languageList != null) {
+    for (var element in dropdownData.languageList!) {
       if (element.name ==
           state.partnerExpectationGetResponse!.data!.languageId) {
         state.language_value = element;
@@ -368,7 +330,6 @@ pexprofile_drop_down_response(PartnerExpectationState state) {
   state.smoking_value = state.commonYesNoList.first;
   if (state.partnerExpectationGetResponse!.data?.smokingAcceptable != null) {
     for (var element in state.commonYesNoList) {
-      // print(element.name == store.state.manageProfileCombineState.partnerExpectationState.partnerExpectationGetResponse.data.preferredCountryId);
       if (element.key ==
           state.partnerExpectationGetResponse!.data!.smokingAcceptable) {
         state.smoking_value = element;
@@ -402,21 +363,21 @@ pexprofile_drop_down_response(PartnerExpectationState state) {
     }
   }
 
-  if (state.partnerExpectationGetResponse!.data?.preferredCountryId != null) {
-    for (var element in store.state.manageProfileCombineState!
-        .profiledropdownResponseData!.data!.countryList!) {
+  if (state.partnerExpectationGetResponse!.data?.preferredCountryId != null &&
+      dropdownData?.countryList != null) {
+    for (var element in dropdownData.countryList!) {
       if (element.name ==
           state.partnerExpectationGetResponse!.data!.preferredCountryId) {
         state.preferred_country = element;
-        store.dispatch(
-            stateMiddleware(element.id, state: AppStates.partnerPreference));
+        // Sanket: Side effect removed from here.
+        // store.dispatch(stateMiddleware(...)) handled in middleware.
       }
     }
   }
 
-  if (state.partnerExpectationGetResponse!.data?.familyValueId != null) {
-    for (var element in store.state.manageProfileCombineState!
-        .profiledropdownResponseData!.data!.familyValueList!) {
+  if (state.partnerExpectationGetResponse!.data?.familyValueId != null &&
+      dropdownData?.familyValueList != null) {
+    for (var element in dropdownData.familyValueList!) {
       if (element.name ==
           state.partnerExpectationGetResponse!.data!.familyValueId) {
         state.family_value = element;

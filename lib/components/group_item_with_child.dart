@@ -24,9 +24,7 @@ class GroupItemWithChild extends StatelessWidget {
           "$title ${isMandatory! ? "*" : ""}",
           style: style ?? Styles.bold_arsenic_12,
         ),
-        const SizedBox(
-          height: 5,
-        ),
+        const SizedBox(height: 5),
         child!,
       ],
     );

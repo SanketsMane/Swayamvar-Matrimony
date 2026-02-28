@@ -14,16 +14,20 @@ class AizRequestResponse {
         res['status'] == "blocked" &&
         !SystemHelper.isBlockScreenShown) {
       if (SystemHelper.context != null) {
-        Navigator.push(SystemHelper.context!,
-            MaterialPageRoute(builder: (context) => BlockScreen()));
+        Navigator.push(
+          SystemHelper.context!,
+          MaterialPageRoute(builder: (context) => BlockScreen()),
+        );
       }
     }
     if (res.runtimeType != List &&
         res['status'] == "un_verified" &&
         !SystemHelper.isVerifyScreenShown) {
       if (SystemHelper.context != null) {
-        Navigator.push(SystemHelper.context!,
-            MaterialPageRoute(builder: (context) => Verify()));
+        Navigator.push(
+          SystemHelper.context!,
+          MaterialPageRoute(builder: (context) => Verify()),
+        );
       }
     }
     return response;

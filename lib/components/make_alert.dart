@@ -8,39 +8,37 @@ import 'package:one_context/one_context.dart';
 class MakeAlert {
   static show(String title, String message, AlertType type) {
     return OneContext().showDialog(
-        builder: (context) => AlertDialog(
-              titlePadding: EdgeInsets.zero,
-              title: Container(
-                height: 30,
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
-                color: type == AlertType.success
-                    ? MyTheme.green
-                    : type == AlertType.failed
-                        ? Colors.red
-                        : Colors.grey,
-                width: DeviceInfo(context).width! * 0.5,
-                child: Text(
-                  title,
-                  style: const TextStyle(fontSize: 14, color: MyTheme.white),
-                ),
+      builder:
+          (context) => AlertDialog(
+            titlePadding: EdgeInsets.zero,
+            title: Container(
+              height: 30,
+              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+              color:
+                  type == AlertType.success
+                      ? MyTheme.green
+                      : type == AlertType.failed
+                      ? Colors.red
+                      : Colors.grey,
+              width: DeviceInfo(context).width! * 0.5,
+              child: Text(
+                title,
+                style: const TextStyle(fontSize: 14, color: MyTheme.white),
               ),
-              content: SizedBox(
-                width: DeviceInfo(context).width! * 0.5,
-                child: Text(message),
+            ),
+            content: SizedBox(
+              width: DeviceInfo(context).width! * 0.5,
+              child: Text(message),
+            ),
+            actions: [
+              ButtonPaddingZero(
+                text: Text(LangText(context: context).getLocal().ok),
+                onPressed: () => Navigator.pop(context),
               ),
-              actions: [
-                ButtonPaddingZero(
-                  text: Text(LangText(context: context).getLocal().ok),
-                  onPressed: () => Navigator.pop(context),
-                )
-              ],
-            ));
+            ],
+          ),
+    );
   }
 }
 
-enum AlertType {
-  success,
-  failed,
-  warning;
-}
+enum AlertType { success, failed, warning }

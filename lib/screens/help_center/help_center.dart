@@ -18,22 +18,26 @@ class _HelpCenterState extends State<HelpCenter> {
   final List<Map<String, dynamic>> _faqs = [
     {
       'question': 'How to send interest?',
-      'answer': 'Go to the member\'s profile and tap on the "Send Interest" heart icon. Once they accept, you can start communicating.',
+      'answer':
+          'Go to the member\'s profile and tap on the "Send Interest" heart icon. Once they accept, you can start communicating.',
       'isExpanded': false,
     },
     {
       'question': 'How to upgrade membership?',
-      'answer': 'Navigate to Settings > Membership Plan or visit the "Packages" section to view and select a premium plan that suits your needs.',
+      'answer':
+          'Navigate to Settings > Membership Plan or visit the "Packages" section to view and select a premium plan that suits your needs.',
       'isExpanded': false,
     },
     {
       'question': 'How to verify profile?',
-      'answer': 'Go to Settings > Verification Status. Upload your ID proof (Aadhaar/PAN/Passport) and a selfie for our team to review.',
+      'answer':
+          'Go to Settings > Verification Status. Upload your ID proof (Aadhaar/PAN/Passport) and a selfie for our team to review.',
       'isExpanded': false,
     },
     {
       'question': 'How to change password?',
-      'answer': 'Visit Settings > Security > Change Password. Enter your current password followed by your new password twice to confirm.',
+      'answer':
+          'Visit Settings > Security > Change Password. Enter your current password followed by your new password twice to confirm.',
       'isExpanded': false,
     },
   ];
@@ -70,8 +74,14 @@ class _HelpCenterState extends State<HelpCenter> {
         icon: const Icon(Icons.arrow_back, color: MyTheme.text_primary),
         onPressed: () => Navigator.pop(context),
       ),
-      title: const Text("Help Center", 
-          style: TextStyle(color: MyTheme.text_primary, fontSize: 18, fontWeight: FontWeight.bold)),
+      title: const Text(
+        "Help Center",
+        style: TextStyle(
+          color: MyTheme.text_primary,
+          fontSize: 18,
+          fontWeight: FontWeight.bold,
+        ),
+      ),
       centerTitle: true,
       bottom: PreferredSize(
         preferredSize: const Size.fromHeight(1),
@@ -91,7 +101,11 @@ class _HelpCenterState extends State<HelpCenter> {
         decoration: InputDecoration(
           hintText: "Search help topics…",
           hintStyle: TextStyle(color: MyTheme.text_secondary, fontSize: 14),
-          prefixIcon: Icon(Icons.search, color: MyTheme.text_secondary, size: 20),
+          prefixIcon: Icon(
+            Icons.search,
+            color: MyTheme.text_secondary,
+            size: 20,
+          ),
           border: InputBorder.none,
           contentPadding: EdgeInsets.symmetric(vertical: 10),
         ),
@@ -122,15 +136,31 @@ class _HelpCenterState extends State<HelpCenter> {
           decoration: BoxDecoration(
             color: MyTheme.white,
             borderRadius: BorderRadius.circular(16),
-            boxShadow: [BoxShadow(color: Colors.black.withOpacity(0.02), blurRadius: 10, offset: const Offset(0, 4))],
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black.withOpacity(0.02),
+                blurRadius: 10,
+                offset: const Offset(0, 4),
+              ),
+            ],
           ),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Icon(items[index]['icon'] as IconData, color: MyTheme.primary, size: 32),
+              Icon(
+                items[index]['icon'] as IconData,
+                color: MyTheme.primary,
+                size: 32,
+              ),
               const SizedBox(height: 8),
-              Text(items[index]['title'] as String, 
-                  style: const TextStyle(color: MyTheme.text_primary, fontSize: 13, fontWeight: FontWeight.bold)),
+              Text(
+                items[index]['title'] as String,
+                style: const TextStyle(
+                  color: MyTheme.text_primary,
+                  fontSize: 13,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
             ],
           ),
         );
@@ -142,8 +172,14 @@ class _HelpCenterState extends State<HelpCenter> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const Text("Frequently Asked Questions", 
-            style: TextStyle(color: MyTheme.text_primary, fontSize: 16, fontWeight: FontWeight.bold)),
+        const Text(
+          "Frequently Asked Questions",
+          style: TextStyle(
+            color: MyTheme.text_primary,
+            fontSize: 16,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
         const SizedBox(height: 16),
         ...List.generate(_faqs.length, (index) {
           final faq = _faqs[index];
@@ -152,15 +188,31 @@ class _HelpCenterState extends State<HelpCenter> {
             decoration: BoxDecoration(
               color: MyTheme.white,
               borderRadius: BorderRadius.circular(16),
-              boxShadow: [BoxShadow(color: Colors.black.withOpacity(0.02), blurRadius: 10, offset: const Offset(0, 4))],
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black.withOpacity(0.02),
+                  blurRadius: 10,
+                  offset: const Offset(0, 4),
+                ),
+              ],
             ),
             child: Theme(
-              data: Theme.of(context).copyWith(dividerColor: Colors.transparent),
+              data: Theme.of(
+                context,
+              ).copyWith(dividerColor: Colors.transparent),
               child: ExpansionTile(
-                title: Text(faq['question'], 
-                    style: const TextStyle(color: MyTheme.text_primary, fontSize: 14, fontWeight: FontWeight.w500)),
+                title: Text(
+                  faq['question'],
+                  style: const TextStyle(
+                    color: MyTheme.text_primary,
+                    fontSize: 14,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
                 trailing: Icon(
-                  faq['isExpanded'] ? Icons.keyboard_arrow_up_rounded : Icons.keyboard_arrow_down_rounded,
+                  faq['isExpanded']
+                      ? Icons.keyboard_arrow_up_rounded
+                      : Icons.keyboard_arrow_down_rounded,
                   color: MyTheme.text_secondary,
                 ),
                 onExpansionChanged: (expanded) {
@@ -171,8 +223,14 @@ class _HelpCenterState extends State<HelpCenter> {
                 children: [
                   Padding(
                     padding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
-                    child: Text(faq['answer'], 
-                        style: const TextStyle(color: MyTheme.text_secondary, fontSize: 14, height: 1.5)),
+                    child: Text(
+                      faq['answer'],
+                      style: const TextStyle(
+                        color: MyTheme.text_secondary,
+                        fontSize: 14,
+                        height: 1.5,
+                      ),
+                    ),
                   ),
                 ],
               ),
@@ -190,32 +248,60 @@ class _HelpCenterState extends State<HelpCenter> {
       decoration: BoxDecoration(
         color: MyTheme.white,
         borderRadius: BorderRadius.circular(16),
-        boxShadow: [BoxShadow(color: Colors.black.withOpacity(0.02), blurRadius: 10, offset: const Offset(0, 4))],
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.02),
+            blurRadius: 10,
+            offset: const Offset(0, 4),
+          ),
+        ],
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Text("Still need help?", 
-              style: TextStyle(color: MyTheme.text_primary, fontSize: 18, fontWeight: FontWeight.bold)),
+          const Text(
+            "Still need help?",
+            style: TextStyle(
+              color: MyTheme.text_primary,
+              fontSize: 18,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
           const SizedBox(height: 8),
-          const Text("Our support team is ready to help you with any queries or issues.", 
-              style: TextStyle(color: MyTheme.text_secondary, fontSize: 14)),
+          const Text(
+            "Our support team is ready to help you with any queries or issues.",
+            style: TextStyle(color: MyTheme.text_secondary, fontSize: 14),
+          ),
           const SizedBox(height: 24),
           ElevatedButton(
             onPressed: () => NavigatorPush.push(context, const SupportTicket()),
             style: ElevatedButton.styleFrom(
               backgroundColor: MyTheme.primary,
               minimumSize: const Size(double.infinity, 56),
-              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(12),
+              ),
               elevation: 0,
             ),
-            child: const Text("Contact Support", 
-                style: TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.bold)),
+            child: const Text(
+              "Contact Support",
+              style: TextStyle(
+                color: Colors.white,
+                fontSize: 16,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
           ),
           const SizedBox(height: 16),
           const Center(
-            child: Text("support@swayamvar.in", 
-                style: TextStyle(color: MyTheme.primary, fontSize: 14, fontWeight: FontWeight.w500)),
+            child: Text(
+              "support@swayamvar.in",
+              style: TextStyle(
+                color: MyTheme.primary,
+                fontSize: 14,
+                fontWeight: FontWeight.w500,
+              ),
+            ),
           ),
         ],
       ),

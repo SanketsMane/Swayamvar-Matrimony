@@ -1,25 +1,23 @@
 import 'package:active_matrimonial_flutter_app/models_response/ignore/ignore_response.dart';
 
-class IgnoreAction{}
+class IgnoreAction {}
 
-class IgnoreLoading{}
+class IgnoreLoading {}
 
-class IgnoreItemRemoveAction{
+class IgnoreItemRemoveAction {
   var context;
   var data;
 
   IgnoreItemRemoveAction({this.data, this.context});
 }
 
-
-
-class AddIgnoreAction{
+class AddIgnoreAction {
   var user;
 
   AddIgnoreAction({this.user});
 }
 
-class IgnoreStoreAction{
+class IgnoreStoreAction {
   IgnoreResponse? payload;
 
   IgnoreStoreAction({this.payload});
@@ -30,7 +28,7 @@ class IgnoreStoreAction{
   }
 }
 
-class IgnoreFailureAction{
+class IgnoreFailureAction {
   String? error;
 
   IgnoreFailureAction({this.error});

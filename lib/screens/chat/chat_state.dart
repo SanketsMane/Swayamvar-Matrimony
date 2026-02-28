@@ -3,14 +3,7 @@ class ChatState {
   String? error;
   List? chatList = [];
 
-  ChatState({
-    this.isFetching,
-    this.error,
-    this.chatList,
-  });
+  ChatState({this.isFetching, this.error, this.chatList});
 
-  ChatState.initialState()
-      : isFetching = true,
-        error = '',
-        chatList = [];
+  ChatState.initialState() : isFetching = true, error = '', chatList = [];
 }

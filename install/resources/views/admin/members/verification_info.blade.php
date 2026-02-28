@@ -33,20 +33,64 @@
                     @if ($user->verification_info != null)
                         <table class="table table-striped table-bordered" cellspacing="0" width="100%">
                             <tbody>
-                                @foreach (json_decode($user->verification_info) as $key => $info)
-                                    <tr>
-                                        <th class="text-muted">{{ $info->label }}</th>
-                                        @if ($info->type == 'text' || $info->type == 'select' || $info->type == 'radio')
-                                            <td> {{ $info->value }} </td>
-                                        @elseif ($info->type == 'multi_select')
-                                            <td> {{ implode(', ', json_decode($info->value)) }} </td>
-                                        @elseif ($info->type == 'file')
+                                @php
+                                    $verification_data = json_decode($user->verification_info);
+                                @endphp
+                                @if(is_array($verification_data) && isset($verification_data[0]->label))
+                                    {{-- Old Format --}}
+                                    @foreach ($verification_data as $key => $info)
+                                        <tr>
+                                            <th class="text-muted">{{ $info->label }}</th>
+                                            @if ($info->type == 'text' || $info->type == 'select' || $info->type == 'radio')
+                                                <td> {{ $info->value }} </td>
+                                            @elseif ($info->type == 'multi_select')
+                                                <td> {{ @implode(', ', json_decode($info->value)) }} </td>
+                                            @elseif ($info->type == 'file')
+                                                <td>
+                                                    <a href="{{ static_asset($info->value) }}" target="_blank" class="btn-info px-2 rounded-2">{{translate('Click here')}}</a>
+                                                </td>
+                                            @endif
+                                        </tr>
+                                    @endforeach
+                                @else
+                                    {{-- New 3-Step Format --}}
+                                    @if(isset($verification_data->id_type))
+                                        <tr>
+                                            <th class="text-muted">{{ translate('ID Type') }}</th>
+                                            <td>{{ $verification_data->id_type }}</td>
+                                        </tr>
+                                    @endif
+                                    @if(isset($verification_data->id_number))
+                                        <tr>
+                                            <th class="text-muted">{{ translate('ID Number') }}</th>
+                                            <td>{{ $verification_data->id_number }}</td>
+                                        </tr>
+                                    @endif
+                                    @if(isset($verification_data->id_front))
+                                        <tr>
+                                            <th class="text-muted">{{ translate('ID Front') }}</th>
                                             <td>
-                                                <a href="{{ static_asset($info->value) }}" target="_blank" class="btn-info px-2 rounded-2">{{translate('Click here')}}</a>
+                                                <a href="{{ static_asset($verification_data->id_front) }}" target="_blank" class="btn-info px-2 rounded-2">{{translate('View Front')}}</a>
                                             </td>
-                                        @endif
-                                    </tr>
-                                @endforeach
+                                        </tr>
+                                    @endif
+                                    @if(isset($verification_data->id_back))
+                                        <tr>
+                                            <th class="text-muted">{{ translate('ID Back') }}</th>
+                                            <td>
+                                                <a href="{{ static_asset($verification_data->id_back) }}" target="_blank" class="btn-info px-2 rounded-2">{{translate('View Back')}}</a>
+                                            </td>
+                                        </tr>
+                                    @endif
+                                    @if(isset($verification_data->selfie))
+                                        <tr>
+                                            <th class="text-muted">{{ translate('Selfie') }}</th>
+                                            <td>
+                                                <a href="{{ static_asset($verification_data->selfie) }}" target="_blank" class="btn-info px-2 rounded-2">{{translate('View Selfie')}}</a>
+                                            </td>
+                                        </tr>
+                                    @endif
+                                @endif
                             </tbody>
                         </table>
                     @endif

@@ -5,16 +5,19 @@ import 'package:active_matrimonial_flutter_app/repository/drop_down_repository.d
 import 'package:flutter/material.dart';
 import 'package:redux/redux.dart';
 import 'package:redux_thunk/redux_thunk.dart';
+import 'package:active_matrimonial_flutter_app/redux/store.dart';
 
-ThunkAction<AppState> casteMiddleware(religion,
-    {AppStates state = AppStates.manageProfile}) {
+ThunkAction<AppState> casteMiddleware(
+  religion, {
+  AppStates state = AppStates.manageProfile,
+}) {
   return (Store<AppState> store) async {
     try {
-      var data = await DropDownRepository().fetchCaste(
-        religion,
+      var data = await DropDownRepository().fetchCaste(religion);
+
+      debugPrint(
+        "Fetched castes for religion $religion: ${data.data?.length} items found.",
       );
-      
-      debugPrint("Fetched castes for religion $religion: ${data.data?.length} items found.");
 
       if (state == AppStates.partnerPreference) {
         store.dispatch(CasteResponseForPartnerPref(data: data.data));

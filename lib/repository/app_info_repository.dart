@@ -11,8 +11,6 @@ import '../models_response/others/app_info_response.dart';
 import '../models_response/others/static_page_response.dart';
 
 class AppInfoRepository {
-
-
   Future<AppInfoResponse> fetchAppInfo() async {
     var baseUrl = "${AppConfig.BASE_URL}/app-info";
     final headers = {
@@ -24,22 +22,17 @@ class AppInfoRepository {
       final response = await http.get(Uri.parse(baseUrl), headers: headers);
 
       if (response.statusCode == 200) {
-
         return appInfoResponseFromJson(response.body);
       } else {
-
         throw Exception(
           'Failed to load App Info. Status Code: ${response.statusCode}',
         );
       }
     } on SocketException {
-
       throw Exception('No Internet connection 😑');
     } on FormatException {
-
       throw Exception('Bad response format 👎');
     } catch (e) {
-
       print("An unexpected error occurred: $e");
       rethrow;
     }

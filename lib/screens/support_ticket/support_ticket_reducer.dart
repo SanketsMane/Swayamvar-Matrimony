@@ -1,4 +1,3 @@
-
 import 'package:active_matrimonial_flutter_app/screens/support_ticket/support_ticket_action.dart';
 import 'package:active_matrimonial_flutter_app/screens/support_ticket/support_ticket_state.dart';
 
@@ -7,7 +6,9 @@ import '../../enums/enums.dart';
 class SupportLoader {}
 
 SupportTicketState? support_ticket_reducer(
-    SupportTicketState? state, dynamic action) {
+  SupportTicketState? state,
+  dynamic action,
+) {
   if (action is SupportTicketStoreAction) {
     state!.isFetching = false;
     state.myTickets = action.payload!.data;

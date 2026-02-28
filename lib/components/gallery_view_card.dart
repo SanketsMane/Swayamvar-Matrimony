@@ -5,10 +5,7 @@ import 'full_screen_image_viewer.dart';
 class GalleryViewCard extends StatelessWidget {
   final String? imagePath;
 
-  const GalleryViewCard({
-    this.imagePath,
-    super.key,
-  });
+  const GalleryViewCard({this.imagePath, super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -23,13 +20,8 @@ class GalleryViewCard extends StatelessWidget {
         );
       },
       child: ClipRRect(
-        borderRadius: const BorderRadius.all(
-          Radius.circular(16.0),
-        ),
-        child: Image.network(
-          imagePath!,
-          fit: BoxFit.fill,
-        ),
+        borderRadius: const BorderRadius.all(Radius.circular(16.0)),
+        child: Image.network(imagePath!, fit: BoxFit.fill),
       ),
     );
   }

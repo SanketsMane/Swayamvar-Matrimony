@@ -13,11 +13,14 @@ class InterestRepository {
     var baseUrl = "${AppConfig.BASE_URL}/member/my-interests?page=$page";
     var accessToken = getToken;
 
-    var response = await http.get(Uri.parse(baseUrl), headers: {
-      "Accept": "application/json",
-      "Content-Type": "application/json",
-      "Authorization": "Bearer $accessToken",
-    });
+    var response = await http.get(
+      Uri.parse(baseUrl),
+      headers: {
+        "Accept": "application/json",
+        "Content-Type": "application/json",
+        "Authorization": "Bearer $accessToken",
+      },
+    );
 
     var data = myInterestResponseFromJson(response.body);
 
@@ -29,11 +32,14 @@ class InterestRepository {
 
     var accessToken = getToken;
 
-    var response = await http.get(Uri.parse(baseUrl), headers: {
-      "Accept": "application/json",
-      "Content-Type": "application/json",
-      "Authorization": "Bearer $accessToken",
-    });
+    var response = await http.get(
+      Uri.parse(baseUrl),
+      headers: {
+        "Accept": "application/json",
+        "Content-Type": "application/json",
+        "Authorization": "Bearer $accessToken",
+      },
+    );
 
     var data = interestRequestResponseFromJson(response.body);
 
@@ -46,13 +52,15 @@ class InterestRepository {
     var postBody = jsonEncode({"user_id": userId});
 
     try {
-      var response = await http.post(Uri.parse(baseUrl),
-          headers: {
-            "Accept": "application/json",
-            "Content-Type": "application/json",
-            "Authorization": "Bearer $accessToken",
-          },
-          body: postBody);
+      var response = await http.post(
+        Uri.parse(baseUrl),
+        headers: {
+          "Accept": "application/json",
+          "Content-Type": "application/json",
+          "Authorization": "Bearer $accessToken",
+        },
+        body: postBody,
+      );
 
       var data = commonResponseFromJson(response.body);
       return data;
@@ -68,32 +76,36 @@ class InterestRepository {
     var accessToken = getToken;
     var postBody = jsonEncode({"interest_id": userId});
 
-    var response = await http.post(Uri.parse(baseUrl),
-        headers: {
-          "Accept": "application/json",
-          "Content-Type": "application/json",
-          "Authorization": "Bearer $accessToken",
-        },
-        body: postBody);
+    var response = await http.post(
+      Uri.parse(baseUrl),
+      headers: {
+        "Accept": "application/json",
+        "Content-Type": "application/json",
+        "Authorization": "Bearer $accessToken",
+      },
+      body: postBody,
+    );
 
     var data = commonResponseFromJson(response.body);
     return data;
   }
 
-// reject interest requests
+  // reject interest requests
 
   Future<CommonResponse> reject_interest_requests({userId}) async {
     var baseUrl = "${AppConfig.BASE_URL}/member/interest-reject";
     var accessToken = getToken;
     var postBody = jsonEncode({"interest_id": userId});
 
-    var response = await http.post(Uri.parse(baseUrl),
-        headers: {
-          "Accept": "application/json",
-          "Content-Type": "application/json",
-          "Authorization": "Bearer $accessToken",
-        },
-        body: postBody);
+    var response = await http.post(
+      Uri.parse(baseUrl),
+      headers: {
+        "Accept": "application/json",
+        "Content-Type": "application/json",
+        "Authorization": "Bearer $accessToken",
+      },
+      body: postBody,
+    );
 
     var data = commonResponseFromJson(response.body);
     return data;

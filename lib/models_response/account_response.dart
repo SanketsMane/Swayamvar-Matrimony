@@ -147,10 +147,7 @@ String profileResponseToJson(AccountResponse data) =>
     json.encode(data.toJson());
 
 class AccountResponse {
-  AccountResponse({
-    this.result,
-    this.data,
-  });
+  AccountResponse({this.result, this.data});
 
   bool? result;
   ProfileData? data;
@@ -161,10 +158,7 @@ class AccountResponse {
         data: json["data"] == null ? null : ProfileData.fromJson(json["data"]),
       );
 
-  Map<String, dynamic> toJson() => {
-    "result": result,
-    "data": data?.toJson(),
-  };
+  Map<String, dynamic> toJson() => {"result": result, "data": data?.toJson()};
 }
 
 class ProfileData {
@@ -203,7 +197,7 @@ class ProfileData {
     97,
     116,
     101,
-    100
+    100,
   ];
 
   String? memberName;
@@ -225,9 +219,10 @@ class ProfileData {
     remainingPhotoGallery: json["remaining_photo_gallery"],
     remainingProfileImageView: json["remaining_profile_image_view"],
     remainingGalleryImageView: json["remaining_gallery_image_view"],
-    currentPackageInfo: json["current_package_info"] == null
-        ? null
-        : CurrentPackageInfo.fromJson(json["current_package_info"]),
+    currentPackageInfo:
+        json["current_package_info"] == null
+            ? null
+            : CurrentPackageInfo.fromJson(json["current_package_info"]),
     deactivated: json["deactivated"],
   );
 
@@ -246,11 +241,7 @@ class ProfileData {
 }
 
 class CurrentPackageInfo {
-  CurrentPackageInfo({
-    this.packageId,
-    this.packageName,
-    this.packageExpiry,
-  });
+  CurrentPackageInfo({this.packageId, this.packageName, this.packageExpiry});
 
   int? packageId;
   String? packageName;

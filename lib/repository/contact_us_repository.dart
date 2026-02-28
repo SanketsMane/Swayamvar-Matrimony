@@ -7,12 +7,14 @@ class ContactUsRepository {
   Future<CommonResponse> sendHelp({postBody}) async {
     var baseUrl = "${AppConfig.BASE_URL}/contact-us";
 
-    var response = await http.post(Uri.parse(baseUrl),
-        headers: {
-          "Accept": "application/json",
-          "Content-Type": "application/json",
-        },
-        body: postBody);
+    var response = await http.post(
+      Uri.parse(baseUrl),
+      headers: {
+        "Accept": "application/json",
+        "Content-Type": "application/json",
+      },
+      body: postBody,
+    );
 
     var data = commonResponseFromJson(response.body);
 

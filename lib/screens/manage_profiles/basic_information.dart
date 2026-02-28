@@ -1,4 +1,3 @@
-
 import 'package:active_matrimonial_flutter_app/components/basic_form_widget.dart';
 import 'package:active_matrimonial_flutter_app/components/common_app_bar_manageprofile.dart';
 import 'package:active_matrimonial_flutter_app/components/common_input.dart';
@@ -28,19 +27,20 @@ class _BasicInformationState extends State<BasicInformation> {
   Widget build(BuildContext context) {
     return StoreConnector<AppState, AppState>(
       converter: (store) => store.state,
-      builder: (_, state) => Scaffold(
-        appBar: CommonAppBarManageProfile(
-          text: AppLocalizations.of(context)!.manage_profile_basic_info,
-        ).build(context),
-        body: SafeArea(
-          child: SingleChildScrollView(
-            child: Form(
-              key: state.manageProfileCombineState!.basicInfoState!.formKey,
-              child: build_body(context, state),
+      builder:
+          (_, state) => Scaffold(
+            appBar: CommonAppBarManageProfile(
+              text: AppLocalizations.of(context)!.manage_profile_basic_info,
+            ).build(context),
+            body: SafeArea(
+              child: SingleChildScrollView(
+                child: Form(
+                  key: state.manageProfileCombineState!.basicInfoState!.formKey,
+                  child: build_body(context, state),
+                ),
+              ),
             ),
           ),
-        ),
-      ),
     );
   }
 
@@ -66,7 +66,10 @@ class _BasicInformationState extends State<BasicInformation> {
             text: AppLocalizations.of(context)!.manage_profile_f_name,
             style: Styles.bold_arsenic_12,
             controller:
-            state.manageProfileCombineState!.basicInfoState!.f_nameController,
+                state
+                    .manageProfileCombineState!
+                    .basicInfoState!
+                    .f_nameController,
             hint: "Sara B.",
             validator: (val) {
               if (val == null || val.isEmpty) {
@@ -82,7 +85,10 @@ class _BasicInformationState extends State<BasicInformation> {
             text: AppLocalizations.of(context)!.manage_profile_l_name,
             style: Styles.bold_arsenic_12,
             controller:
-            state.manageProfileCombineState!.basicInfoState!.l_nameController,
+                state
+                    .manageProfileCombineState!
+                    .basicInfoState!
+                    .l_nameController,
             hint: "Dron",
             validator: (val) {
               if (val == null || val.isEmpty) {
@@ -123,18 +129,27 @@ class _BasicInformationState extends State<BasicInformation> {
                   // helperText: 'Helper text',
                 ),
                 value:
-                state.manageProfileCombineState!.basicInfoState!.gendervalue,
-                items: state
-                    .manageProfileCombineState!.basicInfoState!.gender_items
-                    .map<DropdownMenuItem<dynamic>>((e) {
-                  return DropdownMenuItem<dynamic>(
-                    value: e,
-                    child: Text(e, style: Styles.regular_arsenic_14),
-                  );
-                }).toList(),
+                    state
+                        .manageProfileCombineState!
+                        .basicInfoState!
+                        .gendervalue,
+                items:
+                    state
+                        .manageProfileCombineState!
+                        .basicInfoState!
+                        .gender_items
+                        .map<DropdownMenuItem<dynamic>>((e) {
+                          return DropdownMenuItem<dynamic>(
+                            value: e,
+                            child: Text(e, style: Styles.regular_arsenic_14),
+                          );
+                        })
+                        .toList(),
                 onChanged: (dynamic newValue) {
                   setState(() {
-                    state.manageProfileCombineState!.basicInfoState!
+                    state
+                        .manageProfileCombineState!
+                        .basicInfoState!
                         .gendervalue = newValue;
                   });
                 },
@@ -155,34 +170,40 @@ class _BasicInformationState extends State<BasicInformation> {
               ),
               onPressed: () async {
                 // Get the selected gender from the state
-                String? selectedGender = state
-                    .manageProfileCombineState!.basicInfoState!.gendervalue;
+                String? selectedGender =
+                    state
+                        .manageProfileCombineState!
+                        .basicInfoState!
+                        .gendervalue;
 
                 // Show a message if gender is not selected
                 if (selectedGender == null || selectedGender.isEmpty) {
                   ScaffoldMessenger.of(context).showSnackBar(
                     const SnackBar(
-                        content: Text('Please select a gender first.')),
+                      content: Text('Please select a gender first.'),
+                    ),
                   );
                   return;
                 }
 
-
                 String minAgeString = '0';
                 if (selectedGender == 'Male') {
                   minAgeString =
-                      state.systemSettingState?.settingResponse?.data?[
-                      'male_min_age'] ??
-                          '0';
+                      state
+                          .systemSettingState
+                          ?.settingResponse
+                          ?.data?['male_min_age'] ??
+                      '0';
                 } else if (selectedGender == 'Female') {
                   minAgeString =
-                      state.systemSettingState?.settingResponse?.data?[
-                      'female_min_age'] ??
-                          '0';
+                      state
+                          .systemSettingState
+                          ?.settingResponse
+                          ?.data?['female_min_age'] ??
+                      '0';
                 }
 
                 final int minimumAge = int.tryParse(minAgeString) ?? 0;
-
 
                 final DateTime lastSelectableDate = DateTime(
                   DateTime.now().year - minimumAge,
@@ -190,15 +211,12 @@ class _BasicInformationState extends State<BasicInformation> {
                   DateTime.now().day,
                 );
 
-
                 DateTime initialDate =
                     state.manageProfileCombineState!.basicInfoState!.date;
-
 
                 if (initialDate.isAfter(lastSelectableDate)) {
                   initialDate = lastSelectableDate;
                 }
-
 
                 DateTime? newDate = await showDatePicker(
                   context: context,
@@ -208,7 +226,6 @@ class _BasicInformationState extends State<BasicInformation> {
                 );
 
                 if (newDate == null) return;
-
 
                 store.dispatch(SetBasicDate(payload: newDate));
               },
@@ -223,7 +240,9 @@ class _BasicInformationState extends State<BasicInformation> {
                         DateFormat('y-MM-dd').format(
                           DateTime.parse(
                             state
-                                .manageProfileCombineState!.basicInfoState!.date
+                                .manageProfileCombineState!
+                                .basicInfoState!
+                                .date
                                 .toString(),
                           ),
                         ),
@@ -243,7 +262,10 @@ class _BasicInformationState extends State<BasicInformation> {
             text: AppLocalizations.of(context)!.manage_profile_phone_num,
             style: Styles.bold_arsenic_12,
             controller:
-            state.manageProfileCombineState!.basicInfoState!.phoneController,
+                state
+                    .manageProfileCombineState!
+                    .basicInfoState!
+                    .phoneController,
             hint: "320-243-2537",
             validator: (val) {
               if (val == null || val.isEmpty) {
@@ -277,21 +299,31 @@ class _BasicInformationState extends State<BasicInformation> {
                     color: MyTheme.gull_grey,
                   ),
                 ),
-                value: state
-                    .manageProfileCombineState!.basicInfoState!.on_behalves_value,
-                items: state.manageProfileCombineState!.profiledropdownResponseData!
-                    .data!.onbehalfList!
-                    .map<DropdownMenuItem<DDown>>((e) {
-                  return DropdownMenuItem<DDown>(
-                    value: e,
-                    child: Text(
-                      e.name!,
-                      style: Styles.regular_arsenic_14,
-                    ),
-                  );
-                }).toList(),
+                value:
+                    state
+                        .manageProfileCombineState!
+                        .basicInfoState!
+                        .on_behalves_value,
+                items:
+                    state
+                        .manageProfileCombineState!
+                        .profiledropdownResponseData!
+                        .data!
+                        .onbehalfList!
+                        .map<DropdownMenuItem<DDown>>((e) {
+                          return DropdownMenuItem<DDown>(
+                            value: e,
+                            child: Text(
+                              e.name!,
+                              style: Styles.regular_arsenic_14,
+                            ),
+                          );
+                        })
+                        .toList(),
                 onChanged: (DDown? newValue) {
-                  state.manageProfileCombineState!.basicInfoState!
+                  state
+                      .manageProfileCombineState!
+                      .basicInfoState!
                       .on_behalves_value = newValue;
                 },
               ),
@@ -301,9 +333,10 @@ class _BasicInformationState extends State<BasicInformation> {
 
           //marital status
           GroupItemWithChild(
-            title: AppLocalizations.of(
-              context,
-            )!.advanced_search_screen_marital_status,
+            title:
+                AppLocalizations.of(
+                  context,
+                )!.advanced_search_screen_marital_status,
             child: Container(
               height: 50,
               decoration: BoxDecoration(
@@ -324,21 +357,31 @@ class _BasicInformationState extends State<BasicInformation> {
                     color: MyTheme.gull_grey,
                   ),
                 ),
-                value: state
-                    .manageProfileCombineState!.basicInfoState!.marital_status_value,
-                items: state.manageProfileCombineState!.profiledropdownResponseData!
-                    .data!.maritialStatus!
-                    .map<DropdownMenuItem<DDown>>((e) {
-                  return DropdownMenuItem<DDown>(
-                    value: e,
-                    child: Text(
-                      e.name!,
-                      style: Styles.regular_arsenic_14,
-                    ),
-                  );
-                }).toList(),
+                value:
+                    state
+                        .manageProfileCombineState!
+                        .basicInfoState!
+                        .marital_status_value,
+                items:
+                    state
+                        .manageProfileCombineState!
+                        .profiledropdownResponseData!
+                        .data!
+                        .maritialStatus!
+                        .map<DropdownMenuItem<DDown>>((e) {
+                          return DropdownMenuItem<DDown>(
+                            value: e,
+                            child: Text(
+                              e.name!,
+                              style: Styles.regular_arsenic_14,
+                            ),
+                          );
+                        })
+                        .toList(),
                 onChanged: (dynamic newValue) {
-                  state.manageProfileCombineState!.basicInfoState!
+                  state
+                      .manageProfileCombineState!
+                      .basicInfoState!
                       .marital_status_value = newValue;
                 },
               ),
@@ -350,8 +393,11 @@ class _BasicInformationState extends State<BasicInformation> {
           BasicFormWidget(
             text: AppLocalizations.of(context)!.manage_profile_number_of_child,
             style: Styles.bold_arsenic_12,
-            controller: state
-                .manageProfileCombineState!.basicInfoState!.no_childController,
+            controller:
+                state
+                    .manageProfileCombineState!
+                    .basicInfoState!
+                    .no_childController,
             hint: "No of children",
             validator: (val) {
               if (val == null || val.isEmpty) {
@@ -374,8 +420,11 @@ class _BasicInformationState extends State<BasicInformation> {
                 TextFormField(
                   readOnly: true,
                   decoration: InputStyle.inputDecoration_text_field(
-                    hint: state.manageProfileCombineState!.basicInfoState!
-                        .imageName ??
+                    hint:
+                        state
+                            .manageProfileCombineState!
+                            .basicInfoState!
+                            .imageName ??
                         "Choose file",
                   ),
                 ),
@@ -385,8 +434,7 @@ class _BasicInformationState extends State<BasicInformation> {
                     width: 100,
                     child: TextButton(
                       style: ButtonStyle(
-                        backgroundColor:
-                        WidgetStateProperty.all<Color>(
+                        backgroundColor: WidgetStateProperty.all<Color>(
                           MyTheme.white,
                         ),
                         shape: WidgetStateProperty.all(
@@ -398,8 +446,8 @@ class _BasicInformationState extends State<BasicInformation> {
                           ),
                         ),
                       ),
-                      onPressed: () =>
-                          store.dispatch(getBasicGalleryImageAction()),
+                      onPressed:
+                          () => store.dispatch(getBasicGalleryImageAction()),
                       child: Text(
                         'Browse',
                         style: Styles.regular_storm_grey_12,
@@ -427,14 +475,17 @@ class _BasicInformationState extends State<BasicInformation> {
                 borderRadius: const BorderRadius.all(Radius.circular(6.0)),
               ),
               child: Center(
-                child: state.manageProfileCombineState!.basicInfoState!
-                    .isloading ==
-                    false
-                    ? Text(
-                  AppLocalizations.of(context)!.save_change_btn_text,
-                  style: Styles.bold_white_14,
-                )
-                    : CommonWidget.circularIndicator,
+                child:
+                    state
+                                .manageProfileCombineState!
+                                .basicInfoState!
+                                .isloading ==
+                            false
+                        ? Text(
+                          AppLocalizations.of(context)!.save_change_btn_text,
+                          style: Styles.bold_white_14,
+                        )
+                        : CommonWidget.circularIndicator,
               ),
             ),
           ),

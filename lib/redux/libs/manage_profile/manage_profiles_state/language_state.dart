@@ -13,18 +13,18 @@ class LanguageState {
   }
 
   update({
-  bool? isloading,
-  bool? saveChangesLoader,
-  final LanguageGetResponse? languageGetResponse,
-  DDown? selectedMotherTongue,
-  List<DDown>? selectedKnowLanguage
-}){
-    return  LanguageState(
-      isloading: isloading??this.isloading,
-      languageGetResponse: languageGetResponse??this.languageGetResponse,
-      saveChangesLoader: saveChangesLoader??this.saveChangesLoader,
-      selectedKnowLanguage: selectedKnowLanguage??this.selectedKnowLanguage,
-      selectedMotherTongue: selectedMotherTongue??this.selectedMotherTongue
+    bool? isloading,
+    bool? saveChangesLoader,
+    final LanguageGetResponse? languageGetResponse,
+    DDown? selectedMotherTongue,
+    List<DDown>? selectedKnowLanguage,
+  }) {
+    return LanguageState(
+      isloading: isloading ?? this.isloading,
+      languageGetResponse: languageGetResponse ?? this.languageGetResponse,
+      saveChangesLoader: saveChangesLoader ?? this.saveChangesLoader,
+      selectedKnowLanguage: selectedKnowLanguage ?? this.selectedKnowLanguage,
+      selectedMotherTongue: selectedMotherTongue ?? this.selectedMotherTongue,
     );
   }
 
@@ -37,11 +37,16 @@ class LanguageState {
      return ids;
   }*/
 
-  LanguageState(
-      {this.languageGetResponse, this.isloading, this.saveChangesLoader,this.selectedKnowLanguage=const [],this.selectedMotherTongue});
+  LanguageState({
+    this.languageGetResponse,
+    this.isloading,
+    this.saveChangesLoader,
+    this.selectedKnowLanguage = const [],
+    this.selectedMotherTongue,
+  });
 
   LanguageState.initialState()
-      : isloading = false,
-        languageGetResponse = LanguageGetResponse.initialState(),
-        saveChangesLoader = false;
+    : isloading = false,
+      languageGetResponse = LanguageGetResponse.initialState(),
+      saveChangesLoader = false;
 }

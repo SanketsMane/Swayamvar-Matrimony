@@ -385,37 +385,64 @@ class MemberController extends Controller
     public function store_verification_info(Request $request)
     {
         $data = array();
-        $i = 0;
-        foreach (json_decode(Setting::where('type', 'verification_form')->first()->value) as $key => $element) {
-            $item = array();
-            if ($element->type == 'text') {
-                $item['type'] = 'text';
-                $item['label'] = $element->label;
-                $item['value'] = $request['element_' . $i];
-            } elseif ($element->type == 'select' || $element->type == 'radio') {
-                $item['type'] = 'select';
-                $item['label'] = $element->label;
-                $item['value'] = $request['element_' . $i];
-            } elseif ($element->type == 'multi_select') {
-                $item['type'] = 'multi_select';
-                $item['label'] = $element->label;
-                $item['value'] = json_encode(explode(',', $request['element_' . $i]));
-            } 
-            elseif ($element->type == 'file') {
-                $item['type'] = 'file';
-                $item['label'] = $element->label;
-                $item['value'] = $request['element_' . $i]->store('uploads/verification_form');
+        
+        // Check if this is a structured submission from the new 3-step flow
+        if ($request->has('id_type')) {
+            $data[] = ['label' => 'ID Type', 'type' => 'text', 'value' => $request->id_type];
+            $data[] = ['label' => 'ID Number', 'type' => 'text', 'value' => $request->id_number];
+            
+            if ($request->hasFile('id_front')) {
+                $data[] = ['label' => 'ID Front', 'type' => 'file', 'value' => $request->file('id_front')->store('uploads/verification_form')];
             }
-            array_push($data, $item);
-            $i++;
+            if ($request->hasFile('id_back')) {
+                $data[] = ['label' => 'ID Back', 'type' => 'file', 'value' => $request->file('id_back')->store('uploads/verification_form')];
+            }
+            if ($request->hasFile('selfie')) {
+                $data[] = ['label' => 'Selfie', 'type' => 'file', 'value' => $request->file('selfie')->store('uploads/verification_form')];
+            }
+        } else {
+            // Fallback to dynamic form logic for legacy or web support
+            $i = 0;
+            $form_settings = Setting::where('type', 'verification_form')->first();
+            if ($form_settings) {
+                foreach (json_decode($form_settings->value) as $key => $element) {
+                    $item = array();
+                    if ($element->type == 'text') {
+                        $item['type'] = 'text';
+                        $item['label'] = $element->label;
+                        $item['value'] = $request['element_' . $i];
+                    } elseif ($element->type == 'select' || $element->type == 'radio') {
+                        $item['type'] = 'select';
+                        $item['label'] = $element->label;
+                        $item['value'] = $request['element_' . $i];
+                    } elseif ($element->type == 'multi_select') {
+                        $item['type'] = 'multi_select';
+                        $item['label'] = $element->label;
+                        $item['value'] = json_encode(explode(',', $request['element_' . $i]));
+                    } elseif ($element->type == 'file' && $request->hasFile('element_' . $i)) {
+                        $item['type'] = 'file';
+                        $item['label'] = $element->label;
+                        $item['value'] = $request['element_' . $i]->store('uploads/verification_form');
+                    }
+                    if (!empty($item)) {
+                        array_push($data, $item);
+                    }
+                    $i++;
+                }
+            }
         }
+
+        if (empty($data)) {
+            return $this->failure_message(translate('No verification data provided.'));
+        }
+
         $user = auth()->user();
         $user->verification_info = json_encode($data);
         if ($user->save()) {
             return $this->success_message(translate('Your verification request has been submitted successfully!'));
-        } 
+        }
 
-        return $this->failure_message(translate('Something Wenr Wrong!'));
+        return $this->failure_message(translate('Something Went Wrong!'));
     }
 
 }

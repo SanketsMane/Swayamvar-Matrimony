@@ -168,7 +168,6 @@ class ExploreRepository {
 
   //premium members
   Future<PremiumMembersResponse> fetchPremiumMembers() async {
-
     var baseUrl = "${AppConfig.BASE_URL}/home/premium-members";
     var accessToken = getToken;
 

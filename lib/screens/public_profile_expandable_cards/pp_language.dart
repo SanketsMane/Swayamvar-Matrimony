@@ -23,7 +23,7 @@ class PP_Language extends StatelessWidget {
                               context,
                             )!.public_profile_mother_tounge,
                         data:
-                            "${state.publicProfileState!.mothertongue.name ?? ''}",
+                            "${state.publicProfileState!.motherTongue.name ?? ''}",
                       ),
                       SizedBox(height: 10),
                       buildRow(

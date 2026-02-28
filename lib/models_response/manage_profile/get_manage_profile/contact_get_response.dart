@@ -11,10 +11,7 @@ String contactGetResponseToJson(ContactGetResponse data) =>
     json.encode(data.toJson());
 
 class ContactGetResponse {
-  ContactGetResponse({
-    this.result,
-    this.data,
-  });
+  ContactGetResponse({this.result, this.data});
 
   bool? result;
   ContactData? data;
@@ -25,24 +22,16 @@ class ContactGetResponse {
         data: ContactData.fromJson(json["data"]),
       );
 
-  Map<String, dynamic> toJson() => {
-        "result": result,
-        "data": data!.toJson(),
-      };
+  Map<String, dynamic> toJson() => {"result": result, "data": data!.toJson()};
 }
 
 class ContactData {
-  ContactData({
-    this.email,
-  });
+  ContactData({this.email});
 
   String? email;
 
-  factory ContactData.fromJson(Map<String, dynamic> json) => ContactData(
-        email: json["email"],
-      );
+  factory ContactData.fromJson(Map<String, dynamic> json) =>
+      ContactData(email: json["email"]);
 
-  Map<String, dynamic> toJson() => {
-        "email": email,
-      };
+  Map<String, dynamic> toJson() => {"email": email};
 }

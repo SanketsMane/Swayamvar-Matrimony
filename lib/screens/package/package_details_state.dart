@@ -6,13 +6,9 @@ class PackageDetailsState {
   bool? isFetching;
 
   PackageDetailsState.initialState()
-      : data = null,
-        error = '',
-        isFetching = true;
+    : data = null,
+      error = '',
+      isFetching = true;
 
-  PackageDetailsState({
-    this.data,
-    this.error,
-    this.isFetching,
-  });
+  PackageDetailsState({this.data, this.error, this.isFetching});
 }

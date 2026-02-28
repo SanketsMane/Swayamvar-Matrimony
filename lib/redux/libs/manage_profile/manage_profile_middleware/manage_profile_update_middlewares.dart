@@ -22,18 +22,20 @@ import '../manage_profile_reducer/present_address_reducer.dart';
 import '../manage_profile_reducer/residency_reducer.dart';
 import '../manage_profile_reducer/spiritual_reducer.dart';
 import 'manage_profile_get_middlewares.dart';
+import 'package:active_matrimonial_flutter_app/redux/store.dart';
 
-ThunkAction<AppState> basicInfoUpdateMiddleware(
-    {context,
-    dynamic f_name,
-    dynamic l_name,
-    dynamic gender,
-    dynamic dob,
-    dynamic phone,
-    dynamic onbehalf,
-    dynamic m_status,
-    dynamic noofChild,
-    dynamic photo}) {
+ThunkAction<AppState> basicInfoUpdateMiddleware({
+  context,
+  dynamic f_name,
+  dynamic l_name,
+  dynamic gender,
+  dynamic dob,
+  dynamic phone,
+  dynamic onbehalf,
+  dynamic m_status,
+  dynamic noofChild,
+  dynamic photo,
+}) {
   return (Store<AppState> store) async {
     store.dispatch(SaveChanges.basicInfo);
 
@@ -52,21 +54,21 @@ ThunkAction<AppState> basicInfoUpdateMiddleware(
 
     if (response.result) {
       store.dispatch(
-          ShowMessageAction(msg: response.message, color: MyTheme.success));
+        ShowMessageAction(msg: response.message, color: MyTheme.success),
+      );
       store.dispatch(basicInfoGetMiddleware());
       store.dispatch(accountMiddleware());
     } else {
       store.dispatch(
-          ShowMessageAction(msg: response.message, color: MyTheme.failure));
+        ShowMessageAction(msg: response.message, color: MyTheme.failure),
+      );
     }
 
     store.dispatch(SaveChanges.basicInfo);
   };
 }
 
-ThunkAction<AppState> contactMiddleware({
-  dynamic email,
-}) {
+ThunkAction<AppState> contactMiddleware({dynamic email}) {
   return (Store<AppState> store) async {
     store.dispatch(SaveChanges.contact);
 
@@ -75,10 +77,12 @@ ThunkAction<AppState> contactMiddleware({
 
       if (data.result) {
         store.dispatch(
-            ShowMessageAction(msg: data.message, color: MyTheme.success));
+          ShowMessageAction(msg: data.message, color: MyTheme.success),
+        );
       } else {
         store.dispatch(
-            ShowMessageAction(msg: data.message, color: MyTheme.failure));
+          ShowMessageAction(msg: data.message, color: MyTheme.failure),
+        );
       }
     } catch (e) {
       return;
@@ -96,11 +100,13 @@ ThunkAction<AppState> introUpdateMiddleware({dynamic text}) {
 
       if (data.result) {
         store.dispatch(
-            ShowMessageAction(msg: data.message, color: MyTheme.success));
+          ShowMessageAction(msg: data.message, color: MyTheme.success),
+        );
         store.dispatch(introductionGetMiddleware());
       } else {
         store.dispatch(
-            ShowMessageAction(msg: data.message, color: MyTheme.failure));
+          ShowMessageAction(msg: data.message, color: MyTheme.failure),
+        );
       }
     } catch (e) {
       //debugPrint(e);
@@ -110,8 +116,12 @@ ThunkAction<AppState> introUpdateMiddleware({dynamic text}) {
   };
 }
 
-ThunkAction<AppState> presentAddressUpdateMiddleware(
-    {dynamic country, dynamic state, dynamic city, dynamic postal_code}) {
+ThunkAction<AppState> presentAddressUpdateMiddleware({
+  dynamic country,
+  dynamic state,
+  dynamic city,
+  dynamic postal_code,
+}) {
   return (Store<AppState> store) async {
     store.dispatch(PresentAddressSaveChanges());
 
@@ -123,9 +133,12 @@ ThunkAction<AppState> presentAddressUpdateMiddleware(
         postal_code: postal_code,
       );
       store.dispatch(presentAddressGetMiddleware());
-      store.dispatch(ShowMessageAction(
+      store.dispatch(
+        ShowMessageAction(
           msg: data.message,
-          color: data.result == true ? MyTheme.success : MyTheme.failure));
+          color: data.result == true ? MyTheme.success : MyTheme.failure,
+        ),
+      );
     } catch (e) {
       return;
     }
@@ -144,16 +157,20 @@ ThunkAction<AppState> residencyUpdateMiddleware({
 
     try {
       var data = await ManageProfileRepository().updateResidency(
-          birth_country: birth_country,
-          residency_country: residency_country,
-          growup_country: growup_country,
-          immigration_status: immigration_status);
+        birth_country: birth_country,
+        residency_country: residency_country,
+        growup_country: growup_country,
+        immigration_status: immigration_status,
+      );
 
       store.dispatch(residencyGetMiddleware());
 
-      store.dispatch(ShowMessageAction(
+      store.dispatch(
+        ShowMessageAction(
           msg: data.message,
-          color: data.result == true ? MyTheme.success : MyTheme.failure));
+          color: data.result == true ? MyTheme.success : MyTheme.failure,
+        ),
+      );
     } catch (e) {
       return;
     }
@@ -175,19 +192,23 @@ ThunkAction<AppState> spiritualSocialUpdateMiddleware({
 
     try {
       var data = await ManageProfileRepository().updateSpiritual(
-          religion: religion,
-          caste: caste,
-          sub_caste: sub_caste,
-          ethnicity: ethnicity,
-          personal_value: personal_value,
-          family_value: family_value,
-          community_value: community_value);
+        religion: religion,
+        caste: caste,
+        sub_caste: sub_caste,
+        ethnicity: ethnicity,
+        personal_value: personal_value,
+        family_value: family_value,
+        community_value: community_value,
+      );
 
       store.dispatch(spiritualSocialGetMiddleware());
 
-      store.dispatch(ShowMessageAction(
+      store.dispatch(
+        ShowMessageAction(
           msg: data.message,
-          color: data.result == true ? MyTheme.success : MyTheme.failure));
+          color: data.result == true ? MyTheme.success : MyTheme.failure,
+        ),
+      );
     } catch (e) {
       print("error ${e.toString()}");
       return;
@@ -196,19 +217,30 @@ ThunkAction<AppState> spiritualSocialUpdateMiddleware({
   };
 }
 
-ThunkAction<AppState> astronomicUpdateMiddleware(
-    {dynamic sunsign, dynamic moonsign, dynamic time, dynamic city}) {
+ThunkAction<AppState> astronomicUpdateMiddleware({
+  dynamic sunsign,
+  dynamic moonsign,
+  dynamic time,
+  dynamic city,
+}) {
   return (Store<AppState> store) async {
     store.dispatch(AstroSaveChanges());
 
     try {
       var data = await ManageProfileRepository().astronomicUpdate(
-          sunsign: sunsign, moonsign: moonsign, time: (time), city: city);
+        sunsign: sunsign,
+        moonsign: moonsign,
+        time: (time),
+        city: city,
+      );
       store.dispatch(astronomicGetMiddleware());
 
-      store.dispatch(ShowMessageAction(
+      store.dispatch(
+        ShowMessageAction(
           msg: data.message.toString(),
-          color: data.result == true ? MyTheme.success : MyTheme.failure));
+          color: data.result == true ? MyTheme.success : MyTheme.failure,
+        ),
+      );
     } catch (e) {
       debugPrint(e.toString());
       return;
@@ -237,9 +269,12 @@ ThunkAction<AppState> attitudeBehaviorUpdateMiddleware({
       );
       store.dispatch(attitudeInterestsGetMiddleware());
 
-      store.dispatch(ShowMessageAction(
+      store.dispatch(
+        ShowMessageAction(
           msg: data.message,
-          color: data.result == true ? MyTheme.success : MyTheme.failure));
+          color: data.result == true ? MyTheme.success : MyTheme.failure,
+        ),
+      );
     } catch (e) {
       //debugPrint(e);
       return;
@@ -250,26 +285,31 @@ ThunkAction<AppState> attitudeBehaviorUpdateMiddleware({
 
 /// create career
 
-ThunkAction<AppState> careerUpdateMiddleware(
-    {dynamic designation,
-    dynamic company,
-    dynamic start,
-    dynamic end,
-    dynamic id}) {
+ThunkAction<AppState> careerUpdateMiddleware({
+  dynamic designation,
+  dynamic company,
+  dynamic start,
+  dynamic end,
+  dynamic id,
+}) {
   return (Store<AppState> store) async {
     store.dispatch(CareerLoader.update_change);
 
     try {
       var data = await ManageProfileRepository().careerUpdate(
-          designation: designation,
-          company: company,
-          start: start,
-          end: end,
-          id: id);
+        designation: designation,
+        company: company,
+        start: start,
+        end: end,
+        id: id,
+      );
 
-      store.dispatch(ShowMessageAction(
+      store.dispatch(
+        ShowMessageAction(
           msg: data.message,
-          color: data.result == true ? MyTheme.success : MyTheme.failure));
+          color: data.result == true ? MyTheme.success : MyTheme.failure,
+        ),
+      );
     } catch (e) {
       print("error in update ${e.toString()}");
       return;
@@ -298,23 +338,23 @@ ThunkAction<AppState> eudcationUpdateMiddleware({
       );
 
       if (data.result == true) {
-        store.dispatch(ShowMessageAction(
-          msg: data.message,
-          color: MyTheme.success,
-        ));
+        store.dispatch(
+          ShowMessageAction(msg: data.message, color: MyTheme.success),
+        );
       } else {
-        store.dispatch(ShowMessageAction(
-          msg: data.message,
-          color: MyTheme.failure,
-        ));
+        store.dispatch(
+          ShowMessageAction(msg: data.message, color: MyTheme.failure),
+        );
       }
     } catch (e) {
       store.dispatch(EducationLoader.update);
 
-      store.dispatch(ShowMessageAction(
-        msg: "Failed to update education data.",
-        color: MyTheme.failure,
-      ));
+      store.dispatch(
+        ShowMessageAction(
+          msg: "Failed to update education data.",
+          color: MyTheme.failure,
+        ),
+      );
     } finally {
       // Ensure that the loading state is reset at the end of the process
       store.dispatch(EducationLoader.update);
@@ -322,19 +362,28 @@ ThunkAction<AppState> eudcationUpdateMiddleware({
   };
 }
 
-ThunkAction<AppState> familyUpdateMiddleware(
-    {dynamic father, dynamic mother, dynamic sibling}) {
+ThunkAction<AppState> familyUpdateMiddleware({
+  dynamic father,
+  dynamic mother,
+  dynamic sibling,
+}) {
   return (Store<AppState> store) async {
     store.dispatch(SaveChanges.familyInfo);
 
     try {
-      var data = await ManageProfileRepository()
-          .updateFamily(father: father, mother: mother, sibling: sibling);
+      var data = await ManageProfileRepository().updateFamily(
+        father: father,
+        mother: mother,
+        sibling: sibling,
+      );
       store.dispatch(familyGetMiddleware());
 
-      store.dispatch(ShowMessageAction(
+      store.dispatch(
+        ShowMessageAction(
           msg: data.message,
-          color: data.result == true ? MyTheme.success : MyTheme.failure));
+          color: data.result == true ? MyTheme.success : MyTheme.failure,
+        ),
+      );
     } catch (e) {
       //debugPrint(e);
       return;
@@ -343,37 +392,42 @@ ThunkAction<AppState> familyUpdateMiddleware(
   };
 }
 
-ThunkAction<AppState> hobbiesInterestUpdateMiddleware(
-    {dynamic hobbies,
-    dynamic interests,
-    dynamic music,
-    dynamic books,
-    dynamic movies,
-    dynamic tv_shows,
-    dynamic sports,
-    dynamic fitness_activites,
-    dynamic cuisines,
-    dynamic dress_styles}) {
+ThunkAction<AppState> hobbiesInterestUpdateMiddleware({
+  dynamic hobbies,
+  dynamic interests,
+  dynamic music,
+  dynamic books,
+  dynamic movies,
+  dynamic tv_shows,
+  dynamic sports,
+  dynamic fitness_activites,
+  dynamic cuisines,
+  dynamic dress_styles,
+}) {
   return (Store<AppState> store) async {
     store.dispatch(HobbiesInterestLoader());
 
     try {
       var data = await ManageProfileRepository().updateHobbies(
-          hobbies: hobbies,
-          interests: interests,
-          music: music,
-          books: books,
-          movies: movies,
-          tv_shows: tv_shows,
-          sports: sports,
-          fitness_activites: fitness_activites,
-          cuisines: cuisines,
-          dress_styles: dress_styles);
+        hobbies: hobbies,
+        interests: interests,
+        music: music,
+        books: books,
+        movies: movies,
+        tv_shows: tv_shows,
+        sports: sports,
+        fitness_activites: fitness_activites,
+        cuisines: cuisines,
+        dress_styles: dress_styles,
+      );
       store.dispatch(hobbiesInterestGetMiddleware());
 
-      store.dispatch(ShowMessageAction(
+      store.dispatch(
+        ShowMessageAction(
           msg: data.message,
-          color: data.result == true ? MyTheme.success : MyTheme.failure));
+          color: data.result == true ? MyTheme.success : MyTheme.failure,
+        ),
+      );
     } catch (e) {
       //debugPrint(e);
       return;
@@ -391,12 +445,17 @@ ThunkAction<AppState> languageUpdateMiddleware({
 
     try {
       var data = await ManageProfileRepository().updateLanguage(
-          mother_tongue: mother_tongue, known_language: known_language);
+        mother_tongue: mother_tongue,
+        known_language: known_language,
+      );
       store.dispatch(languageGetMiddleware());
 
-      store.dispatch(ShowMessageAction(
+      store.dispatch(
+        ShowMessageAction(
           msg: data.message,
-          color: data.result == true ? MyTheme.success : MyTheme.failure));
+          color: data.result == true ? MyTheme.success : MyTheme.failure,
+        ),
+      );
     } catch (e) {
       print("error ${e.toString()}");
       return;
@@ -405,19 +464,30 @@ ThunkAction<AppState> languageUpdateMiddleware({
   };
 }
 
-ThunkAction<AppState> life_style_update_Middleware(
-    {dynamic diet, dynamic drink, dynamic smoke, dynamic living_with}) {
+ThunkAction<AppState> life_style_update_Middleware({
+  dynamic diet,
+  dynamic drink,
+  dynamic smoke,
+  dynamic living_with,
+}) {
   return (Store<AppState> store) async {
     store.dispatch(LifeStyleSaveChanges());
 
     try {
       var data = await ManageProfileRepository().updateLifeStyle(
-          diet: diet, drink: drink, smoke: smoke, living_with: living_with);
+        diet: diet,
+        drink: drink,
+        smoke: smoke,
+        living_with: living_with,
+      );
       store.dispatch(lifeStyleGetMiddleware());
 
-      store.dispatch(ShowMessageAction(
+      store.dispatch(
+        ShowMessageAction(
           msg: data.message,
-          color: data.result == true ? MyTheme.success : MyTheme.failure));
+          color: data.result == true ? MyTheme.success : MyTheme.failure,
+        ),
+      );
     } catch (e) {
       print("error ${e.toString()}");
       return;
@@ -455,34 +525,38 @@ ThunkAction<AppState> partnerExpectationUpdateMiddleware({
 
     try {
       var data = await ManageProfileRepository().updatePartnerExpectation(
-          general_info: general_info,
-          min_height: min_height,
-          max_weight: max_weight,
-          residency_country: residency_country,
-          marital_status: marital_status,
-          children: children,
-          religion: religion,
-          caste: caste,
-          subcaste: subcaste,
-          language: language,
-          smoking: smoking,
-          education: education,
-          profession: profession,
-          drinking: drinking,
-          diet: diet,
-          body_type: body_type,
-          personal_value: personal_value,
-          manglik: manglik,
-          pref_country: pref_country,
-          pref_state: pref_state,
-          family_val: family_val,
-          complexion: complexion);
+        general_info: general_info,
+        min_height: min_height,
+        max_weight: max_weight,
+        residency_country: residency_country,
+        marital_status: marital_status,
+        children: children,
+        religion: religion,
+        caste: caste,
+        subcaste: subcaste,
+        language: language,
+        smoking: smoking,
+        education: education,
+        profession: profession,
+        drinking: drinking,
+        diet: diet,
+        body_type: body_type,
+        personal_value: personal_value,
+        manglik: manglik,
+        pref_country: pref_country,
+        pref_state: pref_state,
+        family_val: family_val,
+        complexion: complexion,
+      );
       if (data.result) {
         store.dispatch(partnerExpectationGetMiddleware());
       }
-      store.dispatch(ShowMessageAction(
+      store.dispatch(
+        ShowMessageAction(
           msg: data.message,
-          color: data.result == true ? MyTheme.success : MyTheme.failure));
+          color: data.result == true ? MyTheme.success : MyTheme.failure,
+        ),
+      );
     } catch (e) {
       print("error ${e.toString()}");
       return;
@@ -491,19 +565,30 @@ ThunkAction<AppState> partnerExpectationUpdateMiddleware({
   };
 }
 
-ThunkAction<AppState> permanentAddressUpdateMiddleware(
-    {dynamic country, dynamic state, dynamic city, dynamic postal_code}) {
+ThunkAction<AppState> permanentAddressUpdateMiddleware({
+  dynamic country,
+  dynamic state,
+  dynamic city,
+  dynamic postal_code,
+}) {
   return (Store<AppState> store) async {
     store.dispatch(PermanentAddressSaveChanges());
 
     try {
       var data = await ManageProfileRepository().updatePermanentAddress(
-          country: country, state: state, city: city, postal_code: postal_code);
+        country: country,
+        state: state,
+        city: city,
+        postal_code: postal_code,
+      );
       store.dispatch(permanentAddressGetMiddleware());
 
-      store.dispatch(ShowMessageAction(
+      store.dispatch(
+        ShowMessageAction(
           msg: data.message,
-          color: data.result == true ? MyTheme.success : MyTheme.failure));
+          color: data.result == true ? MyTheme.success : MyTheme.failure,
+        ),
+      );
     } catch (e) {
       print("error ${e.toString()}");
       return;
@@ -512,35 +597,40 @@ ThunkAction<AppState> permanentAddressUpdateMiddleware(
   };
 }
 
-ThunkAction<AppState> physicalAttrMiddleware(
-    {dynamic height,
-    dynamic weight,
-    dynamic eye_color,
-    dynamic hair_color,
-    dynamic complexion,
-    dynamic body_type,
-    dynamic body_art,
-    dynamic blood_group,
-    dynamic disability}) {
+ThunkAction<AppState> physicalAttrMiddleware({
+  dynamic height,
+  dynamic weight,
+  dynamic eye_color,
+  dynamic hair_color,
+  dynamic complexion,
+  dynamic body_type,
+  dynamic body_art,
+  dynamic blood_group,
+  dynamic disability,
+}) {
   return (Store<AppState> store) async {
     store.dispatch(PhysicalAttrLoader());
 
     try {
       var data = await ManageProfileRepository().updatePhysicalAttr(
-          height: height,
-          weight: weight,
-          eye_color: eye_color,
-          hair_color: hair_color,
-          complexion: complexion,
-          body_type: body_type,
-          body_art: body_art,
-          blood_group: blood_group,
-          disability: disability);
+        height: height,
+        weight: weight,
+        eye_color: eye_color,
+        hair_color: hair_color,
+        complexion: complexion,
+        body_type: body_type,
+        body_art: body_art,
+        blood_group: blood_group,
+        disability: disability,
+      );
       store.dispatch(physicalAttributesGetMiddleware());
 
-      store.dispatch(ShowMessageAction(
+      store.dispatch(
+        ShowMessageAction(
           msg: data.message,
-          color: data.result == true ? MyTheme.success : MyTheme.failure));
+          color: data.result == true ? MyTheme.success : MyTheme.failure,
+        ),
+      );
     } catch (e) {
       //debugPrint(e);
       return;

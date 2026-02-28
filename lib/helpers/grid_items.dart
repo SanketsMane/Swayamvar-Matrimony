@@ -1,5 +1,3 @@
-
-
 import 'package:active_matrimonial_flutter_app/components/grid_square_card.dart';
 import 'package:active_matrimonial_flutter_app/helpers/aiz_route.dart';
 import 'package:active_matrimonial_flutter_app/helpers/localization.dart';
@@ -8,7 +6,8 @@ import 'package:active_matrimonial_flutter_app/middleware/check_package_middlewa
 import 'package:active_matrimonial_flutter_app/middleware/middleware.dart';
 import 'package:active_matrimonial_flutter_app/screens/blog/blogs.dart';
 import 'package:active_matrimonial_flutter_app/screens/chat/chat_list.dart';
-import 'package:active_matrimonial_flutter_app/screens/core.dart' hide Middleware;
+import 'package:active_matrimonial_flutter_app/screens/core.dart'
+    hide Middleware;
 import 'package:active_matrimonial_flutter_app/screens/happy_story/my_happy_stories/my_happy_stories.dart';
 import 'package:active_matrimonial_flutter_app/screens/ignore/ignore.dart';
 import 'package:active_matrimonial_flutter_app/screens/member_match/MatchedProfileScreen.dart';
@@ -23,6 +22,7 @@ import 'package:active_matrimonial_flutter_app/screens/referral/referral_earning
 import 'package:active_matrimonial_flutter_app/screens/referral/referral_earnings_wallet.dart';
 import 'package:active_matrimonial_flutter_app/screens/support_ticket/support_ticket.dart';
 import 'package:flutter/material.dart';
+import 'package:active_matrimonial_flutter_app/redux/store.dart';
 
 class GridItems {
   final List<GridSquareCard> _menuList = [];
@@ -40,8 +40,9 @@ class GridItems {
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(
             content: Text(
-                'Your account is deactivated. Please reactivate it to use this feature.',
-            textAlign: TextAlign.center,),
+              'Your account is deactivated. Please reactivate it to use this feature.',
+              textAlign: TextAlign.center,
+            ),
             backgroundColor: Colors.red,
             duration: Duration(seconds: 1),
           ),
@@ -62,8 +63,9 @@ class GridItems {
           text: "My Wallet",
         ),
       GridSquareCard(
-        onpressed:
-        _handleNavigation(screen: ChatList(backButtonAppearance: true)),
+        onpressed: _handleNavigation(
+          screen: ChatList(backButtonAppearance: true),
+        ),
         icon: "icon_messages.png",
         text: "Messages",
       ),
@@ -92,9 +94,10 @@ class GridItems {
         GridSquareCard(
           onpressed: _handleNavigation(screen: const GalleryProfileViewRqst()),
           icon: "icon_gallery_view.png",
-          text: LangText(
-            context: OneContext().context,
-          ).getLocal().gallery_picture_screen_appbar_title,
+          text:
+              LangText(
+                context: OneContext().context,
+              ).getLocal().gallery_picture_screen_appbar_title,
         ),
       GridSquareCard(
         onpressed: _handleNavigation(screen: const MyShortlist()),
@@ -154,4 +157,3 @@ class GridItems {
 
   List<GridSquareCard> get gridMenuItems => _menuList;
 }
-

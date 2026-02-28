@@ -62,14 +62,17 @@ class NotificationListCard extends StatelessWidget {
         margin: const EdgeInsets.symmetric(horizontal: 20),
         width: DeviceInfo(context).width,
         decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: const BorderRadius.all(
-              Radius.circular(12.0),
-            ),
-            boxShadow: [CommonWidget.box_shadow()]),
+          color: Colors.white,
+          borderRadius: const BorderRadius.all(Radius.circular(12.0)),
+          boxShadow: [CommonWidget.box_shadow()],
+        ),
         child: Padding(
-          padding:
-              const EdgeInsets.only(left: 10, top: 14, bottom: 14, right: 10),
+          padding: const EdgeInsets.only(
+            left: 10,
+            top: 14,
+            bottom: 14,
+            right: 10,
+          ),
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -81,9 +84,7 @@ class NotificationListCard extends StatelessWidget {
                   child: MyImages.normalImage(photo),
                 ),
               ),
-              const SizedBox(
-                width: 10,
-              ),
+              const SizedBox(width: 10),
               Column(
                 mainAxisAlignment: MainAxisAlignment.end,
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -95,16 +96,20 @@ class NotificationListCard extends StatelessWidget {
                       children: [
                         Text(
                           time!,
-                          style: Styles.caption.copyWith(fontSize: 12, color: Colors.grey),
+                          style: Styles.caption.copyWith(
+                            fontSize: 12,
+                            color: Colors.grey,
+                          ),
                         ),
                         readAt != "read"
                             ? Container(
-                                height: 7,
-                                width: 7,
-                                decoration: BoxDecoration(
-                                    color: MyTheme.failure,
-                                    shape: BoxShape.circle),
-                              )
+                              height: 7,
+                              width: 7,
+                              decoration: BoxDecoration(
+                                color: MyTheme.failure,
+                                shape: BoxShape.circle,
+                              ),
+                            )
                             : const SizedBox(),
                       ],
                     ),
@@ -119,7 +124,7 @@ class NotificationListCard extends StatelessWidget {
                       maxLines: 2,
                       softWrap: false,
                     ),
-                  )
+                  ),
                 ],
               ),
             ],

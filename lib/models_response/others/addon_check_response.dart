@@ -11,10 +11,7 @@ String addonCheckResponseToJson(AddonCheckResponse data) =>
     json.encode(data.toJson());
 
 class AddonCheckResponse {
-  AddonCheckResponse({
-    this.result,
-    this.data,
-  });
+  AddonCheckResponse({this.result, this.data});
 
   bool? result;
   AddonData? data;
@@ -25,32 +22,25 @@ class AddonCheckResponse {
         data: AddonData.fromJson(json["data"]),
       );
 
-  Map<String, dynamic> toJson() => {
-        "result": result,
-        "data": data!.toJson(),
-      };
+  Map<String, dynamic> toJson() => {"result": result, "data": data!.toJson()};
 }
 
 class AddonData {
-  AddonData({
-    this.otpSystem,
-    this.referralSystem,
-    this.supportTickets,
-  });
+  AddonData({this.otpSystem, this.referralSystem, this.supportTickets});
 
   bool? otpSystem;
   bool? referralSystem;
   bool? supportTickets;
 
   factory AddonData.fromJson(Map<String, dynamic> json) => AddonData(
-        otpSystem: json["otp_system"],
-        referralSystem: json["referral_system"],
-        supportTickets: json["support_tickets"],
-      );
+    otpSystem: json["otp_system"],
+    referralSystem: json["referral_system"],
+    supportTickets: json["support_tickets"],
+  );
 
   Map<String, dynamic> toJson() => {
-        "otp_system": otpSystem,
-        "referral_system": referralSystem,
-        "support_tickets": supportTickets,
-      };
+    "otp_system": otpSystem,
+    "referral_system": referralSystem,
+    "support_tickets": supportTickets,
+  };
 }

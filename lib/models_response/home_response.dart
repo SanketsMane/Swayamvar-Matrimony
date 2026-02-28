@@ -114,7 +114,6 @@
 //       };
 // }*/
 
-
 import 'dart:convert';
 import 'package:active_matrimonial_flutter_app/models_response/common_models/member_data.dart';
 import 'package:active_matrimonial_flutter_app/models_response/gallery_picture_view_request_get_response.dart';
@@ -155,7 +154,8 @@ class HomeResponse {
 
   factory HomeResponse.fromJson(Map<String, dynamic> json) {
     // Sanket: Support both old flat-list format and new segmented API format
-    final isSegmented = json.containsKey('hero_match') ||
+    final isSegmented =
+        json.containsKey('hero_match') ||
         json.containsKey('new_matches') ||
         json.containsKey('verified') ||
         json.containsKey('active_now');

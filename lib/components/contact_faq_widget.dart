@@ -10,11 +10,7 @@ class ContactAndFaq extends StatelessWidget {
   final String? title;
   final String? content;
 
-  const ContactAndFaq({
-    super.key,
-    this.title,
-    this.content,
-  });
+  const ContactAndFaq({super.key, this.title, this.content});
 
   @override
   Widget build(BuildContext context) {
@@ -30,31 +26,21 @@ class ContactAndFaq extends StatelessWidget {
               MaterialPageRoute(builder: (context) => const ContactUs()),
             );
           },
-          child: Text(
-            'Contact Us',
-            style: Styles.regular_gull_grey_12,
-          ),
+          child: Text('Contact Us', style: Styles.regular_gull_grey_12),
         ),
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 8.0),
-          child: Text(
-            "|",
-            style: TextStyle(color: MyTheme.gull_grey),
-          ),
+          child: Text("|", style: TextStyle(color: MyTheme.gull_grey)),
         ),
         GestureDetector(
-            onTap: () {
-              NavigatorPush.push(
-                  context,
-                  CommonPrivacyAndTerms(
-                    title: title,
-                    content: content,
-                  ));
-            },
-            child: Text(
-              'FAQ',
-              style: Styles.regular_gull_grey_12,
-            )),
+          onTap: () {
+            NavigatorPush.push(
+              context,
+              CommonPrivacyAndTerms(title: title, content: content),
+            );
+          },
+          child: Text('FAQ', style: Styles.regular_gull_grey_12),
+        ),
       ],
     );
   }

@@ -9,6 +9,7 @@ import '../screens/happy_story/happy_stories_details.dart';
 import '../screens/home_pages/explore/explore_action.dart';
 import 'common_widget.dart';
 import 'my_images.dart';
+import 'package:active_matrimonial_flutter_app/redux/store.dart';
 
 class HappyStoriesCard extends StatelessWidget {
   final bool? isFetching;
@@ -33,84 +34,80 @@ class HappyStoriesCard extends StatelessWidget {
       children: [
         SizedBox(
           height: 235,
-          child: isFetching == true
-              ? CommonWidget.circularIndicator
-              : hasStories
+          child:
+              isFetching == true
+                  ? CommonWidget.circularIndicator
+                  : hasStories
                   ? CarouselSlider.builder(
-                      carouselController: controller,
-                      itemCount: happyStories!.length,
-                      itemBuilder: (context, index, realIndex) {
-                        return InkWell(
-                          onTap: () {
-                            NavigatorPush.push(
-                              context,
-                              HappyStoriesDetails(
-                                data: happyStories![index],
-                              ),
-                            );
-                          },
-                          child: Container(
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(16.0),
-                              image: DecorationImage(
-                                fit: BoxFit.cover,
-                                image: MyImage.imageProvider(
-                                    happyStories![index].thumbImg),
-                              ),
-                            ),
-                            child: Container(
-                              decoration: const BoxDecoration(
-                                borderRadius:
-                                    BorderRadius.all(Radius.circular(16.0)),
-                                gradient: LinearGradient(
-                                  begin: Alignment.topCenter,
-                                  end: Alignment.bottomCenter,
-                                  stops: [0.4, 1],
-                                  colors: [
-                                    Colors.transparent,
-                                    Colors.black,
-                                  ],
-                                ),
-                              ),
-                              child: Padding(
-                                padding: const EdgeInsets.all(14.0),
-                                child: Column(
-                                  mainAxisAlignment: MainAxisAlignment.end,
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text(
-                                      happyStories![index].title,
-                                      style: Styles.bold_white_16,
-                                      overflow: TextOverflow.ellipsis,
-                                    ),
-                                    const SizedBox(height: 6),
-                                    Text(
-                                      happyStories![index].details,
-                                      style: Styles.regular_light_grey_12,
-                                      overflow: TextOverflow.ellipsis,
-                                      maxLines: 2,
-                                    ),
-                                  ],
-                                ),
+                    carouselController: controller,
+                    itemCount: happyStories!.length,
+                    itemBuilder: (context, index, realIndex) {
+                      return InkWell(
+                        onTap: () {
+                          NavigatorPush.push(
+                            context,
+                            HappyStoriesDetails(data: happyStories![index]),
+                          );
+                        },
+                        child: Container(
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(16.0),
+                            image: DecorationImage(
+                              fit: BoxFit.cover,
+                              image: MyImage.imageProvider(
+                                happyStories![index].thumbImg,
                               ),
                             ),
                           ),
-                        );
-                      },
-                      options: CarouselOptions(
-                        onPageChanged: (index, reason) {
-                          if (index >= 0 && index < happyStories!.length) {
-                            store.dispatch(
-                              SetExploreHappyStoriesCarouselIndex(
-                                payload: index,
+                          child: Container(
+                            decoration: const BoxDecoration(
+                              borderRadius: BorderRadius.all(
+                                Radius.circular(16.0),
                               ),
-                            );
-                          }
-                        },
-                        enlargeCenterPage: true,
-                        viewportFraction: 0.9,
-                      ),
-                    )
+                              gradient: LinearGradient(
+                                begin: Alignment.topCenter,
+                                end: Alignment.bottomCenter,
+                                stops: [0.4, 1],
+                                colors: [Colors.transparent, Colors.black],
+                              ),
+                            ),
+                            child: Padding(
+                              padding: const EdgeInsets.all(14.0),
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.end,
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    happyStories![index].title,
+                                    style: Styles.bold_white_16,
+                                    overflow: TextOverflow.ellipsis,
+                                  ),
+                                  const SizedBox(height: 6),
+                                  Text(
+                                    happyStories![index].details,
+                                    style: Styles.regular_light_grey_12,
+                                    overflow: TextOverflow.ellipsis,
+                                    maxLines: 2,
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                        ),
+                      );
+                    },
+                    options: CarouselOptions(
+                      onPageChanged: (index, reason) {
+                        if (index >= 0 && index < happyStories!.length) {
+                          store.dispatch(
+                            SetExploreHappyStoriesCarouselIndex(payload: index),
+                          );
+                        }
+                      },
+                      enlargeCenterPage: true,
+                      viewportFraction: 0.9,
+                    ),
+                  )
                   : CommonWidget.noData,
         ),
         if (hasStories)
@@ -123,9 +120,10 @@ class HappyStoriesCard extends StatelessWidget {
                 dotHeight: 8,
                 dotWidth: 8,
               ),
-              activeIndex: happyStoriesIndex != null && hasStories
-                  ? happyStoriesIndex!.clamp(0, happyStories!.length - 1)
-                  : 0,
+              activeIndex:
+                  happyStoriesIndex != null && hasStories
+                      ? happyStoriesIndex!.clamp(0, happyStories!.length - 1)
+                      : 0,
               count: happyStories!.length,
             ),
           ),

@@ -1,5 +1,4 @@
-
-import 'package:active_matrimonial_flutter_app/main.dart';
+import 'package:active_matrimonial_flutter_app/redux/store.dart';
 import 'package:active_matrimonial_flutter_app/redux/libs/helpers/show_message_state.dart';
 import 'package:active_matrimonial_flutter_app/screens/home_pages/home/home_action.dart';
 import 'package:active_matrimonial_flutter_app/screens/home_pages/home/home_state.dart';
@@ -17,7 +16,6 @@ final homeReducer = combineReducers<HomeState>([
   TypedReducer<HomeState, GoPrevPage>(_goPrevPage),
 ]);
 
-
 HomeState _homeFetching(HomeState state, HomeFetchingAction action) {
   state.isFetching = true;
   return state;
@@ -25,7 +23,11 @@ HomeState _homeFetching(HomeState state, HomeFetchingAction action) {
 
 HomeState _homeStore(HomeState state, HomeStoreAction action) {
   state.isFetching = false;
-  state.homeDataList = action.payload!.data;
+  state.homeDataList = action.payload?.data;
+  state.heroMatch = action.payload?.heroMatch;
+  state.verified = action.payload?.verified;
+  state.activeNow = action.payload?.activeNow;
+  state.newMatches = action.payload?.newMatches;
   return state;
 }
 

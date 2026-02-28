@@ -7,14 +7,10 @@ class PaymentTypesState {
   var selected_payment_method_key;
   var selected_payment_method;
 
-  PaymentTypesState({
-    this.error,
-    this.isFetching,
-    this.paymentTypes,
-  });
+  PaymentTypesState({this.error, this.isFetching, this.paymentTypes});
 
   PaymentTypesState.initialState()
-      : error = '',
-        isFetching = true,
-        paymentTypes = [];
+    : error = '',
+      isFetching = true,
+      paymentTypes = [];
 }

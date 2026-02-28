@@ -1,3 +1,3 @@
-abstract class Middleware<T,R>{
+abstract class Middleware<T, R> {
   T next({R? data});
 }

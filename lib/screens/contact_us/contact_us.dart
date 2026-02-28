@@ -1,4 +1,3 @@
-
 import 'dart:convert';
 import 'dart:developer';
 import 'package:active_matrimonial_flutter_app/app_config.dart';
@@ -15,6 +14,7 @@ import '../../const/style.dart';
 import '../../helpers/main_helpers.dart';
 import '../core.dart';
 import 'contact_us_action.dart';
+import 'package:active_matrimonial_flutter_app/redux/store.dart';
 
 class ContactUs extends StatefulWidget {
   const ContactUs({super.key});
@@ -24,47 +24,53 @@ class ContactUs extends StatefulWidget {
 }
 
 class _ContactUsState extends State<ContactUs> {
-  final bool _isRecaptchaActive =
-  settingIsActive('recaptcha_contact_form', '1');
+  bool _isRecaptchaActive = false;
   late final WebViewController _controller;
   final String _recaptchaUrl = "${AppConfig.BASE_URL}/google-recaptcha";
+
   @override
   void initState() {
     super.initState();
+    _isRecaptchaActive = settingIsActive(
+      'recaptcha_contact_form',
+      '1',
+    );
     if (_isRecaptchaActive) {
       _setupWebViewController();
     }
   }
 
   void _setupWebViewController() {
-    _controller = WebViewController()
-      ..setJavaScriptMode(JavaScriptMode.unrestricted)
-      ..setBackgroundColor(Colors.transparent)
-      ..addJavaScriptChannel(
-        'Captcha',
-        onMessageReceived: (JavaScriptMessage message) {
-          log("reCAPTCHA v3 Token Received: ${message.message}");
-          if (message.message.isNotEmpty && message.message != "error") {
-            store.dispatch(
-              SetContactUsKeyValueAction(keyValuePayload: message.message),
-            );
-          }
-        },
-      )
-      ..setNavigationDelegate(
-        NavigationDelegate(
-          onNavigationRequest: (NavigationRequest request) {
-            if (request.url == _recaptchaUrl) {
-              return NavigationDecision.navigate;
-            } else {
-              _launchUrl(request.url);
-              return NavigationDecision.prevent;
-            }
-          },
-        ),
-      )
-      ..loadRequest(Uri.parse(_recaptchaUrl));
+    _controller =
+        WebViewController()
+          ..setJavaScriptMode(JavaScriptMode.unrestricted)
+          ..setBackgroundColor(Colors.transparent)
+          ..addJavaScriptChannel(
+            'Captcha',
+            onMessageReceived: (JavaScriptMessage message) {
+              log("reCAPTCHA v3 Token Received: ${message.message}");
+              if (message.message.isNotEmpty && message.message != "error") {
+                store.dispatch(
+                  SetContactUsKeyValueAction(keyValuePayload: message.message),
+                );
+              }
+            },
+          )
+          ..setNavigationDelegate(
+            NavigationDelegate(
+              onNavigationRequest: (NavigationRequest request) {
+                if (request.url == _recaptchaUrl) {
+                  return NavigationDecision.navigate;
+                } else {
+                  _launchUrl(request.url);
+                  return NavigationDecision.prevent;
+                }
+              },
+            ),
+          )
+          ..loadRequest(Uri.parse(_recaptchaUrl));
   }
+
   Future<void> _launchUrl(String url) async {
     final Uri uri = Uri.parse(url);
     if (!await launchUrl(uri, mode: LaunchMode.externalApplication)) {
@@ -79,7 +85,7 @@ class _ContactUsState extends State<ContactUs> {
 
   bool requiredFieldVerification() {
     var value =
-    store.state.contactUsState!.emailController!.text.trim().toString();
+        store.state.contactUsState!.emailController!.text.trim().toString();
 
     if (store.state.contactUsState!.nameController!.text
         .trim()
@@ -156,12 +162,13 @@ class _ContactUsState extends State<ContactUs> {
   Widget build(BuildContext context) {
     return StoreConnector<AppState, AppState>(
       converter: (store) => store.state,
-      builder: (_, state) => Scaffold(
-        appBar: CommonAppBar(
-          text: AppLocalizations.of(context)!.contact_us,
-        ).build(context),
-        body: buildBody(state),
-      ),
+      builder:
+          (_, state) => Scaffold(
+            appBar: CommonAppBar(
+              text: AppLocalizations.of(context)!.contact_us,
+            ).build(context),
+            body: buildBody(state),
+          ),
     );
   }
 
@@ -188,7 +195,7 @@ class _ContactUsState extends State<ContactUs> {
                   name: "Email",
                   hintText: "Enter your E-mail",
                   helperText:
-                  "Please, enter the email address where you wish to receive our answer.",
+                      "Please, enter the email address where you wish to receive our answer.",
                   controller: state.contactUsState!.emailController,
                 ),
                 itemSpacer(height: 14.0),
@@ -227,9 +234,10 @@ class _ContactUsState extends State<ContactUs> {
     return GestureDetector(
       onTap: send,
       child: MyGradientContainer(
-        text: !state.contactUsState!.isSubmit
-            ? Text("Send", style: Styles.bold_white_14)
-            : CircularProgressIndicator(color: MyTheme.storm_grey),
+        text:
+            !state.contactUsState!.isSubmit
+                ? Text("Send", style: Styles.bold_white_14)
+                : CircularProgressIndicator(color: MyTheme.storm_grey),
       ),
     );
   }

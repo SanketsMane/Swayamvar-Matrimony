@@ -11,26 +11,21 @@ String attitudeBehaviorGetResponseToJson(AttitudeBehaviorGetResponse data) =>
     json.encode(data.toJson());
 
 class AttitudeBehaviorGetResponse {
-  AttitudeBehaviorGetResponse({
-    this.data,
-    this.result,
-  });
+  AttitudeBehaviorGetResponse({this.data, this.result});
 
   AttitudeBehaviorData? data;
   bool? result;
 
   factory AttitudeBehaviorGetResponse.fromJson(Map<String, dynamic> json) =>
       AttitudeBehaviorGetResponse(
-        data: json["data"] == null
-            ? null
-            : AttitudeBehaviorData.fromJson(json["data"]),
+        data:
+            json["data"] == null
+                ? null
+                : AttitudeBehaviorData.fromJson(json["data"]),
         result: json["result"],
       );
 
-  Map<String, dynamic> toJson() => {
-        "data": data?.toJson(),
-        "result": result,
-      };
+  Map<String, dynamic> toJson() => {"data": data?.toJson(), "result": result};
 }
 
 class AttitudeBehaviorData {
@@ -55,9 +50,9 @@ class AttitudeBehaviorData {
       );
 
   Map<String, dynamic> toJson() => {
-        "affection": affection,
-        "humor": humor,
-        "political_views": politicalViews,
-        "religious_service": religiousService,
-      };
+    "affection": affection,
+    "humor": humor,
+    "political_views": politicalViews,
+    "religious_service": religiousService,
+  };
 }

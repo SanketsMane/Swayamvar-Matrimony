@@ -3,13 +3,16 @@ import 'package:active_matrimonial_flutter_app/models_response/manage_profile/ge
 import 'package:active_matrimonial_flutter_app/redux/libs/manage_profile/manage_profiles_state/attitude_behavior_state.dart';
 import 'package:flutter/material.dart';
 
-import '../../../../main.dart';
+import '../../../../redux/store.dart';
 import '../manage_profile_middleware/manage_profile_update_middlewares.dart';
+import 'package:active_matrimonial_flutter_app/redux/store.dart';
 
 class AttitudeBehaviorLoader {}
 
 AttitudeBehaviorState? attitude_behavior_reducer(
-    AttitudeBehaviorState? state, dynamic action) {
+  AttitudeBehaviorState? state,
+  dynamic action,
+) {
   if (action is AttitudeBehaviorLoader) {
     state!.isLoading = !state.isLoading!;
     return state;
@@ -22,16 +25,8 @@ AttitudeBehaviorState? attitude_behavior_reducer(
 
   if (action == UpdateInfo.attitudeBehaviour) {
     FocusManager.instance.primaryFocus?.unfocus();
-    if (state!.formKey.currentState!.validate()) {
-      store.dispatch(
-        attitudeBehaviorUpdateMiddleware(
-          affection: state.affectionController!.text,
-          humor: state.humorController!.text,
-          religious_service: state.religiousServiceController!.text,
-          political_views: state.politicalViewsController!.text,
-        ),
-      );
-    }
+    // Sanket: Side effect removed from reducer.
+    // store.dispatch(attitudeBehaviorUpdateMiddleware(...)) must be called from the UI or a thunk.
   }
 
   return state;

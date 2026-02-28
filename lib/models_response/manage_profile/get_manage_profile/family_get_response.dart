@@ -26,32 +26,28 @@ class FamilyGetResponse {
       );
 
   Map<String, dynamic> toJson() => {
-        "data": data?.toJson(),
-        "result": result,
-        "message": message,
-      };
+    "data": data?.toJson(),
+    "result": result,
+    "message": message,
+  };
 }
 
 class FamilyData {
-  FamilyData({
-    this.father,
-    this.mother,
-    this.sibling,
-  });
+  FamilyData({this.father, this.mother, this.sibling});
 
   String? father;
   String? mother;
   String? sibling;
 
   factory FamilyData.fromJson(Map<String, dynamic> json) => FamilyData(
-        father: json["father"],
-        mother: json["mother"],
-        sibling: json["sibling"],
-      );
+    father: json["father"],
+    mother: json["mother"],
+    sibling: json["sibling"],
+  );
 
   Map<String, dynamic> toJson() => {
-        "father": father,
-        "mother": mother,
-        "sibling": sibling,
-      };
+    "father": father,
+    "mother": mother,
+    "sibling": sibling,
+  };
 }

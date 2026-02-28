@@ -15,9 +15,9 @@ class PackageState {
   });
 
   PackageState.initialState()
-      : hasMore = true,
-        error = '',
-        packageHistoryList = [],
-        isFetching = true,
-        page = 1;
+    : hasMore = true,
+      error = '',
+      packageHistoryList = [],
+      isFetching = true,
+      page = 1;
 }

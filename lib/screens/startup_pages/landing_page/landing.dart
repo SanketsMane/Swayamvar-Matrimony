@@ -3,6 +3,7 @@ import 'package:carousel_slider/carousel_slider.dart';
 import '../../../models_response/Explore/slider_response.dart';
 import '../../../repository/explore_repository.dart';
 import '../../core.dart';
+import 'package:active_matrimonial_flutter_app/redux/store.dart';
 
 class LandingState {
   final CarouselSliderController carouselController =
@@ -13,17 +14,18 @@ class LandingState {
   List? sliderImageList = [];
   String? sliderError;
 
-  LandingState(
-      {this.carouselIndex,
-      this.isFetchingSlider,
-      this.sliderImageList,
-      this.sliderError});
+  LandingState({
+    this.carouselIndex,
+    this.isFetchingSlider,
+    this.sliderImageList,
+    this.sliderError,
+  });
 
   LandingState.initialState()
-      : carouselIndex = 0,
-        isFetchingSlider = true,
-        sliderImageList = [],
-        sliderError = '';
+    : carouselIndex = 0,
+      isFetchingSlider = true,
+      sliderImageList = [],
+      sliderError = '';
 }
 
 LandingState? landingReducer(LandingState? state, dynamic action) {

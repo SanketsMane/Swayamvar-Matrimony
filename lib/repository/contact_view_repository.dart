@@ -14,17 +14,17 @@ class ContactView {
   Future<CommonResponse> postContactView({id}) async {
     var baseUrl = "${AppConfig.BASE_URL}/member/view-contact-store";
     var accessToken = SharedPref().accessToken;
-    var postBody = jsonEncode({
-      "id": id,
-    });
+    var postBody = jsonEncode({"id": id});
 
-    var response = await http.post(Uri.parse(baseUrl),
-        headers: {
-          "Accept": "application/json",
-          "Content-Type": "application/json",
-          "Authorization": "Bearer $accessToken",
-        },
-        body: postBody);
+    var response = await http.post(
+      Uri.parse(baseUrl),
+      headers: {
+        "Accept": "application/json",
+        "Content-Type": "application/json",
+        "Authorization": "Bearer $accessToken",
+      },
+      body: postBody,
+    );
 
     var responseBody = commonResponseFromJson(response.body);
 
@@ -42,10 +42,12 @@ ThunkAction<AppState> postContactView({id}) {
         store.dispatch(accountMiddleware());
 
         store.dispatch(
-            ShowMessageAction(msg: response.message, color: MyTheme.success));
+          ShowMessageAction(msg: response.message, color: MyTheme.success),
+        );
       } else {
         store.dispatch(
-            ShowMessageAction(msg: response.message, color: MyTheme.failure));
+          ShowMessageAction(msg: response.message, color: MyTheme.failure),
+        );
       }
     } catch (e) {
       //debugPrint(e.toString());

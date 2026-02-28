@@ -31,9 +31,12 @@ ThunkAction<AppState> socialLoginMiddleware({
         access_token: access_token,
       );
 
-      store.dispatch(ShowMessageAction(
+      store.dispatch(
+        ShowMessageAction(
           msg: data.message,
-          color: data.result == true ? MyTheme.success : MyTheme.failure));
+          color: data.result == true ? MyTheme.success : MyTheme.failure,
+        ),
+      );
 
       if (data.message == "Please verify your account") {
         NavigatorPush.push(context, SignupVerify());

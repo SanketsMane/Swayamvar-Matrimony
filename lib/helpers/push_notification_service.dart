@@ -6,7 +6,7 @@ import 'package:one_context/one_context.dart';
 
 import '../repository/app_info_repository.dart';
 import '../screens/app_navigation.dart';
-import '../screens/auth/signin/signin.dart';
+import '../screens/auth/signin/phone_login.dart';
 import '../screens/my_dashboard_pages/interest/my_interest.dart';
 import '../screens/my_dashboard_pages/interest_request/interest_requests.dart';
 import '../screens/profile_and_gallery_picure_rqst/gallery_picture_view_rqst.dart';
@@ -46,12 +46,14 @@ class PushNotificationService {
 
       await flutterLocalNotificationsPlugin
           .resolvePlatformSpecificImplementation<
-              AndroidFlutterLocalNotificationsPlugin>()
+            AndroidFlutterLocalNotificationsPlugin
+          >()
           ?.createNotificationChannel(channel);
 
       if (fCMToken != null && SharedPref().isLoggedIn) {
-        await AppInfoRepository()
-            .getDeviceTokenUpdateResponse(deviceToken: fCMToken);
+        await AppInfoRepository().getDeviceTokenUpdateResponse(
+          deviceToken: fCMToken,
+        );
       }
     } catch (e) {
       // Non-fatal: notification setup failed, app continues normally
@@ -65,7 +67,8 @@ class PushNotificationService {
           FlutterLocalNotificationsPlugin();
 
       var initializationSettingsAndroid = AndroidInitializationSettings(
-          '@mipmap/ic_launcher'); // <- default icon name is @mipmap/ic_launcher
+        '@mipmap/ic_launcher',
+      ); // <- default icon name is @mipmap/ic_launcher
 
       final DarwinInitializationSettings initializationSettingsDarwin =
           DarwinInitializationSettings();
@@ -77,7 +80,8 @@ class PushNotificationService {
 
       @pragma('vm:entry-point')
       void onDidReceiveNotificationResponse(
-          NotificationResponse notificationResponse) async {
+        NotificationResponse notificationResponse,
+      ) async {
         await _handleMessage(event);
       }
 
@@ -118,25 +122,33 @@ _handleMessage(RemoteMessage message) {
   // print("in handle message");
   if (SharedPref().isLoggedIn == false) {
     OneContext().showDialog(
-        // barrierDismissible: false,
-        builder: (context) => AlertDialog(
-              title: const Text("You are not logged in"),
-              content: const Text("Please log in"),
-              actions: [
-                TextButton(
-                    child: const Text('close'),
-                    onPressed: () => OneContext().popDialog()),
-                TextButton(
-                    child: const Text('Login'),
-                    onPressed: () {
-                      // Navigator.of(context).pop();
-                      OneContext().popDialog();
-                      OneContext().push(MaterialPageRoute(builder: (_) {
-                        return Login();
-                      }));
-                    }),
-              ],
-            ));
+      // barrierDismissible: false,
+      builder:
+          (context) => AlertDialog(
+            title: const Text("You are not logged in"),
+            content: const Text("Please log in"),
+            actions: [
+              TextButton(
+                child: const Text('close'),
+                onPressed: () => OneContext().popDialog(),
+              ),
+              TextButton(
+                child: const Text('Login'),
+                onPressed: () {
+                  // Navigator.of(context).pop();
+                  OneContext().popDialog();
+                  OneContext().push(
+                    MaterialPageRoute(
+                      builder: (_) {
+                        return const PhoneLogin();
+                      },
+                    ),
+                  );
+                },
+              ),
+            ],
+          ),
+    );
     return;
   }
   switch (message.data['route']) {
@@ -158,8 +170,10 @@ _handleMessage(RemoteMessage message) {
     case 'accept_profile_picture_view_request':
     case 'accept_gallery_image_view_request':
     case 'reject_gallery_image_view_request':
-      NavigatorPush.push(OneContext().context,
-          UserPublicProfile(userId: message.data['notify_by']!));
+      NavigatorPush.push(
+        OneContext().context,
+        UserPublicProfile(userId: message.data['notify_by']!),
+      );
 
       break;
   }

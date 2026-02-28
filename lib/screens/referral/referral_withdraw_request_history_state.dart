@@ -1,12 +1,12 @@
 class ReferralWithdrawRequestHistoryState {
-  int page=1;
+  int page = 1;
   bool? isFetching;
   bool? hasMore;
   List<dynamic>? referralWithdrawRequestHistoryList = [];
   String? error;
 
   ReferralWithdrawRequestHistoryState({
-    this.page=1,
+    this.page = 1,
     this.isFetching,
     this.hasMore,
     this.referralWithdrawRequestHistoryList,
@@ -14,11 +14,11 @@ class ReferralWithdrawRequestHistoryState {
   });
 
   ReferralWithdrawRequestHistoryState.initialState()
-      : page = 1,
-        isFetching = true,
-        hasMore = true,
-        referralWithdrawRequestHistoryList = [],
-        error = '';
+    : page = 1,
+      isFetching = true,
+      hasMore = true,
+      referralWithdrawRequestHistoryList = [],
+      error = '';
 
   @override
   String toString() {

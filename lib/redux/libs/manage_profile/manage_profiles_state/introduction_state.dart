@@ -7,14 +7,10 @@ class IntroductionState {
   IntroData? introData;
   TextEditingController? textController = TextEditingController();
 
-  IntroductionState({
-    this.isLoading,
-    this.introData,
-    this.textController,
-  });
+  IntroductionState({this.isLoading, this.introData, this.textController});
 
   IntroductionState.initialState()
-      : introData = null,
-        textController = TextEditingController(text: ''),
-        isLoading = false;
+    : introData = null,
+      textController = TextEditingController(text: ''),
+      isLoading = false;
 }

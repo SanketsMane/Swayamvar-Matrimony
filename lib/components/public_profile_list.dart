@@ -19,17 +19,18 @@ class MyProfileListData {
   dynamic icon2;
   Widget? pp2;
 
-  MyProfileListData(
-      {this.title,
-      this.subtitle,
-      this.link,
-      this.icon,
-      this.pp,
-      this.percentage,
-      this.title2,
-      this.subtitle2,
-      this.icon2,
-      this.pp2});
+  MyProfileListData({
+    this.title,
+    this.subtitle,
+    this.link,
+    this.icon,
+    this.pp,
+    this.percentage,
+    this.title2,
+    this.subtitle2,
+    this.icon2,
+    this.pp2,
+  });
 
   double? getPercent(value) {
     return PercentageCalculator(data: value).getPercentage();
@@ -39,40 +40,33 @@ class MyProfileListData {
     return Container(
       /// box decoration
       decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: const BorderRadius.all(
-            Radius.circular(16.0),
-          ),
-          boxShadow: [CommonWidget.box_shadow()]),
-      // child
+        color: Colors.white,
+        borderRadius: const BorderRadius.all(Radius.circular(16.0)),
+        boxShadow: [CommonWidget.box_shadow()],
+      ),
 
+      // child
       child: Padding(
         padding: EdgeInsets.only(
-            left: 20.0,
-            top: index == 0 ? 20 : 18.0,
-            right: 20,
-            bottom: index == 0 ? 20 : 12),
+          left: 20.0,
+          top: index == 0 ? 20 : 18.0,
+          right: 20,
+          bottom: index == 0 ? 20 : 12,
+        ),
         child: ExpandablePanel(
           theme: const ExpandableThemeData(
-              iconPadding: EdgeInsets.zero, iconColor: Colors.grey),
+            iconPadding: EdgeInsets.zero,
+            iconColor: Colors.grey,
+          ),
           header: Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Image.asset(
-                icon2,
-                height: 16,
-                width: 16,
-              ),
-              const SizedBox(
-                width: 10,
-              ),
+              Image.asset(icon2, height: 16, width: 16),
+              const SizedBox(width: 10),
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(
-                    title2,
-                    style: Styles.medium_arsenic_14,
-                  ),
+                  Text(title2, style: Styles.medium_arsenic_14),
                   if (subtitle2 != null)
                     Padding(
                       padding: const EdgeInsets.only(top: 5.0),
@@ -80,16 +74,14 @@ class MyProfileListData {
                         subtitle2 ?? '',
                         style: Styles.regular_light_grey_12,
                       ),
-                    )
+                    ),
                 ],
               ),
             ],
           ),
           expanded: Padding(
             padding: const EdgeInsets.all(8.0),
-            child: Container(
-              child: pp2,
-            ),
+            child: Container(child: pp2),
           ),
           collapsed: SizedBox.shrink(),
         ),
@@ -100,21 +92,16 @@ class MyProfileListData {
   Widget getWidget(context) {
     return GestureDetector(
       onTap: () {
-        Navigator.push(
-          context,
-          MaterialPageRoute(builder: (context) => link!),
-        );
+        Navigator.push(context, MaterialPageRoute(builder: (context) => link!));
       },
       child: Container(
         padding: EdgeInsets.all(15),
         decoration: BoxDecoration(
           color: Colors.white,
-          borderRadius: BorderRadius.all(
-            Radius.circular(12.0),
-          ),
+          borderRadius: BorderRadius.all(Radius.circular(12.0)),
           boxShadow: [
             // CustombuildBoxShadow(),
-            CommonWidget.box_shadow()
+            CommonWidget.box_shadow(),
           ],
         ),
         child: Column(
@@ -125,14 +112,8 @@ class MyProfileListData {
                 Row(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Image.asset(
-                      icon,
-                      height: 16,
-                      width: 16,
-                    ),
-                    const SizedBox(
-                      width: 10,
-                    ),
+                    Image.asset(icon, height: 16, width: 16),
+                    const SizedBox(width: 10),
                     InkWell(
                       onTap: () {
                         Navigator.push(
@@ -149,10 +130,7 @@ class MyProfileListData {
                             Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                Text(
-                                  title,
-                                  style: Styles.medium_arsenic_14,
-                                ),
+                                Text(title, style: Styles.medium_arsenic_14),
                                 if (subtitle != null)
                                   Padding(
                                     padding: const EdgeInsets.only(top: 5.0),
@@ -160,7 +138,7 @@ class MyProfileListData {
                                       subtitle ?? '',
                                       style: Styles.regular_light_grey_12,
                                     ),
-                                  )
+                                  ),
                               ],
                             ),
                             IconButton(
@@ -173,7 +151,7 @@ class MyProfileListData {
                               },
                               icon: Icon(Icons.chevron_right),
                               color: Color.fromRGBO(115, 122, 128, 1),
-                            )
+                            ),
                           ],
                         ),
                       ),
@@ -182,16 +160,15 @@ class MyProfileListData {
                 ),
               ],
             ),
-            const SizedBox(
-              height: 16,
-            ),
+            const SizedBox(height: 16),
             // linear progress bar
             // buildLinearProgressIndicatorRow(context, this),
             Row(
               children: [
                 Container(
-                  padding:
-                      EdgeInsets.only(left: DeviceInfo(context).width! * .065),
+                  padding: EdgeInsets.only(
+                    left: DeviceInfo(context).width! * .065,
+                  ),
                   width: DeviceInfo(context).width! * .65,
                   child: ClipRRect(
                     borderRadius: BorderRadius.all(Radius.circular(4.0)),
@@ -203,15 +180,13 @@ class MyProfileListData {
                     ),
                   ),
                 ),
-                SizedBox(
-                  width: 10,
-                ),
+                SizedBox(width: 10),
                 Text(
                   "${(this.percentage == null ? 0 : this.percentage * 100).toString().split(".").first}%",
                   style: TextStyle(color: MyTheme.storm_grey),
-                )
+                ),
               ],
-            )
+            ),
           ],
         ),
       ),

@@ -94,15 +94,18 @@ class _NotificationsState extends State<Notifications> {
                       child: Center(
                         child:
                             vm.hasMore
-                                ? CircularProgressIndicator(
-                                    )
-                                : Text('अजून माहिती उपलब्ध नाही', style: Styles.caption),
+                                ? CircularProgressIndicator()
+                                : Text(
+                                  'अजून माहिती उपलब्ध नाही',
+                                  style: Styles.caption,
+                                ),
                       ),
                     );
                   }
 
                   return NotificationListCard(
-                    type: vm.listofdata[index].type ?? "", // Sanket: Safe access
+                    type:
+                        vm.listofdata[index].type ?? "", // Sanket: Safe access
                     photo: vm.listofdata[index].photo ?? "",
                     time: vm.listofdata[index].time ?? "",
                     readAt: vm.listofdata[index].readAt ?? "",
@@ -149,7 +152,10 @@ class _NotificationsState extends State<Notifications> {
                 .map(
                   (e) => PopupMenuItem(
                     value: e,
-                    child: Text(e, style: Styles.body.copyWith(color: Colors.black)),
+                    child: Text(
+                      e,
+                      style: Styles.body.copyWith(color: Colors.black),
+                    ),
                   ),
                 )
                 .toList();

@@ -24,12 +24,12 @@ class ShortlistState {
   });
 
   ShortlistState.initialState()
-      : shortlistData = [],
-        isFetching = true,
-        isLoading = false,
-        delete = false,
-        error = '',
-        page = 1,
-        fullReset = false,
-        hasMore = true;
+    : shortlistData = [],
+      isFetching = true,
+      isLoading = false,
+      delete = false,
+      error = '',
+      page = 1,
+      fullReset = false,
+      hasMore = true;
 }

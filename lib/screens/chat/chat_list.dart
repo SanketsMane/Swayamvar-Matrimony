@@ -1,4 +1,3 @@
-
 // Sanket: Inbox screen — refined 2026 premium chat list layout
 import 'dart:async';
 import 'package:active_matrimonial_flutter_app/const/style.dart';
@@ -8,6 +7,7 @@ import 'package:active_matrimonial_flutter_app/screens/notifications/notificatio
 import 'package:flutter/material.dart';
 import 'package:active_matrimonial_flutter_app/l10n/app_localizations.dart';
 
+import '../../components/main_drawer.dart';
 import '../../components/chat_list_widget.dart';
 import '../../components/deactivate_Massage.dart';
 import '../../components/matched_profile_widget.dart';
@@ -57,14 +57,11 @@ class _ChatListState extends State<ChatList> {
   }
 
   void _startRefreshTimer() {
-    _refreshTimer = Timer.periodic(
-      const Duration(seconds: 20),
-      (Timer t) {
-        if (mounted && store.state.authState?.userData?.deactivated != 1) {
-          store.dispatch(chatMiddleware());
-        }
-      },
-    );
+    _refreshTimer = Timer.periodic(const Duration(seconds: 20), (Timer t) {
+      if (mounted && store.state.authState?.userData?.deactivated != 1) {
+        store.dispatch(chatMiddleware());
+      }
+    });
   }
 
   @override
@@ -80,65 +77,72 @@ class _ChatListState extends State<ChatList> {
       converter: (store) => store.state,
       builder: (_, state) {
         final isDeactivated = state.authState?.userData?.deactivated == 1;
-        
+
         return Scaffold(
           backgroundColor: MyTheme.background,
+          drawer: MainDrawer(),
           body: Column(
             children: [
               // Sanket: Fixed 56px header
               _buildHeader(context),
-              
+
               Expanded(
-                child: isDeactivated
-                    ? Center(
-                        child: Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 24),
-                          child: DeactivatedAccountMessage(),
-                        ),
-                      )
-                    : RefreshIndicator(
-                        color: MyTheme.primary,
-                        onRefresh: () async {
-                          await store.dispatch(chatMiddleware());
-                          await store.dispatch(matchedProfileFetchAction());
-                        },
-                        child: SingleChildScrollView(
-                          physics: const AlwaysScrollableScrollPhysics(),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              const SizedBox(height: 16),
-                              
-                              // Horizontal Matched Profiles
-                              MatchedProfileWidget(
-                                matched_profile_controller: _matchedProfileController,
-                                state: state,
-                              ),
-                              
-                              const SizedBox(height: 8),
-                              
-                              Padding(
-                                padding: const EdgeInsets.symmetric(horizontal: 16),
-                                child: Text(
-                                  AppLocalizations.of(context)!.chat_list_messages,
-                                  // Sanket: Section header uses Tiro Devanagari Marathi
-                                  style: Styles.h2.copyWith(
-                                    fontSize: 17,
-                                    color: MyTheme.text_primary,
+                child:
+                    isDeactivated
+                        ? Center(
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 24),
+                            child: DeactivatedAccountMessage(),
+                          ),
+                        )
+                        : RefreshIndicator(
+                          color: MyTheme.primary,
+                          onRefresh: () async {
+                            await store.dispatch(chatMiddleware());
+                            await store.dispatch(matchedProfileFetchAction());
+                          },
+                          child: SingleChildScrollView(
+                            physics: const AlwaysScrollableScrollPhysics(),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                const SizedBox(height: 16),
+
+                                // Horizontal Matched Profiles
+                                MatchedProfileWidget(
+                                  matched_profile_controller:
+                                      _matchedProfileController,
+                                  state: state,
+                                ),
+
+                                const SizedBox(height: 8),
+
+                                Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                    horizontal: 16,
+                                  ),
+                                  child: Text(
+                                    AppLocalizations.of(
+                                      context,
+                                    )!.chat_list_messages,
+                                    // Sanket: Section header uses Tiro Devanagari Marathi
+                                    style: Styles.h2.copyWith(
+                                      fontSize: 17,
+                                      color: MyTheme.text_primary,
+                                    ),
                                   ),
                                 ),
-                              ),
-                              
-                              const SizedBox(height: 12),
-                              
-                              // Chat List
-                              _buildChatList(context, state),
-                              
-                              const SizedBox(height: 40),
-                            ],
+
+                                const SizedBox(height: 12),
+
+                                // Chat List
+                                _buildChatList(context, state),
+
+                                const SizedBox(height: 40),
+                              ],
+                            ),
                           ),
                         ),
-                      ),
               ),
             ],
           ),
@@ -161,9 +165,17 @@ class _ChatListState extends State<ChatList> {
           children: [
             // Left: Back or Menu
             widget.backButtonAppearance == true
-                ? _headerIconBtn(Icons.arrow_back_ios_new_rounded, () => Navigator.pop(context))
-                : _headerIconBtn(Icons.menu_rounded, () {}),
-                
+                ? _headerIconBtn(
+                  Icons.arrow_back_ios_new_rounded,
+                  () => Navigator.pop(context),
+                )
+                : Builder(
+                  builder:
+                      (context) => _headerIconBtn(Icons.menu_rounded, () {
+                        Scaffold.of(context).openDrawer();
+                      }),
+                ),
+
             const Spacer(),
             Text(
               AppLocalizations.of(context)!.profile_screen_messages,
@@ -175,10 +187,10 @@ class _ChatListState extends State<ChatList> {
               ),
             ),
             const Spacer(),
-            
+
             // Right: Notification
             _headerIconBtn(Icons.notifications_none_rounded, () {
-               NavigatorPush.push(context, const Notifications());
+              NavigatorPush.push(context, const Notifications());
             }),
           ],
         ),
@@ -212,7 +224,7 @@ class _ChatListState extends State<ChatList> {
     }
 
     final chats = state.chatState?.chatList ?? [];
-    
+
     if (chats.isEmpty) {
       return _buildEmptyState(context);
     }
@@ -255,19 +267,26 @@ class _ChatListState extends State<ChatList> {
                 color: MyTheme.primary.withOpacity(0.05),
                 shape: BoxShape.circle,
               ),
-              child: Icon(Icons.chat_bubble_outline_rounded, size: 48, color: MyTheme.primary.withOpacity(0.5)),
+              child: Icon(
+                Icons.chat_bubble_outline_rounded,
+                size: 48,
+                color: MyTheme.primary.withOpacity(0.5),
+              ),
             ),
             const SizedBox(height: 24),
             Text(
-              "अजून कोणतेही संवाद नाही",
+              AppLocalizations.of(context)!.chat_no_conversations,
               // Sanket: Empty state heading
               style: Styles.h2.copyWith(fontSize: 18),
             ),
             const SizedBox(height: 8),
             Text(
-              "मॅचेस जोडणे सुरू करा.",
+              AppLocalizations.of(context)!.chat_start_connecting,
               textAlign: TextAlign.center,
-              style: Styles.body.copyWith(fontSize: 14, color: MyTheme.text_secondary),
+              style: Styles.body.copyWith(
+                fontSize: 14,
+                color: MyTheme.text_secondary,
+              ),
             ),
             const SizedBox(height: 24),
             ElevatedButton(
@@ -276,12 +295,20 @@ class _ChatListState extends State<ChatList> {
                 backgroundColor: MyTheme.primary,
                 foregroundColor: MyTheme.white,
                 elevation: 0,
-                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-                padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 24,
+                  vertical: 12,
+                ),
               ),
               child: Text(
-                "शोधा",
-                style: Styles.buttonText.copyWith(color: Colors.white, fontSize: 14),
+                AppLocalizations.of(context)!.chat_search_button,
+                style: Styles.buttonText.copyWith(
+                  color: Colors.white,
+                  fontSize: 14,
+                ),
               ),
             ),
           ],

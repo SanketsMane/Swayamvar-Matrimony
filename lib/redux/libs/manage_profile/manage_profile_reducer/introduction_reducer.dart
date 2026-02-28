@@ -3,8 +3,9 @@ import 'package:active_matrimonial_flutter_app/models_response/manage_profile/ge
 import 'package:active_matrimonial_flutter_app/redux/libs/manage_profile/manage_profiles_state/introduction_state.dart';
 import 'package:flutter/material.dart';
 
-import '../../../../main.dart';
+import '../../../../redux/store.dart';
 import '../manage_profile_middleware/manage_profile_update_middlewares.dart';
+import 'package:active_matrimonial_flutter_app/redux/store.dart';
 
 IntroductionState? introduction_reducer(IntroductionState? state, action) {
   if (action == SaveChanges.introduction) {
@@ -19,12 +20,8 @@ IntroductionState? introduction_reducer(IntroductionState? state, action) {
   }
   if (action == UpdateInfo.intro) {
     FocusManager.instance.primaryFocus?.unfocus();
-
-    if (state!.formKey.currentState!.validate()) {
-      store.dispatch(
-        introUpdateMiddleware(text: state.textController!.text),
-      );
-    }
+    // Sanket: Side effect removed from reducer.
+    // store.dispatch(introUpdateMiddleware(...)) must be called from the UI or a thunk.
   }
   return state;
 }

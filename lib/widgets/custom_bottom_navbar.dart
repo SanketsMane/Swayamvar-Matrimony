@@ -17,7 +17,8 @@ class CustomBottomNavBar extends StatefulWidget {
   State<CustomBottomNavBar> createState() => _CustomBottomNavBarState();
 }
 
-class _CustomBottomNavBarState extends State<CustomBottomNavBar> with SingleTickerProviderStateMixin {
+class _CustomBottomNavBarState extends State<CustomBottomNavBar>
+    with SingleTickerProviderStateMixin {
   AnimationController? _controller;
   Animation<double>? _animation;
   double _lastIndex = 0;
@@ -45,12 +46,16 @@ class _CustomBottomNavBarState extends State<CustomBottomNavBar> with SingleTick
   @override
   void didUpdateWidget(CustomBottomNavBar oldWidget) {
     super.didUpdateWidget(oldWidget);
-    if (oldWidget.currentIndex != widget.currentIndex && _animation != null && _controller != null) {
+    if (oldWidget.currentIndex != widget.currentIndex &&
+        _animation != null &&
+        _controller != null) {
       _lastIndex = _animation!.value;
       _animation = Tween<double>(
         begin: _lastIndex,
         end: widget.currentIndex.toDouble(),
-      ).animate(CurvedAnimation(parent: _controller!, curve: Curves.easeOutCubic));
+      ).animate(
+        CurvedAnimation(parent: _controller!, curve: Curves.easeOutCubic),
+      );
       _controller!.forward(from: 0);
     }
   }
@@ -74,9 +79,12 @@ class _CustomBottomNavBarState extends State<CustomBottomNavBar> with SingleTick
       child: SafeArea(
         top: false,
         child: AnimatedBuilder(
-          animation: _animation ?? AlwaysStoppedAnimation(widget.currentIndex.toDouble()),
+          animation:
+              _animation ??
+              AlwaysStoppedAnimation(widget.currentIndex.toDouble()),
           builder: (context, child) {
-            final currentAnimValue = _animation?.value ?? widget.currentIndex.toDouble();
+            final currentAnimValue =
+                _animation?.value ?? widget.currentIndex.toDouble();
             final notchX = currentAnimValue * itemWidth + itemWidth / 2;
 
             return SizedBox(
@@ -113,9 +121,11 @@ class _CustomBottomNavBarState extends State<CustomBottomNavBar> with SingleTick
                               children: [
                                 Icon(
                                   icons[index],
-                                  color: widget.currentIndex == index
-                                      ? Colors.transparent // Hidden in navbar, visible in bubble
-                                      : MyTheme.text_secondary,
+                                  color:
+                                      widget.currentIndex == index
+                                          ? Colors
+                                              .transparent // Hidden in navbar, visible in bubble
+                                          : MyTheme.text_secondary,
                                   size: 22,
                                 ),
                                 // Sanket: Labels removed — icon-only nav
@@ -142,7 +152,7 @@ class _CustomBottomNavBarState extends State<CustomBottomNavBar> with SingleTick
                             color: MyTheme.primary.withOpacity(0.3),
                             blurRadius: 10,
                             offset: const Offset(0, 4),
-                          )
+                          ),
                         ],
                       ),
                       child: Column(
@@ -182,9 +192,10 @@ class NotchedNavbarPainter extends CustomPainter {
 
   @override
   void paint(Canvas canvas, Size size) {
-    final paint = Paint()
-      ..color = color
-      ..style = PaintingStyle.fill;
+    final paint =
+        Paint()
+          ..color = color
+          ..style = PaintingStyle.fill;
 
     const double cornerRadius = 25.0;
     const double notchRadius = 32.0; // Tight hug radius for 28px bubble
@@ -205,7 +216,12 @@ class NotchedNavbarPainter extends CustomPainter {
     );
 
     // Exit transition
-    path.quadraticBezierTo(notchX + notchRadius, 0, notchX + notchRadius + 25, 0);
+    path.quadraticBezierTo(
+      notchX + notchRadius,
+      0,
+      notchX + notchRadius + 25,
+      0,
+    );
 
     path.lineTo(size.width - cornerRadius, 0);
     path.quadraticBezierTo(size.width, 0, size.width, cornerRadius);
@@ -215,7 +231,7 @@ class NotchedNavbarPainter extends CustomPainter {
 
     // Draw Physical Shadow
     canvas.drawShadow(path, shadowColor, 8, true);
-    
+
     // Draw Background
     canvas.drawPath(path, paint);
   }

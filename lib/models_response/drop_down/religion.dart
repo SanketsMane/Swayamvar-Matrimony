@@ -11,42 +11,34 @@ String religionResponseToJson(ReligionResponse data) =>
     json.encode(data.toJson());
 
 class ReligionResponse {
-  ReligionResponse({
-    this.data,
-  });
+  ReligionResponse({this.data});
 
   List<Data>? data;
 
   factory ReligionResponse.fromJson(Map<String, dynamic> json) =>
       ReligionResponse(
-        data: json["data"] == null
-            ? null
-            : List<Data>.from(json["data"].map((x) => Data.fromJson(x))),
+        data:
+            json["data"] == null
+                ? null
+                : List<Data>.from(json["data"].map((x) => Data.fromJson(x))),
       );
 
   Map<String, dynamic> toJson() => {
-        "data": data == null
-            ? null
-            : List<dynamic>.from(data!.map((x) => x.toJson())),
-      };
+    "data":
+        data == null ? null : List<dynamic>.from(data!.map((x) => x.toJson())),
+  };
 
   ReligionResponse.initialState() : data = [];
 }
 
 class Data {
-  Data({
-    this.name,
-  });
+  Data({this.name});
 
   String? name;
 
-  factory Data.fromJson(Map<String, dynamic> json) => Data(
-        name: json["name"],
-      );
+  factory Data.fromJson(Map<String, dynamic> json) => Data(name: json["name"]);
 
-  Map<String, dynamic> toJson() => {
-        "name": name,
-      };
+  Map<String, dynamic> toJson() => {"name": name};
 
   Data.initialState() : name = '';
 }

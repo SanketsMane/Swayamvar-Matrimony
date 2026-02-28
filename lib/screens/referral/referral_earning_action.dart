@@ -1,6 +1,6 @@
 import 'package:active_matrimonial_flutter_app/models_response/referral/referral_earnings_response.dart';
 
-class ReferralEarningStoreAction{
+class ReferralEarningStoreAction {
   ReferralEarningsResponse? payload;
 
   ReferralEarningStoreAction({this.payload});
@@ -11,7 +11,7 @@ class ReferralEarningStoreAction{
   }
 }
 
-class ReferralEarningFailureAction{
+class ReferralEarningFailureAction {
   String? error;
 
   ReferralEarningFailureAction({this.error});

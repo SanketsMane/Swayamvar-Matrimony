@@ -10,27 +10,24 @@ BlogResponse blogResponseFromJson(String str) =>
 String blogResponseToJson(BlogResponse data) => json.encode(data.toJson());
 
 class BlogResponse {
-  BlogResponse({
-    this.data,
-    this.result,
-  });
+  BlogResponse({this.data, this.result});
 
   List<dynamic>? data;
   bool? result;
 
   factory BlogResponse.fromJson(Map<String, dynamic> json) => BlogResponse(
-        data: json["data"] == null
+    data:
+        json["data"] == null
             ? null
             : List<Data>.from(json["data"].map((x) => Data.fromJson(x))),
-        result: json["result"],
-      );
+    result: json["result"],
+  );
 
   Map<String, dynamic> toJson() => {
-        "data": data == null
-            ? null
-            : List<dynamic>.from(data!.map((x) => x.toJson())),
-        "result": result,
-      };
+    "data":
+        data == null ? null : List<dynamic>.from(data!.map((x) => x.toJson())),
+    "result": result,
+  };
 }
 
 class Data {
@@ -53,22 +50,22 @@ class Data {
   String? description;
 
   factory Data.fromJson(Map<String, dynamic> json) => Data(
-        id: json["id"],
-        title: json["title"],
-        slug: json["slug"],
-        banner: json["banner"],
-        categoryName: json["category_name"],
-        shortDescription: json["short_description"],
-        description: json["description"],
-      );
+    id: json["id"],
+    title: json["title"],
+    slug: json["slug"],
+    banner: json["banner"],
+    categoryName: json["category_name"],
+    shortDescription: json["short_description"],
+    description: json["description"],
+  );
 
   Map<String, dynamic> toJson() => {
-        "id": id,
-        "title": title,
-        "slug": slug,
-        "banner": banner,
-        "category_name": categoryName,
-        "short_description": shortDescription,
-        "description": description,
-      };
+    "id": id,
+    "title": title,
+    "slug": slug,
+    "banner": banner,
+    "category_name": categoryName,
+    "short_description": shortDescription,
+    "description": description,
+  };
 }

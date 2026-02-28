@@ -3505,6 +3505,984 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Divorce Accepted'**
   String get pub_profile_pref_divorce;
+
+  /// No description provided for @settings_title.
+  ///
+  /// In en, this message translates to:
+  /// **'Settings'**
+  String get settings_title;
+
+  /// No description provided for @settings_section_account.
+  ///
+  /// In en, this message translates to:
+  /// **'Account'**
+  String get settings_section_account;
+
+  /// No description provided for @settings_item_edit_profile.
+  ///
+  /// In en, this message translates to:
+  /// **'Edit Profile'**
+  String get settings_item_edit_profile;
+
+  /// No description provided for @settings_item_plans.
+  ///
+  /// In en, this message translates to:
+  /// **'Membership Plans'**
+  String get settings_item_plans;
+
+  /// No description provided for @settings_item_verify.
+  ///
+  /// In en, this message translates to:
+  /// **'Verification Status'**
+  String get settings_item_verify;
+
+  /// No description provided for @settings_section_preferences.
+  ///
+  /// In en, this message translates to:
+  /// **'Preferences & Personalization'**
+  String get settings_section_preferences;
+
+  /// No description provided for @settings_item_language.
+  ///
+  /// In en, this message translates to:
+  /// **'Language'**
+  String get settings_item_language;
+
+  /// No description provided for @settings_item_partner_pref.
+  ///
+  /// In en, this message translates to:
+  /// **'Partner Expectations'**
+  String get settings_item_partner_pref;
+
+  /// No description provided for @settings_item_notifications.
+  ///
+  /// In en, this message translates to:
+  /// **'Notifications'**
+  String get settings_item_notifications;
+
+  /// No description provided for @settings_item_app_theme.
+  ///
+  /// In en, this message translates to:
+  /// **'App Theme'**
+  String get settings_item_app_theme;
+
+  /// No description provided for @settings_section_security.
+  ///
+  /// In en, this message translates to:
+  /// **'Security'**
+  String get settings_section_security;
+
+  /// No description provided for @settings_item_change_password.
+  ///
+  /// In en, this message translates to:
+  /// **'Change Password'**
+  String get settings_item_change_password;
+
+  /// No description provided for @settings_item_privacy_settings.
+  ///
+  /// In en, this message translates to:
+  /// **'Privacy Settings'**
+  String get settings_item_privacy_settings;
+
+  /// No description provided for @settings_item_deactivate.
+  ///
+  /// In en, this message translates to:
+  /// **'Deactivate Account'**
+  String get settings_item_deactivate;
+
+  /// No description provided for @settings_section_help.
+  ///
+  /// In en, this message translates to:
+  /// **'Help & Support'**
+  String get settings_section_help;
+
+  /// No description provided for @settings_item_help_center.
+  ///
+  /// In en, this message translates to:
+  /// **'Help Center'**
+  String get settings_item_help_center;
+
+  /// No description provided for @settings_item_faq.
+  ///
+  /// In en, this message translates to:
+  /// **'FAQ'**
+  String get settings_item_faq;
+
+  /// No description provided for @settings_item_contact_us.
+  ///
+  /// In en, this message translates to:
+  /// **'Contact Us'**
+  String get settings_item_contact_us;
+
+  /// No description provided for @settings_section_legal.
+  ///
+  /// In en, this message translates to:
+  /// **'Legal'**
+  String get settings_section_legal;
+
+  /// No description provided for @settings_item_terms.
+  ///
+  /// In en, this message translates to:
+  /// **'Terms & Conditions'**
+  String get settings_item_terms;
+
+  /// No description provided for @settings_item_privacy_policy.
+  ///
+  /// In en, this message translates to:
+  /// **'Privacy Policy'**
+  String get settings_item_privacy_policy;
+
+  /// No description provided for @settings_item_refund_policy.
+  ///
+  /// In en, this message translates to:
+  /// **'Refund Policy'**
+  String get settings_item_refund_policy;
+
+  /// No description provided for @settings_logout.
+  ///
+  /// In en, this message translates to:
+  /// **'Logout'**
+  String get settings_logout;
+
+  /// No description provided for @settings_language_dialog_title.
+  ///
+  /// In en, this message translates to:
+  /// **'Select Language'**
+  String get settings_language_dialog_title;
+
+  /// No description provided for @settings_deactivate_confirm.
+  ///
+  /// In en, this message translates to:
+  /// **'Are you sure you want to deactivate your account?'**
+  String get settings_deactivate_confirm;
+
+  /// No description provided for @settings_personalization_desc.
+  ///
+  /// In en, this message translates to:
+  /// **'Customize your app experience'**
+  String get settings_personalization_desc;
+
+  /// No description provided for @profile_title.
+  ///
+  /// In en, this message translates to:
+  /// **'Profile'**
+  String get profile_title;
+
+  /// No description provided for @profile_completion.
+  ///
+  /// In en, this message translates to:
+  /// **'Profile Completion'**
+  String get profile_completion;
+
+  /// No description provided for @profile_edit.
+  ///
+  /// In en, this message translates to:
+  /// **'Edit Profile'**
+  String get profile_edit;
+
+  /// No description provided for @profile_membership_status.
+  ///
+  /// In en, this message translates to:
+  /// **'Membership Status'**
+  String get profile_membership_status;
+
+  /// No description provided for @profile_interests.
+  ///
+  /// In en, this message translates to:
+  /// **'Interests'**
+  String get profile_interests;
+
+  /// No description provided for @profile_contacts.
+  ///
+  /// In en, this message translates to:
+  /// **'Contacts'**
+  String get profile_contacts;
+
+  /// No description provided for @profile_gallery.
+  ///
+  /// In en, this message translates to:
+  /// **'Gallery'**
+  String get profile_gallery;
+
+  /// No description provided for @profile_upgrade.
+  ///
+  /// In en, this message translates to:
+  /// **'Upgrade Plan'**
+  String get profile_upgrade;
+
+  /// No description provided for @profile_shortlist.
+  ///
+  /// In en, this message translates to:
+  /// **'Shortlist'**
+  String get profile_shortlist;
+
+  /// No description provided for @profile_interests_sent.
+  ///
+  /// In en, this message translates to:
+  /// **'Interests Sent'**
+  String get profile_interests_sent;
+
+  /// No description provided for @profile_packages.
+  ///
+  /// In en, this message translates to:
+  /// **'Packages'**
+  String get profile_packages;
+
+  /// No description provided for @profile_referral.
+  ///
+  /// In en, this message translates to:
+  /// **'Referral'**
+  String get profile_referral;
+
+  /// No description provided for @common_yes.
+  ///
+  /// In en, this message translates to:
+  /// **'Yes'**
+  String get common_yes;
+
+  /// No description provided for @common_no.
+  ///
+  /// In en, this message translates to:
+  /// **'No'**
+  String get common_no;
+
+  /// No description provided for @drawer_my_profile.
+  ///
+  /// In en, this message translates to:
+  /// **'My Profile'**
+  String get drawer_my_profile;
+
+  /// No description provided for @drawer_edit_profile.
+  ///
+  /// In en, this message translates to:
+  /// **'Edit Profile'**
+  String get drawer_edit_profile;
+
+  /// No description provided for @drawer_sent_interests.
+  ///
+  /// In en, this message translates to:
+  /// **'Sent Interests'**
+  String get drawer_sent_interests;
+
+  /// No description provided for @drawer_shortlist.
+  ///
+  /// In en, this message translates to:
+  /// **'Shortlist'**
+  String get drawer_shortlist;
+
+  /// No description provided for @drawer_verification.
+  ///
+  /// In en, this message translates to:
+  /// **'Verification'**
+  String get drawer_verification;
+
+  /// No description provided for @drawer_membership_plans.
+  ///
+  /// In en, this message translates to:
+  /// **'Membership Plans'**
+  String get drawer_membership_plans;
+
+  /// No description provided for @drawer_settings.
+  ///
+  /// In en, this message translates to:
+  /// **'Settings'**
+  String get drawer_settings;
+
+  /// No description provided for @drawer_help_center.
+  ///
+  /// In en, this message translates to:
+  /// **'Help Center'**
+  String get drawer_help_center;
+
+  /// No description provided for @drawer_logout.
+  ///
+  /// In en, this message translates to:
+  /// **'Logout'**
+  String get drawer_logout;
+
+  /// No description provided for @home_why_recommended.
+  ///
+  /// In en, this message translates to:
+  /// **'Why is this profile recommended?'**
+  String get home_why_recommended;
+
+  /// No description provided for @home_same_religion.
+  ///
+  /// In en, this message translates to:
+  /// **'Same Religion'**
+  String get home_same_religion;
+
+  /// No description provided for @home_same_city.
+  ///
+  /// In en, this message translates to:
+  /// **'Same City'**
+  String get home_same_city;
+
+  /// No description provided for @home_same_education.
+  ///
+  /// In en, this message translates to:
+  /// **'Same Education'**
+  String get home_same_education;
+
+  /// No description provided for @home_matches_preferences.
+  ///
+  /// In en, this message translates to:
+  /// **'This profile matches your partner preferences.'**
+  String get home_matches_preferences;
+
+  /// No description provided for @home_quick_actions.
+  ///
+  /// In en, this message translates to:
+  /// **'Quick Actions'**
+  String get home_quick_actions;
+
+  /// No description provided for @home_action_search.
+  ///
+  /// In en, this message translates to:
+  /// **'Search'**
+  String get home_action_search;
+
+  /// No description provided for @home_action_liked.
+  ///
+  /// In en, this message translates to:
+  /// **'Liked'**
+  String get home_action_liked;
+
+  /// No description provided for @home_action_viewed.
+  ///
+  /// In en, this message translates to:
+  /// **'Viewed'**
+  String get home_action_viewed;
+
+  /// No description provided for @home_action_shortlist.
+  ///
+  /// In en, this message translates to:
+  /// **'Shortlist'**
+  String get home_action_shortlist;
+
+  /// No description provided for @home_new_partner.
+  ///
+  /// In en, this message translates to:
+  /// **'New Partner'**
+  String get home_new_partner;
+
+  /// No description provided for @home_received_likes.
+  ///
+  /// In en, this message translates to:
+  /// **'Received Likes'**
+  String get home_received_likes;
+
+  /// No description provided for @home_profiles_viewed.
+  ///
+  /// In en, this message translates to:
+  /// **'Profiles Viewed'**
+  String get home_profiles_viewed;
+
+  /// No description provided for @home_selected.
+  ///
+  /// In en, this message translates to:
+  /// **'Selected'**
+  String get home_selected;
+
+  /// No description provided for @home_recommended_for_you.
+  ///
+  /// In en, this message translates to:
+  /// **'Recommended For You'**
+  String get home_recommended_for_you;
+
+  /// No description provided for @home_see_all.
+  ///
+  /// In en, this message translates to:
+  /// **'See All'**
+  String get home_see_all;
+
+  /// No description provided for @home_recent_activity.
+  ///
+  /// In en, this message translates to:
+  /// **'Recent Activity'**
+  String get home_recent_activity;
+
+  /// No description provided for @home_people.
+  ///
+  /// In en, this message translates to:
+  /// **'People'**
+  String get home_people;
+
+  /// No description provided for @home_viewed_your_profile.
+  ///
+  /// In en, this message translates to:
+  /// **'viewed your profile'**
+  String get home_viewed_your_profile;
+
+  /// No description provided for @home_new_like_received.
+  ///
+  /// In en, this message translates to:
+  /// **'new like received'**
+  String get home_new_like_received;
+
+  /// No description provided for @home_new_profiles_available.
+  ///
+  /// In en, this message translates to:
+  /// **'new profiles available'**
+  String get home_new_profiles_available;
+
+  /// No description provided for @home_upgrade_to_platinum.
+  ///
+  /// In en, this message translates to:
+  /// **'Upgrade to Platinum'**
+  String get home_upgrade_to_platinum;
+
+  /// No description provided for @home_prioritize_profile.
+  ///
+  /// In en, this message translates to:
+  /// **'Prioritize your profile and get more matches.'**
+  String get home_prioritize_profile;
+
+  /// No description provided for @home_complete_profile_now.
+  ///
+  /// In en, this message translates to:
+  /// **'Complete your profile'**
+  String get home_complete_profile_now;
+
+  /// No description provided for @home_increase_matches_3x.
+  ///
+  /// In en, this message translates to:
+  /// **'Get 3x more matches by adding your details.'**
+  String get home_increase_matches_3x;
+
+  /// No description provided for @home_add_education.
+  ///
+  /// In en, this message translates to:
+  /// **'Add Education Details'**
+  String get home_add_education;
+
+  /// No description provided for @home_add_photos.
+  ///
+  /// In en, this message translates to:
+  /// **'Add Photos'**
+  String get home_add_photos;
+
+  /// No description provided for @home_add_partner_prefs.
+  ///
+  /// In en, this message translates to:
+  /// **'Add Partner Preferences'**
+  String get home_add_partner_prefs;
+
+  /// No description provided for @chat_no_conversations.
+  ///
+  /// In en, this message translates to:
+  /// **'No conversations yet'**
+  String get chat_no_conversations;
+
+  /// No description provided for @chat_start_connecting.
+  ///
+  /// In en, this message translates to:
+  /// **'Start connecting with matches.'**
+  String get chat_start_connecting;
+
+  /// No description provided for @chat_search_button.
+  ///
+  /// In en, this message translates to:
+  /// **'Search'**
+  String get chat_search_button;
+
+  /// No description provided for @home_premium_label.
+  ///
+  /// In en, this message translates to:
+  /// **'Premium'**
+  String get home_premium_label;
+
+  /// No description provided for @home_verified_profile.
+  ///
+  /// In en, this message translates to:
+  /// **'Verified Profile'**
+  String get home_verified_profile;
+
+  /// No description provided for @home_action_no.
+  ///
+  /// In en, this message translates to:
+  /// **'No'**
+  String get home_action_no;
+
+  /// No description provided for @home_action_view.
+  ///
+  /// In en, this message translates to:
+  /// **'View'**
+  String get home_action_view;
+
+  /// No description provided for @home_matches_for_you.
+  ///
+  /// In en, this message translates to:
+  /// **'Matches For You'**
+  String get home_matches_for_you;
+
+  /// No description provided for @home_handpicked_interests.
+  ///
+  /// In en, this message translates to:
+  /// **'Handpicked based on your interests'**
+  String get home_handpicked_interests;
+
+  /// No description provided for @home_filter_all.
+  ///
+  /// In en, this message translates to:
+  /// **'All'**
+  String get home_filter_all;
+
+  /// No description provided for @home_filter_new.
+  ///
+  /// In en, this message translates to:
+  /// **'New'**
+  String get home_filter_new;
+
+  /// No description provided for @home_filter_near_me.
+  ///
+  /// In en, this message translates to:
+  /// **'Near Me'**
+  String get home_filter_near_me;
+
+  /// No description provided for @home_filter_verified.
+  ///
+  /// In en, this message translates to:
+  /// **'Verified'**
+  String get home_filter_verified;
+
+  /// No description provided for @home_filter_online.
+  ///
+  /// In en, this message translates to:
+  /// **'Online'**
+  String get home_filter_online;
+
+  /// No description provided for @gallery_delete_confirm_title.
+  ///
+  /// In en, this message translates to:
+  /// **'Are You Sure That You Want To Delete This Image?'**
+  String get gallery_delete_confirm_title;
+
+  /// No description provided for @gallery_delete_confirm_nb.
+  ///
+  /// In en, this message translates to:
+  /// **'**N.B. Deleting An Image Will Not Refund Your Remaining Gallery Capacity**'**
+  String get gallery_delete_confirm_nb;
+
+  /// No description provided for @gallery_add_new_image.
+  ///
+  /// In en, this message translates to:
+  /// **'Add new image'**
+  String get gallery_add_new_image;
+
+  /// No description provided for @gallery_choose_file.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose file...'**
+  String get gallery_choose_file;
+
+  /// No description provided for @gallery_browse.
+  ///
+  /// In en, this message translates to:
+  /// **'Browse'**
+  String get gallery_browse;
+
+  /// No description provided for @gallery_verify_account_msg.
+  ///
+  /// In en, this message translates to:
+  /// **'Please verify your account'**
+  String get gallery_verify_account_msg;
+
+  /// No description provided for @gallery_update_package_msg.
+  ///
+  /// In en, this message translates to:
+  /// **'Please Update Your Package.'**
+  String get gallery_update_package_msg;
+
+  /// No description provided for @common_close.
+  ///
+  /// In en, this message translates to:
+  /// **'Close'**
+  String get common_close;
+
+  /// No description provided for @common_please_wait.
+  ///
+  /// In en, this message translates to:
+  /// **'Please Wait'**
+  String get common_please_wait;
+
+  /// No description provided for @gallery_image_view_title.
+  ///
+  /// In en, this message translates to:
+  /// **'Gallery Image View'**
+  String get gallery_image_view_title;
+
+  /// No description provided for @gallery_remaining_view_prefix.
+  ///
+  /// In en, this message translates to:
+  /// **'Remaining Gallery Picture View: '**
+  String get gallery_remaining_view_prefix;
+
+  /// No description provided for @gallery_remaining_view_suffix.
+  ///
+  /// In en, this message translates to:
+  /// **' times'**
+  String get gallery_remaining_view_suffix;
+
+  /// No description provided for @gallery_request_note.
+  ///
+  /// In en, this message translates to:
+  /// **'N.B. Requesting to See This Member Gallery Picture Will Cost 1 From Remaining Gallery Picture View.'**
+  String get gallery_request_note;
+
+  /// No description provided for @gallery_send_request_btn.
+  ///
+  /// In en, this message translates to:
+  /// **'Send Gallery Photo View Request'**
+  String get gallery_send_request_btn;
+
+  /// No description provided for @referral_screen_rewards_msg.
+  ///
+  /// In en, this message translates to:
+  /// **'Share this code with your friends and earn rewards!'**
+  String get referral_screen_rewards_msg;
+
+  /// No description provided for @referral_stat_wallet.
+  ///
+  /// In en, this message translates to:
+  /// **'Wallet Balance'**
+  String get referral_stat_wallet;
+
+  /// No description provided for @referral_stat_invited.
+  ///
+  /// In en, this message translates to:
+  /// **'Invited Users'**
+  String get referral_stat_invited;
+
+  /// No description provided for @referral_stat_successful.
+  ///
+  /// In en, this message translates to:
+  /// **'Successful'**
+  String get referral_stat_successful;
+
+  /// No description provided for @referral_stat_pending.
+  ///
+  /// In en, this message translates to:
+  /// **'Pending'**
+  String get referral_stat_pending;
+
+  /// No description provided for @referral_btn_withdraw.
+  ///
+  /// In en, this message translates to:
+  /// **'Withdraw'**
+  String get referral_btn_withdraw;
+
+  /// No description provided for @referral_btn_share.
+  ///
+  /// In en, this message translates to:
+  /// **'Share Code'**
+  String get referral_btn_share;
+
+  /// No description provided for @referral_header_invited.
+  ///
+  /// In en, this message translates to:
+  /// **'People You Invited'**
+  String get referral_header_invited;
+
+  /// No description provided for @referral_msg_no_invited.
+  ///
+  /// In en, this message translates to:
+  /// **'No invited users yet'**
+  String get referral_msg_no_invited;
+
+  /// No description provided for @referral_joined_on.
+  ///
+  /// In en, this message translates to:
+  /// **'Joined on {date}'**
+  String referral_joined_on(Object date);
+
+  /// No description provided for @referral_status_active.
+  ///
+  /// In en, this message translates to:
+  /// **'Active'**
+  String get referral_status_active;
+
+  /// No description provided for @referral_copied_msg.
+  ///
+  /// In en, this message translates to:
+  /// **'Copied to clipboard'**
+  String get referral_copied_msg;
+
+  /// No description provided for @verify_title.
+  ///
+  /// In en, this message translates to:
+  /// **'Profile Verification'**
+  String get verify_title;
+
+  /// No description provided for @verify_trust_header.
+  ///
+  /// In en, this message translates to:
+  /// **'Get Verified ✔'**
+  String get verify_trust_header;
+
+  /// No description provided for @verify_trust_desc.
+  ///
+  /// In en, this message translates to:
+  /// **'Verified profiles receive more matches and build higher trust with potential partners.'**
+  String get verify_trust_desc;
+
+  /// No description provided for @verify_benefit_visibility.
+  ///
+  /// In en, this message translates to:
+  /// **'Higher search visibility'**
+  String get verify_benefit_visibility;
+
+  /// No description provided for @verify_benefit_responses.
+  ///
+  /// In en, this message translates to:
+  /// **'More responses from serious members'**
+  String get verify_benefit_responses;
+
+  /// No description provided for @verify_benefit_badge.
+  ///
+  /// In en, this message translates to:
+  /// **'Exclusive \"Trusted\" profile badge'**
+  String get verify_benefit_badge;
+
+  /// No description provided for @verify_steps_header.
+  ///
+  /// In en, this message translates to:
+  /// **'Verification Steps'**
+  String get verify_steps_header;
+
+  /// No description provided for @verify_step_id.
+  ///
+  /// In en, this message translates to:
+  /// **'Upload ID'**
+  String get verify_step_id;
+
+  /// No description provided for @verify_step_selfie.
+  ///
+  /// In en, this message translates to:
+  /// **'Selfie'**
+  String get verify_step_selfie;
+
+  /// No description provided for @verify_step_review.
+  ///
+  /// In en, this message translates to:
+  /// **'Review'**
+  String get verify_step_review;
+
+  /// No description provided for @verify_upload_desc.
+  ///
+  /// In en, this message translates to:
+  /// **'Upload a clear document for faster approval.'**
+  String get verify_upload_desc;
+
+  /// No description provided for @verify_tap_to_upload.
+  ///
+  /// In en, this message translates to:
+  /// **'Tap to upload photo'**
+  String get verify_tap_to_upload;
+
+  /// No description provided for @verify_status_header.
+  ///
+  /// In en, this message translates to:
+  /// **'Verification Status'**
+  String get verify_status_header;
+
+  /// No description provided for @verify_status_pending.
+  ///
+  /// In en, this message translates to:
+  /// **'Pending Submission'**
+  String get verify_status_pending;
+
+  /// No description provided for @verify_status_desc.
+  ///
+  /// In en, this message translates to:
+  /// **'Verification usually takes 24-48 hours.'**
+  String get verify_status_desc;
+
+  /// No description provided for @verify_submit_btn.
+  ///
+  /// In en, this message translates to:
+  /// **'Submit Verification'**
+  String get verify_submit_btn;
+
+  /// No description provided for @verify_already_sent.
+  ///
+  /// In en, this message translates to:
+  /// **'Verification request already sent.'**
+  String get verify_already_sent;
+
+  /// No description provided for @verify_submitting_msg.
+  ///
+  /// In en, this message translates to:
+  /// **'Submitting verification...'**
+  String get verify_submitting_msg;
+
+  /// No description provided for @verify_enter_details.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter details'**
+  String get verify_enter_details;
+
+  /// No description provided for @verify_select_option.
+  ///
+  /// In en, this message translates to:
+  /// **'Select option'**
+  String get verify_select_option;
+
+  /// No description provided for @verify_uploaded.
+  ///
+  /// In en, this message translates to:
+  /// **'Uploaded'**
+  String get verify_uploaded;
+
+  /// No description provided for @verify_step_1_title.
+  ///
+  /// In en, this message translates to:
+  /// **'Proof of Identity'**
+  String get verify_step_1_title;
+
+  /// No description provided for @verify_select_id_type.
+  ///
+  /// In en, this message translates to:
+  /// **'Select ID Type'**
+  String get verify_select_id_type;
+
+  /// No description provided for @verify_enter_id_number.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter ID Number'**
+  String get verify_enter_id_number;
+
+  /// No description provided for @verify_id_hint.
+  ///
+  /// In en, this message translates to:
+  /// **'Ex: 1234 5678 9012'**
+  String get verify_id_hint;
+
+  /// No description provided for @verify_upload_id.
+  ///
+  /// In en, this message translates to:
+  /// **'Upload ID Documents'**
+  String get verify_upload_id;
+
+  /// No description provided for @verify_front_side.
+  ///
+  /// In en, this message translates to:
+  /// **'Front Side'**
+  String get verify_front_side;
+
+  /// No description provided for @verify_back_side.
+  ///
+  /// In en, this message translates to:
+  /// **'Back Side'**
+  String get verify_back_side;
+
+  /// No description provided for @verify_step_2_title.
+  ///
+  /// In en, this message translates to:
+  /// **'Live Selfie'**
+  String get verify_step_2_title;
+
+  /// No description provided for @verify_selfie_desc.
+  ///
+  /// In en, this message translates to:
+  /// **'Take a clear selfie to verify your identity'**
+  String get verify_selfie_desc;
+
+  /// No description provided for @verify_selfie_instruction.
+  ///
+  /// In en, this message translates to:
+  /// **'Ensure your face is well-lit and clearly visible'**
+  String get verify_selfie_instruction;
+
+  /// No description provided for @verify_step_3_title.
+  ///
+  /// In en, this message translates to:
+  /// **'Review Details'**
+  String get verify_step_3_title;
+
+  /// No description provided for @verify_review_desc.
+  ///
+  /// In en, this message translates to:
+  /// **'By submitting, you agree that the provided information is accurate and belongs to you.'**
+  String get verify_review_desc;
+
+  /// No description provided for @verify_submit_for_review.
+  ///
+  /// In en, this message translates to:
+  /// **'Submit for Verification'**
+  String get verify_submit_for_review;
+
+  /// No description provided for @verify_next.
+  ///
+  /// In en, this message translates to:
+  /// **'Next'**
+  String get verify_next;
+
+  /// No description provided for @verify_back.
+  ///
+  /// In en, this message translates to:
+  /// **'Back'**
+  String get verify_back;
+
+  /// No description provided for @verify_upload.
+  ///
+  /// In en, this message translates to:
+  /// **'Upload'**
+  String get verify_upload;
+
+  /// No description provided for @verify_id_type_label.
+  ///
+  /// In en, this message translates to:
+  /// **'ID Type'**
+  String get verify_id_type_label;
+
+  /// No description provided for @verify_id_number_label.
+  ///
+  /// In en, this message translates to:
+  /// **'ID Number'**
+  String get verify_id_number_label;
+
+  /// No description provided for @verify_documents_label.
+  ///
+  /// In en, this message translates to:
+  /// **'Documents'**
+  String get verify_documents_label;
+
+  /// No description provided for @verify_attached.
+  ///
+  /// In en, this message translates to:
+  /// **'Attached'**
+  String get verify_attached;
+
+  /// No description provided for @verify_missing.
+  ///
+  /// In en, this message translates to:
+  /// **'Missing'**
+  String get verify_missing;
+
+  /// No description provided for @verify_error_id_number.
+  ///
+  /// In en, this message translates to:
+  /// **'Please enter your ID number'**
+  String get verify_error_id_number;
+
+  /// No description provided for @verify_error_id_front.
+  ///
+  /// In en, this message translates to:
+  /// **'Please upload ID front side'**
+  String get verify_error_id_front;
+
+  /// No description provided for @verify_error_selfie.
+  ///
+  /// In en, this message translates to:
+  /// **'Please upload a selfie'**
+  String get verify_error_selfie;
+
+  /// No description provided for @verify_error_failed.
+  ///
+  /// In en, this message translates to:
+  /// **'Submission failed'**
+  String get verify_error_failed;
 }
 
 class _AppLocalizationsDelegate

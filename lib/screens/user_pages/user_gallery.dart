@@ -10,6 +10,7 @@ import '../../const/style.dart';
 import '../../helpers/main_helpers.dart';
 import '../core.dart';
 import '../profile_and_gallery_picure_rqst/gallery_picture_view_request_send.dart';
+import 'package:active_matrimonial_flutter_app/redux/store.dart';
 
 class UserGallery extends StatelessWidget {
   final AppState state;
@@ -100,6 +101,13 @@ class UserGallery extends StatelessWidget {
                                         color: MyTheme.arsenic,
                                         height: 25,
                                         width: 25,
+                                        errorBuilder:
+                                            (context, error, stackTrace) =>
+                                                const Icon(
+                                                  Icons.lock_outline,
+                                                  color: MyTheme.arsenic,
+                                                  size: 25,
+                                                ),
                                       ),
                                       TextButton(
                                         onPressed: () {
@@ -118,7 +126,9 @@ class UserGallery extends StatelessWidget {
                                                 ? store.dispatch(
                                                   ShowMessageAction(
                                                     msg:
-                                                        "Please Upgrade your Package",
+                                                        AppLocalizations.of(
+                                                          context,
+                                                        )!.gallery_update_package_msg,
                                                   ),
                                                 )
                                                 : showDialog<void>(
@@ -128,7 +138,9 @@ class UserGallery extends StatelessWidget {
                                                   ) {
                                                     return AlertDialog(
                                                       title: Text(
-                                                        'Gallery Image View',
+                                                        AppLocalizations.of(
+                                                          context,
+                                                        )!.gallery_image_view_title,
                                                         style:
                                                             Styles
                                                                 .bold_arsenic_14,
@@ -141,7 +153,7 @@ class UserGallery extends StatelessWidget {
                                                             thickness: 1,
                                                           ),
                                                           Text(
-                                                            "Remaining Gallery Picture View: ${state.accountState!.profileData!.remainingGalleryImageView} times",
+                                                            "${AppLocalizations.of(context)!.gallery_remaining_view_prefix}${state.accountState!.profileData!.remainingGalleryImageView}${AppLocalizations.of(context)!.gallery_remaining_view_suffix}",
                                                             textAlign:
                                                                 TextAlign
                                                                     .center,
@@ -152,9 +164,11 @@ class UserGallery extends StatelessWidget {
                                                           const SizedBox(
                                                             height: 5,
                                                           ),
-                                                          const Text(
-                                                            "N.B. Requesting to See This Member Gallery Picture Will Cost 1 From Remaining Gallery Picture View.",
-                                                            style: TextStyle(
+                                                          Text(
+                                                            AppLocalizations.of(
+                                                              context,
+                                                            )!.gallery_request_note,
+                                                            style: const TextStyle(
                                                               color:
                                                                   Colors
                                                                       .redAccent,
@@ -181,12 +195,16 @@ class UserGallery extends StatelessWidget {
                                                             backgroundColor:
                                                                 MyTheme.zircon,
                                                           ),
-                                                          child: const Text(
-                                                            'Close',
-                                                            style: TextStyle(
-                                                              color:
-                                                                  Colors.black,
-                                                            ),
+                                                          child: Text(
+                                                            AppLocalizations.of(
+                                                              context,
+                                                            )!.common_close,
+                                                            style:
+                                                                const TextStyle(
+                                                                  color:
+                                                                      Colors
+                                                                          .black,
+                                                                ),
                                                           ),
                                                           onPressed: () {
                                                             Navigator.of(
@@ -222,9 +240,11 @@ class UserGallery extends StatelessWidget {
                                                                         .centerRight,
                                                               ),
                                                             ),
-                                                            child: const Text(
-                                                              'Confirm',
-                                                              style: TextStyle(
+                                                            child: Text(
+                                                              AppLocalizations.of(
+                                                                context,
+                                                              )!.common_confirm,
+                                                              style: const TextStyle(
                                                                 color:
                                                                     MyTheme
                                                                         .white,
@@ -270,7 +290,9 @@ class UserGallery extends StatelessWidget {
                                                     : null,
                                           ),
                                           child: Text(
-                                            'Send Gallery Photo View Request',
+                                            AppLocalizations.of(
+                                              context,
+                                            )!.gallery_send_request_btn,
                                             style: Styles.bold_white_12,
                                           ),
                                         ),
@@ -295,7 +317,10 @@ class UserGallery extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               CommonWidget.circularIndicator,
-              const Text('Please Wait', style: TextStyle(fontSize: 16)),
+              Text(
+                AppLocalizations.of(context)!.common_please_wait,
+                style: const TextStyle(fontSize: 16),
+              ),
             ],
           ),
         );

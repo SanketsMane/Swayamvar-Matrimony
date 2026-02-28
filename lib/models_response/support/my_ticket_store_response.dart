@@ -11,22 +11,13 @@ String myTicketStoreResponseToJson(MyTicketStoreResponse data) =>
     json.encode(data.toJson());
 
 class MyTicketStoreResponse {
-  MyTicketStoreResponse({
-    this.result,
-    this.data,
-  });
+  MyTicketStoreResponse({this.result, this.data});
 
   bool? result;
   String? data;
 
   factory MyTicketStoreResponse.fromJson(Map<String, dynamic> json) =>
-      MyTicketStoreResponse(
-        result: json["result"],
-        data: json["data"],
-      );
+      MyTicketStoreResponse(result: json["result"], data: json["data"]);
 
-  Map<String, dynamic> toJson() => {
-        "result": result,
-        "data": data,
-      };
+  Map<String, dynamic> toJson() => {"result": result, "data": data};
 }

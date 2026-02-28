@@ -3,7 +3,9 @@ import 'package:active_matrimonial_flutter_app/screens/referral/referral_withdra
 import 'package:active_matrimonial_flutter_app/screens/referral/referral_withdraw_request_history_state.dart';
 
 ReferralWithdrawRequestHistoryState? referral_withdraw_request_history_reducer(
-    ReferralWithdrawRequestHistoryState? state, dynamic action) {
+  ReferralWithdrawRequestHistoryState? state,
+  dynamic action,
+) {
   if (action is ReferralWithdrawRequestHistoryStoreAction) {
     state!.isFetching = false;
     if (action.payload!.meta!.lastPage != state.page) {

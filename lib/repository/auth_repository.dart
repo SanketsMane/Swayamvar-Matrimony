@@ -16,15 +16,17 @@ class AuthRepository {
     var postBody = jsonEncode({
       "email_or_phone": email,
       "password": password,
-      "identity_matrix": AppConfig.purshase_code
+      "identity_matrix": AppConfig.purshase_code,
     });
 
-    var response = await http.post(Uri.parse(baseUrl),
-        headers: {
-          "Accept": "application/json",
-          "Content-Type": "application/json",
-        },
-        body: postBody);
+    var response = await http.post(
+      Uri.parse(baseUrl),
+      headers: {
+        "Accept": "application/json",
+        "Content-Type": "application/json",
+      },
+      body: postBody,
+    );
     var signInResponse = signInResponseFromJson(response.body);
     if (signInResponse.result == true && signInResponse.user != null) {
       SharedPref().deactivated = signInResponse.user!.deactivated.toString();
@@ -40,21 +42,22 @@ class AuthRepository {
     var postBody = jsonEncode({
       "old_password": old,
       "password": new_,
-      "password_confirmation": confirm
+      "password_confirmation": confirm,
     });
 
-    var response = await http.post(Uri.parse(baseUrl),
-        headers: {
-          "Accept": "application/json",
-          "Content-Type": "application/json",
-          "Authorization": "Bearer $accessToken"
-        },
-        body: postBody);
+    var response = await http.post(
+      Uri.parse(baseUrl),
+      headers: {
+        "Accept": "application/json",
+        "Content-Type": "application/json",
+        "Authorization": "Bearer $accessToken",
+      },
+      body: postBody,
+    );
 
     var data = commonResponseFromJson(response.body);
     return data;
   }
-
 
   Future<CommonResponse> deactivate({deactivate_status}) async {
     var baseUrl = "${AppConfig.BASE_URL}/member/account/deactivate";
@@ -67,20 +70,23 @@ class AuthRepository {
       "Authorization": "Bearer $accessToken",
     };
 
-    var response = await http.post(Uri.parse(baseUrl),
-        headers: headers,
-        body: postBody);
-
+    var response = await http.post(
+      Uri.parse(baseUrl),
+      headers: headers,
+      body: postBody,
+    );
 
     var data = commonResponseFromJson(response.body);
     return data;
   }
-  Future<CommonResponse> resetPassword(
-      {required String sendBy,
-        required String emailOrPhone,
-        password,
-        confirm_password,
-        required String otp}) async {
+
+  Future<CommonResponse> resetPassword({
+    required String sendBy,
+    required String emailOrPhone,
+    password,
+    confirm_password,
+    required String otp,
+  }) async {
     var baseUrl = "${AppConfig.BASE_URL}/reset/password";
 
     var postBody = jsonEncode({
@@ -88,15 +94,17 @@ class AuthRepository {
       "email_or_phone": emailOrPhone,
       "verification_code": otp,
       "password": password,
-      "password_confirmation": confirm_password
+      "password_confirmation": confirm_password,
     });
 
-    var response = await http.post(Uri.parse(baseUrl),
-        headers: {
-          "Accept": "application/json",
-          "Content-Type": "application/json",
-        },
-        body: postBody);
+    var response = await http.post(
+      Uri.parse(baseUrl),
+      headers: {
+        "Accept": "application/json",
+        "Content-Type": "application/json",
+      },
+      body: postBody,
+    );
 
     var data = commonResponseFromJson(response.body);
     return data;
@@ -107,11 +115,14 @@ class AuthRepository {
 
     var accessToken = SharedPref().accessToken;
 
-    var response = await http.post(Uri.parse(baseUrl), headers: {
-      "Accept": "application/json",
-      "Content-Type": "application/json",
-      "Authorization": "Bearer $accessToken"
-    });
+    var response = await http.post(
+      Uri.parse(baseUrl),
+      headers: {
+        "Accept": "application/json",
+        "Content-Type": "application/json",
+        "Authorization": "Bearer $accessToken",
+      },
+    );
 
     var data = commonResponseFromJson(response.body);
     return data;
@@ -122,47 +133,54 @@ class AuthRepository {
 
     var accessToken = SharedPref().accessToken;
 
-    var response = await http.post(Uri.parse(baseUrl), headers: {
-      "Accept": "application/json",
-      "Content-Type": "application/json",
-      "Authorization": "Bearer $accessToken"
-    });
+    var response = await http.post(
+      Uri.parse(baseUrl),
+      headers: {
+        "Accept": "application/json",
+        "Content-Type": "application/json",
+        "Authorization": "Bearer $accessToken",
+      },
+    );
 
     var data = commonResponseFromJson(response.body);
     return data;
   }
 
-  Future<SignInResponse> postSignUp(
-      {firstName,
-        lastName,
-        emailOrPhone,
-        emailOrPhoneText,
-        onBehalf,
-        gender,
-        dateOfBirth,
-        password,
-        passwordConfirmation,
-        recapthca,
-        referral}) async {
+  Future<SignInResponse> postSignUp({
+    firstName,
+    lastName,
+    email,
+    phone,
+    onBehalf,
+    gender,
+    dateOfBirth,
+    password,
+    passwordConfirmation,
+    recapthca,
+    referral,
+  }) async {
     var baseUrl = "${AppConfig.BASE_URL}/signup";
     var postBody = jsonEncode({
       'first_name': firstName,
       'last_name': lastName,
-      '$emailOrPhoneText': emailOrPhone,
+      'email': email,
+      'phone': phone,
       'on_behalf': onBehalf,
       'gender': gender,
       'date_of_birth': dateOfBirth,
       'password': password,
       'password_confirmation': passwordConfirmation,
       'referral_code': referral,
-      'g-recaptcha-response': recapthca
+      'g-recaptcha-response': recapthca,
     });
-    var response = await http.post(Uri.parse(baseUrl),
-        headers: {
-          "Accept": "application/json",
-          "Content-Type": "application/json",
-        },
-        body: postBody);
+    var response = await http.post(
+      Uri.parse(baseUrl),
+      headers: {
+        "Accept": "application/json",
+        "Content-Type": "application/json",
+      },
+      body: postBody,
+    );
 
     return signInResponseFromJson(response.body);
   }
@@ -171,13 +189,15 @@ class AuthRepository {
     var baseUrl = "${AppConfig.BASE_URL}/verify/code";
     var postBody = jsonEncode({"verification_code": code});
 
-    var response = await http.post(Uri.parse(baseUrl),
-        headers: {
-          "Accept": "application/json",
-          "Content-Type": "application/json",
-          "Authorization": "Bearer $getToken"
-        },
-        body: postBody);
+    var response = await http.post(
+      Uri.parse(baseUrl),
+      headers: {
+        "Accept": "application/json",
+        "Content-Type": "application/json",
+        "Authorization": "Bearer $getToken",
+      },
+      body: postBody,
+    );
 
     var data = commonResponseFromJson(response.body);
     return data;
@@ -191,7 +211,7 @@ class AuthRepository {
       headers: {
         "Accept": "application/json",
         "Content-Type": "application/json",
-        "Authorization": "Bearer $getToken"
+        "Authorization": "Bearer $getToken",
       },
     );
 
@@ -202,17 +222,44 @@ class AuthRepository {
   Future<CommonResponse> forgetPassword({send_by, email}) async {
     var baseUrl = "${AppConfig.BASE_URL}/forgot/password";
 
-    var postBody =
-    jsonEncode({"send_code_by": send_by, "email_or_phone": email});
+    var postBody = jsonEncode({
+      "send_code_by": send_by,
+      "email_or_phone": email,
+    });
 
-    var response = await http.post(Uri.parse(baseUrl),
-        headers: {
-          "Accept": "application/json",
-          "Content-Type": "application/json",
-        },
-        body: postBody);
+    var response = await http.post(
+      Uri.parse(baseUrl),
+      headers: {
+        "Accept": "application/json",
+        "Content-Type": "application/json",
+      },
+      body: postBody,
+    );
 
     var data = commonResponseFromJson(response.body);
+    return data;
+  }
+
+  Future<SignInResponse> firebasePhoneLogin({required String phone}) async {
+    var baseUrl = "${AppConfig.BASE_URL}/firebase-phone-login";
+    var postBody = jsonEncode({
+      "phone": phone,
+      "identity_matrix": AppConfig.purshase_code,
+    });
+
+    var response = await http.post(
+      Uri.parse(baseUrl),
+      headers: {
+        "Accept": "application/json",
+        "Content-Type": "application/json",
+      },
+      body: postBody,
+    );
+
+    var data = signInResponseFromJson(response.body);
+    if (data.result == true && data.user != null) {
+      SharedPref().deactivated = data.user!.deactivated.toString();
+    }
     return data;
   }
 
@@ -232,15 +279,17 @@ class AuthRepository {
       "provider": provider,
       "social_provider": social_provider,
       "secret_token": secret_token,
-      "access_token": access_token
+      "access_token": access_token,
     });
 
-    var response = await http.post(Uri.parse(baseUrl),
-        headers: {
-          "Accept": "application/json",
-          "Content-Type": "application/json",
-        },
-        body: postBody);
+    var response = await http.post(
+      Uri.parse(baseUrl),
+      headers: {
+        "Accept": "application/json",
+        "Content-Type": "application/json",
+      },
+      body: postBody,
+    );
 
     var data = signInResponseFromJson(response.body);
     return data;
@@ -272,21 +321,25 @@ class AuthRepository {
     Map<String, dynamic> postBodyMap;
     var headers = {
       "Accept": "application/json",
-      "Content-Type": "application/json"
+      "Content-Type": "application/json",
     };
 
     if (sendBy == 'phone' && phoneNumber != null) {
       postBodyMap = {
         'country_code': phoneNumber.dialCode!.replaceAll('+', ''),
-        'phone': phoneNumber.phoneNumber!.substring(phoneNumber.dialCode!.length)
+        'phone': phoneNumber.phoneNumber!.substring(
+          phoneNumber.dialCode!.length,
+        ),
       };
     } else {
       postBodyMap = {'email': identifier};
     }
 
-    var response = await http.post(Uri.parse(baseUrl),
-        headers: headers,
-        body: jsonEncode(postBodyMap));
+    var response = await http.post(
+      Uri.parse(baseUrl),
+      headers: headers,
+      body: jsonEncode(postBodyMap),
+    );
 
     return verifyMailResponseFromJson(response.body);
   }
@@ -303,24 +356,19 @@ class AuthRepository {
     Map<String, dynamic> postBodyMap;
     var headers = {
       "Accept": "application/json",
-      "Content-Type": "application/json"
+      "Content-Type": "application/json",
     };
     if (sendBy == 'phone' && phoneNumber != null) {
-      postBodyMap = {
-        'code': code,
-
-        'phone':phoneNumber.phoneNumber,
-
-      };
+      postBodyMap = {'code': code, 'phone': phoneNumber.phoneNumber};
     } else {
-      postBodyMap = {
-        'code': code,
-        'email': identifier,
-      };
+      postBodyMap = {'code': code, 'email': identifier};
     }
 
-    var response = await http.post(Uri.parse(baseUrl),
-        headers: headers, body: jsonEncode(postBodyMap));
+    var response = await http.post(
+      Uri.parse(baseUrl),
+      headers: headers,
+      body: jsonEncode(postBodyMap),
+    );
 
     return verifyMailResponseFromJson(response.body);
   }

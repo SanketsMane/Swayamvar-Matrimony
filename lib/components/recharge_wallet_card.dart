@@ -29,9 +29,7 @@ class BalanceRechargeCard extends StatelessWidget {
         child: Container(
           height: 90,
           decoration: BoxDecoration(
-            borderRadius: const BorderRadius.all(
-              Radius.circular(16.0),
-            ),
+            borderRadius: const BorderRadius.all(Radius.circular(16.0)),
             // color: MyTheme.zircon,
             color: color!,
           ),
@@ -40,26 +38,12 @@ class BalanceRechargeCard extends StatelessWidget {
             child: Center(
               child: Column(
                 children: [
-                  Image.asset(
-                    "assets/icon/$icon",
-                    height: 16,
-                  ),
-                  if (balance != null)
-                    const SizedBox(
-                      height: 10,
-                    ),
-                  if (balance != null)
-                    Text(
-                      balance!,
-                      style: balanceStyle,
-                    ),
+                  Image.asset("assets/icon/$icon", height: 16),
+                  if (balance != null) const SizedBox(height: 10),
+                  if (balance != null) Text(balance!, style: balanceStyle),
                   balance == null
-                      ? const SizedBox(
-                          height: 10,
-                        )
-                      : const SizedBox(
-                          height: 0,
-                        ),
+                      ? const SizedBox(height: 10)
+                      : const SizedBox(height: 0),
                   Text(name!, style: textStyle!),
                 ],
               ),

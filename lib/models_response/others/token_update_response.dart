@@ -14,19 +14,10 @@ class TokenUpdateResponse {
   bool? result;
   String? message;
 
-  TokenUpdateResponse({
-    this.result,
-    this.message,
-  });
+  TokenUpdateResponse({this.result, this.message});
 
   factory TokenUpdateResponse.fromJson(Map<String, dynamic> json) =>
-      TokenUpdateResponse(
-        result: json["result"],
-        message: json["message"],
-      );
+      TokenUpdateResponse(result: json["result"], message: json["message"]);
 
-  Map<String, dynamic> toJson() => {
-        "result": result,
-        "message": message,
-      };
+  Map<String, dynamic> toJson() => {"result": result, "message": message};
 }

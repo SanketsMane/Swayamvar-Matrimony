@@ -11,8 +11,8 @@ class ChangePasswordState {
   TextEditingController confirmPasswordController = TextEditingController();
 
   ChangePasswordState.initialState()
-      : oldpass = false,
-        newpass = false,
-        confirmpass = false,
-        cp_loader = false;
+    : oldpass = false,
+      newpass = false,
+      confirmpass = false,
+      cp_loader = false;
 }

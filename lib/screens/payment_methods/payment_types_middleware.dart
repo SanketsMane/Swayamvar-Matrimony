@@ -3,6 +3,7 @@ import 'package:active_matrimonial_flutter_app/repository/payment_repository.dar
 import 'package:active_matrimonial_flutter_app/screens/payment_methods/payment_types_action.dart';
 import 'package:redux/redux.dart';
 import 'package:redux_thunk/redux_thunk.dart';
+import 'package:active_matrimonial_flutter_app/redux/store.dart';
 
 ThunkAction<AppState> paymentTypesMiddleware() {
   return (Store<AppState> store) async {

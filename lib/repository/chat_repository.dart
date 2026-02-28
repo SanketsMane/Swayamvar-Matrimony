@@ -13,11 +13,14 @@ class ChatRepository {
     var baseUrl = "${AppConfig.BASE_URL}/member/chat-list";
     var accessToken = SharedPref().accessToken;
 
-    var response = await http.get(Uri.parse(baseUrl), headers: {
-      "Accept": "application/json",
-      "Content-Type": "application/json",
-      "Authorization": "Bearer $accessToken",
-    });
+    var response = await http.get(
+      Uri.parse(baseUrl),
+      headers: {
+        "Accept": "application/json",
+        "Content-Type": "application/json",
+        "Authorization": "Bearer $accessToken",
+      },
+    );
 
     var data = chatResponseFromJson(response.body);
 
@@ -29,29 +32,40 @@ class ChatRepository {
     var baseUrl = "${AppConfig.BASE_URL}/member/chat-view/$chatId";
     var accessToken = SharedPref().accessToken;
 
-    var response = await http.get(Uri.parse(baseUrl), headers: {
-      "Accept": "application/json",
-      "Content-Type": "application/json",
-      "Authorization": "Bearer $accessToken",
-    });
+    var response = await http.get(
+      Uri.parse(baseUrl),
+      headers: {
+        "Accept": "application/json",
+        "Content-Type": "application/json",
+        "Authorization": "Bearer $accessToken",
+      },
+    );
     var data = chatDetailsResponseFromJson(response.body);
     return data;
   }
 
-  Future<CommonResponse> postChatReply(
-      {int? id, String? text, dynamic attachment}) async {
+  Future<CommonResponse> postChatReply({
+    int? id,
+    String? text,
+    dynamic attachment,
+  }) async {
     var baseUrl = "${AppConfig.BASE_URL}/member/chat-reply";
     var accessToken = SharedPref().accessToken;
-    var postBody = jsonEncode(
-        {"chat_thread_id": id, "message": text, "attachment": attachment});
+    var postBody = jsonEncode({
+      "chat_thread_id": id,
+      "message": text,
+      "attachment": attachment,
+    });
 
-    var response = await http.post(Uri.parse(baseUrl),
-        headers: {
-          "Accept": "application/json",
-          "Content-Type": "application/json",
-          "Authorization": "Bearer $accessToken",
-        },
-        body: postBody);
+    var response = await http.post(
+      Uri.parse(baseUrl),
+      headers: {
+        "Accept": "application/json",
+        "Content-Type": "application/json",
+        "Authorization": "Bearer $accessToken",
+      },
+      body: postBody,
+    );
 
     var data = commonResponseFromJson(response.body);
 

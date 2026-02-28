@@ -8,7 +8,7 @@ class ResidencyState {
   ResidencyState({this.residencyGetResponse, this.isloading, this.pageloader});
 
   ResidencyState.initialState()
-      : residencyGetResponse = ResidencyGetResponse.initialState(),
-        isloading = false,
-        pageloader = false;
+    : residencyGetResponse = ResidencyGetResponse.initialState(),
+      isloading = false,
+      pageloader = false;
 }

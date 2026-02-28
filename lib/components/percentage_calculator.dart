@@ -1,4 +1,4 @@
-import 'package:active_matrimonial_flutter_app/main.dart';
+import 'package:active_matrimonial_flutter_app/redux/store.dart';
 
 class PercentageCalculator {
   var data;
@@ -68,10 +68,14 @@ class PercentageCalculator {
     } else {
       percentage =
           (store.state.manageProfileCombineState!.educationState!.list.length /
-                  store.state.manageProfileCombineState!.educationState!.list
-                      .length) *
-              100 /
-              100;
+              store
+                  .state
+                  .manageProfileCombineState!
+                  .educationState!
+                  .list
+                  .length) *
+          100 /
+          100;
       var twodec = percentage.toStringAsFixed(2);
       percentage = double.parse(twodec);
     }
@@ -84,8 +88,8 @@ class PercentageCalculator {
     if (store.state.manageProfileCombineState!.careerState!.list.isEmpty) {
       percentage = 0.0;
     } else {
-      percentage = (store
-                  .state.manageProfileCombineState!.careerState!.list.length /
+      percentage =
+          (store.state.manageProfileCombineState!.careerState!.list.length /
               store.state.manageProfileCombineState!.careerState!.list.length) *
           100 /
           100;

@@ -9,25 +9,29 @@ class MyTextButton extends StatelessWidget {
   final vertical;
   Function? onPressed;
 
-  MyTextButton(
-      {super.key,
-      this.horizontal = 10.0,
-      this.vertical = 0.0,
-      this.color,
-      this.route,
-      this.text,
-      this.onPressed});
+  MyTextButton({
+    super.key,
+    this.horizontal = 10.0,
+    this.vertical = 0.0,
+    this.color,
+    this.route,
+    this.text,
+    this.onPressed,
+  });
 
   @override
   Widget build(BuildContext context) {
     return TextButton(
       style: TextButton.styleFrom(
-        padding:
-            EdgeInsets.symmetric(horizontal: horizontal, vertical: vertical),
+        padding: EdgeInsets.symmetric(
+          horizontal: horizontal,
+          vertical: vertical,
+        ),
         backgroundColor: color,
         shape: RoundedRectangleBorder(
-            side: BorderSide(color: MyTheme.white),
-            borderRadius: BorderRadius.circular(30)),
+          side: BorderSide(color: MyTheme.white),
+          borderRadius: BorderRadius.circular(30),
+        ),
       ),
       onPressed: onPressed as void Function()?,
       child: text,

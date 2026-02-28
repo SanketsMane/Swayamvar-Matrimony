@@ -21,12 +21,14 @@ ThunkAction<AppState> signInMiddleware({email, password, from, context}) {
     if (data.result == true) {
       setUserData(data);
       store.dispatch(
-          ShowMessageAction(msg: data.message, color: MyTheme.success));
+        ShowMessageAction(msg: data.message, color: MyTheme.success),
+      );
       store.dispatch(getUserIsApproveAction());
       Navigator.pushAndRemoveUntil(
-          context,
-          MaterialPageRoute(builder: (context) => AppNavigation()),
-          (route) => false);
+        context,
+        MaterialPageRoute(builder: (context) => AppNavigation()),
+        (route) => false,
+      );
       store.state.signInState!.emailController!.clear();
       store.state.signInState!.passwordController!.clear();
 
@@ -48,8 +50,9 @@ ThunkAction<AppState> signInMiddleware({email, password, from, context}) {
           String? fCMToken = await fcm.getToken();
 
           if (fCMToken != null && SharedPref().isLoggedIn) {
-            await AppInfoRepository()
-                .getDeviceTokenUpdateResponse(deviceToken: fCMToken);
+            await AppInfoRepository().getDeviceTokenUpdateResponse(
+              deviceToken: fCMToken,
+            );
           }
         } catch (e) {
           // Non-fatal: token registration failed, app continues normally
@@ -57,7 +60,8 @@ ThunkAction<AppState> signInMiddleware({email, password, from, context}) {
       }
     } else {
       store.dispatch(
-          ShowMessageAction(msg: data.message, color: MyTheme.failure));
+        ShowMessageAction(msg: data.message, color: MyTheme.failure),
+      );
     }
 
     store.dispatch(SignInAction(from: from));

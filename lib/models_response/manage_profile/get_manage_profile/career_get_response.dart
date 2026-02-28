@@ -76,31 +76,26 @@ String careerGetResponseToJson(CareerGetResponse data) =>
     json.encode(data.toJson());
 
 class CareerGetResponse {
-  CareerGetResponse({
-    this.data,
-    this.result,
-  });
+  CareerGetResponse({this.data, this.result});
 
   List<Data>? data;
   bool? result;
 
   factory CareerGetResponse.fromJson(Map<String, dynamic> json) =>
       CareerGetResponse(
-        data: json["data"] != null
-            ? List<Data>.from(json["data"].map((x) => Data.fromJson(x)))
-            : [],
-        result:
-            json["result"] ?? false,
+        data:
+            json["data"] != null
+                ? List<Data>.from(json["data"].map((x) => Data.fromJson(x)))
+                : [],
+        result: json["result"] ?? false,
       );
 
   Map<String, dynamic> toJson() => {
-        "data": List<dynamic>.from(data!.map((x) => x.toJson())),
-        "result": result,
-      };
+    "data": List<dynamic>.from(data!.map((x) => x.toJson())),
+    "result": result,
+  };
 
-  CareerGetResponse.initialState()
-      : data = [],
-        result = false;
+  CareerGetResponse.initialState() : data = [], result = false;
 }
 
 class Data {
@@ -121,36 +116,33 @@ class Data {
   bool? present;
 
   factory Data.fromJson(Map<String, dynamic> json) => Data(
-
-        id: json["id"] is int
+    id:
+        json["id"] is int
             ? json["id"]
             : int.tryParse(json["id"].toString()) ?? 0,
 
-        designation: json["designation"] is String
+    designation:
+        json["designation"] is String
             ? json["designation"]
-            : json["designation"]?.toString() ??
-                "",
-        company: json["company"] is String
+            : json["designation"]?.toString() ?? "",
+    company:
+        json["company"] is String
             ? json["company"]
-            : json["company"]?.toString() ??
-                "",
-        start: json["start"] is String
+            : json["company"]?.toString() ?? "",
+    start:
+        json["start"] is String
             ? json["start"]
-            : json["start"]?.toString() ??
-                "",
-        end: json["end"] is String
-            ? json["end"]
-            : json["end"]?.toString() ?? "",
-        present:
-            json["present"] ?? false,
-      );
+            : json["start"]?.toString() ?? "",
+    end: json["end"] is String ? json["end"] : json["end"]?.toString() ?? "",
+    present: json["present"] ?? false,
+  );
 
   Map<String, dynamic> toJson() => {
-        "id": id,
-        "designation": designation,
-        "company": company,
-        "start": start,
-        "end": end,
-        "present": present,
-      };
+    "id": id,
+    "designation": designation,
+    "company": company,
+    "start": start,
+    "end": end,
+    "present": present,
+  };
 }

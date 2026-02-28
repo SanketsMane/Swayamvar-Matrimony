@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 
 class SupportTicketCreateState {
- // QuillController controller = QuillController.basic();
+  // QuillController controller = QuillController.basic();
   TextEditingController subjectController = TextEditingController();
 
   var subject_category;
@@ -25,6 +25,6 @@ class SupportTicketCreateState {
   );
 
   SupportTicketCreateState.initialState()
-      : subject_category = '',
-        img_name = '';
+    : subject_category = '',
+      img_name = '';
 }

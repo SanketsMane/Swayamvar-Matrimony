@@ -8,6 +8,7 @@ import 'package:redux_thunk/redux_thunk.dart';
 import '../../helpers/show_message_state.dart';
 import '../manage_profile_reducer/career_reducer.dart';
 import 'manage_profile_get_middlewares.dart';
+import 'package:active_matrimonial_flutter_app/redux/store.dart';
 
 ThunkAction<AppState> eudcationDeleteMiddleware({dynamic id}) {
   return (Store<AppState> store) async {
@@ -15,9 +16,12 @@ ThunkAction<AppState> eudcationDeleteMiddleware({dynamic id}) {
 
     try {
       var data = await ManageProfileRepository().educationDelete(id: id);
-      store.dispatch(ShowMessageAction(
+      store.dispatch(
+        ShowMessageAction(
           msg: data.message,
-          color: data.result == true ? MyTheme.success : MyTheme.failure));
+          color: data.result == true ? MyTheme.success : MyTheme.failure,
+        ),
+      );
 
       store.dispatch(educationGetMiddleware());
     } catch (e) {
@@ -37,9 +41,12 @@ ThunkAction<AppState> careerDeleteMiddleware({dynamic id}) {
 
       store.dispatch(careerGetMiddleware());
 
-      store.dispatch(ShowMessageAction(
+      store.dispatch(
+        ShowMessageAction(
           msg: data.message,
-          color: data.result == true ? MyTheme.success : MyTheme.failure));
+          color: data.result == true ? MyTheme.success : MyTheme.failure,
+        ),
+      );
     } catch (e) {
       print("error ${e.toString()}");
       return;

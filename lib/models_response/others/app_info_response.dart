@@ -11,10 +11,7 @@ String appInfoResponseToJson(AppInfoResponse data) =>
     json.encode(data.toJson());
 
 class AppInfoResponse {
-  AppInfoResponse({
-    this.result,
-    this.data,
-  });
+  AppInfoResponse({this.result, this.data});
 
   bool? result;
   Data? data;
@@ -25,10 +22,7 @@ class AppInfoResponse {
         data: json["data"] == null ? null : Data.fromJson(json["data"]),
       );
 
-  Map<String, dynamic> toJson() => {
-        "result": result,
-        "data": data?.toJson(),
-      };
+  Map<String, dynamic> toJson() => {"result": result, "data": data?.toJson()};
 }
 
 class Data {
@@ -38,7 +32,7 @@ class Data {
     this.howItWorksTitle,
     this.howItWorksSubTitle,
     this.howItWorks,
-    this.recaptchaSiteKey
+    this.recaptchaSiteKey,
   });
 
   String? websiteName;
@@ -49,27 +43,30 @@ class Data {
   String? recaptchaSiteKey;
 
   factory Data.fromJson(Map<String, dynamic> json) => Data(
-        websiteName: json["website_name"],
-        systemLogo: json["system_logo"],
-        howItWorksTitle: json["how_it_works_title"],
-        howItWorksSubTitle: json["how_it_works_sub_title"],
-        howItWorks: json["how_it_works"] == null
+    websiteName: json["website_name"],
+    systemLogo: json["system_logo"],
+    howItWorksTitle: json["how_it_works_title"],
+    howItWorksSubTitle: json["how_it_works_sub_title"],
+    howItWorks:
+        json["how_it_works"] == null
             ? null
             : List<HowItWork>.from(
-                json["how_it_works"].map((x) => HowItWork.fromJson(x))),
+              json["how_it_works"].map((x) => HowItWork.fromJson(x)),
+            ),
     recaptchaSiteKey: json["recaptcha_site_key"],
-      );
+  );
 
   Map<String, dynamic> toJson() => {
-        "website_name": websiteName,
-        "system_logo": systemLogo,
-        "how_it_works_title": howItWorksTitle,
-        "how_it_works_sub_title": howItWorksSubTitle,
-        "how_it_works": howItWorks == null
+    "website_name": websiteName,
+    "system_logo": systemLogo,
+    "how_it_works_title": howItWorksTitle,
+    "how_it_works_sub_title": howItWorksSubTitle,
+    "how_it_works":
+        howItWorks == null
             ? null
             : List<dynamic>.from(howItWorks!.map((x) => x.toJson())),
-    "recaptcha_site_key":recaptchaSiteKey
-      };
+    "recaptcha_site_key": recaptchaSiteKey,
+  };
 }
 
 class HowItWork {
@@ -86,16 +83,16 @@ class HowItWork {
   String? howItWorksStepsIcons;
 
   factory HowItWork.fromJson(Map<String, dynamic> json) => HowItWork(
-        steps: json["steps"],
-        howItWorksStepsTitles: json["how_it_works_steps_titles"],
-        howItWorksStepsSubTitles: json["how_it_works_steps_sub_titles"],
-        howItWorksStepsIcons: json["how_it_works_steps_icons"],
-      );
+    steps: json["steps"],
+    howItWorksStepsTitles: json["how_it_works_steps_titles"],
+    howItWorksStepsSubTitles: json["how_it_works_steps_sub_titles"],
+    howItWorksStepsIcons: json["how_it_works_steps_icons"],
+  );
 
   Map<String, dynamic> toJson() => {
-        "steps": steps,
-        "how_it_works_steps_titles": howItWorksStepsTitles,
-        "how_it_works_steps_sub_titles": howItWorksStepsSubTitles,
-        "how_it_works_steps_icons": howItWorksStepsIcons,
-      };
+    "steps": steps,
+    "how_it_works_steps_titles": howItWorksStepsTitles,
+    "how_it_works_steps_sub_titles": howItWorksStepsSubTitles,
+    "how_it_works_steps_icons": howItWorksStepsIcons,
+  };
 }

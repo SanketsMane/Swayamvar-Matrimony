@@ -11,10 +11,7 @@ String referralCodeResponseToJson(ReferralCodeResponse data) =>
     json.encode(data.toJson());
 
 class ReferralCodeResponse {
-  ReferralCodeResponse({
-    this.result,
-    this.data,
-  });
+  ReferralCodeResponse({this.result, this.data});
 
   bool? result;
   Data? data;
@@ -25,24 +22,16 @@ class ReferralCodeResponse {
         data: json["data"] == null ? null : Data.fromJson(json["data"]),
       );
 
-  Map<String, dynamic> toJson() => {
-        "result": result,
-        "data": data?.toJson(),
-      };
+  Map<String, dynamic> toJson() => {"result": result, "data": data?.toJson()};
 }
 
 class Data {
-  Data({
-    this.referralCode,
-  });
+  Data({this.referralCode});
 
   String? referralCode;
 
-  factory Data.fromJson(Map<String, dynamic> json) => Data(
-        referralCode: json["referral_code"],
-      );
+  factory Data.fromJson(Map<String, dynamic> json) =>
+      Data(referralCode: json["referral_code"]);
 
-  Map<String, dynamic> toJson() => {
-        "referral_code": referralCode,
-      };
+  Map<String, dynamic> toJson() => {"referral_code": referralCode};
 }

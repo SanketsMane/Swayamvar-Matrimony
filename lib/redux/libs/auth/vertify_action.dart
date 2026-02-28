@@ -1,1 +1,1 @@
-class VerifyAction{}
+class VerifyAction {}

@@ -11,10 +11,7 @@ String trustedByMillionsResponseToJson(TrustedByMillionsResponse data) =>
     json.encode(data.toJson());
 
 class TrustedByMillionsResponse {
-  TrustedByMillionsResponse({
-    this.result,
-    this.data,
-  });
+  TrustedByMillionsResponse({this.result, this.data});
 
   bool? result;
   List<Data>? data;
@@ -26,27 +23,19 @@ class TrustedByMillionsResponse {
       );
 
   Map<String, dynamic> toJson() => {
-        "result": result,
-        "data": List<dynamic>.from(data!.map((x) => x.toJson())),
-      };
+    "result": result,
+    "data": List<dynamic>.from(data!.map((x) => x.toJson())),
+  };
 }
 
 class Data {
-  Data({
-    this.title,
-    this.icon,
-  });
+  Data({this.title, this.icon});
 
   String? title;
   String? icon;
 
-  factory Data.fromJson(Map<String, dynamic> json) => Data(
-        title: json["title"],
-        icon: json["icon"],
-      );
+  factory Data.fromJson(Map<String, dynamic> json) =>
+      Data(title: json["title"], icon: json["icon"]);
 
-  Map<String, dynamic> toJson() => {
-        "title": title,
-        "icon": icon,
-      };
+  Map<String, dynamic> toJson() => {"title": title, "icon": icon};
 }

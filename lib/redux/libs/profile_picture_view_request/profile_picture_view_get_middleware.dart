@@ -7,6 +7,7 @@ import 'package:redux/redux.dart';
 import 'package:redux_thunk/redux_thunk.dart';
 
 import '../../../helpers/shared_pref.dart';
+import 'package:active_matrimonial_flutter_app/redux/store.dart';
 
 ThunkAction<AppState> getProfilePictureViewRequestMiddleware({page = 1}) {
   return (Store<AppState> store) async {
@@ -15,10 +16,12 @@ ThunkAction<AppState> getProfilePictureViewRequestMiddleware({page = 1}) {
       var data = await ProfilePictureViewRepository()
           .getProfilePictureViewRequestList(page: page);
       store.dispatch(
-          GetProfilePictureViewSucceededAction(profileypictureviewlist: data));
+        GetProfilePictureViewSucceededAction(profileypictureviewlist: data),
+      );
     } catch (e) {
       store.dispatch(
-          GetProfilePictureViewFailureAction(error: "Faild to Fetch Data."));
+        GetProfilePictureViewFailureAction(error: "Faild to Fetch Data."),
+      );
 
       return;
     }
@@ -26,18 +29,21 @@ ThunkAction<AppState> getProfilePictureViewRequestMiddleware({page = 1}) {
 }
 
 class ProfilePictureViewRepository {
-  Future<ProfilePictureViewRequestGetResponse> getProfilePictureViewRequestList(
-      {page}) async {
+  Future<ProfilePictureViewRequestGetResponse>
+  getProfilePictureViewRequestList({page}) async {
     var baseUrl =
         "${AppConfig.BASE_URL}/member/profile-picture-view-request?page=$page";
     var accessToken = SharedPref().accessToken;
 
     try {
-      var response = await http.get(Uri.parse(baseUrl), headers: {
-        "Accept": "application/json",
-        "Content-Type": "application/json",
-        "Authorization": "Bearer $accessToken",
-      });
+      var response = await http.get(
+        Uri.parse(baseUrl),
+        headers: {
+          "Accept": "application/json",
+          "Content-Type": "application/json",
+          "Authorization": "Bearer $accessToken",
+        },
+      );
       var data = profilePictureViewRequestGetResponseFromJson(response.body);
 
       return data;

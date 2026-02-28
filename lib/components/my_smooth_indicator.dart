@@ -7,22 +7,24 @@ class MySmoothIndicator {
       controller: controller,
       count: length,
       effect: WormEffect(
-          dotColor: Colors.white.withOpacity(0.8),
-          activeDotColor: Colors.white,
-          dotHeight: 8,
-          dotWidth: 8),
+        dotColor: Colors.white.withOpacity(0.8),
+        activeDotColor: Colors.white,
+        dotHeight: 8,
+        dotWidth: 8,
+      ),
     );
   }
 
-  static Widget expanding_dot_effect({ required controller, required length}) {
+  static Widget expanding_dot_effect({required controller, required length}) {
     return SmoothPageIndicator(
       controller: controller,
       count: length,
       effect: ExpandingDotsEffect(
-          dotColor: Colors.white.withOpacity(0.8),
-          activeDotColor: Colors.white,
-          dotHeight: 8,
-          dotWidth: 8),
+        dotColor: Colors.white.withOpacity(0.8),
+        activeDotColor: Colors.white,
+        dotHeight: 8,
+        dotWidth: 8,
+      ),
     );
   }
 }

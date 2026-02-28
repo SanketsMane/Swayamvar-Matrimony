@@ -8,12 +8,7 @@ class UserProfileActionButton extends StatelessWidget {
   final String? text;
   final String? icon;
 
-  const UserProfileActionButton({
-    super.key,
-    this.icon,
-    this.onTap,
-    this.text,
-  });
+  const UserProfileActionButton({super.key, this.icon, this.onTap, this.text});
 
   @override
   Widget build(BuildContext context) {
@@ -26,27 +21,18 @@ class UserProfileActionButton extends StatelessWidget {
             height: 42,
             decoration: const BoxDecoration(
               color: Colors.white,
-              borderRadius: BorderRadius.all(
-                Radius.circular(32),
-              ),
+              borderRadius: BorderRadius.all(Radius.circular(32)),
             ),
             child: Center(
               child: IconButton(
-                icon: Image.asset(
-                  'assets/icon/$icon',
-                  width: 16,
-                  height: 16,
-                ),
+                icon: Image.asset('assets/icon/$icon', width: 16, height: 16),
                 onPressed: null,
               ),
             ),
           ),
         ),
         Const.height5,
-        Text(
-          text!,
-          style: Styles.medium_white_12,
-        ),
+        Text(text!, style: Styles.medium_white_12),
       ],
     );
   }

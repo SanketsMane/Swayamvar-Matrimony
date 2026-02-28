@@ -23,6 +23,7 @@ Route::group(['namespace' => 'Api', 'middleware' => ['app_language']], function 
     // Authentication
     Route::post('/signup', 'AuthController@signup');
     Route::post('/signin', 'AuthController@signin');
+    Route::post('/firebase-phone-login', 'AuthController@firebasePhoneLogin');
     
     Route::post('/forgot/password', 'AuthController@forgotPassword');
     Route::post('/verify/code', 'AuthController@verifyCode')->middleware("auth:sanctum");

@@ -13,10 +13,7 @@ String profiledropdownResponseToJson(ProfiledropdownResponse data) =>
     json.encode(data.toJson());
 
 class ProfiledropdownResponse {
-  ProfiledropdownResponse({
-    this.result,
-    this.data,
-  });
+  ProfiledropdownResponse({this.result, this.data});
 
   bool? result;
   ProfiledropdownResponseData? data;
@@ -24,29 +21,27 @@ class ProfiledropdownResponse {
   factory ProfiledropdownResponse.fromJson(Map<String, dynamic> json) =>
       ProfiledropdownResponse(
         result: json["result"],
-        data: json["data"] == null
-            ? null
-            : ProfiledropdownResponseData.fromJson(json["data"]),
+        data:
+            json["data"] == null
+                ? null
+                : ProfiledropdownResponseData.fromJson(json["data"]),
       );
 
-  Map<String, dynamic> toJson() => {
-        "result": result,
-        "data": data?.toJson(),
-      };
+  Map<String, dynamic> toJson() => {"result": result, "data": data?.toJson()};
 
   ProfiledropdownResponse.initialState()
-      : result = false,
-        data = ProfiledropdownResponseData.init();
+    : result = false,
+      data = ProfiledropdownResponseData.init();
 }
 
 class ProfiledropdownResponseData {
   ProfiledropdownResponseData.init()
-      : onbehalfList = [],
-        maritialStatus = [],
-        languageList = [],
-        religionList = [],
-        familyValueList = [],
-        countryList = [];
+    : onbehalfList = [],
+      maritialStatus = [],
+      languageList = [],
+      religionList = [],
+      familyValueList = [],
+      countryList = [];
 
   ProfiledropdownResponseData({
     this.onbehalfList,
@@ -66,50 +61,68 @@ class ProfiledropdownResponseData {
 
   factory ProfiledropdownResponseData.fromJson(Map<String, dynamic> json) =>
       ProfiledropdownResponseData(
-        onbehalfList: json["onbehalf_list"] == null
-            ? null
-            : List<DDown>.from(
-                json["onbehalf_list"].map((x) => DDown.fromJson(x))),
-        maritialStatus: json["maritial_status"] == null
-            ? null
-            : List<DDown>.from(
-                json["maritial_status"].map((x) => DDown.fromJson(x))),
-        languageList: json["language_list"] == null
-            ? null
-            : List<DDown>.from(
-                json["language_list"].map((x) => DDown.fromJson(x))),
-        religionList: json["religion_list"] == null
-            ? null
-            : List<DDown>.from(
-                json["religion_list"].map((x) => DDown.fromJson(x))),
-        familyValueList: json["family_value_list"] == null
-            ? null
-            : List<DDown>.from(
-                json["family_value_list"].map((x) => DDown.fromJson(x))),
-        countryList: json["country_list"] == null
-            ? null
-            : List<DDown>.from(
-                json["country_list"].map((x) => DDown.fromJson(x))),
+        onbehalfList:
+            json["onbehalf_list"] == null
+                ? null
+                : List<DDown>.from(
+                  json["onbehalf_list"].map((x) => DDown.fromJson(x)),
+                ),
+        maritialStatus:
+            json["maritial_status"] == null
+                ? null
+                : List<DDown>.from(
+                  json["maritial_status"].map((x) => DDown.fromJson(x)),
+                ),
+        languageList:
+            json["language_list"] == null
+                ? null
+                : List<DDown>.from(
+                  json["language_list"].map((x) => DDown.fromJson(x)),
+                ),
+        religionList:
+            json["religion_list"] == null
+                ? null
+                : List<DDown>.from(
+                  json["religion_list"].map((x) => DDown.fromJson(x)),
+                ),
+        familyValueList:
+            json["family_value_list"] == null
+                ? null
+                : List<DDown>.from(
+                  json["family_value_list"].map((x) => DDown.fromJson(x)),
+                ),
+        countryList:
+            json["country_list"] == null
+                ? null
+                : List<DDown>.from(
+                  json["country_list"].map((x) => DDown.fromJson(x)),
+                ),
       );
 
   Map<String, dynamic> toJson() => {
-        "onbehalf_list": onbehalfList == null
+    "onbehalf_list":
+        onbehalfList == null
             ? null
             : List<dynamic>.from(onbehalfList!.map((x) => x.toJson())),
-        "maritial_status": maritialStatus == null
+    "maritial_status":
+        maritialStatus == null
             ? null
             : List<dynamic>.from(maritialStatus!.map((x) => x.toJson())),
-        "language_list": languageList == null
+    "language_list":
+        languageList == null
             ? null
             : List<dynamic>.from(languageList!.map((x) => x.toJson())),
-        "religion_list": religionList == null
+    "religion_list":
+        religionList == null
             ? null
             : List<dynamic>.from(religionList!.map((x) => x.toJson())),
-        "family_value_list": familyValueList == null
+    "family_value_list":
+        familyValueList == null
             ? null
             : List<dynamic>.from(familyValueList!.map((x) => x.toJson())),
-        "country_list": countryList == null
+    "country_list":
+        countryList == null
             ? null
             : List<dynamic>.from(countryList!.map((x) => x.toJson())),
-      };
+  };
 }

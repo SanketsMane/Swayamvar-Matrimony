@@ -1,4 +1,3 @@
-
 import 'dart:ui';
 import 'package:active_matrimonial_flutter_app/const/my_theme.dart';
 import 'package:active_matrimonial_flutter_app/const/style.dart';
@@ -7,7 +6,7 @@ import 'package:active_matrimonial_flutter_app/helpers/get_context.dart';
 import 'package:active_matrimonial_flutter_app/redux/libs/common/common_states_middleware.dart';
 import 'package:active_matrimonial_flutter_app/redux/libs/drop_down/profile_dropdown_middleware.dart';
 import 'package:active_matrimonial_flutter_app/screens/account/account.dart';
-import 'package:active_matrimonial_flutter_app/screens/auth/signin/signin.dart';
+import 'package:active_matrimonial_flutter_app/screens/auth/signin/phone_login.dart';
 import 'package:active_matrimonial_flutter_app/screens/chat/chat_list.dart';
 import 'package:active_matrimonial_flutter_app/screens/core.dart';
 import 'package:active_matrimonial_flutter_app/screens/home_pages/explore/explore.dart';
@@ -18,7 +17,7 @@ import 'package:active_matrimonial_flutter_app/l10n/app_localizations.dart';
 
 import '../helpers/push_notification_service.dart';
 import '../helpers/shared_pref.dart';
-import '../main.dart';
+import '../redux/store.dart';
 import '../widgets/custom_bottom_navbar.dart';
 
 class AppNavigation extends StatefulWidget {
@@ -111,9 +110,9 @@ class _AppNavigationState extends State<AppNavigation> {
     } else if (_currentIndex == 2) {
       return SharedPref().isLoggedIn
           ? ChatList(backButtonAppearance: false)
-          : Login();
+          : const PhoneLogin();
     } else if (_currentIndex == 3) {
-      return SharedPref().isLoggedIn ? const Account() : Login();
+      return SharedPref().isLoggedIn ? const Account() : const PhoneLogin();
     }
     return const SizedBox.shrink();
   }

@@ -102,10 +102,14 @@ class ShowBasicSearch extends StatelessWidget {
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                    Text(
-                                      state.basicSearchState!.searchList![index].name ?? "",
-                                      style: Styles.medium_arsenic_14,
-                                    ),
+                                  Text(
+                                    state
+                                            .basicSearchState!
+                                            .searchList![index]
+                                            .name ??
+                                        "",
+                                    style: Styles.medium_arsenic_14,
+                                  ),
                                   Const.height5,
                                   Row(
                                     children: [
@@ -115,8 +119,12 @@ class ShowBasicSearch extends StatelessWidget {
                                         )!.common_screen_member_id,
                                         style: Styles.regular_storm_grey_12,
                                       ),
-                                       Text(
-                                        state.basicSearchState!.searchList![index].code ?? "",
+                                      Text(
+                                        state
+                                                .basicSearchState!
+                                                .searchList![index]
+                                                .code ??
+                                            "",
                                         style: Styles.bold_storm_grey_12,
                                       ),
                                     ],

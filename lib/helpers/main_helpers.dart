@@ -1,5 +1,5 @@
 import 'package:active_matrimonial_flutter_app/helpers/shared_pref.dart';
-import 'package:active_matrimonial_flutter_app/main.dart';
+import 'package:active_matrimonial_flutter_app/redux/store.dart';
 import 'package:active_matrimonial_flutter_app/redux/libs/drop_down/profile_dropdown_middleware.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:intl/intl.dart';
@@ -29,15 +29,10 @@ setProfileDropdownValues() {
 }
 
 Map<String, String> get commonHeader => {
-      "Accept": "application/json",
-      "Content-Type": "application/json",
-    };
+  "Accept": "application/json",
+  "Content-Type": "application/json",
+};
 
-Map<String, String> get authHeader => {
-      "Authorization": "Bearer $getToken",
-    };
+Map<String, String> get authHeader => {"Authorization": "Bearer $getToken"};
 
-Widget itemSpacer(h, w) => SizedBox(
-      height: h.toDouble(),
-      width: w.toDouble(),
-    );
+Widget itemSpacer(h, w) => SizedBox(height: h.toDouble(), width: w.toDouble());

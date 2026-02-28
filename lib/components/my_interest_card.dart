@@ -34,13 +34,11 @@ class MyInterestCard extends StatelessWidget {
       // box decoration
       decoration: BoxDecoration(
         color: Colors.white,
-        borderRadius: const BorderRadius.all(
-          Radius.circular(12.0),
-        ),
+        borderRadius: const BorderRadius.all(Radius.circular(12.0)),
         boxShadow: [CommonWidget.box_shadow()],
       ),
-      // child0
 
+      // child0
       child: Row(
         children: [
           SizedBox(
@@ -48,47 +46,49 @@ class MyInterestCard extends StatelessWidget {
             width: 84.0,
             child: ClipRRect(
               borderRadius: const BorderRadius.only(
-                  topLeft: Radius.circular(12.0),
-                  bottomLeft: Radius.circular(12.0)),
+                topLeft: Radius.circular(12.0),
+                bottomLeft: Radius.circular(12.0),
+              ),
               child: MyImages.normalImage(photo),
             ),
           ),
           Expanded(
             child: Padding(
               padding: const EdgeInsets.only(
-                  left: 14.0, top: 16.0, right: 10.0, bottom: 16.0),
+                left: 14.0,
+                top: 16.0,
+                right: 10.0,
+                bottom: 16.0,
+              ),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Text(
-                        name!,
-                        style: Styles.bold_arsenic_14,
-                      ),
+                      Text(name!, style: Styles.bold_arsenic_14),
                       Container(
                         // width: 60,
                         decoration: BoxDecoration(
-                            color: status! == "Approved"
-                                ? MyTheme.medium_sea_green
-                                : MyTheme.very_light_grey,
-                            borderRadius:
-                                const BorderRadius.all(Radius.circular(4.0))),
-                        child: Padding(
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: 10, vertical: 5),
-                          child: Text(
-                            status!,
-                            style: Styles.bold_white_10,
+                          color:
+                              status! == "Approved"
+                                  ? MyTheme.medium_sea_green
+                                  : MyTheme.very_light_grey,
+                          borderRadius: const BorderRadius.all(
+                            Radius.circular(4.0),
                           ),
                         ),
-                      )
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 10,
+                            vertical: 5,
+                          ),
+                          child: Text(status!, style: Styles.bold_white_10),
+                        ),
+                      ),
                     ],
                   ),
-                  const SizedBox(
-                    height: 14,
-                  ),
+                  const SizedBox(height: 14),
                   Row(
                     mainAxisSize: MainAxisSize.max,
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -100,16 +100,11 @@ class MyInterestCard extends StatelessWidget {
                         ),
                       ),
                       Expanded(
-                        child: Text(
-                          country!,
-                          style: Styles.regular_arsenic_14,
-                        ),
+                        child: Text(country!, style: Styles.regular_arsenic_14),
                       ),
                     ],
                   ),
-                  const SizedBox(
-                    height: 14,
-                  ),
+                  const SizedBox(height: 14),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
@@ -130,7 +125,7 @@ class MyInterestCard extends StatelessWidget {
                 ],
               ),
             ),
-          )
+          ),
         ],
       ),
     );

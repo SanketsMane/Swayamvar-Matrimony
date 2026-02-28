@@ -14,7 +14,7 @@ class PP_AstronomicInfo extends StatelessWidget {
       converter: (store) => store.state,
       builder:
           (_, state) =>
-              state.publicProfileState!.astrologies != null
+              state.publicProfileState!.astronomy != null
                   ? Column(
                     children: [
                       buildRow(
@@ -24,7 +24,7 @@ class PP_AstronomicInfo extends StatelessWidget {
                               context,
                             )!.manage_profile_sun_sign,
                         data:
-                            "${state.publicProfileState!.astrologies.sunSign ?? ''}",
+                            "${state.publicProfileState!.astronomy.sunSign ?? ''}",
                       ),
                       SizedBox(height: 10),
                       buildRow(
@@ -34,7 +34,7 @@ class PP_AstronomicInfo extends StatelessWidget {
                               context,
                             )!.manage_profile_moon_sign,
                         data:
-                            "${state.publicProfileState!.astrologies.moonSign ?? ''}",
+                            "${state.publicProfileState!.astronomy.moonSign ?? ''}",
                       ),
                       SizedBox(height: 10),
                       buildRow(
@@ -44,7 +44,7 @@ class PP_AstronomicInfo extends StatelessWidget {
                               context,
                             )!.manage_profile_time_of_birth,
                         data:
-                            "${state.publicProfileState!.astrologies.timeOfBirth ?? ''}",
+                            "${state.publicProfileState!.astronomy.timeOfBirth ?? ''}",
                       ),
                       SizedBox(height: 10),
                       buildRow(
@@ -54,7 +54,7 @@ class PP_AstronomicInfo extends StatelessWidget {
                               context,
                             )!.manage_profile_city_of_birth,
                         data:
-                            "${state.publicProfileState!.astrologies.cityOfBirth ?? ''}",
+                            "${state.publicProfileState!.astronomy.cityOfBirth ?? ''}",
                       ),
                     ],
                   )

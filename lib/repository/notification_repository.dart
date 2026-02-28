@@ -11,11 +11,14 @@ class NotificationRepository {
       var baseUrl = "${AppConfig.BASE_URL}/member/notifications?page=$page";
       var accessToken = prefs.getString(Const.accessToken);
 
-      var response = await http.get(Uri.parse(baseUrl), headers: {
-        "Accept": "application/json",
-        "Content-Type": "application/json",
-        "Authorization": "Bearer $accessToken"
-      });
+      var response = await http.get(
+        Uri.parse(baseUrl),
+        headers: {
+          "Accept": "application/json",
+          "Content-Type": "application/json",
+          "Authorization": "Bearer $accessToken",
+        },
+      );
       return notificationsGetResponseFromJson(response.body);
     } catch (e) {
       rethrow;
@@ -27,11 +30,14 @@ class NotificationRepository {
     var accessToken = prefs.getString(Const.accessToken);
 
     try {
-      var response = await http.get(Uri.parse(baseUrl), headers: {
-        "Accept": "application/json",
-        "Content-Type": "application/json",
-        "Authorization": "Bearer $accessToken"
-      });
+      var response = await http.get(
+        Uri.parse(baseUrl),
+        headers: {
+          "Accept": "application/json",
+          "Content-Type": "application/json",
+          "Authorization": "Bearer $accessToken",
+        },
+      );
 
       var data = commonResponseFromJson(response.body);
       return data;

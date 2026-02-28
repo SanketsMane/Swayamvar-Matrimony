@@ -1,28 +1,41 @@
 import 'dart:io';
 
-import 'package:image_picker/image_picker.dart';
-
 class UserVerifyState {
-  List<VerificationModel>? formList = [];
   bool? isFetching;
   bool? isApprove;
   bool? verificationInfo;
-  ImagePicker picker = ImagePicker();
-  File? image;
-  String? imageName;
-  UserVerifyState(
-      {this.formList, this.isFetching, this.isApprove, this.verificationInfo});
+
+  // 3-Step Verification Data
+  String idType = 'Aadhaar';
+  String idNumber = '';
+  File? idFront;
+  File? idBack;
+  File? selfie;
+
+  bool isSubmitting = false;
+
+  UserVerifyState({
+    this.isFetching,
+    this.isApprove,
+    this.verificationInfo,
+    this.idType = 'Aadhaar',
+    this.idNumber = '',
+    this.idFront,
+    this.idBack,
+    this.selfie,
+    this.isSubmitting = false,
+  });
+
+  UserVerifyState.initialState()
+    : isApprove = false,
+      verificationInfo = false,
+      isFetching = false,
+      isSubmitting = false;
 
   @override
   String toString() {
-    return 'VerifyState{formList: $formList, isFetching: $isFetching, isApprove: $isApprove}';
+    return 'VerifyState{isFetching: $isFetching, isApprove: $isApprove, isSubmitting: $isSubmitting}';
   }
-
-  UserVerifyState.initialState()
-      : formList = [],
-        isApprove = false,
-        verificationInfo = false,
-        isFetching = true;
 }
 
 // model verify
@@ -31,10 +44,11 @@ class VerificationModel<T> {
   T data;
   List<dynamic>? options;
 
-  VerificationModel(
-      {required this.key,
-      required this.type,
-      required this.title,
-      required this.data,
-      this.options});
+  VerificationModel({
+    required this.key,
+    required this.type,
+    required this.title,
+    required this.data,
+    this.options,
+  });
 }

@@ -4,15 +4,21 @@ import 'package:active_matrimonial_flutter_app/redux/libs/helpers/show_message_s
 import 'package:active_matrimonial_flutter_app/repository/report_repository.dart';
 import 'package:redux/redux.dart';
 import 'package:redux_thunk/redux_thunk.dart';
+import 'package:active_matrimonial_flutter_app/redux/store.dart';
 
 ThunkAction<AppState> reportMiddleware({int? userId, dynamic reason}) {
   return (Store<AppState> store) async {
     try {
-      var data =
-          await ReportRepository().report(userId: userId, reason: reason);
-      store.dispatch(ShowMessageAction(
+      var data = await ReportRepository().report(
+        userId: userId,
+        reason: reason,
+      );
+      store.dispatch(
+        ShowMessageAction(
           msg: data.message,
-          color: data.result == true ? MyTheme.success : MyTheme.failure));
+          color: data.result == true ? MyTheme.success : MyTheme.failure,
+        ),
+      );
     } catch (e) {
       //debugPrint(e.toString());
       return;

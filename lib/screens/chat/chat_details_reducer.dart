@@ -3,7 +3,9 @@ import 'package:active_matrimonial_flutter_app/screens/chat/chat_details_action.
 import 'package:active_matrimonial_flutter_app/screens/chat/chat_details_state.dart';
 
 ChatDetailsState? chat_details_reducer(
-    ChatDetailsState? state, dynamic action) {
+  ChatDetailsState? state,
+  dynamic action,
+) {
   if (action is ChatDetailsStoreAction) {
     state!.isFetching = false;
     state.chatDetailsList = action.payload!.data;

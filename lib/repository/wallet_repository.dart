@@ -11,11 +11,14 @@ class WalletRepository {
     var baseUrl = "${AppConfig.BASE_URL}/member/my-wallet-balance";
     var accessToken = getToken;
 
-    var response = await http.get(Uri.parse(baseUrl), headers: {
-      "Accept": "application/json",
-      "Content-Type": "application/json",
-      "Authorization": "Bearer $accessToken",
-    });
+    var response = await http.get(
+      Uri.parse(baseUrl),
+      headers: {
+        "Accept": "application/json",
+        "Content-Type": "application/json",
+        "Authorization": "Bearer $accessToken",
+      },
+    );
 
     var data = walletBalanceResponseFromJson(response.body);
 
@@ -26,20 +29,21 @@ class WalletRepository {
     var baseUrl = "${AppConfig.BASE_URL}/member/wallet?page=$page";
     var accessToken = getToken;
 
-    var response = await http.get(Uri.parse(baseUrl), headers: {
-      "Accept": "application/json",
-      "Content-Type": "application/json",
-      "Authorization": "Bearer $accessToken",
-    });
+    var response = await http.get(
+      Uri.parse(baseUrl),
+      headers: {
+        "Accept": "application/json",
+        "Content-Type": "application/json",
+        "Authorization": "Bearer $accessToken",
+      },
+    );
 
     var data = walletHistoryResponseFromJson(response.body);
     return data;
   }
 
   // offline wallet recharge
-  Future<CommonResponse> offlineWalletRecharge({
-    postBody,
-  }) async {
+  Future<CommonResponse> offlineWalletRecharge({postBody}) async {
     var baseUrl = "${AppConfig.BASE_URL}/member/wallet-recharge";
     var accessToken = getToken;
 
@@ -54,7 +58,9 @@ class WalletRepository {
 
     if (postBody['payment_proof']?.path != null) {
       var pic = await http.MultipartFile.fromPath(
-          "reciept", (postBody['payment_proof']?.path));
+        "reciept",
+        (postBody['payment_proof']?.path),
+      );
       request.files.add(pic);
     }
 

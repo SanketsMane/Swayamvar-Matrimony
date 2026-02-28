@@ -4,7 +4,8 @@ import 'package:connectivity_plus/connectivity_plus.dart';
 
 class ConnectivityHelper {
   Future<bool> checkInternetConnection() async {
-    final List<ConnectivityResult> connectivityResult = await (Connectivity().checkConnectivity());
+    final List<ConnectivityResult> connectivityResult =
+        await (Connectivity().checkConnectivity());
     if (connectivityResult.contains(ConnectivityResult.none)) {
       return false;
     } else {
@@ -14,9 +15,14 @@ class ConnectivityHelper {
 
   abortIfNotConnected(context, onPop) async {
     if (await checkInternetConnection() == false) {
-      Navigator.push(context, MaterialPageRoute(builder: (context) {
-        return Offline();
-      })).then((value) {
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) {
+            return Offline();
+          },
+        ),
+      ).then((value) {
         onPop(value);
       });
     }

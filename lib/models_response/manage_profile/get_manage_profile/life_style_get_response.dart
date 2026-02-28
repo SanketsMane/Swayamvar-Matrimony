@@ -22,23 +22,15 @@ class LifeStyleGetResponse {
         result: json["result"],
       );
 
-  Map<String, dynamic> toJson() => {
-        "data": data?.toJson(),
-        "result": result,
-      };
+  Map<String, dynamic> toJson() => {"data": data?.toJson(), "result": result};
 
   LifeStyleGetResponse.initialState()
-      : data = Data.initialState(),
-        result = false;
+    : data = Data.initialState(),
+      result = false;
 }
 
 class Data {
-  Data({
-    this.diet,
-    this.drink,
-    this.smoke,
-    this.livingWith,
-  });
+  Data({this.diet, this.drink, this.smoke, this.livingWith});
 
   String? diet;
   String? drink;
@@ -46,22 +38,18 @@ class Data {
   String? livingWith;
 
   factory Data.fromJson(Map<String, dynamic> json) => Data(
-        diet: json["diet"],
-        drink: json["drink"],
-        smoke: json["smoke"],
-        livingWith: json["living_with"],
-      );
+    diet: json["diet"],
+    drink: json["drink"],
+    smoke: json["smoke"],
+    livingWith: json["living_with"],
+  );
 
   Map<String, dynamic> toJson() => {
-        "diet": diet,
-        "drink": drink,
-        "smoke": smoke,
-        "living_with": livingWith,
-      };
+    "diet": diet,
+    "drink": drink,
+    "smoke": smoke,
+    "living_with": livingWith,
+  };
 
-  Data.initialState()
-      : diet = '',
-        drink = '',
-        smoke = '',
-        livingWith = '';
+  Data.initialState() : diet = '', drink = '', smoke = '', livingWith = '';
 }

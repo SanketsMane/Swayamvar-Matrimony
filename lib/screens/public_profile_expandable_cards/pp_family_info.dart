@@ -13,21 +13,21 @@ class PP_FamilyInfo extends StatelessWidget {
       converter: (store) => store.state,
       builder:
           (_, state) =>
-              state.publicProfileState!.families != null
+              state.publicProfileState!.family != null
                   ? Column(
                     children: [
                       buildRow(
                         context: context,
                         localization_text:
                             AppLocalizations.of(context)!.manage_profile_father,
-                        data: state.publicProfileState!.families.father ?? '',
+                        data: state.publicProfileState!.family.father ?? '',
                       ),
                       const SizedBox(height: 10),
                       buildRow(
                         context: context,
                         localization_text:
                             AppLocalizations.of(context)!.manage_profile_mother,
-                        data: state.publicProfileState!.families.mother ?? '',
+                        data: state.publicProfileState!.family.mother ?? '',
                       ),
                       const SizedBox(height: 10),
                       buildRow(
@@ -36,7 +36,7 @@ class PP_FamilyInfo extends StatelessWidget {
                             AppLocalizations.of(
                               context,
                             )!.manage_profile_sibling,
-                        data: state.publicProfileState!.families.sibling ?? '',
+                        data: state.publicProfileState!.family.sibling ?? '',
                       ),
                     ],
                   )

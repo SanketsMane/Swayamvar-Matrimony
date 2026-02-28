@@ -17,13 +17,10 @@ class CommonResponse {
   var message;
 
   factory CommonResponse.fromJson(Map<String, dynamic> json) => CommonResponse(
-        result: json["result"] ?? false,
-        message: json["message"],
-        errors: json["errors"],
-      );
+    result: json["result"] ?? false,
+    message: json["message"],
+    errors: json["errors"],
+  );
 
-  Map<String, dynamic> toJson() => {
-        "result": result,
-        "message": message,
-      };
+  Map<String, dynamic> toJson() => {"result": result, "message": message};
 }

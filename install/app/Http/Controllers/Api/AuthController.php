@@ -115,6 +115,35 @@ class AuthController extends Controller
     }
 
     /**
+     * Firebase Phone Login using api
+     */
+    public function firebasePhoneLogin(Request $request)
+    {
+        $request->validate([
+            'phone' => 'required|string',
+        ]);
+
+        // Member check
+        if (\App\Utility\MemberUtility::member_check($request->identity_matrix) == false) {
+            return response()->json(['result' => false, 'message' => 'Identity matrix error', 'user' => null], 401);
+        }
+
+        $user = User::where('phone', $request->phone)->first();
+
+        // If User exists, generate token and login
+        if ($user) {
+            return $this->authResponse($user);
+        }
+
+        // If User does not exist, return failure -> meaning they need to Register
+        return response()->json([
+            'result' => false,
+            'message' => translate('User not found. Please register first.'),
+            'user' => null
+        ], 401);
+    }
+
+    /**
      * Social Login
      */
     public function socialLogin(Request $request)

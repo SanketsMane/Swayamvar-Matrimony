@@ -1,4 +1,3 @@
-
 import 'package:shared_preferences/shared_preferences.dart';
 
 class SharedPref {
@@ -16,6 +15,7 @@ class SharedPref {
     _prefs = await SharedPreferences.getInstance();
     _checkAndClearInvalidData();
   }
+
   void _checkAndClearInvalidData() {
     if (_prefs != null) {
       if (_prefs!.containsKey('isLoggedIn') &&
@@ -95,6 +95,7 @@ class SharedPref {
   set userEmail(String value) {
     _prefs?.setString('userEmail', value);
   }
+
   ///deactivation status
   String get deactivated => _prefs?.getString('deactivated') ?? '';
 
@@ -113,22 +114,40 @@ class SharedPref {
 
   /// Advanced Search Filters Persistence
   int? get advReligionId => _prefs?.getInt('adv_religion_id');
-  set advReligionId(int? value) => value != null ? _prefs?.setInt('adv_religion_id', value) : _prefs?.remove('adv_religion_id');
+  set advReligionId(int? value) =>
+      value != null
+          ? _prefs?.setInt('adv_religion_id', value)
+          : _prefs?.remove('adv_religion_id');
 
   int? get advCasteId => _prefs?.getInt('adv_caste_id');
-  set advCasteId(int? value) => value != null ? _prefs?.setInt('adv_caste_id', value) : _prefs?.remove('adv_caste_id');
+  set advCasteId(int? value) =>
+      value != null
+          ? _prefs?.setInt('adv_caste_id', value)
+          : _prefs?.remove('adv_caste_id');
 
   int? get advCountryId => _prefs?.getInt('adv_country_id');
-  set advCountryId(int? value) => value != null ? _prefs?.setInt('adv_country_id', value) : _prefs?.remove('adv_country_id');
+  set advCountryId(int? value) =>
+      value != null
+          ? _prefs?.setInt('adv_country_id', value)
+          : _prefs?.remove('adv_country_id');
 
   int? get advStateId => _prefs?.getInt('adv_state_id');
-  set advStateId(int? value) => value != null ? _prefs?.setInt('adv_state_id', value) : _prefs?.remove('adv_state_id');
+  set advStateId(int? value) =>
+      value != null
+          ? _prefs?.setInt('adv_state_id', value)
+          : _prefs?.remove('adv_state_id');
 
   int? get advCityId => _prefs?.getInt('adv_city_id');
-  set advCityId(int? value) => value != null ? _prefs?.setInt('adv_city_id', value) : _prefs?.remove('adv_city_id');
+  set advCityId(int? value) =>
+      value != null
+          ? _prefs?.setInt('adv_city_id', value)
+          : _prefs?.remove('adv_city_id');
 
   String? get advMaritalStatus => _prefs?.getString('adv_marital_status');
-  set advMaritalStatus(String? value) => value != null ? _prefs?.setString('adv_marital_status', value) : _prefs?.remove('adv_marital_status');
+  set advMaritalStatus(String? value) =>
+      value != null
+          ? _prefs?.setString('adv_marital_status', value)
+          : _prefs?.remove('adv_marital_status');
 
   /// Call this method on user logout.
   void clear() {

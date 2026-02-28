@@ -11,9 +11,10 @@ import 'package:one_context/one_context.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
 import '../../helpers/main_helpers.dart';
-import '../../main.dart';
+import '../../redux/store.dart';
 import '../../redux/libs/helpers/show_message_state.dart';
 import '../account/account_middleware.dart';
+import 'package:active_matrimonial_flutter_app/redux/store.dart';
 
 class StripeScreen extends StatefulWidget {
   var amount;
@@ -38,12 +39,12 @@ class _StripeScreenState extends State<StripeScreen> {
   final WebViewController _webViewController = WebViewController();
 
   String? accessToken = getToken;
-  var userId = store.state.authState!.userData!.id!;
+  late var userId;
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
+    userId = store.state.authState!.userData!.id!;
     initialUrl =
         "${AppConfig.BASE_URL}/stripe?amount=${widget.amount}&payment_method=${widget.payment_method_key}&payment_type=${widget.payment_type}&package_id=${widget.package_id}&user_id=$userId";
 

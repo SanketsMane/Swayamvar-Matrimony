@@ -1,4 +1,4 @@
-import 'package:active_matrimonial_flutter_app/main.dart';
+import 'package:active_matrimonial_flutter_app/redux/store.dart';
 import 'package:active_matrimonial_flutter_app/redux/libs/manage_profile/manage_profiles_state/education_state.dart';
 import 'package:active_matrimonial_flutter_app/repository/education_repository.dart';
 import 'package:flutter/material.dart';
@@ -54,8 +54,8 @@ EducationState education_reducer(EducationState? state, dynamic action) {
 }
 
 status_toggler(EducationState? state, dynamic action) {
-  EducationRepository()
-      .postEducationStatus(id: action.id, status: action.status);
+  // Sanket: Side effect removed from reducer.
+  // Repository call moved to middleware/UI.
   return state;
 }
 
@@ -72,7 +72,8 @@ delete_education_item(EducationState state, EduDelete action) {
   state.startController?.clear();
   state.endController?.clear();
 
-  store.dispatch(educationGetMiddleware());
+  // Sanket: Side effect removed.
+  // store.dispatch(educationGetMiddleware()) moved to middleware/UI.
   return state;
 }
 

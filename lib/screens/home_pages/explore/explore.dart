@@ -25,7 +25,7 @@ import '../../my_dashboard_pages/shortlist/add_shortlist_middleware.dart';
 import '../../my_dashboard_pages/interest/express_interest_middleware.dart';
 import '../home/home_action.dart';
 import '../../account/account_middleware.dart';
-import '../../auth/signin/signin.dart';
+import '../../auth/signin/phone_login.dart';
 import '../../../middleware/profile_view_middleware.dart';
 import '../../manage_profiles/manage_profile.dart'; // For MyProfile import if needed, but it's used in home.dart
 
@@ -50,11 +50,32 @@ class _ExploreState extends State<Explore> {
   }
 
   // Mock configs
-  final List<String> _mockNames = ['Akash Patil', 'Rohit Kulkarni', 'Snehal Jadhav', 'Pooja More', 'Rahul Desai', 'Neha Sharma', 'Vikram Singh', 'Priya Gupta', 'Karan Mehta', 'Anjali Rao'];
-  final List<String> _mockCities = ['Pune', 'Mumbai', 'Nagpur', 'Kolhapur', 'Nashik'];
-  final List<String> _mockReasons = ['✔ Same Religion\n✔ Same City\n✔ Similar Education', '✔ Same Caste\n✔ Highly Compatible Profession', '✔ Same Religion\n✔ Matches Partner Preferences'];
+  final List<String> _mockNames = [
+    'Akash Patil',
+    'Rohit Kulkarni',
+    'Snehal Jadhav',
+    'Pooja More',
+    'Rahul Desai',
+    'Neha Sharma',
+    'Vikram Singh',
+    'Priya Gupta',
+    'Karan Mehta',
+    'Anjali Rao',
+  ];
+  final List<String> _mockCities = [
+    'Pune',
+    'Mumbai',
+    'Nagpur',
+    'Kolhapur',
+    'Nashik',
+  ];
+  final List<String> _mockReasons = [
+    '✔ Same Religion\n✔ Same City\n✔ Similar Education',
+    '✔ Same Caste\n✔ Highly Compatible Profession',
+    '✔ Same Religion\n✔ Matches Partner Preferences',
+  ];
   final List<int> _mockMatchScores = [96, 92, 88, 75, 82, 65, 90, 85];
-  
+
   @override
   void dispose() {
     _searchController.dispose();
@@ -63,14 +84,19 @@ class _ExploreState extends State<Explore> {
   }
 
   String _getName(MemberData m, int index) {
-    if (m.name == null || m.name!.trim().isEmpty || m.name!.toLowerCase() == 'dummy' || m.name!.toLowerCase() == 'test') {
+    if (m.name == null ||
+        m.name!.trim().isEmpty ||
+        m.name!.toLowerCase() == 'dummy' ||
+        m.name!.toLowerCase() == 'test') {
       return _mockNames[index % _mockNames.length];
     }
     return m.name!;
   }
 
   String _getCity(MemberData m, int index) {
-    if (m.country == null || m.country!.trim().isEmpty || m.country!.toLowerCase().contains('dummy')) {
+    if (m.country == null ||
+        m.country!.trim().isEmpty ||
+        m.country!.toLowerCase().contains('dummy')) {
       return _mockCities[index % _mockCities.length];
     }
     return m.country!;
@@ -80,46 +106,53 @@ class _ExploreState extends State<Explore> {
   Widget build(BuildContext context) {
     return StoreConnector<AppState, ExploreViewModel>(
       converter: (store) => ExploreViewModel.fromStore(store),
-      onInit: (store) => [
-        store.dispatch(fetchPremiumMembersAction()),
-        store.dispatch(fetchNewMembersAction()),
-        if (store.state.basicSearchState?.searchText != null)
-          _searchController.text = store.state.basicSearchState!.searchText!,
-      ],
+      onInit:
+          (store) => [
+            store.dispatch(fetchPremiumMembersAction()),
+            store.dispatch(fetchNewMembersAction()),
+            if (store.state.basicSearchState?.searchText != null)
+              _searchController.text =
+                  store.state.basicSearchState!.searchText!,
+          ],
       builder: (_, vm) {
-        
         // Ensure data is loaded
         if (vm.premiumMembersList == null || vm.newMemberList == null) {
-           return Scaffold(
-             backgroundColor: MyTheme.background,
-             body: Column(
-               children: [
-                 _buildHeader(context, vm),
-                 const Expanded(child: Center(child: CircularProgressIndicator(color: MyTheme.primary))),
-               ],
-             ),
-           );
+          return Scaffold(
+            backgroundColor: MyTheme.background,
+            body: Column(
+              children: [
+                _buildHeader(context, vm),
+                const Expanded(
+                  child: Center(
+                    child: CircularProgressIndicator(color: MyTheme.primary),
+                  ),
+                ),
+              ],
+            ),
+          );
         }
 
         List<MemberData> rawMembers = [];
         rawMembers.addAll(vm.premiumMembersList!);
         rawMembers.addAll(vm.newMemberList!);
-        
+
         final seen = <int>{};
-        List<MemberData> uniqueMembers = rawMembers.where((m) {
-          if (m.userId == null) return false;
-          return seen.add(m.userId!);
-        }).toList();
+        List<MemberData> uniqueMembers =
+            rawMembers.where((m) {
+              if (m.userId == null) return false;
+              return seen.add(m.userId!);
+            }).toList();
 
         List<MemberData> activeNowMatches = [];
 
         if (uniqueMembers.length >= 8) {
-           activeNowMatches = uniqueMembers.take(8).toList();
+          activeNowMatches = uniqueMembers.take(8).toList();
         } else {
-           activeNowMatches = uniqueMembers;
+          activeNowMatches = uniqueMembers;
         }
-        
-        bool isSearching = vm.isFilterActive || _searchController.text.isNotEmpty;
+
+        bool isSearching =
+            vm.isFilterActive || _searchController.text.isNotEmpty;
         final searchResults = vm.searchList ?? [];
 
         double headerOffset = 0.0;
@@ -130,9 +163,10 @@ class _ExploreState extends State<Explore> {
 
         return WillPopScope(
           onWillPop: () async {
-            final shouldPop = (await OneContext().showDialog<bool>(
-              builder: (BuildContext context) => exit_alert_dialog(context),
-            ))!;
+            final shouldPop =
+                (await OneContext().showDialog<bool>(
+                  builder: (BuildContext context) => exit_alert_dialog(context),
+                ))!;
             return shouldPop;
           },
           child: Scaffold(
@@ -141,60 +175,72 @@ class _ExploreState extends State<Explore> {
             body: RefreshIndicator(
               color: MyTheme.primary,
               onRefresh: () async {
-                StoreProvider.of<AppState>(context).dispatch(fetchPremiumMembersAction());
-                StoreProvider.of<AppState>(context).dispatch(fetchNewMembersAction());
+                StoreProvider.of<AppState>(
+                  context,
+                ).dispatch(fetchPremiumMembersAction());
+                StoreProvider.of<AppState>(
+                  context,
+                ).dispatch(fetchNewMembersAction());
               },
               child: Stack(
                 children: [
-                   // Layer 1: The Reels (PageView)
-                   if (uniqueMembers.isEmpty)
-                      _buildEmptyState(context)
-                   else
-                      PageView.builder(
-                        controller: _pageController,
-                        scrollDirection: Axis.vertical,
-                        itemCount: uniqueMembers.length,
-                        itemBuilder: (context, index) {
-                          return _buildReelMatchCard(context, uniqueMembers[index], vm);
-                        },
-                      ),
+                  // Layer 1: The Reels (PageView)
+                  if (uniqueMembers.isEmpty)
+                    _buildEmptyState(context)
+                  else
+                    PageView.builder(
+                      controller: _pageController,
+                      scrollDirection: Axis.vertical,
+                      itemCount: uniqueMembers.length,
+                      itemBuilder: (context, index) {
+                        return _buildReelMatchCard(
+                          context,
+                          uniqueMembers[index],
+                          vm,
+                        );
+                      },
+                    ),
 
-                   // Layer 2: The Sliding Header (App Bar + Active Now)
-                   if (!isSearching)
-                     Positioned(
-                       top: headerOffset,
-                       left: 0,
-                       right: 0,
-                       child: Container(
-                         color: MyTheme.white, // Opaque background
-                         child: Column(
-                           mainAxisSize: MainAxisSize.min,
-                           children: [
-                              _buildHeader(context, vm),
-                              if (activeNowMatches.isNotEmpty) 
-                                 _buildActiveNow(context, activeNowMatches),
-                           ],
-                         ),
-                       ),
-                     ),
-                   
-                   // Layer 3: Search Results Overlay (If searching)
-                   if (isSearching)
-                     Positioned.fill(
-                       child: Container(
-                         color: MyTheme.background,
-                         child: Column(
-                           children: [
-                              _buildHeader(context, vm),
-                              Expanded(
-                                child: SingleChildScrollView(
-                                  child: _buildFilteredGrid(context, searchResults, vm),
+                  // Layer 2: The Sliding Header (App Bar + Active Now)
+                  if (!isSearching)
+                    Positioned(
+                      top: headerOffset,
+                      left: 0,
+                      right: 0,
+                      child: Container(
+                        color: MyTheme.white, // Opaque background
+                        child: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            _buildHeader(context, vm),
+                            if (activeNowMatches.isNotEmpty)
+                              _buildActiveNow(context, activeNowMatches),
+                          ],
+                        ),
+                      ),
+                    ),
+
+                  // Layer 3: Search Results Overlay (If searching)
+                  if (isSearching)
+                    Positioned.fill(
+                      child: Container(
+                        color: MyTheme.background,
+                        child: Column(
+                          children: [
+                            _buildHeader(context, vm),
+                            Expanded(
+                              child: SingleChildScrollView(
+                                child: _buildFilteredGrid(
+                                  context,
+                                  searchResults,
+                                  vm,
                                 ),
                               ),
-                           ],
-                         ),
-                       ),
-                     ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
                 ],
               ),
             ),
@@ -212,18 +258,32 @@ class _ExploreState extends State<Explore> {
           const SizedBox(height: 48),
           Icon(Icons.people_alt_outlined, size: 64, color: MyTheme.border),
           const SizedBox(height: 16),
-          Text(AppLocalizations.of(context)!.explore_no_matches, style: Styles.h2.copyWith(color: MyTheme.text_primary)),
+          Text(
+            AppLocalizations.of(context)!.explore_no_matches,
+            style: Styles.h2.copyWith(color: MyTheme.text_primary),
+          ),
           const SizedBox(height: 8),
-          Text(AppLocalizations.of(context)!.explore_adjust_prefs, style: Styles.body.copyWith(color: MyTheme.text_secondary)),
+          Text(
+            AppLocalizations.of(context)!.explore_adjust_prefs,
+            style: Styles.body.copyWith(color: MyTheme.text_secondary),
+          ),
           const SizedBox(height: 24),
           ElevatedButton(
             onPressed: () => AIZRoute.push(context, AdvancedSearch()),
             style: ElevatedButton.styleFrom(
               backgroundColor: MyTheme.primary,
-              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(Styles.br_btn)),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(Styles.br_btn),
+              ),
               padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
             ),
-            child: Text(AppLocalizations.of(context)!.explore_edit_prefs, style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
+            child: Text(
+              AppLocalizations.of(context)!.explore_edit_prefs,
+              style: const TextStyle(
+                color: Colors.white,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
           ),
         ],
       ),
@@ -242,18 +302,35 @@ class _ExploreState extends State<Explore> {
         padding: const EdgeInsets.symmetric(horizontal: 16),
         child: Row(
           children: [
-            _headerIconBtn(Icons.tune_rounded, onTap: () => AIZRoute.push(context, AdvancedSearch())),
+            _headerIconBtn(
+              Icons.tune_rounded,
+              onTap: () => AIZRoute.push(context, AdvancedSearch()),
+            ),
             const Spacer(),
-            Text(AppLocalizations.of(context)!.explore_page_title, style: Styles.bold_arsenic_16.copyWith(color: MyTheme.text_primary, fontSize: 18, letterSpacing: -0.3)),
+            Text(
+              AppLocalizations.of(context)!.explore_page_title,
+              style: Styles.bold_arsenic_16.copyWith(
+                color: MyTheme.text_primary,
+                fontSize: 18,
+                letterSpacing: -0.3,
+              ),
+            ),
             const Spacer(),
-            _headerIconBtn(Icons.notifications_none_rounded, onTap: () => AIZRoute.push(context, const Notifications())),
+            _headerIconBtn(
+              Icons.notifications_none_rounded,
+              onTap: () => AIZRoute.push(context, const Notifications()),
+            ),
           ],
         ),
       ),
     );
   }
 
-  Widget _headerIconBtn(IconData icon, {VoidCallback? onTap, bool isActive = false}) {
+  Widget _headerIconBtn(
+    IconData icon, {
+    VoidCallback? onTap,
+    bool isActive = false,
+  }) {
     return InkWell(
       onTap: onTap,
       borderRadius: BorderRadius.circular(12),
@@ -263,24 +340,46 @@ class _ExploreState extends State<Explore> {
         decoration: BoxDecoration(
           color: isActive ? MyTheme.primary : MyTheme.background,
           borderRadius: BorderRadius.circular(12),
-          border: Border.all(color: isActive ? MyTheme.primary : MyTheme.border),
+          border: Border.all(
+            color: isActive ? MyTheme.primary : MyTheme.border,
+          ),
         ),
-        child: Icon(icon, color: isActive ? MyTheme.white : MyTheme.text_primary, size: 20),
+        child: Icon(
+          icon,
+          color: isActive ? MyTheme.white : MyTheme.text_primary,
+          size: 20,
+        ),
       ),
     );
   }
 
-
   Widget _buildCompBadge(int match) {
     Color bColor;
-    if (match >= 85) bColor = MyTheme.success;
-    else if (match >= 60) bColor = Colors.orange;
-    else bColor = MyTheme.text_secondary;
+    if (match >= 85)
+      bColor = MyTheme.success;
+    else if (match >= 60)
+      bColor = Colors.orange;
+    else
+      bColor = MyTheme.text_secondary;
 
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
-      decoration: BoxDecoration(color: bColor, borderRadius: BorderRadius.circular(12)),
-      child: Text('$match% ${match >= 85 ? AppLocalizations.of(context)!.explore_match_high : match >= 60 ? AppLocalizations.of(context)!.explore_match_medium : AppLocalizations.of(context)!.explore_match_low}', style: const TextStyle(color: Colors.white, fontSize: 10, fontWeight: FontWeight.bold)),
+      decoration: BoxDecoration(
+        color: bColor,
+        borderRadius: BorderRadius.circular(12),
+      ),
+      child: Text(
+        '$match% ${match >= 85
+            ? AppLocalizations.of(context)!.explore_match_high
+            : match >= 60
+            ? AppLocalizations.of(context)!.explore_match_medium
+            : AppLocalizations.of(context)!.explore_match_low}',
+        style: const TextStyle(
+          color: Colors.white,
+          fontSize: 10,
+          fontWeight: FontWeight.bold,
+        ),
+      ),
     );
   }
 
@@ -291,20 +390,32 @@ class _ExploreState extends State<Explore> {
         const SizedBox(height: 24),
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 16),
-          child: Text(AppLocalizations.of(context)!.explore_top_matches, style: Styles.bold_arsenic_16.copyWith(fontSize: 18, color: MyTheme.text_primary)),
+          child: Text(
+            AppLocalizations.of(context)!.explore_top_matches,
+            style: Styles.bold_arsenic_16.copyWith(
+              fontSize: 18,
+              color: MyTheme.text_primary,
+            ),
+          ),
         ),
         const SizedBox(height: 12),
         ListView.builder(
           shrinkWrap: true,
           physics: const NeverScrollableScrollPhysics(),
           itemCount: min(matches.length, 3),
-          itemBuilder: (ctx, idx) => _buildTopMatchCard(context, matches[idx], idx, vm),
-        )
+          itemBuilder:
+              (ctx, idx) => _buildTopMatchCard(context, matches[idx], idx, vm),
+        ),
       ],
     );
   }
 
-  Widget _buildTopMatchCard(BuildContext context, MemberData m, int idx, ExploreViewModel vm) {
+  Widget _buildTopMatchCard(
+    BuildContext context,
+    MemberData m,
+    int idx,
+    ExploreViewModel vm,
+  ) {
     int score = _mockMatchScores[idx % _mockMatchScores.length];
     return Container(
       margin: const EdgeInsets.fromLTRB(16, 0, 16, 16),
@@ -312,66 +423,119 @@ class _ExploreState extends State<Explore> {
         color: MyTheme.white,
         borderRadius: BorderRadius.circular(16),
         border: Border.all(color: MyTheme.border),
-        boxShadow: [BoxShadow(color: MyTheme.black.withOpacity(0.05), blurRadius: 10, offset: const Offset(0, 4))],
+        boxShadow: [
+          BoxShadow(
+            color: MyTheme.black.withOpacity(0.05),
+            blurRadius: 10,
+            offset: const Offset(0, 4),
+          ),
+        ],
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-           ClipRRect(
+          ClipRRect(
             borderRadius: const BorderRadius.vertical(top: Radius.circular(16)),
             child: SizedBox(
-               height: 250,
-               width: double.infinity,
-               child: Stack(
-                 fit: StackFit.expand,
-                 children: [
-                    MyImages.normalImage(m.photo, alignment: Alignment.topCenter),
-                    Positioned(
-                      top: 12, left: 12,
-                      child: _buildCompBadge(score)
-                    )
-                 ]
-               )
-            )
+              height: 250,
+              width: double.infinity,
+              child: Stack(
+                fit: StackFit.expand,
+                children: [
+                  MyImages.normalImage(m.photo, alignment: Alignment.topCenter),
+                  Positioned(top: 12, left: 12, child: _buildCompBadge(score)),
+                ],
+              ),
+            ),
           ),
           Padding(
             padding: const EdgeInsets.all(16),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text("${_getName(m, idx)}, ${m.age ?? '25'}", style: Styles.bold_arsenic_16.copyWith(fontSize: 20, color: MyTheme.text_primary)),
+                Text(
+                  "${_getName(m, idx)}, ${m.age ?? '25'}",
+                  style: Styles.bold_arsenic_16.copyWith(
+                    fontSize: 20,
+                    color: MyTheme.text_primary,
+                  ),
+                ),
                 const SizedBox(height: 4),
-                Text(_getCity(m, idx), style: Styles.regular_gull_grey_12.copyWith(color: MyTheme.text_secondary, fontSize: 13)),
+                Text(
+                  _getCity(m, idx),
+                  style: Styles.regular_gull_grey_12.copyWith(
+                    color: MyTheme.text_secondary,
+                    fontSize: 13,
+                  ),
+                ),
                 const SizedBox(height: 12),
                 _buildInfoChips(m),
                 const SizedBox(height: 12),
-                
+
                 Container(
                   width: double.infinity,
                   padding: const EdgeInsets.all(12),
-                  decoration: BoxDecoration(color: MyTheme.background, borderRadius: BorderRadius.circular(8)),
-                  child: Text(_mockReasons[idx % _mockReasons.length], style: Styles.bold_arsenic_12.copyWith(color: MyTheme.text_primary, height: 1.5)),
+                  decoration: BoxDecoration(
+                    color: MyTheme.background,
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                  child: Text(
+                    _mockReasons[idx % _mockReasons.length],
+                    style: Styles.bold_arsenic_12.copyWith(
+                      color: MyTheme.text_primary,
+                      height: 1.5,
+                    ),
+                  ),
                 ),
-                
+
                 const SizedBox(height: 16),
                 Row(
                   children: [
-                    Expanded(child: _actionBtn(AppLocalizations.of(context)!.explore_interest, Icons.favorite, MyTheme.primary, () => vm.expressInterest(userId: m.userId!))),
+                    Expanded(
+                      child: _actionBtn(
+                        AppLocalizations.of(context)!.explore_interest,
+                        Icons.favorite,
+                        MyTheme.primary,
+                        () => vm.expressInterest(userId: m.userId!),
+                      ),
+                    ),
                     const SizedBox(width: 8),
-                    Expanded(child: _actionBtn(AppLocalizations.of(context)!.explore_shortlist, Icons.star_border, MyTheme.text_secondary, () => vm.addShortlist(user: m.userId!))),
+                    Expanded(
+                      child: _actionBtn(
+                        AppLocalizations.of(context)!.explore_shortlist,
+                        Icons.star_border,
+                        MyTheme.text_secondary,
+                        () => vm.addShortlist(user: m.userId!),
+                      ),
+                    ),
                     const SizedBox(width: 8),
-                    Expanded(child: _actionBtn(AppLocalizations.of(context)!.explore_view, Icons.person_outline, MyTheme.text_secondary, () => AIZRoute.push(context, UserPublicProfile(userId: m.userId ?? 0)))),
+                    Expanded(
+                      child: _actionBtn(
+                        AppLocalizations.of(context)!.explore_view,
+                        Icons.person_outline,
+                        MyTheme.text_secondary,
+                        () => AIZRoute.push(
+                          context,
+                          UserPublicProfile(userId: m.userId ?? 0),
+                        ),
+                      ),
+                    ),
                   ],
-                )
+                ),
               ],
             ),
-          )
+          ),
         ],
       ),
     );
   }
 
-  Widget _actionBtn(String title, IconData icon, Color color, VoidCallback onTap) {
+  Widget _actionBtn(
+    String title,
+    IconData icon,
+    Color color,
+    VoidCallback onTap,
+  ) {
     return InkWell(
       onTap: onTap,
       borderRadius: BorderRadius.circular(12),
@@ -379,14 +543,25 @@ class _ExploreState extends State<Explore> {
         padding: const EdgeInsets.symmetric(vertical: 10),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(12),
-          border: Border.all(color: color == MyTheme.primary ? color : MyTheme.border),
-          color: color == MyTheme.primary ? MyTheme.primary.withOpacity(0.05) : Colors.transparent,
+          border: Border.all(
+            color: color == MyTheme.primary ? color : MyTheme.border,
+          ),
+          color:
+              color == MyTheme.primary
+                  ? MyTheme.primary.withOpacity(0.05)
+                  : Colors.transparent,
         ),
         child: Column(
           children: [
             Icon(icon, color: color, size: 20),
             const SizedBox(height: 4),
-            Text(title, style: Styles.bold_arsenic_12.copyWith(color: color, fontSize: 11)),
+            Text(
+              title,
+              style: Styles.bold_arsenic_12.copyWith(
+                color: color,
+                fontSize: 11,
+              ),
+            ),
           ],
         ),
       ),
@@ -399,8 +574,14 @@ class _ExploreState extends State<Explore> {
       children: [
         const SizedBox(height: 16),
         Padding(
-           padding: const EdgeInsets.symmetric(horizontal: 16),
-           child: Text(AppLocalizations.of(context)!.explore_nearby, style: Styles.bold_arsenic_16.copyWith(fontSize: 18, color: MyTheme.text_primary)),
+          padding: const EdgeInsets.symmetric(horizontal: 16),
+          child: Text(
+            AppLocalizations.of(context)!.explore_nearby,
+            style: Styles.bold_arsenic_16.copyWith(
+              fontSize: 18,
+              color: MyTheme.text_primary,
+            ),
+          ),
         ),
         const SizedBox(height: 12),
         SizedBox(
@@ -410,9 +591,10 @@ class _ExploreState extends State<Explore> {
             scrollDirection: Axis.horizontal,
             physics: const BouncingScrollPhysics(),
             itemCount: matches.length,
-            itemBuilder: (ctx, idx) => _buildNearbyCard(context, matches[idx], idx),
+            itemBuilder:
+                (ctx, idx) => _buildNearbyCard(context, matches[idx], idx),
           ),
-        )
+        ),
       ],
     );
   }
@@ -431,22 +613,40 @@ class _ExploreState extends State<Explore> {
         child: Column(
           children: [
             Expanded(
-               child: ClipRRect(
-                  borderRadius: const BorderRadius.vertical(top: Radius.circular(16)),
-                  child: MyImages.normalImage(m.photo, alignment: Alignment.topCenter),
-               )
+              child: ClipRRect(
+                borderRadius: const BorderRadius.vertical(
+                  top: Radius.circular(16),
+                ),
+                child: MyImages.normalImage(
+                  m.photo,
+                  alignment: Alignment.topCenter,
+                ),
+              ),
             ),
             Padding(
-               padding: const EdgeInsets.all(10),
-               child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                     Text("${_getName(m, idx)}, ${m.age ?? '25'}", maxLines: 1, overflow: TextOverflow.ellipsis, style: Styles.bold_arsenic_12.copyWith(color: MyTheme.text_primary, fontSize: 13)),
-                     const SizedBox(height: 2),
-                     Text("${idx * 2 + 1} km away", style: Styles.caption.copyWith(color: MyTheme.text_secondary)),
-                  ],
-               ),
-            )
+              padding: const EdgeInsets.all(10),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    "${_getName(m, idx)}, ${m.age ?? '25'}",
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: Styles.bold_arsenic_12.copyWith(
+                      color: MyTheme.text_primary,
+                      fontSize: 13,
+                    ),
+                  ),
+                  const SizedBox(height: 2),
+                  Text(
+                    "${idx * 2 + 1} km",
+                    style: Styles.caption.copyWith(
+                      color: MyTheme.text_secondary,
+                    ),
+                  ),
+                ],
+              ),
+            ),
           ],
         ),
       ),
@@ -459,8 +659,15 @@ class _ExploreState extends State<Explore> {
       child: ExpansionTile(
         tilePadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 0),
         dense: true,
-        visualDensity: const VisualDensity(horizontal: 0, vertical: -4),
-        title: Text("🟢 ${AppLocalizations.of(context)!.explore_active_now} (${matches.length})", style: Styles.bold_arsenic_12.copyWith(fontSize: 14, color: MyTheme.text_primary, letterSpacing: 0.2)),
+        visualDensity: const VisualDensity(horizontal: 0, vertical: -4.0),
+        title: Text(
+          "🟢 ${AppLocalizations.of(context)!.explore_active_now} (${matches.length})",
+          style: Styles.bold_arsenic_12.copyWith(
+            fontSize: 14,
+            color: MyTheme.text_primary,
+            letterSpacing: 0.2,
+          ),
+        ),
         childrenPadding: const EdgeInsets.only(bottom: 12),
         children: [
           SizedBox(
@@ -473,63 +680,77 @@ class _ExploreState extends State<Explore> {
               itemBuilder: (ctx, idx) {
                 final m = matches[idx];
                 return GestureDetector(
-                  onTap: () => AIZRoute.push(context, UserPublicProfile(userId: m.userId ?? 0)),
+                  onTap:
+                      () => AIZRoute.push(
+                        context,
+                        UserPublicProfile(userId: m.userId ?? 0),
+                      ),
                   child: Padding(
                     padding: const EdgeInsets.only(right: 14),
                     child: Column(
-                       children: [
-                          Stack(
-                            children: [
-                               Container(
-                                 width: 58,
-                                 height: 58,
-                                 decoration: BoxDecoration(
-                                   shape: BoxShape.circle,
-                                   border: Border.all(color: MyTheme.primary.withOpacity(0.1), width: 1.5),
-                                   image: DecorationImage(
-                                     image: MyImage.imageProvider(m.photo),
-                                     fit: BoxFit.cover,
-                                   ),
-                                 ),
-                               ),
-                               Positioned(
-                                 bottom: 0,
-                                 right: 0,
-                                 child: Container(
-                                   width: 12,
-                                   height: 12,
-                                   decoration: BoxDecoration(
-                                     color: const Color(0xFF1CB14D),
-                                     shape: BoxShape.circle,
-                                     border: Border.all(color: MyTheme.white, width: 2),
-                                   ),
-                                 ),
-                               ),
-                            ]
-                          ),
-                          const SizedBox(height: 6),
-                          Text(
-                            "${AppLocalizations.of(ctx)!.explore_active_ago} ${idx * 5 + 1}m", 
-                            style: const TextStyle(
-                              fontFamily: 'Mukta',
-                              fontSize: 10,
-                              fontWeight: FontWeight.w500,
-                              color: Color(0xFF6B7280),
+                      children: [
+                        Stack(
+                          children: [
+                            Container(
+                              width: 58,
+                              height: 58,
+                              decoration: BoxDecoration(
+                                shape: BoxShape.circle,
+                                border: Border.all(
+                                  color: MyTheme.primary.withOpacity(0.1),
+                                  width: 1.5,
+                                ),
+                                image: DecorationImage(
+                                  image: MyImage.imageProvider(m.photo),
+                                  fit: BoxFit.cover,
+                                ),
+                              ),
                             ),
+                            Positioned(
+                              bottom: 0,
+                              right: 0,
+                              child: Container(
+                                width: 12,
+                                height: 12,
+                                decoration: BoxDecoration(
+                                  color: const Color(0xFF1CB14D),
+                                  shape: BoxShape.circle,
+                                  border: Border.all(
+                                    color: MyTheme.white,
+                                    width: 2,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                        const SizedBox(height: 6),
+                        Text(
+                          "${AppLocalizations.of(ctx)!.explore_active_ago} ${idx * 5 + 1}m",
+                          style: const TextStyle(
+                            fontFamily: 'Mukta',
+                            fontSize: 10,
+                            fontWeight: FontWeight.w500,
+                            color: Color(0xFF6B7280),
                           ),
-                       ]
-                    )
-                  )
+                        ),
+                      ],
+                    ),
+                  ),
                 );
-              }
+              },
             ),
-          )
+          ),
         ],
-      )
+      ),
     );
   }
 
-  Widget _buildReelMatchCard(BuildContext context, MemberData member, ExploreViewModel vm) {
+  Widget _buildReelMatchCard(
+    BuildContext context,
+    MemberData member,
+    ExploreViewModel vm,
+  ) {
     return Container(
       color: Colors.black,
       child: Stack(
@@ -565,7 +786,10 @@ class _ExploreState extends State<Explore> {
                         "${member.name ?? ''}, ${member.age ?? ''}",
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
-                        style: Styles.h1.copyWith(color: MyTheme.white, fontSize: 28),
+                        style: Styles.h1.copyWith(
+                          color: MyTheme.white,
+                          fontSize: 28,
+                        ),
                       ),
                     ),
                     const SizedBox(width: 8),
@@ -574,11 +798,17 @@ class _ExploreState extends State<Explore> {
                 const SizedBox(height: 8),
                 Row(
                   children: [
-                    const Icon(Icons.location_on, color: MyTheme.white, size: 16),
+                    const Icon(
+                      Icons.location_on,
+                      color: MyTheme.white,
+                      size: 16,
+                    ),
                     const SizedBox(width: 4),
                     Text(
                       member.country ?? 'India',
-                      style: Styles.body.copyWith(color: MyTheme.white.withOpacity(0.9)),
+                      style: Styles.body.copyWith(
+                        color: MyTheme.white.withOpacity(0.9),
+                      ),
                     ),
                   ],
                 ),
@@ -599,7 +829,7 @@ class _ExploreState extends State<Explore> {
                   iconColor: Colors.white,
                   onTap: () {
                     if (member.userId != null) {
-                       vm.ignoreUser(user: member);
+                      vm.ignoreUser(user: member);
                     }
                   },
                 ),
@@ -620,7 +850,7 @@ class _ExploreState extends State<Explore> {
                   color: Colors.white.withOpacity(0.2),
                   iconColor: Colors.white,
                   onTap: () {
-                     _showFullProfileSheet(context, member, vm);
+                    _showFullProfileSheet(context, member, vm);
                   },
                 ),
               ],
@@ -631,7 +861,12 @@ class _ExploreState extends State<Explore> {
     );
   }
 
-  Widget _buildActionBtn({required IconData icon, required Color color, required Color iconColor, required VoidCallback onTap}) {
+  Widget _buildActionBtn({
+    required IconData icon,
+    required Color color,
+    required Color iconColor,
+    required VoidCallback onTap,
+  }) {
     return GestureDetector(
       onTap: onTap,
       child: Container(
@@ -647,7 +882,11 @@ class _ExploreState extends State<Explore> {
     );
   }
 
-  void _showFullProfileSheet(BuildContext context, MemberData member, ExploreViewModel vm) {
+  void _showFullProfileSheet(
+    BuildContext context,
+    MemberData member,
+    ExploreViewModel vm,
+  ) {
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
@@ -667,7 +906,8 @@ class _ExploreState extends State<Explore> {
               Center(
                 child: Container(
                   margin: const EdgeInsets.only(top: 12, bottom: 8),
-                  width: 40, height: 5,
+                  width: 40,
+                  height: 5,
                   decoration: BoxDecoration(
                     color: Colors.grey[300],
                     borderRadius: BorderRadius.circular(10),
@@ -696,8 +936,14 @@ class _ExploreState extends State<Explore> {
       children: [
         const SizedBox(height: 24),
         Padding(
-           padding: const EdgeInsets.symmetric(horizontal: 16),
-           child: Text("New Matches", style: Styles.bold_arsenic_16.copyWith(fontSize: 18, color: MyTheme.text_primary)),
+          padding: const EdgeInsets.symmetric(horizontal: 16),
+          child: Text(
+            "New Matches",
+            style: Styles.bold_arsenic_16.copyWith(
+              fontSize: 18,
+              color: MyTheme.text_primary,
+            ),
+          ),
         ),
         const SizedBox(height: 12),
         GridView.builder(
@@ -705,13 +951,14 @@ class _ExploreState extends State<Explore> {
           shrinkWrap: true,
           physics: const NeverScrollableScrollPhysics(),
           gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-             crossAxisCount: 2,
-             childAspectRatio: 0.75,
-             crossAxisSpacing: 12,
-             mainAxisSpacing: 12
+            crossAxisCount: 2,
+            childAspectRatio: 0.75,
+            crossAxisSpacing: 12,
+            mainAxisSpacing: 12,
           ),
           itemCount: matches.length,
-          itemBuilder: (ctx, idx) => _buildNewMatchCard(context, matches[idx], idx),
+          itemBuilder:
+              (ctx, idx) => _buildNewMatchCard(context, matches[idx], idx),
         ),
       ],
     );
@@ -730,39 +977,71 @@ class _ExploreState extends State<Explore> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Expanded(
-               child: ClipRRect(
-                  borderRadius: const BorderRadius.vertical(top: Radius.circular(16)),
-                  child: SizedBox(width: double.infinity, child: MyImages.normalImage(m.photo, alignment: Alignment.topCenter))
-               )
+              child: ClipRRect(
+                borderRadius: const BorderRadius.vertical(
+                  top: Radius.circular(16),
+                ),
+                child: SizedBox(
+                  width: double.infinity,
+                  child: MyImages.normalImage(
+                    m.photo,
+                    alignment: Alignment.topCenter,
+                  ),
+                ),
+              ),
             ),
             Padding(
-               padding: const EdgeInsets.all(12),
-               child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                     Text(_getName(m, idx), maxLines: 1, overflow: TextOverflow.ellipsis, style: Styles.bold_arsenic_12.copyWith(color: MyTheme.text_primary, fontSize: 13)),
-                     const SizedBox(height: 4),
-                     Text("Joined ${idx + 1}d ago", style: Styles.caption.copyWith(color: MyTheme.primary, fontWeight: FontWeight.bold)),
-                  ],
-               ),
-            )
+              padding: const EdgeInsets.all(12),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    _getName(m, idx),
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: Styles.bold_arsenic_12.copyWith(
+                      color: MyTheme.text_primary,
+                      fontSize: 13,
+                    ),
+                  ),
+                  const SizedBox(height: 4),
+                  Text(
+                    "Joined ${idx + 1}d ago",
+                    style: Styles.caption.copyWith(
+                      color: MyTheme.primary,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ],
+              ),
+            ),
           ],
         ),
       ),
     );
   }
 
-  Widget _buildFilteredGrid(BuildContext context, List<dynamic> results, ExploreViewModel vm) {
+  Widget _buildFilteredGrid(
+    BuildContext context,
+    List<dynamic> results,
+    ExploreViewModel vm,
+  ) {
     if (results.isEmpty) {
-       return _buildEmptyState(context);
+      return _buildEmptyState(context);
     }
-    
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 16),
-          child: Text("Search Results (${results.length})", style: Styles.bold_arsenic_16.copyWith(color: MyTheme.text_primary, fontSize: 16)),
+          child: Text(
+            "Search Results (${results.length})",
+            style: Styles.bold_arsenic_16.copyWith(
+              color: MyTheme.text_primary,
+              fontSize: 16,
+            ),
+          ),
         ),
         const SizedBox(height: 16),
         GridView.builder(
@@ -771,15 +1050,18 @@ class _ExploreState extends State<Explore> {
           physics: const NeverScrollableScrollPhysics(),
           itemCount: results.length,
           gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-             crossAxisCount: 2,
-             childAspectRatio: 0.75,
-             crossAxisSpacing: 12,
-             mainAxisSpacing: 12
+            crossAxisCount: 2,
+            childAspectRatio: 0.75,
+            crossAxisSpacing: 12,
+            mainAxisSpacing: 12,
           ),
           itemBuilder: (ctx, idx) {
-             final m = results[idx] is MemberData ? results[idx] as MemberData : MemberData(); 
-             return _buildNewMatchCard(context, m, idx);
-          }
+            final m =
+                results[idx] is MemberData
+                    ? results[idx] as MemberData
+                    : MemberData();
+            return _buildNewMatchCard(context, m, idx);
+          },
         ),
       ],
     );
@@ -797,13 +1079,19 @@ class _ExploreState extends State<Explore> {
           onPressed: () {
             Platform.isAndroid ? SystemNavigator.pop() : exit(0);
           },
-          child: Text('Yes', style: Styles.body),
+          child: Text(
+            AppLocalizations.of(context)!.common_yes,
+            style: Styles.body,
+          ),
         ),
         TextButton(
           onPressed: () {
             Navigator.pop(context, false);
           },
-          child: Text('No', style: Styles.body),
+          child: Text(
+            AppLocalizations.of(context)!.common_no,
+            style: Styles.body,
+          ),
         ),
       ],
     );
@@ -813,37 +1101,71 @@ class _ExploreState extends State<Explore> {
     final l = AppLocalizations.of(context)!;
     final na = l.explore_chip_na;
     final List<String> chips = [];
-    
-    chips.add((m.height != null && m.height.toString().isNotEmpty) ? "${m.height} ${l.explore_ft}" : "${l.explore_chip_height}: $na");
-    chips.add((m.caste != null && m.caste!.isNotEmpty) ? m.caste! : "${l.explore_chip_caste}: $na");
-    chips.add((m.education != null && m.education!.isNotEmpty) ? m.education! : "${l.explore_chip_edu}: $na");
-    chips.add((m.job != null && m.job!.isNotEmpty) ? m.job! : "${l.explore_chip_job}: $na");
-    chips.add((m.income != null && m.income!.toString().isNotEmpty) ? "${l.explore_chip_income}: ${m.income}" : "${l.explore_chip_income}: $na");
 
-    final Color bgColor = isDarkTheme ? Colors.white.withOpacity(0.15) : MyTheme.primary.withOpacity(0.08);
-    final Color borderColor = isDarkTheme ? Colors.white.withOpacity(0.3) : MyTheme.primary.withOpacity(0.2);
+    chips.add(
+      (m.height != null && m.height.toString().isNotEmpty)
+          ? "${m.height} ${l.explore_ft}"
+          : "${l.explore_chip_height}: $na",
+    );
+    chips.add(
+      (m.caste != null && m.caste!.isNotEmpty)
+          ? m.caste!
+          : "${l.explore_chip_caste}: $na",
+    );
+    chips.add(
+      (m.education != null && m.education!.isNotEmpty)
+          ? m.education!
+          : "${l.explore_chip_edu}: $na",
+    );
+    chips.add(
+      (m.job != null && m.job!.isNotEmpty)
+          ? m.job!
+          : "${l.explore_chip_job}: $na",
+    );
+    chips.add(
+      (m.income != null && m.income!.toString().isNotEmpty)
+          ? "${l.explore_chip_income}: ${m.income}"
+          : "${l.explore_chip_income}: $na",
+    );
+
+    final Color bgColor =
+        isDarkTheme
+            ? Colors.white.withOpacity(0.15)
+            : MyTheme.primary.withOpacity(0.08);
+    final Color borderColor =
+        isDarkTheme
+            ? Colors.white.withOpacity(0.3)
+            : MyTheme.primary.withOpacity(0.2);
     final Color textColor = isDarkTheme ? Colors.white : MyTheme.primary;
 
     return Wrap(
       spacing: 6,
       runSpacing: 6,
-      children: chips.map((c) => Container(
-        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-        decoration: BoxDecoration(
-          color: bgColor,
-          borderRadius: BorderRadius.circular(20),
-          border: Border.all(color: borderColor),
-        ),
-        child: Text(
-          c, 
-          style: TextStyle(
-            fontSize: 11, 
-            color: textColor, 
-            fontWeight: FontWeight.w600,
-            letterSpacing: 0.3
-          ),
-        ),
-      )).toList(),
+      children:
+          chips
+              .map(
+                (c) => Container(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 10,
+                    vertical: 5,
+                  ),
+                  decoration: BoxDecoration(
+                    color: bgColor,
+                    borderRadius: BorderRadius.circular(20),
+                    border: Border.all(color: borderColor),
+                  ),
+                  child: Text(
+                    c,
+                    style: TextStyle(
+                      fontSize: 11,
+                      color: textColor,
+                      fontWeight: FontWeight.w600,
+                      letterSpacing: 0.3,
+                    ),
+                  ),
+                ),
+              )
+              .toList(),
     );
   }
 }
@@ -879,9 +1201,15 @@ class ExploreViewModel {
       newMemberList: store.state.exploreState?.newMemberList,
       searchList: store.state.basicSearchState?.searchList,
       isFilterActive: store.state.basicSearchState?.isFilterActive ?? false,
-      addShortlist: ({dynamic user}) => store.dispatch(addShortlistMiddleware(userId: user)),
-      expressInterest: ({required int userId}) => store.dispatch(expressInterestMiddleware(userId: userId)),
-      ignoreUser: ({required MemberData user}) => store.dispatch(AddToIgnoreListFromHome(user: user)),
+      addShortlist:
+          ({dynamic user}) =>
+              store.dispatch(addShortlistMiddleware(userId: user)),
+      expressInterest:
+          ({required int userId}) =>
+              store.dispatch(expressInterestMiddleware(userId: userId)),
+      ignoreUser:
+          ({required MemberData user}) =>
+              store.dispatch(AddToIgnoreListFromHome(user: user)),
     );
   }
 }

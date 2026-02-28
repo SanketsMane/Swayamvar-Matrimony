@@ -19,7 +19,9 @@ class ShowMessageAction {
 }
 
 ShowMessageState? show_message_reducer(
-    ShowMessageState? state, dynamic action) {
+  ShowMessageState? state,
+  dynamic action,
+) {
   if (action is ShowMessageAction) {
     return show_message(state, action);
   }
@@ -28,11 +30,12 @@ ShowMessageState? show_message_reducer(
 
 show_message(ShowMessageState? state, dynamic action) {
   OneContext().showSnackBar(
-    builder: (_) => SnackBar(
-      duration: const Duration(seconds: 2),
-      behavior: SnackBarBehavior.floating,
-      backgroundColor: action.color,
-      content: Text(TranslationHelper.translate(action.msg!)),
-    ),
+    builder:
+        (_) => SnackBar(
+          duration: const Duration(seconds: 2),
+          behavior: SnackBarBehavior.floating,
+          backgroundColor: action.color,
+          content: Text(TranslationHelper.translate(action.msg!)),
+        ),
   );
 }

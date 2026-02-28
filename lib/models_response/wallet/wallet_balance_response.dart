@@ -11,10 +11,7 @@ String walletBalanceResponseToJson(WalletBalanceResponse data) =>
     json.encode(data.toJson());
 
 class WalletBalanceResponse {
-  WalletBalanceResponse({
-    this.result,
-    this.data,
-  });
+  WalletBalanceResponse({this.result, this.data});
 
   bool? result;
   Data? data;
@@ -25,24 +22,16 @@ class WalletBalanceResponse {
         data: json["data"] == null ? null : Data.fromJson(json["data"]),
       );
 
-  Map<String, dynamic> toJson() => {
-        "result": result,
-        "data": data?.toJson(),
-      };
+  Map<String, dynamic> toJson() => {"result": result, "data": data?.toJson()};
 }
 
 class Data {
-  Data({
-    this.walletBalance,
-  });
+  Data({this.walletBalance});
 
   String? walletBalance;
 
-  factory Data.fromJson(Map<String, dynamic> json) => Data(
-        walletBalance: json["wallet_balance"],
-      );
+  factory Data.fromJson(Map<String, dynamic> json) =>
+      Data(walletBalance: json["wallet_balance"]);
 
-  Map<String, dynamic> toJson() => {
-        "wallet_balance": walletBalance,
-      };
+  Map<String, dynamic> toJson() => {"wallet_balance": walletBalance};
 }

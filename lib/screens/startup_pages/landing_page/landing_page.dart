@@ -37,12 +37,11 @@ class _LandingPageState extends State<LandingPage> {
                 children: [
                   SizedBox(
                     height: DeviceInfo(context).height! * .70,
-                    child:
-                        Image.asset(
-                                'assets/images/landing_image.jpeg',
-                                fit: BoxFit.cover,
-                                width: double.infinity,
-                              ),
+                    child: Image.asset(
+                      'assets/images/landing_image.jpeg',
+                      fit: BoxFit.cover,
+                      width: double.infinity,
+                    ),
                   ),
                   // upper most container
                   Positioned(
@@ -77,7 +76,9 @@ class _LandingPageState extends State<LandingPage> {
                             mainAxisSize: MainAxisSize.min,
                             children: [
                               Text(
-                                AppLocalizations.of(context)!.landing_page_title,
+                                AppLocalizations.of(
+                                  context,
+                                )!.landing_page_title,
                                 style: Styles.bold_arsenic_30,
                               ),
                               const SizedBox(height: 5),
@@ -106,10 +107,13 @@ class _LandingPageState extends State<LandingPage> {
                                             begin: Alignment.centerLeft,
                                             end: Alignment.centerRight,
                                           ),
-                                          borderRadius: BorderRadius.circular(30),
+                                          borderRadius: BorderRadius.circular(
+                                            30,
+                                          ),
                                           boxShadow: [
                                             BoxShadow(
-                                              color: MyTheme.app_accent_color.withOpacity(0.3),
+                                              color: MyTheme.app_accent_color
+                                                  .withOpacity(0.3),
                                               blurRadius: 10,
                                               spreadRadius: 2,
                                               offset: const Offset(0, 5),

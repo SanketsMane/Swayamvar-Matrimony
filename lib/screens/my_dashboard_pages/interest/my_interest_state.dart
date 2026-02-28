@@ -21,11 +21,11 @@ class MyInterestState {
   });
 
   MyInterestState.initialState()
-      : page = 1,
-        error = '',
-        fullReset = false,
-        isFetching = true,
-        myInterestList = [],
-        hasMore = true,
-        isLoading = false;
+    : page = 1,
+      error = '',
+      fullReset = false,
+      isFetching = true,
+      myInterestList = [],
+      hasMore = true,
+      isLoading = false;
 }

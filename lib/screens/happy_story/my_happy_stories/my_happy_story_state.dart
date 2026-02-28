@@ -16,7 +16,7 @@ class MyHappyStoryState {
   });
 
   MyHappyStoryState.initialState()
-      : happyloader = false,
-        myHappyStory = null,
-        error = '';
+    : happyloader = false,
+      myHappyStory = null,
+      error = '';
 }

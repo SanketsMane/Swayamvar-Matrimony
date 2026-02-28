@@ -13,7 +13,7 @@ class ChatDetailsState {
   }
 
   ChatDetailsState.initialState()
-      : chatDetailsList =null,
-        isFetching = true,
-        error = '';
+    : chatDetailsList = null,
+      isFetching = true,
+      error = '';
 }

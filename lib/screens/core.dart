@@ -1,6 +1,6 @@
 export 'package:active_matrimonial_flutter_app/enums/enums.dart';
-export 'package:active_matrimonial_flutter_app/main.dart';
 export 'package:active_matrimonial_flutter_app/redux/app/app_state.dart';
+export 'package:active_matrimonial_flutter_app/redux/store.dart';
 export 'package:flutter_redux/flutter_redux.dart';
 export 'package:one_context/one_context.dart';
 export 'package:redux/redux.dart';

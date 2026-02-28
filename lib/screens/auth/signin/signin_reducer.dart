@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 
 import '../../core.dart';
 import 'signin_middleware.dart';
+import 'package:active_matrimonial_flutter_app/redux/store.dart';
 
 SignInState? sign_in_reducer(SignInState? state, dynamic action) {
   if (action is SignInAction) {
@@ -19,7 +20,8 @@ SignInState? sign_in_reducer(SignInState? state, dynamic action) {
     });
 
     print(
-        'get setting values: ${store.state.addonState!.data?.otpSystem ?? false}');
+      'get setting values: ${store.state.addonState!.data?.otpSystem ?? false}',
+    );
     print(state!.isPhone);
     return state;
   }
@@ -40,11 +42,12 @@ SignInState? sign_in_reducer(SignInState? state, dynamic action) {
     }
     bool isOtp = store.state.addonState!.data?.otpSystem ?? false;
 
-    var emailOrPhone = isOtp
-        ? state.isPhone!
-            ? state.phoneNumber
-            : state.emailController!.text
-        : state.emailController!.text;
+    var emailOrPhone =
+        isOtp
+            ? state.isPhone!
+                ? state.phoneNumber
+                : state.emailController!.text
+            : state.emailController!.text;
 
     state.passwordErrorText = '';
     state.emailErrorText = '';

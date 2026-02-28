@@ -25,16 +25,12 @@ class MatchedProfileState {
   List<MemberData>? matchedProfiles = [];
   String? error;
 
-  MatchedProfileState({
-    this.isFetching,
-    this.matchedProfiles,
-    this.error,
-  });
+  MatchedProfileState({this.isFetching, this.matchedProfiles, this.error});
 
   MatchedProfileState.initialState()
-      : isFetching = true,
-        matchedProfiles = [],
-        error = '';
+    : isFetching = true,
+      matchedProfiles = [],
+      error = '';
 
   MatchedProfileState copyWith({
     bool? isFetching,

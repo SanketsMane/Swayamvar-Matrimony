@@ -14,6 +14,7 @@ import 'package:active_matrimonial_flutter_app/screens/support_ticket/support_ti
 import 'package:active_matrimonial_flutter_app/middleware/profile_view_middleware.dart';
 import 'package:active_matrimonial_flutter_app/screens/user_pages/user_public_profile.dart';
 import 'package:active_matrimonial_flutter_app/components/my_images.dart';
+import 'package:active_matrimonial_flutter_app/l10n/app_localizations.dart';
 
 class MainDrawer extends StatelessWidget {
   const MainDrawer({super.key});
@@ -27,9 +28,7 @@ class MainDrawer extends StatelessWidget {
         padding: EdgeInsets.zero,
         children: [
           DrawerHeader(
-            decoration: const BoxDecoration(
-              color: MyTheme.primary,
-            ),
+            decoration: const BoxDecoration(color: MyTheme.primary),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisAlignment: MainAxisAlignment.end,
@@ -41,7 +40,9 @@ class MainDrawer extends StatelessWidget {
                     shape: BoxShape.circle,
                     border: Border.all(color: MyTheme.white, width: 2),
                     image: DecorationImage(
-                      image: MyImage.imageProvider(store.state.accountState?.profileData?.memberPhoto),
+                      image: MyImage.imageProvider(
+                        store.state.accountState?.profileData?.memberPhoto,
+                      ),
                       fit: BoxFit.cover,
                     ),
                   ),
@@ -53,34 +54,97 @@ class MainDrawer extends StatelessWidget {
                 ),
                 Text(
                   userData?.email ?? "",
-                  style: Styles.body.copyWith(color: MyTheme.white.withOpacity(0.8), fontSize: 12),
+                  style: Styles.body.copyWith(
+                    color: MyTheme.white.withOpacity(0.8),
+                    fontSize: 12,
+                  ),
                 ),
               ],
             ),
           ),
-          _drawerItem(context, icon: Icons.person_outline, title: "माझी प्रोफाईल", onTap: () => AIZRoute.push(context, UserPublicProfile(userId: userData?.id), middleware: ProfileViewMiddleware(context: context, user: userData))),
-          _drawerItem(context, icon: Icons.edit_outlined, title: "प्रोफाईल संपादित करा", onTap: () => NavigatorPush.push(context, const MyProfile())),
-          _drawerItem(context, icon: Icons.favorite_border, title: "पाठवलेली आवड", onTap: () => NavigatorPush.push(context, MyInterest())),
-          _drawerItem(context, icon: Icons.star_border, title: "निवडलेले (Shortlist)", onTap: () => NavigatorPush.push(context, MyShortlist())),
-          _drawerItem(context, icon: Icons.verified_outlined, title: "पडताळणी (Verification)", onTap: () {
-            NavigatorPush.push(context, const MyProfile());
-          }),
-          _drawerItem(context, icon: Icons.card_membership_rounded, title: "सदस्यत्व योजना", onTap: () => NavigatorPush.push(context, PremiumPlans())),
+          _drawerItem(
+            context,
+            icon: Icons.person_outline,
+            title: AppLocalizations.of(context)!.drawer_my_profile,
+            onTap:
+                () => AIZRoute.push(
+                  context,
+                  UserPublicProfile(userId: userData?.id),
+                  middleware: ProfileViewMiddleware(
+                    context: context,
+                    user: userData,
+                  ),
+                ),
+          ),
+          _drawerItem(
+            context,
+            icon: Icons.edit_outlined,
+            title: AppLocalizations.of(context)!.drawer_edit_profile,
+            onTap: () => NavigatorPush.push(context, const MyProfile()),
+          ),
+          _drawerItem(
+            context,
+            icon: Icons.favorite_border,
+            title: AppLocalizations.of(context)!.drawer_sent_interests,
+            onTap: () => NavigatorPush.push(context, MyInterest()),
+          ),
+          _drawerItem(
+            context,
+            icon: Icons.star_border,
+            title: AppLocalizations.of(context)!.drawer_shortlist,
+            onTap: () => NavigatorPush.push(context, MyShortlist()),
+          ),
+          _drawerItem(
+            context,
+            icon: Icons.verified_outlined,
+            title: AppLocalizations.of(context)!.drawer_verification,
+            onTap: () {
+              NavigatorPush.push(context, const MyProfile());
+            },
+          ),
+          _drawerItem(
+            context,
+            icon: Icons.card_membership_rounded,
+            title: AppLocalizations.of(context)!.drawer_membership_plans,
+            onTap: () => NavigatorPush.push(context, PremiumPlans()),
+          ),
           const Divider(),
-          _drawerItem(context, icon: Icons.settings_outlined, title: "सेटिंग्ज", onTap: () => NavigatorPush.push(context, const SettingsScreen())),
-          _drawerItem(context, icon: Icons.help_outline, title: "मदत केंद्र", onTap: () => NavigatorPush.push(context, const SupportTicket())),
+          _drawerItem(
+            context,
+            icon: Icons.settings_outlined,
+            title: AppLocalizations.of(context)!.drawer_settings,
+            onTap: () => NavigatorPush.push(context, const SettingsScreen()),
+          ),
+          _drawerItem(
+            context,
+            icon: Icons.help_outline,
+            title: AppLocalizations.of(context)!.drawer_help_center,
+            onTap: () => NavigatorPush.push(context, const SupportTicket()),
+          ),
           const Divider(),
-          _drawerItem(context, icon: Icons.logout_rounded, title: "बाहेर पडा", color: MyTheme.primary, onTap: () {
-            Navigator.pop(context); // close drawer first
-            store.dispatch(signOutMiddleware(context));
-          }),
+          _drawerItem(
+            context,
+            icon: Icons.logout_rounded,
+            title: AppLocalizations.of(context)!.drawer_logout,
+            color: MyTheme.primary,
+            onTap: () {
+              Navigator.pop(context); // close drawer first
+              store.dispatch(signOutMiddleware(context));
+            },
+          ),
           const SizedBox(height: 30),
         ],
       ),
     );
   }
 
-  Widget _drawerItem(BuildContext context, {required IconData icon, required String title, required VoidCallback onTap, Color? color}) {
+  Widget _drawerItem(
+    BuildContext context, {
+    required IconData icon,
+    required String title,
+    required VoidCallback onTap,
+    Color? color,
+  }) {
     return ListTile(
       leading: Icon(icon, color: color ?? MyTheme.text_secondary, size: 22),
       title: Text(

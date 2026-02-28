@@ -1,5 +1,3 @@
-
-
 import 'package:active_matrimonial_flutter_app/const/my_theme.dart';
 import 'package:active_matrimonial_flutter_app/const/style.dart';
 import 'package:active_matrimonial_flutter_app/helpers/aiz_route.dart';
@@ -16,7 +14,6 @@ import 'package:flutter_redux/flutter_redux.dart';
 
 import '../../components/common_app_bar.dart';
 import '../../l10n/app_localizations.dart';
-
 
 class MatchedProfileScreen extends StatefulWidget {
   const MatchedProfileScreen({Key? key}) : super(key: key);
@@ -70,7 +67,10 @@ class _MatchedProfileScreenState extends State<MatchedProfileScreen> {
   }
 
   Widget _buildProfileCard(
-      BuildContext context, _ViewModel vm, MemberData profile) {
+    BuildContext context,
+    _ViewModel vm,
+    MemberData profile,
+  ) {
     return GestureDetector(
       onTap: () {
         AIZRoute.push(
@@ -133,7 +133,7 @@ class _MatchedProfileScreenState extends State<MatchedProfileScreen> {
                 ),
               ),
               // Interest Button
-           //   buildInterestButton(vm, profile),
+              //   buildInterestButton(vm, profile),
             ],
           ),
         ),
@@ -147,10 +147,7 @@ class _MatchedProfileScreenState extends State<MatchedProfileScreen> {
         height: 30,
         width: 30,
         child: Center(
-          child: CircularProgressIndicator(
-            strokeWidth: 2,
-            color: Colors.white,
-          ),
+          child: CircularProgressIndicator(strokeWidth: 2, color: Colors.white),
         ),
       );
     }
@@ -165,22 +162,24 @@ class _MatchedProfileScreenState extends State<MatchedProfileScreen> {
       ),
       onPressed: () {
         if (vm.isUserVerified == false) {
-          StoreProvider.of<AppState>(context).dispatch(ShowMessageAction(
-            msg: "Please verify your account",
-            color: MyTheme.failure,
-          ));
+          StoreProvider.of<AppState>(context).dispatch(
+            ShowMessageAction(
+              msg: "Please verify your account",
+              color: MyTheme.failure,
+            ),
+          );
           return;
         }
         if (vm.packageExpiry == "Expired") {
-          StoreProvider.of<AppState>(context).dispatch(
-            ShowMessageAction(msg: "Please update your package."),
-          );
+          StoreProvider.of<AppState>(
+            context,
+          ).dispatch(ShowMessageAction(msg: "Please update your package."));
           return;
         }
         if (vm.isFullProfileView!) {
-          StoreProvider.of<AppState>(context).dispatch(
-            ShowMessageAction(msg: "Please update your package."),
-          );
+          StoreProvider.of<AppState>(
+            context,
+          ).dispatch(ShowMessageAction(msg: "Please update your package."));
           return;
         }
         vm.expressInterest(userId: profile.userId!);
@@ -221,13 +220,19 @@ class _ViewModel {
       myInterestStateLoading: store.state.myInterestState?.isLoading,
       isUserVerified: store.state.userVerifyState?.isApprove,
       packageExpiry:
-      store.state.accountState!.profileData?.currentPackageInfo?.packageExpiry,
+          store
+              .state
+              .accountState!
+              .profileData
+              ?.currentPackageInfo
+              ?.packageExpiry,
       isFullProfileView: settingIsActive(
         "full_profile_show_according_to_membership",
         "1",
       ),
-      expressInterest: ({required int userId}) =>
-          store.dispatch(expressInterestMiddleware(userId: userId)),
+      expressInterest:
+          ({required int userId}) =>
+              store.dispatch(expressInterestMiddleware(userId: userId)),
     );
   }
 }

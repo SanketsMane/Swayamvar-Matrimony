@@ -37,12 +37,13 @@ class ChatListWidget extends StatelessWidget {
         Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (context) => Chat(
-              chatId: chatId,
-              userId: userId,
-              name: name,
-              picture: photo,
-            ),
+            builder:
+                (context) => Chat(
+                  chatId: chatId,
+                  userId: userId,
+                  name: name,
+                  picture: photo,
+                ),
           ),
         );
       },
@@ -95,7 +96,7 @@ class ChatListWidget extends StatelessWidget {
               ],
             ),
             const SizedBox(width: 12),
-            
+
             // Middle: Name, Last message, Compatibility
             Expanded(
               child: Column(
@@ -119,7 +120,10 @@ class ChatListWidget extends StatelessWidget {
                       const SizedBox(width: 8),
                       // Compatibility Badge
                       Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 6,
+                          vertical: 2,
+                        ),
                         decoration: BoxDecoration(
                           color: MyTheme.primary.withOpacity(0.1),
                           borderRadius: BorderRadius.circular(8),
@@ -148,7 +152,7 @@ class ChatListWidget extends StatelessWidget {
                 ],
               ),
             ),
-            
+
             // Right: Time and Unread Badge
             Column(
               crossAxisAlignment: CrossAxisAlignment.end,
@@ -156,17 +160,26 @@ class ChatListWidget extends StatelessWidget {
               children: [
                 Text(
                   "2m ago",
-                  style: Styles.caption.copyWith(fontSize: 11, color: MyTheme.text_secondary),
+                  style: Styles.caption.copyWith(
+                    fontSize: 11,
+                    color: MyTheme.text_secondary,
+                  ),
                 ),
                 const SizedBox(height: 4),
                 if (unseenMessageCount > 0)
                   Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 6,
+                      vertical: 2,
+                    ),
                     decoration: const BoxDecoration(
                       color: MyTheme.primary,
                       shape: BoxShape.circle,
                     ),
-                    constraints: const BoxConstraints(minWidth: 18, minHeight: 18),
+                    constraints: const BoxConstraints(
+                      minWidth: 18,
+                      minHeight: 18,
+                    ),
                     child: Center(
                       child: Text(
                         unseenMessageCount.toString(),
@@ -186,4 +199,3 @@ class ChatListWidget extends StatelessWidget {
     );
   }
 }
-

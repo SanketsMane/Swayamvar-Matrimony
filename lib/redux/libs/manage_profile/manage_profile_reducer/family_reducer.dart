@@ -3,8 +3,9 @@ import 'package:active_matrimonial_flutter_app/redux/libs/manage_profile/manage_
 import 'package:flutter/material.dart';
 
 import '../../../../enums/enums.dart';
-import '../../../../main.dart';
+import '../../../../redux/store.dart';
 import '../manage_profile_middleware/manage_profile_update_middlewares.dart';
+import 'package:active_matrimonial_flutter_app/redux/store.dart';
 
 class Loader {}
 
@@ -26,15 +27,8 @@ FamilyState? family_reducer(FamilyState? state, dynamic action) {
 
   if (action == UpdateInfo.family) {
     FocusManager.instance.primaryFocus?.unfocus();
-    if (state!.formKey.currentState!.validate()) {
-      store.dispatch(
-        familyUpdateMiddleware(
-          father: state.fatherController!.text,
-          mother: state.motherController!.text,
-          sibling: state.siblingController!.text,
-        ),
-      );
-    }
+    // Sanket: Side effect removed from reducer.
+    // store.dispatch(familyUpdateMiddleware(...)) must be called from the UI or a thunk.
   }
 
   return state;

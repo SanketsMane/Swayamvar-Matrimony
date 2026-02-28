@@ -13,7 +13,7 @@ class PP_PermanentAddress extends StatelessWidget {
       converter: (store) => store.state,
       builder:
           (_, state) =>
-              state.publicProfileState!.permanentaddress != null
+              state.publicProfileState!.permanentAddress != null
                   ? Column(
                     children: [
                       buildRow(
@@ -21,7 +21,7 @@ class PP_PermanentAddress extends StatelessWidget {
                         localization_text:
                             AppLocalizations.of(context)!.public_profile_city,
                         data:
-                            state.publicProfileState!.permanentaddress.city ??
+                            state.publicProfileState!.permanentAddress.city ??
                             "",
                       ),
                       SizedBox(height: 10),
@@ -30,7 +30,7 @@ class PP_PermanentAddress extends StatelessWidget {
                         localization_text:
                             AppLocalizations.of(context)!.public_profile_state,
                         data:
-                            "${state.publicProfileState!.permanentaddress.state ?? ''}",
+                            "${state.publicProfileState!.permanentAddress.state ?? ''}",
                       ),
                       SizedBox(height: 10),
                       buildRow(
@@ -40,7 +40,7 @@ class PP_PermanentAddress extends StatelessWidget {
                               context,
                             )!.public_profile_country,
                         data:
-                            "${state.publicProfileState!.permanentaddress.country ?? ''}",
+                            "${state.publicProfileState!.permanentAddress.country ?? ''}",
                       ),
                       SizedBox(height: 10),
                       buildRow(
@@ -50,7 +50,7 @@ class PP_PermanentAddress extends StatelessWidget {
                               context,
                             )!.public_profile_postal_code,
                         data:
-                            "${state.publicProfileState!.permanentaddress.postalCode ?? ''}",
+                            "${state.publicProfileState!.permanentAddress.postalCode ?? ''}",
                       ),
                     ],
                   )

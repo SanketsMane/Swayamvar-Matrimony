@@ -1743,4 +1743,506 @@ class AppLocalizationsMr extends AppLocalizations {
 
   @override
   String get pub_profile_pref_divorce => 'घटस्फोट स्वीकार्य';
+
+  @override
+  String get settings_title => 'सेटिंग्ज';
+
+  @override
+  String get settings_section_account => 'खाते';
+
+  @override
+  String get settings_item_edit_profile => 'प्रोफाईल संपादित करा';
+
+  @override
+  String get settings_item_plans => 'सदस्यत्व योजना';
+
+  @override
+  String get settings_item_verify => 'पडताळणी स्थिती';
+
+  @override
+  String get settings_section_preferences => 'प्राधान्यता आणि वैयक्तिकरण';
+
+  @override
+  String get settings_item_language => 'भाषा';
+
+  @override
+  String get settings_item_partner_pref => 'साथीदाराची अपेक्षा';
+
+  @override
+  String get settings_item_notifications => 'सूचना';
+
+  @override
+  String get settings_item_app_theme => 'अॅप थीम';
+
+  @override
+  String get settings_section_security => 'सुरक्षा';
+
+  @override
+  String get settings_item_change_password => 'पासवर्ड बदला';
+
+  @override
+  String get settings_item_privacy_settings => 'गोपनीयता सेटिंग्ज';
+
+  @override
+  String get settings_item_deactivate => 'खाते निष्क्रिय करा';
+
+  @override
+  String get settings_section_help => 'सहाय्यता';
+
+  @override
+  String get settings_item_help_center => 'सहाय्यता केंद्र';
+
+  @override
+  String get settings_item_faq => 'वारंवार विचारले जाणारे प्रश्न';
+
+  @override
+  String get settings_item_contact_us => 'आमच्याशी संपर्क साधा';
+
+  @override
+  String get settings_section_legal => 'कानूनी';
+
+  @override
+  String get settings_item_terms => 'नियम व अटी';
+
+  @override
+  String get settings_item_privacy_policy => 'गोपनीयता धोरण';
+
+  @override
+  String get settings_item_refund_policy => 'परतावा धोरण';
+
+  @override
+  String get settings_logout => 'लॉगआउट';
+
+  @override
+  String get settings_language_dialog_title => 'भाषा निवडा';
+
+  @override
+  String get settings_deactivate_confirm =>
+      'तुम्हाला खात्री आहे की तुम्ही तुमचे खाते निष्क्रिय करू इच्छिता?';
+
+  @override
+  String get settings_personalization_desc => 'तुमचा अॅप अनुभव सानुकूलित करा';
+
+  @override
+  String get profile_title => 'प्रोफाईल';
+
+  @override
+  String get profile_completion => 'प्रोफाईल पूर्णता';
+
+  @override
+  String get profile_edit => 'प्रोफाईल संपादित करा';
+
+  @override
+  String get profile_membership_status => 'सदस्यत्व स्थिती';
+
+  @override
+  String get profile_interests => 'रस (Interests)';
+
+  @override
+  String get profile_contacts => 'संपर्क';
+
+  @override
+  String get profile_gallery => 'गॅलरी';
+
+  @override
+  String get profile_upgrade => 'योजना अपग्रेड करा';
+
+  @override
+  String get profile_shortlist => 'शॉर्टलिस्ट';
+
+  @override
+  String get profile_interests_sent => 'पाठवलेले रस (Interests)';
+
+  @override
+  String get profile_packages => 'पॅकेजेस';
+
+  @override
+  String get profile_referral => 'रेफरल';
+
+  @override
+  String get common_yes => 'हो';
+
+  @override
+  String get common_no => 'नाही';
+
+  @override
+  String get drawer_my_profile => 'माझी प्रोफाईल';
+
+  @override
+  String get drawer_edit_profile => 'प्रोफाईल संपादित करा';
+
+  @override
+  String get drawer_sent_interests => 'पाठवलेली आवड';
+
+  @override
+  String get drawer_shortlist => 'निवडलेले (Shortlist)';
+
+  @override
+  String get drawer_verification => 'पडताळणी (Verification)';
+
+  @override
+  String get drawer_membership_plans => 'सदस्यत्व योजना';
+
+  @override
+  String get drawer_settings => 'सेटिंग्ज';
+
+  @override
+  String get drawer_help_center => 'मदत केंद्र';
+
+  @override
+  String get drawer_logout => 'बाहेर पडा';
+
+  @override
+  String get home_why_recommended => 'हे प्रोफाइल का सुचवले आहे?';
+
+  @override
+  String get home_same_religion => '✔ सारखा धर्म';
+
+  @override
+  String get home_same_city => '✔ सारखे शहर';
+
+  @override
+  String get home_same_education => '✔ सारखे शिक्षण';
+
+  @override
+  String get home_matches_preferences =>
+      'हे प्रोफाइल तुमच्या जोडीदाराच्या पसंतीशी मिळतेजुळते आहे.';
+
+  @override
+  String get home_quick_actions => 'त्वरित क्रिया';
+
+  @override
+  String get home_action_search => 'शोधा';
+
+  @override
+  String get home_action_liked => 'आवडले';
+
+  @override
+  String get home_action_viewed => 'पाहिले';
+
+  @override
+  String get home_action_shortlist => 'शॉर्टलिस्ट';
+
+  @override
+  String get home_new_partner => 'नवीन जोडीदार';
+
+  @override
+  String get home_received_likes => 'पसंती मिळाल्या';
+
+  @override
+  String get home_profiles_viewed => 'प्रोफाईल पाहिले';
+
+  @override
+  String get home_selected => 'निवडलेले';
+
+  @override
+  String get home_recommended_for_you => 'तुमच्यासाठी शिफारस केलेले';
+
+  @override
+  String get home_see_all => 'सर्व पहा';
+
+  @override
+  String get home_recent_activity => 'अलीकडील हालचाली';
+
+  @override
+  String get home_people => 'लोक';
+
+  @override
+  String get home_viewed_your_profile => 'तुमचे प्रोफाइल पहिले';
+
+  @override
+  String get home_new_like_received => 'मिळालेली आवड';
+
+  @override
+  String get home_new_profiles_available => 'मिळणारे प्रोफाइल';
+
+  @override
+  String get home_upgrade_to_platinum => 'प्लॅटिनमवर अपग्रेड करा';
+
+  @override
+  String get home_prioritize_profile =>
+      'तुमच्या प्रोफाईलला प्राधान्य द्या आणि अधिक जुळण्या मिळवा.';
+
+  @override
+  String get home_complete_profile_now => 'तुमची प्रोफाइल पूर्ण करा';
+
+  @override
+  String get home_increase_matches_3x =>
+      'तुमचे तपशील जोडून ३ पट अधिक चांगले प्रोफाइल मिळवा.';
+
+  @override
+  String get home_add_education => 'शिक्षण तपशील जोडा';
+
+  @override
+  String get home_add_photos => 'फोटो जोडा';
+
+  @override
+  String get home_add_partner_prefs => 'जोडीदाराच्या पसंती जोडा';
+
+  @override
+  String get chat_no_conversations => 'अजून कोणतेही संवाद नाही';
+
+  @override
+  String get chat_start_connecting => 'मॅचेस जोडणे सुरू करा.';
+
+  @override
+  String get chat_search_button => 'शोधा';
+
+  @override
+  String get home_premium_label => 'प्रीमियम';
+
+  @override
+  String get home_verified_profile => 'पडताळणी केलेले प्रोफाईल';
+
+  @override
+  String get home_action_no => 'नको';
+
+  @override
+  String get home_action_view => 'पहा';
+
+  @override
+  String get home_matches_for_you => 'तुमच्यासाठी निवडलेले जुळणारे प्रोफाइल';
+
+  @override
+  String get home_handpicked_interests => 'तुमच्या आवडीनुसार निवडलेले';
+
+  @override
+  String get home_filter_all => 'सर्व';
+
+  @override
+  String get home_filter_new => 'नवीन';
+
+  @override
+  String get home_filter_near_me => 'माझ्या जवळ';
+
+  @override
+  String get home_filter_verified => 'पडताळणी केलेले';
+
+  @override
+  String get home_filter_online => 'ऑनलाइन';
+
+  @override
+  String get gallery_delete_confirm_title =>
+      'तुम्हाला खात्री आहे की तुम्ही ही प्रतिमा हटवू इच्छिता?';
+
+  @override
+  String get gallery_delete_confirm_nb =>
+      '**नोंद: प्रतिमा हटवल्याने तुमची उर्वरित गॅलरी क्षमता परत मिळणार नाही**';
+
+  @override
+  String get gallery_add_new_image => 'नवीन प्रतिमा जोडा';
+
+  @override
+  String get gallery_choose_file => 'फाइल निवडा...';
+
+  @override
+  String get gallery_browse => 'निवडा (Browse)';
+
+  @override
+  String get gallery_verify_account_msg => 'कृपया आपले खाते पडताळून पहा';
+
+  @override
+  String get gallery_update_package_msg => 'कृपया तुमचे पॅकेज अपडेट करा.';
+
+  @override
+  String get common_close => 'बंद करा';
+
+  @override
+  String get common_please_wait => 'कृपया प्रतीक्षा करा';
+
+  @override
+  String get gallery_image_view_title => 'गॅलरी प्रतिमा पहा';
+
+  @override
+  String get gallery_remaining_view_prefix => 'उर्वरित गॅलरी चित्र पहा: ';
+
+  @override
+  String get gallery_remaining_view_suffix => ' वेळा';
+
+  @override
+  String get gallery_request_note =>
+      'नोंद: सदस्याचे गॅलरी चित्र पाहण्याची विनंती केल्यास तुमच्या उर्वरित गॅलरी चित्र पहा संख्येतून १ वजा केला जाईल.';
+
+  @override
+  String get gallery_send_request_btn => 'गॅलरी फोटो पाहण्याची विनंती पाठवा';
+
+  @override
+  String get referral_screen_rewards_msg =>
+      'तुमचा कोड मित्रांसोबत शेअर करा आणि बक्षिसे मिळवा!';
+
+  @override
+  String get referral_stat_wallet => 'वॉलेट बॅलन्स';
+
+  @override
+  String get referral_stat_invited => 'आमंत्रित वापरकर्ते';
+
+  @override
+  String get referral_stat_successful => 'यशस्वी';
+
+  @override
+  String get referral_stat_pending => 'प्रलंबित';
+
+  @override
+  String get referral_btn_withdraw => 'काढून घ्या';
+
+  @override
+  String get referral_btn_share => 'कोड शेअर करा';
+
+  @override
+  String get referral_header_invited => 'तुम्ही आमंत्रित केलेले लोक';
+
+  @override
+  String get referral_msg_no_invited => 'अद्याप कोणीही आमंत्रित वापरकर्ता नाही';
+
+  @override
+  String referral_joined_on(Object date) {
+    return '$date रोजी जोडले गेले';
+  }
+
+  @override
+  String get referral_status_active => 'सक्रिय';
+
+  @override
+  String get referral_copied_msg => 'क्लिपबोर्डवर कॉपी केले';
+
+  @override
+  String get verify_title => 'प्रोफाइल पडताळणी';
+
+  @override
+  String get verify_trust_header => 'पडताळणी करा ✔';
+
+  @override
+  String get verify_trust_desc =>
+      'पडताळणी केलेल्या प्रोफाईलना अधिक मॅचेस मिळतात आणि संभाव्य जोडीदारांमध्ये अधिक विश्वास निर्माण होतो.';
+
+  @override
+  String get verify_benefit_visibility => 'जास्त शोध दृश्यमानता';
+
+  @override
+  String get verify_benefit_responses => 'गंभीर सदस्यांकडून अधिक प्रतिसाद';
+
+  @override
+  String get verify_benefit_badge => 'अनन्य \"Trusted\" प्रोफाइल बॅज';
+
+  @override
+  String get verify_steps_header => 'पडताळणी पायऱ्या';
+
+  @override
+  String get verify_step_id => 'ID अपलोड करा';
+
+  @override
+  String get verify_step_selfie => 'सेल्फी';
+
+  @override
+  String get verify_step_review => 'पुनरावलोकन';
+
+  @override
+  String get verify_upload_desc => 'जलद मंजुरीसाठी स्पष्ट दस्तऐवज अपलोड करा.';
+
+  @override
+  String get verify_tap_to_upload => 'फोटो अपलोड करण्यासाठी टॅप करा';
+
+  @override
+  String get verify_status_header => 'पडताळणी स्थिती';
+
+  @override
+  String get verify_status_pending => 'सबमिशन प्रलंबित';
+
+  @override
+  String get verify_status_desc => 'पडताळणीसाठी सहसा २४-४८ तास लागतात.';
+
+  @override
+  String get verify_submit_btn => 'पडताळणी सबमिट करा';
+
+  @override
+  String get verify_already_sent => 'पडताळणी विनंती आधीच पाठवली आहे.';
+
+  @override
+  String get verify_submitting_msg => 'पडताळणी सबमिट करत आहे...';
+
+  @override
+  String get verify_enter_details => 'तपशील प्रविष्ट करा';
+
+  @override
+  String get verify_select_option => 'पर्याय निवडा';
+
+  @override
+  String get verify_uploaded => 'अपलोड केले';
+
+  @override
+  String get verify_step_1_title => 'ओळख पुरावा';
+
+  @override
+  String get verify_select_id_type => 'आयडी प्रकार निवडा';
+
+  @override
+  String get verify_enter_id_number => 'आयडी क्रमांक प्रविष्ट करा';
+
+  @override
+  String get verify_id_hint => 'उदा: 1234 5678 9012';
+
+  @override
+  String get verify_upload_id => 'आयडी दस्तऐवज अपलोड करा';
+
+  @override
+  String get verify_front_side => 'पुढची बाजू';
+
+  @override
+  String get verify_back_side => 'मागची बाजू';
+
+  @override
+  String get verify_step_2_title => 'थेट सेल्फी';
+
+  @override
+  String get verify_selfie_desc => 'तुमची ओळख पटवण्यासाठी स्पष्ट सेल्फी घ्या';
+
+  @override
+  String get verify_selfie_instruction =>
+      'तुमचा चेहरा पुरेसा प्रकाश असलेला आणि स्पष्टपणे दृश्यमान असल्याची खात्री करा';
+
+  @override
+  String get verify_step_3_title => 'तपशील पुनरावलोकन';
+
+  @override
+  String get verify_review_desc =>
+      'सबमिट करून, आपण सहमत आहात की प्रदान केलेली माहिती अचूक आहे आणि आपल्या मालकीची आहे.';
+
+  @override
+  String get verify_submit_for_review => 'पडताळणीसाठी सबमिट करा';
+
+  @override
+  String get verify_next => 'पुढील';
+
+  @override
+  String get verify_back => 'मागे';
+
+  @override
+  String get verify_upload => 'अपलोड';
+
+  @override
+  String get verify_id_type_label => 'आयडी प्रकार';
+
+  @override
+  String get verify_id_number_label => 'आयडी क्रमांक';
+
+  @override
+  String get verify_documents_label => 'दस्तऐवज';
+
+  @override
+  String get verify_attached => 'संलग्न';
+
+  @override
+  String get verify_missing => 'गहाळ';
+
+  @override
+  String get verify_error_id_number => 'कृपया तुमचा आयडी क्रमांक प्रविष्ट करा';
+
+  @override
+  String get verify_error_id_front => 'कृपया आयडीची पुढची बाजू अपलोड करा';
+
+  @override
+  String get verify_error_selfie => 'कृपया सेल्फी अपलोड करा';
+
+  @override
+  String get verify_error_failed => 'सबमिशन अयशस्वी झाले';
 }

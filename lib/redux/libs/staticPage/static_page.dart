@@ -2,6 +2,7 @@ import 'package:active_matrimonial_flutter_app/models_response/others/static_pag
 
 import '../../../repository/app_info_repository.dart';
 import '../../../screens/core.dart';
+import 'package:active_matrimonial_flutter_app/redux/store.dart';
 
 class StaticPageState {
   bool? isFetching;
@@ -20,12 +21,12 @@ class StaticPageState {
   });
 
   StaticPageState.initialState()
-      : isFetching = true,
-        staticPageList = [],
-        faq = '',
-        privacyPolicy = '',
-        termsAndCondition = '',
-        error = '';
+    : isFetching = true,
+      staticPageList = [],
+      faq = '',
+      privacyPolicy = '',
+      termsAndCondition = '',
+      error = '';
 }
 
 StaticPageState? staticPageReducer(StaticPageState? state, dynamic action) {

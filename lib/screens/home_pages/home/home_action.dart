@@ -1,10 +1,7 @@
-
-
 import 'package:active_matrimonial_flutter_app/models_response/common_models/member_data.dart';
 import 'package:active_matrimonial_flutter_app/models_response/home_response.dart';
 
 class HomeFetchingAction {}
-
 
 class HomeStoreAction {
   HomeResponse? payload;

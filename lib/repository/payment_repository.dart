@@ -7,20 +7,23 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
 import '../helpers/main_helpers.dart';
-import '../main.dart';
+import '../redux/store.dart';
 import '../models_response/others/common_response.dart';
 
 class PaymentRepository {
   var accessToken = getToken;
-// payment types
+  // payment types
   Future<PaymentTypesResponse> fetchPaymentTypes() async {
     var baseUrl = "${AppConfig.BASE_URL}/payment-types";
 
-    var response = await http.get(Uri.parse(baseUrl), headers: {
-      "Accept": "application/json",
-      "Content-Type": "application/json",
-      "Authorization": "Bearer $accessToken"
-    });
+    var response = await http.get(
+      Uri.parse(baseUrl),
+      headers: {
+        "Accept": "application/json",
+        "Content-Type": "application/json",
+        "Authorization": "Bearer $accessToken",
+      },
+    );
 
     var data = paymentTypesResponseFromJson(response.body);
     return data;
@@ -39,22 +42,26 @@ class PaymentRepository {
       "amount": amount,
       "payment_method": payment_method,
       "user_id": userId,
-      "package_id": package_id
+      "package_id": package_id,
     });
 
     Uri url = Uri.parse(
-        "${AppConfig.BASE_URL}/paypal/payment/pay?payment_method=$payment_method&amount=$amount&payment_type=$payment_type&user_id=$userId&package_id=                                                                                                                             $package_id");
+      "${AppConfig.BASE_URL}/paypal/payment/pay?payment_method=$payment_method&amount=$amount&payment_type=$payment_type&user_id=$userId&package_id=                                                                                                                             $package_id",
+    );
 
-    final response = await http.post(url,
-        headers: {
-          "Accept": "application/json",
-          "Content-Type": "application/json",
-          "Authorization": "Bearer $accessToken"
-        },
-        body: postBody);
+    final response = await http.post(
+      url,
+      headers: {
+        "Accept": "application/json",
+        "Content-Type": "application/json",
+        "Authorization": "Bearer $accessToken",
+      },
+      body: postBody,
+    );
 
     return jsonDecode(response.body);
   }
+
   //instamojo
   Future getInstamojoUrlResponse({
     String? amount,
@@ -68,28 +75,29 @@ class PaymentRepository {
       "amount": amount,
       "payment_method": payment_method,
       "user_id": userId,
-      "package_id": package_id
+      "package_id": package_id,
     });
 
     Uri url = Uri.parse(
-        "${AppConfig.BASE_URL}/pay-with-instamojo?payment_method=$payment_method&amount=$amount&payment_type=$payment_type&user_id=$userId&package_id=$package_id                                                                                                                             $package_id");
+      "${AppConfig.BASE_URL}/pay-with-instamojo?payment_method=$payment_method&amount=$amount&payment_type=$payment_type&user_id=$userId&package_id=$package_id                                                                                                                             $package_id",
+    );
 
-    final response = await http.post(url,
-        headers: {
-          "Accept": "application/json",
-          "Content-Type": "application/json",
-          "Authorization": "Bearer $accessToken"
-        },
-        body: postBody);
+    final response = await http.post(
+      url,
+      headers: {
+        "Accept": "application/json",
+        "Content-Type": "application/json",
+        "Authorization": "Bearer $accessToken",
+      },
+      body: postBody,
+    );
 
     return jsonDecode(response.body);
   }
 
   // offline payment
 
-  Future<CommonResponse> offlinePayment({
-    postBody,
-  }) async {
+  Future<CommonResponse> offlinePayment({postBody}) async {
     var baseUrl = "${AppConfig.BASE_URL}/member/package-purchase";
     var accessToken = getToken;
 
@@ -105,7 +113,9 @@ class PaymentRepository {
 
     if (postBody['payment_proof']?.path != null) {
       var pic = await http.MultipartFile.fromPath(
-          "payment_proof", (postBody['payment_proof']?.path));
+        "payment_proof",
+        (postBody['payment_proof']?.path),
+      );
       request.files.add(pic);
     }
 

@@ -5,17 +5,15 @@
 import 'dart:convert';
 
 PartnerExpectationGetResponse partnerExpectationGetResponseFromJson(
-        String str) =>
-    PartnerExpectationGetResponse.fromJson(json.decode(str));
+  String str,
+) => PartnerExpectationGetResponse.fromJson(json.decode(str));
 
 String partnerExpectationGetResponseToJson(
-        PartnerExpectationGetResponse data) =>
-    json.encode(data.toJson());
+  PartnerExpectationGetResponse data,
+) => json.encode(data.toJson());
 
 class PartnerExpectationGetResponse {
-  PartnerExpectationGetResponse({
-    this.data,
-  });
+  PartnerExpectationGetResponse({this.data});
 
   Data? data;
 
@@ -24,9 +22,7 @@ class PartnerExpectationGetResponse {
         data: json["data"] == null ? null : Data.fromJson(json["data"]),
       );
 
-  Map<String, dynamic> toJson() => {
-        "data": data?.toJson(),
-      };
+  Map<String, dynamic> toJson() => {"data": data?.toJson()};
 
   PartnerExpectationGetResponse.initialState() : data = Data.initialState();
 }
@@ -81,75 +77,75 @@ class Data {
   dynamic complexion;
 
   factory Data.fromJson(Map<String, dynamic> json) => Data(
-        general: json["general"],
-        height: json["height"],
-        weight: json["weight"],
-        maritalStatusId: json["marital_status"],
-        childrenAcceptable: json["children_acceptable"],
-        residenceCountryId: json["residence_country_id"],
-        religionId: json["religion_id"],
-        casteId: json["caste_id"],
-        subCasteId: json["sub_caste_id"],
-        education: json["education"],
-        profession: json["profession"],
-        smokingAcceptable: json["smoking_acceptable"],
-        drinkingAcceptable: json["drinking_acceptable"],
-        diet: json["diet"],
-        bodyType: json["body_type"],
-        personalValue: json["personal_value"],
-        manglik: json["manglik"],
-        languageId: json["language"],
-        familyValueId: json["family_value_id"],
-        preferredCountryId: json["preferred_country_id"],
-        preferredStateId: json["preferred_state_id"],
-        complexion: json["complexion"],
-      );
+    general: json["general"],
+    height: json["height"],
+    weight: json["weight"],
+    maritalStatusId: json["marital_status"],
+    childrenAcceptable: json["children_acceptable"],
+    residenceCountryId: json["residence_country_id"],
+    religionId: json["religion_id"],
+    casteId: json["caste_id"],
+    subCasteId: json["sub_caste_id"],
+    education: json["education"],
+    profession: json["profession"],
+    smokingAcceptable: json["smoking_acceptable"],
+    drinkingAcceptable: json["drinking_acceptable"],
+    diet: json["diet"],
+    bodyType: json["body_type"],
+    personalValue: json["personal_value"],
+    manglik: json["manglik"],
+    languageId: json["language"],
+    familyValueId: json["family_value_id"],
+    preferredCountryId: json["preferred_country_id"],
+    preferredStateId: json["preferred_state_id"],
+    complexion: json["complexion"],
+  );
 
   Map<String, dynamic> toJson() => {
-        "general": general,
-        "height": height,
-        "weight": weight,
-        "marital_status": maritalStatusId,
-        "children_acceptable": childrenAcceptable,
-        "residence_country_id": residenceCountryId,
-        "religion_id": religionId,
-        "caste_id": casteId,
-        "sub_caste_id": subCasteId,
-        "education": education,
-        "profession": profession,
-        "smoking_acceptable": smokingAcceptable,
-        "drinking_acceptable": drinkingAcceptable,
-        "diet": diet,
-        "body_type": bodyType,
-        "personal_value": personalValue,
-        "manglik": manglik,
-        "language": languageId,
-        "family_value_id": familyValueId,
-        "preferred_country_id": preferredCountryId,
-        "preferred_state_id": preferredStateId,
-        "complexion": complexion,
-      };
+    "general": general,
+    "height": height,
+    "weight": weight,
+    "marital_status": maritalStatusId,
+    "children_acceptable": childrenAcceptable,
+    "residence_country_id": residenceCountryId,
+    "religion_id": religionId,
+    "caste_id": casteId,
+    "sub_caste_id": subCasteId,
+    "education": education,
+    "profession": profession,
+    "smoking_acceptable": smokingAcceptable,
+    "drinking_acceptable": drinkingAcceptable,
+    "diet": diet,
+    "body_type": bodyType,
+    "personal_value": personalValue,
+    "manglik": manglik,
+    "language": languageId,
+    "family_value_id": familyValueId,
+    "preferred_country_id": preferredCountryId,
+    "preferred_state_id": preferredStateId,
+    "complexion": complexion,
+  };
 
   Data.initialState()
-      : general = '',
-        height = '',
-        weight = '',
-        maritalStatusId = '',
-        childrenAcceptable = '',
-        residenceCountryId = '',
-        religionId = '',
-        casteId = '',
-        subCasteId = '',
-        education = '',
-        profession = '',
-        smokingAcceptable = '',
-        drinkingAcceptable = '',
-        diet = '',
-        bodyType = '',
-        personalValue = '',
-        manglik = '',
-        languageId = '',
-        preferredCountryId = '',
-        preferredStateId = '',
-        complexion = '';
+    : general = '',
+      height = '',
+      weight = '',
+      maritalStatusId = '',
+      childrenAcceptable = '',
+      residenceCountryId = '',
+      religionId = '',
+      casteId = '',
+      subCasteId = '',
+      education = '',
+      profession = '',
+      smokingAcceptable = '',
+      drinkingAcceptable = '',
+      diet = '',
+      bodyType = '',
+      personalValue = '',
+      manglik = '',
+      languageId = '',
+      preferredCountryId = '',
+      preferredStateId = '',
+      complexion = '';
 }

@@ -3,7 +3,9 @@ import 'package:active_matrimonial_flutter_app/screens/auth/change_password/chan
 enum obscure { oldpass, newpass, confirmpass }
 
 ChangePasswordState? change_password_reducer(
-    ChangePasswordState? state, dynamic action) {
+  ChangePasswordState? state,
+  dynamic action,
+) {
   if (action is CpLoader) {
     return loader(state!, action);
   }

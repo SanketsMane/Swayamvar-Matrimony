@@ -11,42 +11,34 @@ String countryResponseToJson(CountryResponse data) =>
     json.encode(data.toJson());
 
 class CountryResponse {
-  CountryResponse({
-    this.data,
-  });
+  CountryResponse({this.data});
 
   List<Data>? data;
 
   factory CountryResponse.fromJson(Map<String, dynamic> json) =>
       CountryResponse(
-        data: json["data"] == null
-            ? null
-            : List<Data>.from(json["data"].map((x) => Data.fromJson(x))),
+        data:
+            json["data"] == null
+                ? null
+                : List<Data>.from(json["data"].map((x) => Data.fromJson(x))),
       );
 
   Map<String, dynamic> toJson() => {
-        "data": data == null
-            ? null
-            : List<dynamic>.from(data!.map((x) => x.toJson())),
-      };
+    "data":
+        data == null ? null : List<dynamic>.from(data!.map((x) => x.toJson())),
+  };
 
   CountryResponse.initialState() : data = [];
 }
 
 class Data {
-  Data({
-    this.name,
-  });
+  Data({this.name});
 
   String? name;
 
-  factory Data.fromJson(Map<String, dynamic> json) => Data(
-        name: json["name"],
-      );
+  factory Data.fromJson(Map<String, dynamic> json) => Data(name: json["name"]);
 
-  Map<String, dynamic> toJson() => {
-        "name": name,
-      };
+  Map<String, dynamic> toJson() => {"name": name};
 
   Data.initialState() : name = '';
 }

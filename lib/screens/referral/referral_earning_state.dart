@@ -1,12 +1,12 @@
 class ReferralEarningState {
-  int page=1;
+  int page = 1;
   bool? hasMore;
   bool? isFetching;
   List<dynamic>? referralEarningList = [];
   String? error;
 
   ReferralEarningState({
-    this.page=1,
+    this.page = 1,
     this.hasMore,
     this.isFetching,
     this.referralEarningList,
@@ -19,9 +19,9 @@ class ReferralEarningState {
   }
 
   ReferralEarningState.initialState()
-      : page = 1,
-        hasMore = true,
-        isFetching = true,
-        referralEarningList = [],
-        error = '';
+    : page = 1,
+      hasMore = true,
+      isFetching = true,
+      referralEarningList = [],
+      error = '';
 }

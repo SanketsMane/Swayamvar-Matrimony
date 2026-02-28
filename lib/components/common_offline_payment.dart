@@ -8,11 +8,12 @@ import 'package:webview_flutter/webview_flutter.dart';
 import '../const/const.dart';
 import '../const/my_theme.dart';
 import '../const/style.dart';
-import '../main.dart';
+import '../redux/store.dart';
 import '../redux/app/app_state.dart';
 import '../screens/others/offline/offline_payment_reducer.dart';
 import 'common_app_bar.dart';
 import 'common_input.dart';
+import 'package:active_matrimonial_flutter_app/redux/store.dart';
 
 class CommonOfflinePayment extends StatefulWidget {
   var amount;
@@ -41,8 +42,8 @@ class CommonOfflinePayment extends StatefulWidget {
 class _CommonOfflinePaymentState extends State<CommonOfflinePayment> {
   double webViewHeight = 150.0;
 
-  WebViewController controller = WebViewController()
-    ..setJavaScriptMode(JavaScriptMode.unrestricted);
+  WebViewController controller =
+      WebViewController()..setJavaScriptMode(JavaScriptMode.unrestricted);
   @override
   void initState() {
     super.initState();
@@ -55,11 +56,10 @@ class _CommonOfflinePaymentState extends State<CommonOfflinePayment> {
   makeHeight() async {
     await Future.delayed(Duration(seconds: 1));
     var h = await controller.runJavaScriptReturningResult(
-        "document.getElementById('scaled-frame').clientHeight");
-
-    webViewHeight = double.parse(
-      (h).toString(),
+      "document.getElementById('scaled-frame').clientHeight",
     );
+
+    webViewHeight = double.parse((h).toString());
     setState(() {});
   }
 
@@ -88,10 +88,11 @@ class _CommonOfflinePaymentState extends State<CommonOfflinePayment> {
   Widget build(BuildContext context) {
     return StoreConnector<AppState, AppState>(
       converter: (store) => store.state,
-      builder: (_, state) => Scaffold(
-        appBar: CommonAppBar(text: widget.title).build(context),
-        body: buildBody(state),
-      ),
+      builder:
+          (_, state) => Scaffold(
+            appBar: CommonAppBar(text: widget.title).build(context),
+            body: buildBody(state),
+          ),
     );
   }
 
@@ -99,16 +100,15 @@ class _CommonOfflinePaymentState extends State<CommonOfflinePayment> {
     return SingleChildScrollView(
       child: Padding(
         padding: EdgeInsets.symmetric(
-            horizontal: Const.kPaddingHorizontal,
-            vertical: Const.kPaddingVertical),
+          horizontal: Const.kPaddingHorizontal,
+          vertical: Const.kPaddingVertical,
+        ),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
             SizedBox(
               height: webViewHeight,
-              child: WebViewWidget(
-                controller: controller,
-              ),
+              child: WebViewWidget(controller: controller),
             ),
             Const.height20,
             const Divider(),
@@ -136,25 +136,27 @@ class _CommonOfflinePaymentState extends State<CommonOfflinePayment> {
                     child: SizedBox(
                       width: 100,
                       child: TextButton(
-                          style: ButtonStyle(
-                            backgroundColor:
-                                WidgetStateProperty.all<Color>(MyTheme.white),
-                            shape: WidgetStateProperty.all(
-                              const RoundedRectangleBorder(
-                                borderRadius: BorderRadius.only(
-                                  topRight: Radius.circular(8),
-                                  bottomRight: Radius.circular(8),
-                                ),
+                        style: ButtonStyle(
+                          backgroundColor: WidgetStateProperty.all<Color>(
+                            MyTheme.white,
+                          ),
+                          shape: WidgetStateProperty.all(
+                            const RoundedRectangleBorder(
+                              borderRadius: BorderRadius.only(
+                                topRight: Radius.circular(8),
+                                bottomRight: Radius.circular(8),
                               ),
                             ),
                           ),
-                          onPressed: () => store.dispatch(getImageAction()),
-                          child: Text(
-                            'Browse',
-                            style: Styles.regular_storm_grey_12,
-                          )),
+                        ),
+                        onPressed: () => store.dispatch(getImageAction()),
+                        child: Text(
+                          'Browse',
+                          style: Styles.regular_storm_grey_12,
+                        ),
+                      ),
                     ),
-                  )
+                  ),
                 ],
               ),
             ),
@@ -171,48 +173,45 @@ class _CommonOfflinePaymentState extends State<CommonOfflinePayment> {
               children: [
                 TextButton(
                   style: ButtonStyle(
-                    backgroundColor:
-                        WidgetStateProperty.all(MyTheme.app_accent_color),
-                    fixedSize: WidgetStateProperty.all(
-                      const Size(100.0, 20.0),
+                    backgroundColor: WidgetStateProperty.all(
+                      MyTheme.app_accent_color,
                     ),
+                    fixedSize: WidgetStateProperty.all(const Size(100.0, 20.0)),
                   ),
                   onPressed: () {
                     widget.payment_type == "wallet_payment"
                         ? store.dispatch(
-                            // wallet recharge offline action
-                            OfflineRechargeWalletAction(
-                              amount: widget.amount.toString(),
-                              manualPaymentId:
-                                  widget.manual_payment_id.toString(),
-                            ),
-                          )
-                        : store.dispatch(
-                            // package purchase offline action
-                            OfflineBuyPackageAction(
-                              amount: widget.amount.toString(),
-                              packageId: widget.package_id.toString(),
-                              manualPaymentId:
-                                  widget.manual_payment_id.toString(),
-                            ),
-                          );
-                  },
-                  child: state.offlinePaymentState!.isSubmit!
-                      ? const SizedBox(
-                          height: 20,
-                          width: 20,
-                          child: CircularProgressIndicator(
-                            strokeWidth: 2.0,
-                            color: MyTheme.white,
+                          // wallet recharge offline action
+                          OfflineRechargeWalletAction(
+                            amount: widget.amount.toString(),
+                            manualPaymentId:
+                                widget.manual_payment_id.toString(),
                           ),
                         )
-                      : Text(
-                          'Confirm',
-                          style: Styles.bold_white_12,
-                        ),
+                        : store.dispatch(
+                          // package purchase offline action
+                          OfflineBuyPackageAction(
+                            amount: widget.amount.toString(),
+                            packageId: widget.package_id.toString(),
+                            manualPaymentId:
+                                widget.manual_payment_id.toString(),
+                          ),
+                        );
+                  },
+                  child:
+                      state.offlinePaymentState!.isSubmit!
+                          ? const SizedBox(
+                            height: 20,
+                            width: 20,
+                            child: CircularProgressIndicator(
+                              strokeWidth: 2.0,
+                              color: MyTheme.white,
+                            ),
+                          )
+                          : Text('Confirm', style: Styles.bold_white_12),
                 ),
               ],
-            )
+            ),
           ],
         ),
       ),

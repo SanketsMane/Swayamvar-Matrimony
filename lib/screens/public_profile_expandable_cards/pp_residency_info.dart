@@ -13,7 +13,7 @@ class PP_ResidencyInfo extends StatelessWidget {
       converter: (store) => store.state,
       builder:
           (_, state) =>
-              state.publicProfileState!.resi != null
+              state.publicProfileState!.residency != null
                   ? Column(
                     children: [
                       buildRow(
@@ -22,7 +22,9 @@ class PP_ResidencyInfo extends StatelessWidget {
                             AppLocalizations.of(
                               context,
                             )!.public_profile_birth_country,
-                        data: state.publicProfileState!.resi.birthCountry ?? '',
+                        data:
+                            state.publicProfileState!.residency.birthCountry ??
+                            '',
                       ),
                       SizedBox(height: 10),
                       buildRow(
@@ -32,7 +34,7 @@ class PP_ResidencyInfo extends StatelessWidget {
                               context,
                             )!.public_profile_growup_country,
                         data:
-                            "${state.publicProfileState!.resi.growupCountry ?? ''}",
+                            "${state.publicProfileState!.residency.growupCountry ?? ''}",
                       ),
                       SizedBox(height: 10),
                       buildRow(
@@ -42,7 +44,7 @@ class PP_ResidencyInfo extends StatelessWidget {
                               context,
                             )!.public_profile_residency_country,
                         data:
-                            "${state.publicProfileState!.resi.recidencyCountry ?? ''}",
+                            "${state.publicProfileState!.residency.recidencyCountry ?? ''}",
                       ),
                       SizedBox(height: 10),
                       buildRow(
@@ -52,7 +54,7 @@ class PP_ResidencyInfo extends StatelessWidget {
                               context,
                             )!.public_profile_immigration_status,
                         data:
-                            "${state.publicProfileState!.resi.immigrationStatus ?? ''}",
+                            "${state.publicProfileState!.residency.immigrationStatus ?? ''}",
                       ),
                     ],
                   )

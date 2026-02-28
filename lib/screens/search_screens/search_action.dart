@@ -179,9 +179,6 @@ class BasicSearchMotherTongueAdd {
   BasicSearchMotherTongueAdd({this.value});
 }
 
-enum BasicSearchRemove {
-  motherTongueClear,
-  religionClear,
-}
+enum BasicSearchRemove { motherTongueClear, religionClear }
 
 // author: Sanket

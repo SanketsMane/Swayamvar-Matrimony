@@ -33,7 +33,7 @@ class BasicSearchState {
   String? diet;
   String? smoking;
   String? drinking;
-  
+
   // Sanket: Advanced filters
   dynamic education;
   dynamic income;
@@ -97,31 +97,32 @@ class BasicSearchState {
   });
 
   BasicSearchState.initialState()
-      : casteResponse = CasteResponse.initialState(),
-        isFetching = false,
-        searchList = [],
-        error = '',
-        subcasteResponse = SubcasteResponse.initialState(),
-        search_loader = false,
-        stateResponse = StateResponse.initialState(),
-        cityResponse = CityResponse.initialState(),
-        minAge = 21,
-        maxAge = 40,
-        quickFilters = [],
-        diet = "Veg",
-        smoking = "No",
-        drinking = "No",
-        education = null,
-        income = null,
-        isManglik = false,
-        isIntercaste = false,
-        isDisabled = false,
-        searchText = "",
-        religion_value = SharedPref().advReligionId,
-        caste_value = SharedPref().advCasteId,
-        country_value = SharedPref().advCountryId,
-        state_value = SharedPref().advStateId,
-        city_value = SharedPref().advCityId,
-        marital_status_value = SharedPref().advMaritalStatus;
+    : casteResponse = CasteResponse.initialState(),
+      isFetching = false,
+      searchList = [],
+      error = '',
+      subcasteResponse = SubcasteResponse.initialState(),
+      search_loader = false,
+      stateResponse = StateResponse.initialState(),
+      cityResponse = CityResponse.initialState(),
+      minAge = 21,
+      maxAge = 40,
+      quickFilters = [],
+      diet = "Veg",
+      smoking = "No",
+      drinking = "No",
+      education = null,
+      income = null,
+      isManglik = false,
+      isIntercaste = false,
+      isDisabled = false,
+      searchText = "",
+      religion_value = SharedPref().advReligionId,
+      caste_value = SharedPref().advCasteId,
+      country_value = SharedPref().advCountryId,
+      state_value = SharedPref().advStateId,
+      city_value = SharedPref().advCityId,
+      marital_status_value = SharedPref().advMaritalStatus;
 }
+
 // author: Sanket

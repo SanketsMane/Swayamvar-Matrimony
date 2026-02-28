@@ -33,16 +33,16 @@ class HobbiesInterestState {
   });
 
   HobbiesInterestState.initialState()
-      : isLoading = false,
-        hobbiesInterestData = null,
-        hobbiesController = TextEditingController(text: ''),
-        interestsController = TextEditingController(text: ''),
-        musicController = TextEditingController(text: ''),
-        booksController = TextEditingController(text: ''),
-        moviesController = TextEditingController(text: ''),
-        tvShowController = TextEditingController(text: ''),
-        sportsController = TextEditingController(text: ''),
-        fitnessActivitiesController = TextEditingController(text: ''),
-        cuisinesController = TextEditingController(text: ''),
-        dressStylesController = TextEditingController(text: '');
+    : isLoading = false,
+      hobbiesInterestData = null,
+      hobbiesController = TextEditingController(text: ''),
+      interestsController = TextEditingController(text: ''),
+      musicController = TextEditingController(text: ''),
+      booksController = TextEditingController(text: ''),
+      moviesController = TextEditingController(text: ''),
+      tvShowController = TextEditingController(text: ''),
+      sportsController = TextEditingController(text: ''),
+      fitnessActivitiesController = TextEditingController(text: ''),
+      cuisinesController = TextEditingController(text: ''),
+      dressStylesController = TextEditingController(text: '');
 }

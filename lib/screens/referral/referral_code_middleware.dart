@@ -3,6 +3,7 @@ import 'package:active_matrimonial_flutter_app/repository/referral_repository.da
 import 'package:active_matrimonial_flutter_app/screens/referral/referral_action.dart';
 import 'package:redux/redux.dart';
 import 'package:redux_thunk/redux_thunk.dart';
+import 'package:active_matrimonial_flutter_app/redux/store.dart';
 
 ThunkAction<AppState> referralCodeMiddleware() {
   return (Store<AppState> store) async {

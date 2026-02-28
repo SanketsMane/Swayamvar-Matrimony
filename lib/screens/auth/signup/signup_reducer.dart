@@ -1,4 +1,3 @@
-
 import 'package:active_matrimonial_flutter_app/redux/libs/helpers/show_message_state.dart';
 import 'package:active_matrimonial_flutter_app/screens/auth/signup/signup_action.dart';
 import 'package:active_matrimonial_flutter_app/screens/auth/signup/signup_state.dart';
@@ -6,31 +5,29 @@ import 'package:flutter/cupertino.dart';
 import '../../../helpers/data_time_format.dart';
 import '../../core.dart';
 import 'signup_middleware.dart';
+import 'package:active_matrimonial_flutter_app/redux/store.dart';
 
 SignUpState sign_up_reducer(SignUpState state, dynamic action) {
   if (action is SignupReset) {
     return state.copyWith(
-        firstNameController: "",
-        lastNameController: "",
-        emailController: "",
-        passwordController: "",
-        phoneNumber: "",
-        confirmPasswordController: "",
-        checkBox: false,
-        isCodeSent: false,
-        isVerified: false,
-        isSendingCode: false,
-        isVerifyingCode: false,
-        verificationCodeController: TextEditingController(text: ""));
+      firstNameController: "",
+      lastNameController: "",
+      emailController: "",
+      passwordController: "",
+      phoneNumber: "",
+      confirmPasswordController: "",
+      checkBox: false,
+      isCodeSent: false,
+      isVerified: false,
+      isSendingCode: false,
+      isVerifyingCode: false,
+      verificationCodeController: TextEditingController(text: ""),
+    );
   }
 
   if (action is SignUpRequestAction) {
     if (state.checkBox == false) {
-      store.dispatch(
-        ShowMessageAction(
-          msg: 'Agree to terms and condition!',
-        ),
-      );
+      store.dispatch(ShowMessageAction(msg: 'Agree to terms and condition!'));
       return state;
     }
     if (!state.signUpFormKey.currentState!.validate()) {
@@ -43,16 +40,13 @@ SignUpState sign_up_reducer(SignUpState state, dynamic action) {
       state.genderController!.text = "2";
     }
 
-    bool isOtp = store.state.addonState!.data!.otpSystem ?? false;
-    bool isPhone = isOtp && state.emailOrPhone!;
+    String phoneValue = action.phoneNumber?.phoneNumber ?? "";
+    String emailValue = state.emailController!.text.trim();
 
-    var emailOrPhoneText = isPhone ? "phone" : "email";
-
-    var emailOrPhoneValue =
-    isPhone ? action.phoneNumber?.phoneNumber : state.emailController!.text;
-
-    if (emailOrPhoneValue == null || emailOrPhoneValue.isEmpty) {
-      store.dispatch(ShowMessageAction(msg: 'Email or Phone cannot be empty!'));
+    if (emailValue.isEmpty || phoneValue.isEmpty) {
+      store.dispatch(
+        ShowMessageAction(msg: 'Email and Phone cannot be empty!'),
+      );
       return state;
     }
 
@@ -74,8 +68,8 @@ SignUpState sign_up_reducer(SignUpState state, dynamic action) {
         action.payloadContext,
         firstName: extractedFirstName,
         lastName: extractedLastName,
-        emailOrPhone: emailOrPhoneValue,
-        emailOrPhoneText: emailOrPhoneText,
+        email: emailValue,
+        phone: phoneValue,
         onBehalf: onBehalfValue,
         gender: state.genderController!.text,
         dateOfBirth: yearMonthDay(state.date!),

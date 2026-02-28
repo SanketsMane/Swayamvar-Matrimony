@@ -11,42 +11,32 @@ String onbehalfResponseToJson(OnbehalfResponse data) =>
     json.encode(data.toJson());
 
 class OnbehalfResponse {
-  OnbehalfResponse({
-    this.data,
-  });
+  OnbehalfResponse({this.data});
 
   List<Data>? data;
 
   factory OnbehalfResponse.fromJson(Map<String, dynamic> json) =>
       OnbehalfResponse(
-        data: json["data"] == null
-            ? null
-            : List<Data>.from(json["data"].map((x) => Data.fromJson(x))),
+        data:
+            json["data"] == null
+                ? null
+                : List<Data>.from(json["data"].map((x) => Data.fromJson(x))),
       );
 
   Map<String, dynamic> toJson() => {
-        "data": data == null
-            ? null
-            : List<dynamic>.from(data!.map((x) => x.toJson())),
-      };
+    "data":
+        data == null ? null : List<dynamic>.from(data!.map((x) => x.toJson())),
+  };
 }
 
 class Data {
-  Data({
-    this.id,
-    this.name,
-  });
+  Data({this.id, this.name});
 
   int? id;
   String? name;
 
-  factory Data.fromJson(Map<String, dynamic> json) => Data(
-        id: json["id"],
-        name: json["name"],
-      );
+  factory Data.fromJson(Map<String, dynamic> json) =>
+      Data(id: json["id"], name: json["name"]);
 
-  Map<String, dynamic> toJson() => {
-        "id": id,
-        "name": name,
-      };
+  Map<String, dynamic> toJson() => {"id": id, "name": name};
 }

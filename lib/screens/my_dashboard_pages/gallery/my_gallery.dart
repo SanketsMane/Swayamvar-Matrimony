@@ -31,7 +31,10 @@ class _MyGalleryState extends State<MyGallery> {
                 OneContext().pop(),
                 store.dispatch(
                   ShowMessageAction(
-                    msg: "Please verify your account",
+                    msg:
+                        AppLocalizations.of(
+                          context,
+                        )!.gallery_verify_account_msg,
                     color: MyTheme.failure,
                   ),
                 ),
@@ -166,12 +169,12 @@ class _MyGalleryState extends State<MyGallery> {
       builder: (BuildContext context) {
         return AlertDialog(
           title: Text(
-            'Are You Sure That You Want To Delete This Image?',
+            AppLocalizations.of(context)!.gallery_delete_confirm_title,
             style: Styles.bold_arsenic_14,
             textAlign: TextAlign.center,
           ),
           content: Text(
-            '**N.B. Deleting An Image Will Not Refund Your Remaining Gallery Capacity**',
+            AppLocalizations.of(context)!.gallery_delete_confirm_nb,
             style: Styles.regular_arsenic_12,
             textAlign: TextAlign.center,
           ),
@@ -186,7 +189,10 @@ class _MyGalleryState extends State<MyGallery> {
                   borderRadius: BorderRadius.circular(4),
                   color: const Color.fromRGBO(255, 221, 218, 1),
                 ),
-                child: Text('Cancel', style: TextStyle(color: MyTheme.arsenic)),
+                child: Text(
+                  AppLocalizations.of(context)!.common_cancel,
+                  style: TextStyle(color: MyTheme.arsenic),
+                ),
               ),
               onPressed: () {
                 OneContext().popDialog();
@@ -203,7 +209,7 @@ class _MyGalleryState extends State<MyGallery> {
                   color: const Color.fromRGBO(201, 227, 202, 1),
                 ),
                 child: Text(
-                  'Confirm',
+                  AppLocalizations.of(context)!.common_confirm,
                   style: TextStyle(color: MyTheme.arsenic),
                 ),
               ),
@@ -244,7 +250,7 @@ class _MyGalleryState extends State<MyGallery> {
                 Const.height18,
                 Row(
                   children: [
-                    Expanded(
+                    Flexible(
                       child: GalleryExtendedBox(
                         text:
                             state
@@ -256,11 +262,14 @@ class _MyGalleryState extends State<MyGallery> {
                       ),
                     ),
                     Const.width10,
-                    Expanded(
+                    Flexible(
                       child: GestureDetector(
                         onTap: _addNewImage,
-                        child: const GalleryExtendedBox(
-                          text: 'Add new image',
+                        child: GalleryExtendedBox(
+                          text:
+                              AppLocalizations.of(
+                                context,
+                              )!.gallery_add_new_image,
                           icon: 'assets/icon/icon_gallery_plus.png',
                         ),
                       ),
@@ -287,7 +296,11 @@ class _MyGalleryState extends State<MyGallery> {
         (store.state.accountState!.profileData!.remainingPhotoGallery != 0)) {
       return browseImageDialog();
     } else {
-      store.dispatch(ShowMessageAction(msg: 'Please Update Your Package.'));
+      store.dispatch(
+        ShowMessageAction(
+          msg: AppLocalizations.of(context)!.gallery_update_package_msg,
+        ),
+      );
     }
   }
 
@@ -339,7 +352,7 @@ class _MyGalleryState extends State<MyGallery> {
                       children: [
                         Text(
                           store.state.galleryImageState!.imgName ??
-                              'Choose file...',
+                              AppLocalizations.of(context)!.gallery_choose_file,
                           style: Styles.regular_gull_grey_12,
                         ),
                         Container(
@@ -352,7 +365,7 @@ class _MyGalleryState extends State<MyGallery> {
                             ),
                           ),
                           child: Text(
-                            'Browse',
+                            AppLocalizations.of(context)!.gallery_browse,
                             style: Styles.regular_storm_grey_12,
                             textAlign: TextAlign.center,
                           ),
@@ -410,6 +423,12 @@ class _MyGalleryState extends State<MyGallery> {
                 'assets/icon/icon_pop_white.png',
                 height: 20,
                 width: 20,
+                errorBuilder:
+                    (context, error, stackTrace) => const Icon(
+                      Icons.arrow_back_ios,
+                      color: Colors.white,
+                      size: 20,
+                    ),
               ),
             ),
             const SizedBox(width: 10),

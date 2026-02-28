@@ -31,24 +31,29 @@ class _PremiumPlansState extends State<PremiumPlans> {
         return Scaffold(
           backgroundColor: MyTheme.background,
           appBar: _buildHeader(context),
-          body: vm.fetch!
-              ? const Center(child: CircularProgressIndicator(color: MyTheme.primary))
-              : Stack(
-                  children: [
-                    SingleChildScrollView(
-                      child: Column(
-                        children: [
-                          _buildHeroSection(),
-                          _buildPlansList(vm),
-                          const SizedBox(height: 16),
-                          _buildComparisonTable(vm),
-                          const SizedBox(height: 100), // Space for sticky button
-                        ],
+          body:
+              vm.fetch!
+                  ? const Center(
+                    child: CircularProgressIndicator(color: MyTheme.primary),
+                  )
+                  : Stack(
+                    children: [
+                      SingleChildScrollView(
+                        child: Column(
+                          children: [
+                            _buildHeroSection(),
+                            _buildPlansList(vm),
+                            const SizedBox(height: 16),
+                            _buildComparisonTable(vm),
+                            const SizedBox(
+                              height: 100,
+                            ), // Space for sticky button
+                          ],
+                        ),
                       ),
-                    ),
-                    _buildStickyUpgradeButton(vm),
-                  ],
-                ),
+                      _buildStickyUpgradeButton(vm),
+                    ],
+                  ),
         );
       },
     );
@@ -62,8 +67,14 @@ class _PremiumPlansState extends State<PremiumPlans> {
         icon: const Icon(Icons.arrow_back, color: MyTheme.text_primary),
         onPressed: () => Navigator.pop(context),
       ),
-      title: const Text("Membership Plans", 
-          style: TextStyle(color: MyTheme.text_primary, fontSize: 18, fontWeight: FontWeight.bold)),
+      title: const Text(
+        "Membership Plans",
+        style: TextStyle(
+          color: MyTheme.text_primary,
+          fontSize: 18,
+          fontWeight: FontWeight.bold,
+        ),
+      ),
       centerTitle: true,
       bottom: PreferredSize(
         preferredSize: const Size.fromHeight(1),
@@ -78,13 +89,21 @@ class _PremiumPlansState extends State<PremiumPlans> {
       padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 32),
       child: Column(
         children: [
-          const Text("Find Your Perfect Life Partner ❤️", 
-              textAlign: TextAlign.center,
-              style: TextStyle(color: MyTheme.text_primary, fontSize: 22, fontWeight: FontWeight.bold)),
+          const Text(
+            "Find Your Perfect Life Partner ❤️",
+            textAlign: TextAlign.center,
+            style: TextStyle(
+              color: MyTheme.text_primary,
+              fontSize: 22,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
           const SizedBox(height: 8),
-          const Text("Upgrade your membership to connect faster and access premium features.", 
-              textAlign: TextAlign.center,
-              style: TextStyle(color: MyTheme.text_secondary, fontSize: 14)),
+          const Text(
+            "Upgrade your membership to connect faster and access premium features.",
+            textAlign: TextAlign.center,
+            style: TextStyle(color: MyTheme.text_secondary, fontSize: 14),
+          ),
         ],
       ),
     );
@@ -99,7 +118,9 @@ class _PremiumPlansState extends State<PremiumPlans> {
       separatorBuilder: (_, __) => const SizedBox(height: 16),
       itemBuilder: (context, index) {
         final package = vm.list![index];
-        final isGold = package.name.toString().toLowerCase().contains('gold') || index == 1;
+        final isGold =
+            package.name.toString().toLowerCase().contains('gold') ||
+            index == 1;
         final isSelected = _selectedPackageId == package.packageId;
 
         return GestureDetector(
@@ -110,10 +131,21 @@ class _PremiumPlansState extends State<PremiumPlans> {
               color: MyTheme.white,
               borderRadius: BorderRadius.circular(16),
               border: Border.all(
-                color: isSelected ? MyTheme.primary : (isGold ? MyTheme.primary.withOpacity(0.5) : MyTheme.border),
+                color:
+                    isSelected
+                        ? MyTheme.primary
+                        : (isGold
+                            ? MyTheme.primary.withOpacity(0.5)
+                            : MyTheme.border),
                 width: isSelected || isGold ? 2 : 1,
               ),
-              boxShadow: [BoxShadow(color: Colors.black.withOpacity(0.04), blurRadius: 10, offset: const Offset(0, 4))],
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black.withOpacity(0.04),
+                  blurRadius: 10,
+                  offset: const Offset(0, 4),
+                ),
+              ],
             ),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -124,17 +156,43 @@ class _PremiumPlansState extends State<PremiumPlans> {
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text(package.name, style: const TextStyle(color: MyTheme.text_primary, fontSize: 18, fontWeight: FontWeight.bold)),
+                        Text(
+                          package.name,
+                          style: const TextStyle(
+                            color: MyTheme.text_primary,
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
                         const SizedBox(height: 4),
-                        Text(package.price == 0 ? "Free" : package.priceText, 
-                            style: const TextStyle(color: MyTheme.primary, fontSize: 24, fontWeight: FontWeight.bold)),
+                        Text(
+                          package.price == 0 ? "Free" : package.priceText,
+                          style: const TextStyle(
+                            color: MyTheme.primary,
+                            fontSize: 24,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
                       ],
                     ),
                     if (isGold)
                       Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-                        decoration: BoxDecoration(color: MyTheme.primary, borderRadius: BorderRadius.circular(20)),
-                        child: const Text("Most Popular", style: TextStyle(color: Colors.white, fontSize: 10, fontWeight: FontWeight.bold)),
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 12,
+                          vertical: 6,
+                        ),
+                        decoration: BoxDecoration(
+                          color: MyTheme.primary,
+                          borderRadius: BorderRadius.circular(20),
+                        ),
+                        child: const Text(
+                          "Most Popular",
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 10,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
                       ),
                   ],
                 ),
@@ -142,11 +200,17 @@ class _PremiumPlansState extends State<PremiumPlans> {
                   padding: EdgeInsets.symmetric(vertical: 16),
                   child: Divider(color: MyTheme.border),
                 ),
-                _buildFeatureRow("${package.expressInterest} Interests per month"),
+                _buildFeatureRow(
+                  "${package.expressInterest} Interests per month",
+                ),
                 const SizedBox(height: 10),
                 _buildFeatureRow("${package.contact} Contact Views"),
                 const SizedBox(height: 10),
-                _buildFeatureRow(package.autoProfileMatch == 1 ? "Priority Matches" : "Basic Matches"),
+                _buildFeatureRow(
+                  package.autoProfileMatch == 1
+                      ? "Priority Matches"
+                      : "Basic Matches",
+                ),
               ],
             ),
           ),
@@ -160,7 +224,10 @@ class _PremiumPlansState extends State<PremiumPlans> {
       children: [
         const Icon(Icons.check_circle, color: MyTheme.success, size: 18),
         const SizedBox(width: 8),
-        Text(label, style: const TextStyle(color: MyTheme.text_primary, fontSize: 14)),
+        Text(
+          label,
+          style: const TextStyle(color: MyTheme.text_primary, fontSize: 14),
+        ),
       ],
     );
   }
@@ -172,12 +239,21 @@ class _PremiumPlansState extends State<PremiumPlans> {
       decoration: BoxDecoration(
         color: MyTheme.white,
         borderRadius: BorderRadius.circular(16),
-        boxShadow: [BoxShadow(color: Colors.black.withOpacity(0.02), blurRadius: 10)],
+        boxShadow: [
+          BoxShadow(color: Colors.black.withOpacity(0.02), blurRadius: 10),
+        ],
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Text("Features Comparison", style: TextStyle(color: MyTheme.text_primary, fontSize: 16, fontWeight: FontWeight.bold)),
+          const Text(
+            "Features Comparison",
+            style: TextStyle(
+              color: MyTheme.text_primary,
+              fontSize: 16,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
           const SizedBox(height: 20),
           _comparisonHeader(vm),
           const Divider(height: 32),
@@ -194,12 +270,28 @@ class _PremiumPlansState extends State<PremiumPlans> {
   Widget _comparisonHeader(PremiumPlansViewModel vm) {
     return Row(
       children: [
-        const Expanded(flex: 2, child: Text("Feature", style: TextStyle(color: MyTheme.text_secondary, fontSize: 12))),
-        ...vm.list!.take(3).map((p) => Expanded(
-          child: Text(p.name.toString().split(' ')[0], 
-              textAlign: TextAlign.center,
-              style: const TextStyle(color: MyTheme.text_secondary, fontSize: 12, fontWeight: FontWeight.bold)),
-        )),
+        const Expanded(
+          flex: 2,
+          child: Text(
+            "Feature",
+            style: TextStyle(color: MyTheme.text_secondary, fontSize: 12),
+          ),
+        ),
+        ...vm.list!
+            .take(3)
+            .map(
+              (p) => Expanded(
+                child: Text(
+                  p.name.toString().split(' ')[0],
+                  textAlign: TextAlign.center,
+                  style: const TextStyle(
+                    color: MyTheme.text_secondary,
+                    fontSize: 12,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ),
+            ),
       ],
     );
   }
@@ -207,32 +299,64 @@ class _PremiumPlansState extends State<PremiumPlans> {
   Widget _comparisonRow(String feature, PremiumPlansViewModel vm) {
     return Row(
       children: [
-        Expanded(flex: 2, child: Text(feature, style: const TextStyle(color: MyTheme.text_primary, fontSize: 13))),
-        ...vm.list!.take(3).map((p) => const Expanded(
-          child: Icon(Icons.check, color: MyTheme.success, size: 16),
-        )),
+        Expanded(
+          flex: 2,
+          child: Text(
+            feature,
+            style: const TextStyle(color: MyTheme.text_primary, fontSize: 13),
+          ),
+        ),
+        ...vm.list!
+            .take(3)
+            .map(
+              (p) => const Expanded(
+                child: Icon(Icons.check, color: MyTheme.success, size: 16),
+              ),
+            ),
       ],
     );
   }
 
   Widget _buildStickyUpgradeButton(PremiumPlansViewModel vm) {
     return Positioned(
-      bottom: 0, left: 0, right: 0,
+      bottom: 0,
+      left: 0,
+      right: 0,
       child: Container(
-        padding: EdgeInsets.fromLTRB(16, 16, 16, 16 + MediaQuery.of(context).padding.bottom),
+        padding: EdgeInsets.fromLTRB(
+          16,
+          16,
+          16,
+          16 + MediaQuery.of(context).padding.bottom,
+        ),
         decoration: BoxDecoration(
           color: MyTheme.white,
-          boxShadow: [BoxShadow(color: Colors.black.withOpacity(0.05), blurRadius: 10, offset: const Offset(0, -4))],
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withOpacity(0.05),
+              blurRadius: 10,
+              offset: const Offset(0, -4),
+            ),
+          ],
         ),
         child: ElevatedButton(
           onPressed: () => _handlePurchase(vm),
           style: ElevatedButton.styleFrom(
             backgroundColor: MyTheme.primary,
             minimumSize: const Size(double.infinity, 56),
-            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(12),
+            ),
             elevation: 0,
           ),
-          child: const Text("Upgrade Now", style: TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.bold)),
+          child: const Text(
+            "Upgrade Now",
+            style: TextStyle(
+              color: Colors.white,
+              fontSize: 16,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
         ),
       ),
     );
@@ -240,27 +364,48 @@ class _PremiumPlansState extends State<PremiumPlans> {
 
   void _handlePurchase(PremiumPlansViewModel vm) {
     if (_selectedPackageId == -1) {
-      store.dispatch(ShowMessageAction(msg: "Please select a plan first", color: MyTheme.failure));
+      store.dispatch(
+        ShowMessageAction(
+          msg: "Please select a plan first",
+          color: MyTheme.failure,
+        ),
+      );
       return;
     }
 
-    final selectedPackage = vm.list!.firstWhere((p) => p.packageId == _selectedPackageId);
-    
+    final selectedPackage = vm.list!.firstWhere(
+      (p) => p.packageId == _selectedPackageId,
+    );
+
     if (vm.isDeactivated!) {
-      store.dispatch(ShowMessageAction(msg: "Please reactivate your account", color: MyTheme.failure));
+      store.dispatch(
+        ShowMessageAction(
+          msg: "Please reactivate your account",
+          color: MyTheme.failure,
+        ),
+      );
       return;
     }
 
     if (!store.state.userVerifyState!.isApprove!) {
-      store.dispatch(ShowMessageAction(msg: "Please verify your account", color: MyTheme.failure));
+      store.dispatch(
+        ShowMessageAction(
+          msg: "Please verify your account",
+          color: MyTheme.failure,
+        ),
+      );
     } else {
-      if (selectedPackage.packageId != 1) { // 1 is Free
-        NavigatorPush.push(context, Payment(
-          title: "Package Payment",
-          payment_type: "package_payment",
-          amount: selectedPackage.price.toDouble(),
-          package_id: selectedPackage.packageId,
-        ));
+      if (selectedPackage.packageId != 1) {
+        // 1 is Free
+        NavigatorPush.push(
+          context,
+          Payment(
+            title: "Package Payment",
+            payment_type: "package_payment",
+            amount: selectedPackage.price.toDouble(),
+            package_id: selectedPackage.packageId,
+          ),
+        );
       }
     }
   }

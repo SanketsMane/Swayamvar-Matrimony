@@ -25,17 +25,18 @@ class PermanentAddressState {
         selected_city != null;
   }
 
-  PermanentAddressState(
-      {this.is_loading,
-      this.cityResponse,
-      this.stateResponse,
-      this.permanentGetResponse,
-      this.permanent_address_save_changes});
+  PermanentAddressState({
+    this.is_loading,
+    this.cityResponse,
+    this.stateResponse,
+    this.permanentGetResponse,
+    this.permanent_address_save_changes,
+  });
 
   PermanentAddressState.initialState()
-      : is_loading = false,
-        cityResponse = CityResponse.initialState(),
-        permanentGetResponse = PermanentGetResponse.initialState(),
-        stateResponse = StateResponse.initialState(),
-        permanent_address_save_changes = false;
+    : is_loading = false,
+      cityResponse = CityResponse.initialState(),
+      permanentGetResponse = PermanentGetResponse.initialState(),
+      stateResponse = StateResponse.initialState(),
+      permanent_address_save_changes = false;
 }

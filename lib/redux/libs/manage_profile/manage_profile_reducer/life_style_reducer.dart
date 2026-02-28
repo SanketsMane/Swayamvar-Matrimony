@@ -17,8 +17,10 @@ LifeStyleState? life_style_reducer(LifeStyleState? state, dynamic action) {
   }
 
   if (action is LifeStyleGetResponse) {
-    state!.lifeStyleGetResponse =
-        LifeStyleGetResponse(data: action.data, result: action.result);
+    state!.lifeStyleGetResponse = LifeStyleGetResponse(
+      data: action.data,
+      result: action.result,
+    );
     return state;
   }
 

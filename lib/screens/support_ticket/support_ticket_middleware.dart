@@ -6,6 +6,7 @@ import 'package:redux_thunk/redux_thunk.dart';
 
 import '../../const/my_theme.dart';
 import '../../redux/libs/helpers/show_message_state.dart';
+import 'package:active_matrimonial_flutter_app/redux/store.dart';
 
 ThunkAction<AppState> getSupportTicketMiddleware() {
   return (Store<AppState> store) async {
@@ -32,8 +33,11 @@ ThunkAction<AppState> getSupportTicketCategoriesMiddleware() {
   };
 }
 
-ThunkAction<AppState> storeSupportTicketReplyMiddleware(
-    {ticket_id, reply, attachment}) {
+ThunkAction<AppState> storeSupportTicketReplyMiddleware({
+  ticket_id,
+  reply,
+  attachment,
+}) {
   return (Store<AppState> store) async {
     var response = await SupportTicketRepository().replySupportTicket(
       ticket_id: ticket_id,
@@ -45,10 +49,12 @@ ThunkAction<AppState> storeSupportTicketReplyMiddleware(
     if (response.result) {
       store.dispatch(getSupportTicketMiddleware());
       store.dispatch(
-          ShowMessageAction(msg: response.message, color: MyTheme.success));
+        ShowMessageAction(msg: response.message, color: MyTheme.success),
+      );
     } else {
       store.dispatch(
-          ShowMessageAction(msg: "Something is wrong", color: MyTheme.failure));
+        ShowMessageAction(msg: "Something is wrong", color: MyTheme.failure),
+      );
     }
   };
 }

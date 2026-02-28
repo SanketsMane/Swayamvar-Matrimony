@@ -22,24 +22,16 @@ class IntroductionGetResponse {
         result: json["result"],
       );
 
-  Map<String, dynamic> toJson() => {
-        "data": data?.toJson(),
-        "result": result,
-      };
+  Map<String, dynamic> toJson() => {"data": data?.toJson(), "result": result};
 }
 
 class IntroData {
-  IntroData({
-    this.introduction,
-  });
+  IntroData({this.introduction});
 
   String? introduction;
 
-  factory IntroData.fromJson(Map<String, dynamic> json) => IntroData(
-        introduction: json["introduction"],
-      );
+  factory IntroData.fromJson(Map<String, dynamic> json) =>
+      IntroData(introduction: json["introduction"]);
 
-  Map<String, dynamic> toJson() => {
-        "introduction": introduction,
-      };
+  Map<String, dynamic> toJson() => {"introduction": introduction};
 }

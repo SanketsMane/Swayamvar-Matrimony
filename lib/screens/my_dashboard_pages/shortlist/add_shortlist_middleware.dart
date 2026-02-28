@@ -7,6 +7,7 @@ import 'package:redux_thunk/redux_thunk.dart';
 
 import '../../../const/my_theme.dart';
 import '../../../redux/libs/helpers/show_message_state.dart';
+import 'package:active_matrimonial_flutter_app/redux/store.dart';
 
 ThunkAction<AppState> addShortlistMiddleware({required int userId}) {
   return (Store<AppState> store) async {
@@ -17,11 +18,13 @@ ThunkAction<AppState> addShortlistMiddleware({required int userId}) {
 
       if (data.result) {
         store.dispatch(
-            ShowMessageAction(msg: data.message, color: MyTheme.success));
+          ShowMessageAction(msg: data.message, color: MyTheme.success),
+        );
         store.dispatch(memberInfoMiddleware(userId: userId));
       } else {
         store.dispatch(
-            ShowMessageAction(msg: data.message, color: MyTheme.failure));
+          ShowMessageAction(msg: data.message, color: MyTheme.failure),
+        );
       }
     } catch (e) {
       //debugPrint(e);

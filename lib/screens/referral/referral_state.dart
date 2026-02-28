@@ -1,6 +1,6 @@
 class ReferralState {
   String? referralCode;
-  int page=1;
+  int page = 1;
   bool? isFetching;
   bool? hasMore;
   List<dynamic>? referralUserList = [];
@@ -8,7 +8,7 @@ class ReferralState {
   String? referralCodeError;
 
   ReferralState({
-    this.page=1,
+    this.page = 1,
     this.isFetching,
     this.referralCode,
     this.hasMore,
@@ -18,11 +18,11 @@ class ReferralState {
   });
 
   ReferralState.initialState()
-      : page = 1,
-        referralCodeError = '',
-        referralCode = '--------',
-        hasMore = true,
-        isFetching = true,
-        referralUserList = [],
-        error = '';
+    : page = 1,
+      referralCodeError = '',
+      referralCode = '--------',
+      hasMore = true,
+      isFetching = true,
+      referralUserList = [],
+      error = '';
 }

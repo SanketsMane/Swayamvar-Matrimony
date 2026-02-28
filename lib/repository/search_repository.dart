@@ -57,16 +57,18 @@ class SearchRepository {
       "intercaste_accepted": intercaste,
       "disability": disability,
       "with_photo": withPhoto,
-      "recently_joined": recentlyJoined
+      "recently_joined": recentlyJoined,
     });
 
-    var response = await http.post(Uri.parse(baseUrl),
-        headers: {
-          "Accept": "application/json",
-          "Content-Type": "application/json",
-          "Authorization": "Bearer $accessToken"
-        },
-        body: postBody);
+    var response = await http.post(
+      Uri.parse(baseUrl),
+      headers: {
+        "Accept": "application/json",
+        "Content-Type": "application/json",
+        "Authorization": "Bearer $accessToken",
+      },
+      body: postBody,
+    );
 
     var data = basicSearchResponseFromJson(response.body);
     return data;

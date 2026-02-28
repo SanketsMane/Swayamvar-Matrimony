@@ -23,10 +23,10 @@ class FamilyState {
   });
 
   FamilyState.initialState()
-      : isloading = false,
-        familyData = null,
-        fatherController = TextEditingController(text: ''),
-        motherController = TextEditingController(text: ''),
-        siblingController = TextEditingController(text: ''),
-        pageloader = false;
+    : isloading = false,
+      familyData = null,
+      fatherController = TextEditingController(text: ''),
+      motherController = TextEditingController(text: ''),
+      siblingController = TextEditingController(text: ''),
+      pageloader = false;
 }

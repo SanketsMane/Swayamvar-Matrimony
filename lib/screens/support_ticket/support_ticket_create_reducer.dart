@@ -16,7 +16,9 @@ class StoreSubjectAction {
 class ResetAction {}
 
 SupportTicketCreateState? support_ticket_create_reducer(
-    SupportTicketCreateState? state, dynamic action) {
+  SupportTicketCreateState? state,
+  dynamic action,
+) {
   if (action is StoreImageAction) {
     state!.image = action.image;
     state.img_name = action.image_name;
@@ -29,7 +31,7 @@ SupportTicketCreateState? support_ticket_create_reducer(
   if (action is ResetAction) {
     state!.subjectController.clear();
     state.img_name = '';
-   // state.controller.clear();
+    // state.controller.clear();
     return state;
   }
 

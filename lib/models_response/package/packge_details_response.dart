@@ -14,10 +14,7 @@ class PackageDetailsResponse {
   PackageDetail? data;
   bool? result;
 
-  PackageDetailsResponse({
-    this.data,
-    this.result,
-  });
+  PackageDetailsResponse({this.data, this.result});
 
   factory PackageDetailsResponse.fromJson(Map<String, dynamic> json) =>
       PackageDetailsResponse(
@@ -25,10 +22,7 @@ class PackageDetailsResponse {
         result: json["result"],
       );
 
-  Map<String, dynamic> toJson() => {
-        "data": data!.toJson(),
-        "result": result,
-      };
+  Map<String, dynamic> toJson() => {"data": data!.toJson(), "result": result};
 }
 
 class PackageDetail {
@@ -59,30 +53,30 @@ class PackageDetail {
   });
 
   factory PackageDetail.fromJson(Map<String, dynamic> json) => PackageDetail(
-        packageId: json["package_id"],
-        name: json["name"],
-        image: json["image"],
-        expressInterest: json["express_interest"],
-        photoGallery: json["photo_gallery"],
-        contact: json["contact"],
-        profileImageView: json["profile_image_view"],
-        galleryImageView: json["gallery_image_view"],
-        autoProfileMatch: json["auto_profile_match"],
-        price: json["price"],
-        validity: json["validity"],
-      );
+    packageId: json["package_id"],
+    name: json["name"],
+    image: json["image"],
+    expressInterest: json["express_interest"],
+    photoGallery: json["photo_gallery"],
+    contact: json["contact"],
+    profileImageView: json["profile_image_view"],
+    galleryImageView: json["gallery_image_view"],
+    autoProfileMatch: json["auto_profile_match"],
+    price: json["price"],
+    validity: json["validity"],
+  );
 
   Map<String, dynamic> toJson() => {
-        "package_id": packageId,
-        "name": name,
-        "image": image,
-        "express_interest": expressInterest,
-        "photo_gallery": photoGallery,
-        "contact": contact,
-        "profile_image_view": profileImageView,
-        "gallery_image_view": galleryImageView,
-        "auto_profile_match": autoProfileMatch,
-        "price": price,
-        "validity": validity,
-      };
+    "package_id": packageId,
+    "name": name,
+    "image": image,
+    "express_interest": expressInterest,
+    "photo_gallery": photoGallery,
+    "contact": contact,
+    "profile_image_view": profileImageView,
+    "gallery_image_view": galleryImageView,
+    "auto_profile_match": autoProfileMatch,
+    "price": price,
+    "validity": validity,
+  };
 }

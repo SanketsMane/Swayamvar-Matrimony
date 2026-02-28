@@ -19,10 +19,10 @@ class InterestRequestState {
   });
 
   InterestRequestState.initialState()
-      : acceptInterest = false,
-        hasMore = true,
-        error = '',
-        interestRequestList = [],
-        isFetching = true,
-        page = 1;
+    : acceptInterest = false,
+      hasMore = true,
+      error = '',
+      interestRequestList = [],
+      isFetching = true,
+      page = 1;
 }

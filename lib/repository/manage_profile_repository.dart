@@ -31,11 +31,14 @@ class ManageProfileRepository {
     var baseUrl = "${AppConfig.BASE_URL}/member/basic-info";
     var accessToken = getToken;
 
-    var response = await http.get(Uri.parse(baseUrl), headers: {
-      "Accept": "application/json",
-      "Content-Type": "application/json",
-      "Authorization": "Bearer $accessToken"
-    });
+    var response = await http.get(
+      Uri.parse(baseUrl),
+      headers: {
+        "Accept": "application/json",
+        "Content-Type": "application/json",
+        "Authorization": "Bearer $accessToken",
+      },
+    );
 
     var data = basicInfoGetResponseFromJson(response.body);
     return data;
@@ -95,11 +98,14 @@ class ManageProfileRepository {
     var baseUrl = "${AppConfig.BASE_URL}/member/introduction";
     var accessToken = getToken;
 
-    var response = await http.get(Uri.parse(baseUrl), headers: {
-      "Accept": "application/json",
-      "Content-Type": "application/json",
-      "Authorization": "Bearer $accessToken"
-    });
+    var response = await http.get(
+      Uri.parse(baseUrl),
+      headers: {
+        "Accept": "application/json",
+        "Content-Type": "application/json",
+        "Authorization": "Bearer $accessToken",
+      },
+    );
 
     var data = introductionGetResponseFromJson(response.body);
     return data;
@@ -110,13 +116,15 @@ class ManageProfileRepository {
     var accessToken = getToken;
     var postBody = jsonEncode({"introduction": text});
 
-    var response = await http.post(Uri.parse(baseUrl),
-        headers: {
-          "Accept": "application/json",
-          "Content-Type": "application/json",
-          "Authorization": "Bearer $accessToken",
-        },
-        body: postBody);
+    var response = await http.post(
+      Uri.parse(baseUrl),
+      headers: {
+        "Accept": "application/json",
+        "Content-Type": "application/json",
+        "Authorization": "Bearer $accessToken",
+      },
+      body: postBody,
+    );
 
     var data = commonResponseFromJson(response.body);
     return data;
@@ -127,32 +135,33 @@ class ManageProfileRepository {
     var baseUrl = "${AppConfig.BASE_URL}/member/get-email";
     var accessToken = getToken;
 
-    var response = await http.get(Uri.parse(baseUrl), headers: {
-      "Accept": "application/json",
-      "Content-Type": "application/json",
-      "Authorization": "Bearer $accessToken"
-    });
+    var response = await http.get(
+      Uri.parse(baseUrl),
+      headers: {
+        "Accept": "application/json",
+        "Content-Type": "application/json",
+        "Authorization": "Bearer $accessToken",
+      },
+    );
 
     var data = contactGetResponseFromJson(response.body);
     return data;
   }
 
-  Future<CommonResponse> contactUpdate({
-    dynamic email,
-  }) async {
+  Future<CommonResponse> contactUpdate({dynamic email}) async {
     var baseUrl = "${AppConfig.BASE_URL}/member/contact-info/update";
     var accessToken = getToken;
-    var postBody = jsonEncode({
-      "email": email,
-    });
+    var postBody = jsonEncode({"email": email});
 
-    var response = await http.post(Uri.parse(baseUrl),
-        headers: {
-          "Accept": "application/json",
-          "Content-Type": "application/json",
-          "Authorization": "Bearer $accessToken",
-        },
-        body: postBody);
+    var response = await http.post(
+      Uri.parse(baseUrl),
+      headers: {
+        "Accept": "application/json",
+        "Content-Type": "application/json",
+        "Authorization": "Bearer $accessToken",
+      },
+      body: postBody,
+    );
 
     var data = commonResponseFromJson(response.body);
     return data;
@@ -163,21 +172,25 @@ class ManageProfileRepository {
     var baseUrl = "${AppConfig.BASE_URL}/member/present/address";
     var accessToken = getToken;
 
-    var response = await http.get(Uri.parse(baseUrl), headers: {
-      "Accept": "application/json",
-      "Content-Type": "application/json",
-      "Authorization": "Bearer $accessToken"
-    });
+    var response = await http.get(
+      Uri.parse(baseUrl),
+      headers: {
+        "Accept": "application/json",
+        "Content-Type": "application/json",
+        "Authorization": "Bearer $accessToken",
+      },
+    );
 
     var data = presentAddressGetResponseFromJson(response.body);
     return data;
   }
 
-  Future<CommonResponse> updatePresentAddress(
-      {dynamic country,
-      dynamic state,
-      dynamic city,
-      dynamic postal_code}) async {
+  Future<CommonResponse> updatePresentAddress({
+    dynamic country,
+    dynamic state,
+    dynamic city,
+    dynamic postal_code,
+  }) async {
     var baseUrl = "${AppConfig.BASE_URL}/member/address/update";
     var accessToken = getToken;
 
@@ -186,16 +199,18 @@ class ManageProfileRepository {
       "country_id": country,
       "state_id": state,
       "city_id": city,
-      "postal_code": postal_code
+      "postal_code": postal_code,
     });
 
-    var response = await http.post(Uri.parse(baseUrl),
-        headers: {
-          "Accept": "application/json",
-          "Content-Type": "application/json",
-          "Authorization": "Bearer $accessToken",
-        },
-        body: postBody);
+    var response = await http.post(
+      Uri.parse(baseUrl),
+      headers: {
+        "Accept": "application/json",
+        "Content-Type": "application/json",
+        "Authorization": "Bearer $accessToken",
+      },
+      body: postBody,
+    );
 
     var data = commonResponseFromJson(response.body);
     return data;
@@ -206,34 +221,43 @@ class ManageProfileRepository {
     var baseUrl = "${AppConfig.BASE_URL}/member/astronomic";
     var accessToken = getToken;
 
-    var response = await http.get(Uri.parse(baseUrl), headers: {
-      "Accept": "application/json",
-      "Content-Type": "application/json",
-      "Authorization": "Bearer $accessToken"
-    });
+    var response = await http.get(
+      Uri.parse(baseUrl),
+      headers: {
+        "Accept": "application/json",
+        "Content-Type": "application/json",
+        "Authorization": "Bearer $accessToken",
+      },
+    );
 
     var data = astronomicGetResponseFromJson(response.body);
     return data;
   }
 
-  Future<CommonResponse> astronomicUpdate(
-      {dynamic sunsign, dynamic moonsign, dynamic time, dynamic city}) async {
+  Future<CommonResponse> astronomicUpdate({
+    dynamic sunsign,
+    dynamic moonsign,
+    dynamic time,
+    dynamic city,
+  }) async {
     var baseUrl = "${AppConfig.BASE_URL}/member/astronomic/update";
     var accessToken = getToken;
     var postBody = jsonEncode({
       "sun_sign": sunsign,
       "moon_sign": moonsign,
       "time_of_birth": time,
-      "city_of_birth": city
+      "city_of_birth": city,
     });
 
-    var response = await http.post(Uri.parse(baseUrl),
-        headers: {
-          "Accept": "application/json",
-          "Content-Type": "application/json",
-          "Authorization": "Bearer $accessToken",
-        },
-        body: postBody);
+    var response = await http.post(
+      Uri.parse(baseUrl),
+      headers: {
+        "Accept": "application/json",
+        "Content-Type": "application/json",
+        "Authorization": "Bearer $accessToken",
+      },
+      body: postBody,
+    );
 
     var data = commonResponseFromJson(response.body);
     return data;
@@ -244,11 +268,14 @@ class ManageProfileRepository {
     var baseUrl = "${AppConfig.BASE_URL}/member/attitude-behavior";
     var accessToken = getToken;
 
-    var response = await http.get(Uri.parse(baseUrl), headers: {
-      "Accept": "application/json",
-      "Content-Type": "application/json",
-      "Authorization": "Bearer $accessToken"
-    });
+    var response = await http.get(
+      Uri.parse(baseUrl),
+      headers: {
+        "Accept": "application/json",
+        "Content-Type": "application/json",
+        "Authorization": "Bearer $accessToken",
+      },
+    );
 
     var data = attitudeBehaviorGetResponseFromJson(response.body);
     return data;
@@ -270,13 +297,15 @@ class ManageProfileRepository {
       "political_views": political_views,
     });
 
-    var response = await http.post(Uri.parse(baseUrl),
-        headers: {
-          "Accept": "application/json",
-          "Content-Type": "application/json",
-          "Authorization": "Bearer $accessToken",
-        },
-        body: postBody);
+    var response = await http.post(
+      Uri.parse(baseUrl),
+      headers: {
+        "Accept": "application/json",
+        "Content-Type": "application/json",
+        "Authorization": "Bearer $accessToken",
+      },
+      body: postBody,
+    );
 
     var data = commonResponseFromJson(response.body);
     return data;
@@ -287,11 +316,14 @@ class ManageProfileRepository {
     var baseUrl = "${AppConfig.BASE_URL}/member/career";
     var accessToken = getToken;
 
-    var response = await http.get(Uri.parse(baseUrl), headers: {
-      "Accept": "application/json",
-      "Content-Type": "application/json",
-      "Authorization": "Bearer $accessToken"
-    });
+    var response = await http.get(
+      Uri.parse(baseUrl),
+      headers: {
+        "Accept": "application/json",
+        "Content-Type": "application/json",
+        "Authorization": "Bearer $accessToken",
+      },
+    );
 
     var data = careerGetResponseFromJson(response.body);
     return data;
@@ -314,11 +346,12 @@ class ManageProfileRepository {
     return data;
   }
 
-  Future<CommonResponse> careerCreate(
-      {dynamic designation,
-      dynamic company,
-      dynamic start,
-      dynamic end}) async {
+  Future<CommonResponse> careerCreate({
+    dynamic designation,
+    dynamic company,
+    dynamic start,
+    dynamic end,
+  }) async {
     var baseUrl = "${AppConfig.BASE_URL}/member/career";
     var accessToken = getToken;
 
@@ -326,27 +359,30 @@ class ManageProfileRepository {
       "designation": designation,
       "company": company,
       "start": start,
-      "end": end
+      "end": end,
     });
 
-    var response = await http.post(Uri.parse(baseUrl),
-        headers: {
-          "Accept": "application/json",
-          "Content-Type": "application/json",
-          "Authorization": "Bearer $accessToken",
-        },
-        body: postBody);
+    var response = await http.post(
+      Uri.parse(baseUrl),
+      headers: {
+        "Accept": "application/json",
+        "Content-Type": "application/json",
+        "Authorization": "Bearer $accessToken",
+      },
+      body: postBody,
+    );
 
     var data = commonResponseFromJson(response.body);
     return data;
   }
 
-  Future<CommonResponse> careerUpdate(
-      {dynamic designation,
-      dynamic company,
-      dynamic start,
-      dynamic end,
-      dynamic id}) async {
+  Future<CommonResponse> careerUpdate({
+    dynamic designation,
+    dynamic company,
+    dynamic start,
+    dynamic end,
+    dynamic id,
+  }) async {
     var baseUrl = "${AppConfig.BASE_URL}/member/career/$id";
     var accessToken = getToken;
 
@@ -357,13 +393,15 @@ class ManageProfileRepository {
       "end": end,
     });
 
-    var response = await http.put(Uri.parse(baseUrl),
-        headers: {
-          "Accept": "application/json",
-          "Content-Type": "application/json",
-          "Authorization": "Bearer $accessToken",
-        },
-        body: postBody);
+    var response = await http.put(
+      Uri.parse(baseUrl),
+      headers: {
+        "Accept": "application/json",
+        "Content-Type": "application/json",
+        "Authorization": "Bearer $accessToken",
+      },
+      body: postBody,
+    );
 
     var data = commonResponseFromJson(response.body);
     return data;
@@ -376,11 +414,14 @@ class ManageProfileRepository {
     var baseUrl = "${AppConfig.BASE_URL}/member/education";
     var accessToken = getToken;
 
-    var response = await http.get(Uri.parse(baseUrl), headers: {
-      "Accept": "application/json",
-      "Content-Type": "application/json",
-      "Authorization": "Bearer $accessToken"
-    });
+    var response = await http.get(
+      Uri.parse(baseUrl),
+      headers: {
+        "Accept": "application/json",
+        "Content-Type": "application/json",
+        "Authorization": "Bearer $accessToken",
+      },
+    );
 
     var data = educationGetResponseFromJson(response.body);
     debugPrint("Education data fetched: ${data.data}");
@@ -406,8 +447,12 @@ class ManageProfileRepository {
     return data;
   }
 
-  Future<CommonResponse> educationCreate(
-      {dynamic degree, dynamic institution, dynamic start, dynamic end}) async {
+  Future<CommonResponse> educationCreate({
+    dynamic degree,
+    dynamic institution,
+    dynamic start,
+    dynamic end,
+  }) async {
     var baseUrl = "${AppConfig.BASE_URL}/member/education";
     var accessToken = getToken;
 
@@ -415,27 +460,30 @@ class ManageProfileRepository {
       "degree": degree,
       "institution": institution,
       "education_start": start,
-      "education_end": end
+      "education_end": end,
     });
 
-    var response = await http.post(Uri.parse(baseUrl),
-        headers: {
-          "Accept": "application/json",
-          "Content-Type": "application/json",
-          "Authorization": "Bearer $accessToken",
-        },
-        body: postBody);
+    var response = await http.post(
+      Uri.parse(baseUrl),
+      headers: {
+        "Accept": "application/json",
+        "Content-Type": "application/json",
+        "Authorization": "Bearer $accessToken",
+      },
+      body: postBody,
+    );
 
     var data = commonResponseFromJson(response.body);
     return data;
   }
 
-  Future<CommonResponse> educationUpdate(
-      {dynamic degree,
-      dynamic institution,
-      dynamic start,
-      dynamic end,
-      dynamic id}) async {
+  Future<CommonResponse> educationUpdate({
+    dynamic degree,
+    dynamic institution,
+    dynamic start,
+    dynamic end,
+    dynamic id,
+  }) async {
     var baseUrl = "${AppConfig.BASE_URL}/member/education/$id";
     var accessToken = getToken;
 
@@ -446,13 +494,15 @@ class ManageProfileRepository {
       "education_end": end,
     });
 
-    var response = await http.put(Uri.parse(baseUrl),
-        headers: {
-          "Accept": "application/json",
-          "Content-Type": "application/json",
-          "Authorization": "Bearer $accessToken",
-        },
-        body: postBody);
+    var response = await http.put(
+      Uri.parse(baseUrl),
+      headers: {
+        "Accept": "application/json",
+        "Content-Type": "application/json",
+        "Authorization": "Bearer $accessToken",
+      },
+      body: postBody,
+    );
 
     var data = commonResponseFromJson(response.body);
     return data;
@@ -463,31 +513,42 @@ class ManageProfileRepository {
     var baseUrl = "${AppConfig.BASE_URL}/member/family-info";
     var accessToken = getToken;
 
-    var response = await http.get(Uri.parse(baseUrl), headers: {
-      "Accept": "application/json",
-      "Content-Type": "application/json",
-      "Authorization": "Bearer $accessToken"
-    });
+    var response = await http.get(
+      Uri.parse(baseUrl),
+      headers: {
+        "Accept": "application/json",
+        "Content-Type": "application/json",
+        "Authorization": "Bearer $accessToken",
+      },
+    );
 
     var data = familyGetResponseFromJson(response.body);
     return data;
   }
 
   // family update
-  Future<CommonResponse> updateFamily(
-      {dynamic father, dynamic mother, dynamic sibling}) async {
+  Future<CommonResponse> updateFamily({
+    dynamic father,
+    dynamic mother,
+    dynamic sibling,
+  }) async {
     var baseUrl = "${AppConfig.BASE_URL}/member/family-info/update";
     var accessToken = getToken;
-    var postBody =
-        jsonEncode({"father": father, "mother": mother, "sibling": sibling});
+    var postBody = jsonEncode({
+      "father": father,
+      "mother": mother,
+      "sibling": sibling,
+    });
 
-    var response = await http.post(Uri.parse(baseUrl),
-        headers: {
-          "Accept": "application/json",
-          "Content-Type": "application/json",
-          "Authorization": "Bearer $accessToken",
-        },
-        body: postBody);
+    var response = await http.post(
+      Uri.parse(baseUrl),
+      headers: {
+        "Accept": "application/json",
+        "Content-Type": "application/json",
+        "Authorization": "Bearer $accessToken",
+      },
+      body: postBody,
+    );
 
     var data = commonResponseFromJson(response.body);
     return data;
@@ -498,28 +559,32 @@ class ManageProfileRepository {
     var baseUrl = "${AppConfig.BASE_URL}/member/hobbies-interests";
     var accessToken = getToken;
 
-    var response = await http.get(Uri.parse(baseUrl), headers: {
-      "Accept": "application/json",
-      "Content-Type": "application/json",
-      "Authorization": "Bearer $accessToken"
-    });
+    var response = await http.get(
+      Uri.parse(baseUrl),
+      headers: {
+        "Accept": "application/json",
+        "Content-Type": "application/json",
+        "Authorization": "Bearer $accessToken",
+      },
+    );
 
     var data = hobbiesInterestGetResponseFromJson(response.body);
     return data;
   }
 
   // hobbies and interest
-  Future<CommonResponse> updateHobbies(
-      {dynamic hobbies,
-      dynamic interests,
-      dynamic music,
-      dynamic books,
-      dynamic movies,
-      dynamic tv_shows,
-      dynamic sports,
-      dynamic fitness_activites,
-      dynamic cuisines,
-      dynamic dress_styles}) async {
+  Future<CommonResponse> updateHobbies({
+    dynamic hobbies,
+    dynamic interests,
+    dynamic music,
+    dynamic books,
+    dynamic movies,
+    dynamic tv_shows,
+    dynamic sports,
+    dynamic fitness_activites,
+    dynamic cuisines,
+    dynamic dress_styles,
+  }) async {
     var baseUrl = "${AppConfig.BASE_URL}/member/hobbies/update";
     var accessToken = getToken;
     var postBody = jsonEncode({
@@ -532,16 +597,18 @@ class ManageProfileRepository {
       "sports": sports,
       "fitness_activities": fitness_activites,
       "cuisines": cuisines,
-      "dress_styles": dress_styles
+      "dress_styles": dress_styles,
     });
 
-    var response = await http.post(Uri.parse(baseUrl),
-        headers: {
-          "Accept": "application/json",
-          "Content-Type": "application/json",
-          "Authorization": "Bearer $accessToken",
-        },
-        body: postBody);
+    var response = await http.post(
+      Uri.parse(baseUrl),
+      headers: {
+        "Accept": "application/json",
+        "Content-Type": "application/json",
+        "Authorization": "Bearer $accessToken",
+      },
+      body: postBody,
+    );
 
     var data = commonResponseFromJson(response.body);
     return data;
@@ -552,11 +619,14 @@ class ManageProfileRepository {
     var baseUrl = "${AppConfig.BASE_URL}/member/language";
     var accessToken = getToken;
 
-    var response = await http.get(Uri.parse(baseUrl), headers: {
-      "Accept": "application/json",
-      "Content-Type": "application/json",
-      "Authorization": "Bearer $accessToken"
-    });
+    var response = await http.get(
+      Uri.parse(baseUrl),
+      headers: {
+        "Accept": "application/json",
+        "Content-Type": "application/json",
+        "Authorization": "Bearer $accessToken",
+      },
+    );
 
     var data = languageGetResponseFromJson(response.body);
     return data;
@@ -574,13 +644,15 @@ class ManageProfileRepository {
       "known_languages": known_language,
     });
 
-    var response = await http.post(Uri.parse(baseUrl),
-        headers: {
-          "Accept": "application/json",
-          "Content-Type": "application/json",
-          "Authorization": "Bearer $accessToken",
-        },
-        body: postBody);
+    var response = await http.post(
+      Uri.parse(baseUrl),
+      headers: {
+        "Accept": "application/json",
+        "Content-Type": "application/json",
+        "Authorization": "Bearer $accessToken",
+      },
+      body: postBody,
+    );
 
     var data = commonResponseFromJson(response.body);
     return data;
@@ -591,35 +663,44 @@ class ManageProfileRepository {
     var baseUrl = "${AppConfig.BASE_URL}/member/life-style";
     var accessToken = getToken;
 
-    var response = await http.get(Uri.parse(baseUrl), headers: {
-      "Accept": "application/json",
-      "Content-Type": "application/json",
-      "Authorization": "Bearer $accessToken"
-    });
+    var response = await http.get(
+      Uri.parse(baseUrl),
+      headers: {
+        "Accept": "application/json",
+        "Content-Type": "application/json",
+        "Authorization": "Bearer $accessToken",
+      },
+    );
 
     var data = lifeStyleGetResponseFromJson(response.body);
     return data;
   }
 
   // life style
-  Future<CommonResponse> updateLifeStyle(
-      {dynamic diet, dynamic drink, dynamic smoke, dynamic living_with}) async {
+  Future<CommonResponse> updateLifeStyle({
+    dynamic diet,
+    dynamic drink,
+    dynamic smoke,
+    dynamic living_with,
+  }) async {
     var baseUrl = "${AppConfig.BASE_URL}/member/life-style/update";
     var accessToken = getToken;
     var postBody = jsonEncode({
       "diet": diet,
       "drink": drink,
       "smoke": smoke,
-      "living_with": living_with
+      "living_with": living_with,
     });
 
-    var response = await http.post(Uri.parse(baseUrl),
-        headers: {
-          "Accept": "application/json",
-          "Content-Type": "application/json",
-          "Authorization": "Bearer $accessToken",
-        },
-        body: postBody);
+    var response = await http.post(
+      Uri.parse(baseUrl),
+      headers: {
+        "Accept": "application/json",
+        "Content-Type": "application/json",
+        "Authorization": "Bearer $accessToken",
+      },
+      body: postBody,
+    );
 
     var data = commonResponseFromJson(response.body);
     return data;
@@ -630,11 +711,14 @@ class ManageProfileRepository {
     var baseUrl = "${AppConfig.BASE_URL}/member/partner-expectation";
     var accessToken = getToken;
 
-    var response = await http.get(Uri.parse(baseUrl), headers: {
-      "Accept": "application/json",
-      "Content-Type": "application/json",
-      "Authorization": "Bearer $accessToken"
-    });
+    var response = await http.get(
+      Uri.parse(baseUrl),
+      headers: {
+        "Accept": "application/json",
+        "Content-Type": "application/json",
+        "Authorization": "Bearer $accessToken",
+      },
+    );
 
     var data = partnerExpectationGetResponseFromJson(response.body);
     return data;
@@ -645,11 +729,14 @@ class ManageProfileRepository {
     var baseUrl = "${AppConfig.BASE_URL}/member/permanent/address";
     var accessToken = getToken;
 
-    var response = await http.get(Uri.parse(baseUrl), headers: {
-      "Accept": "application/json",
-      "Content-Type": "application/json",
-      "Authorization": "Bearer $accessToken"
-    });
+    var response = await http.get(
+      Uri.parse(baseUrl),
+      headers: {
+        "Accept": "application/json",
+        "Content-Type": "application/json",
+        "Authorization": "Bearer $accessToken",
+      },
+    );
 
     var data = permanentGetResponseFromJson(response.body);
 
@@ -657,11 +744,12 @@ class ManageProfileRepository {
   }
 
   // permanent address
-  Future<CommonResponse> updatePermanentAddress(
-      {dynamic country,
-      dynamic state,
-      dynamic city,
-      dynamic postal_code}) async {
+  Future<CommonResponse> updatePermanentAddress({
+    dynamic country,
+    dynamic state,
+    dynamic city,
+    dynamic postal_code,
+  }) async {
     var baseUrl = "${AppConfig.BASE_URL}/member/address/update";
     var accessToken = getToken;
 
@@ -670,16 +758,18 @@ class ManageProfileRepository {
       "country_id": country,
       "state_id": state,
       "city_id": city,
-      "postal_code": postal_code
+      "postal_code": postal_code,
     });
 
-    var response = await http.post(Uri.parse(baseUrl),
-        headers: {
-          "Accept": "application/json",
-          "Content-Type": "application/json",
-          "Authorization": "Bearer $accessToken",
-        },
-        body: postBody);
+    var response = await http.post(
+      Uri.parse(baseUrl),
+      headers: {
+        "Accept": "application/json",
+        "Content-Type": "application/json",
+        "Authorization": "Bearer $accessToken",
+      },
+      body: postBody,
+    );
 
     var data = commonResponseFromJson(response.body);
 
@@ -692,11 +782,14 @@ class ManageProfileRepository {
     var baseUrl = "${AppConfig.BASE_URL}/member/partner-expectation";
     var accessToken = getToken;
 
-    var response = await http.get(Uri.parse(baseUrl), headers: {
-      "Accept": "application/json",
-      "Content-Type": "application/json",
-      "Authorization": "Bearer $accessToken"
-    });
+    var response = await http.get(
+      Uri.parse(baseUrl),
+      headers: {
+        "Accept": "application/json",
+        "Content-Type": "application/json",
+        "Authorization": "Bearer $accessToken",
+      },
+    );
 
     var data = partnerExpectationGetResponseFromJson(response.body);
     return data;
@@ -754,13 +847,15 @@ class ManageProfileRepository {
       "pertner_complexion": complexion,
     });
 
-    var response = await http.post(Uri.parse(baseUrl),
-        headers: {
-          "Accept": "application/json",
-          "Content-Type": "application/json",
-          "Authorization": "Bearer $accessToken",
-        },
-        body: postBody);
+    var response = await http.post(
+      Uri.parse(baseUrl),
+      headers: {
+        "Accept": "application/json",
+        "Content-Type": "application/json",
+        "Authorization": "Bearer $accessToken",
+      },
+      body: postBody,
+    );
 
     var data = commonResponseFromJson(response.body);
 
@@ -772,11 +867,14 @@ class ManageProfileRepository {
     var baseUrl = "${AppConfig.BASE_URL}/member/physical-attributes";
     var accessToken = getToken;
 
-    var response = await http.get(Uri.parse(baseUrl), headers: {
-      "Accept": "application/json",
-      "Content-Type": "application/json",
-      "Authorization": "Bearer $accessToken"
-    });
+    var response = await http.get(
+      Uri.parse(baseUrl),
+      headers: {
+        "Accept": "application/json",
+        "Content-Type": "application/json",
+        "Authorization": "Bearer $accessToken",
+      },
+    );
 
     var data = physicalAttributesGetResponseFromJson(response.body);
 
@@ -784,16 +882,17 @@ class ManageProfileRepository {
   }
 
   // physical attributes
-  Future<CommonResponse> updatePhysicalAttr(
-      {dynamic height,
-      dynamic weight,
-      dynamic eye_color,
-      dynamic hair_color,
-      dynamic complexion,
-      dynamic body_type,
-      dynamic body_art,
-      dynamic blood_group,
-      dynamic disability}) async {
+  Future<CommonResponse> updatePhysicalAttr({
+    dynamic height,
+    dynamic weight,
+    dynamic eye_color,
+    dynamic hair_color,
+    dynamic complexion,
+    dynamic body_type,
+    dynamic body_art,
+    dynamic blood_group,
+    dynamic disability,
+  }) async {
     var baseUrl = "${AppConfig.BASE_URL}/member/physical-attributes/update";
     var accessToken = getToken;
     var postBody = jsonEncode({
@@ -805,16 +904,18 @@ class ManageProfileRepository {
       "body_type": body_type,
       "body_art": body_art,
       "blood_group": blood_group,
-      "disability": disability
+      "disability": disability,
     });
 
-    var response = await http.post(Uri.parse(baseUrl),
-        headers: {
-          "Accept": "application/json",
-          "Content-Type": "application/json",
-          "Authorization": "Bearer $accessToken",
-        },
-        body: postBody);
+    var response = await http.post(
+      Uri.parse(baseUrl),
+      headers: {
+        "Accept": "application/json",
+        "Content-Type": "application/json",
+        "Authorization": "Bearer $accessToken",
+      },
+      body: postBody,
+    );
 
     var data = commonResponseFromJson(response.body);
 
@@ -826,11 +927,14 @@ class ManageProfileRepository {
     var baseUrl = "${AppConfig.BASE_URL}/member/residency-info";
     var accessToken = getToken;
 
-    var response = await http.get(Uri.parse(baseUrl), headers: {
-      "Accept": "application/json",
-      "Content-Type": "application/json",
-      "Authorization": "Bearer $accessToken"
-    });
+    var response = await http.get(
+      Uri.parse(baseUrl),
+      headers: {
+        "Accept": "application/json",
+        "Content-Type": "application/json",
+        "Authorization": "Bearer $accessToken",
+      },
+    );
 
     var data = residencyGetResponseFromJson(response.body);
 
@@ -853,13 +957,15 @@ class ManageProfileRepository {
       "immigration_status": immigration_status,
     });
 
-    var response = await http.post(Uri.parse(baseUrl),
-        headers: {
-          "Accept": "application/json",
-          "Content-Type": "application/json",
-          "Authorization": "Bearer $accessToken",
-        },
-        body: postBody);
+    var response = await http.post(
+      Uri.parse(baseUrl),
+      headers: {
+        "Accept": "application/json",
+        "Content-Type": "application/json",
+        "Authorization": "Bearer $accessToken",
+      },
+      body: postBody,
+    );
 
     var data = commonResponseFromJson(response.body);
 
@@ -871,11 +977,14 @@ class ManageProfileRepository {
     var baseUrl = "${AppConfig.BASE_URL}/member/spiritual-background";
     var accessToken = getToken;
 
-    var response = await http.get(Uri.parse(baseUrl), headers: {
-      "Accept": "application/json",
-      "Content-Type": "application/json",
-      "Authorization": "Bearer $accessToken"
-    });
+    var response = await http.get(
+      Uri.parse(baseUrl),
+      headers: {
+        "Accept": "application/json",
+        "Content-Type": "application/json",
+        "Authorization": "Bearer $accessToken",
+      },
+    );
 
     var data = spiritualSocialGetResponseFromJson(response.body);
 
@@ -904,13 +1013,15 @@ class ManageProfileRepository {
       "community_value": community_value,
     });
 
-    var response = await http.post(Uri.parse(baseUrl),
-        headers: {
-          "Accept": "application/json",
-          "Content-Type": "application/json",
-          "Authorization": "Bearer $accessToken",
-        },
-        body: postBody);
+    var response = await http.post(
+      Uri.parse(baseUrl),
+      headers: {
+        "Accept": "application/json",
+        "Content-Type": "application/json",
+        "Authorization": "Bearer $accessToken",
+      },
+      body: postBody,
+    );
 
     var data = commonResponseFromJson(response.body);
 

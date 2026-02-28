@@ -12,46 +12,42 @@ CasteResponse casteResponseFromJson(String str) =>
 String casteResponseToJson(CasteResponse data) => json.encode(data.toJson());
 
 class CasteResponse {
-  CasteResponse({
-    this.data,
-  });
+  CasteResponse({this.data});
 
   List<DDown>? data;
 
   factory CasteResponse.fromJson(Map<String, dynamic> json) => CasteResponse(
-        data: json["data"] == null
+    data:
+        json["data"] == null
             ? null
             : List<DDown>.from(json["data"].map((x) => DDown.fromJson(x))),
-      );
+  );
 
   Map<String, dynamic> toJson() => {
-        "data": data == null
-            ? null
-            : List<dynamic>.from(data!.map((x) => x.toJson())),
-      };
+    "data":
+        data == null ? null : List<dynamic>.from(data!.map((x) => x.toJson())),
+  };
 
   CasteResponse.initialState() : data = [];
 }
 
 class CasteResponseForPartnerPref {
-  CasteResponseForPartnerPref({
-    this.data,
-  });
+  CasteResponseForPartnerPref({this.data});
 
   List<DDown>? data;
 
   factory CasteResponseForPartnerPref.fromJson(Map<String, dynamic> json) =>
       CasteResponseForPartnerPref(
-        data: json["data"] == null
-            ? null
-            : List<DDown>.from(json["data"].map((x) => DDown.fromJson(x))),
+        data:
+            json["data"] == null
+                ? null
+                : List<DDown>.from(json["data"].map((x) => DDown.fromJson(x))),
       );
 
   Map<String, dynamic> toJson() => {
-        "data": data == null
-            ? null
-            : List<dynamic>.from(data!.map((x) => x.toJson())),
-      };
+    "data":
+        data == null ? null : List<dynamic>.from(data!.map((x) => x.toJson())),
+  };
 
   CasteResponseForPartnerPref.initialState() : data = [];
 }

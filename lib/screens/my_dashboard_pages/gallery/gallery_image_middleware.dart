@@ -6,6 +6,7 @@ import 'package:active_matrimonial_flutter_app/screens/account/account_middlewar
 import 'package:active_matrimonial_flutter_app/screens/my_dashboard_pages/gallery/gallery_image_action.dart';
 import 'package:redux/redux.dart';
 import 'package:redux_thunk/redux_thunk.dart';
+import 'package:active_matrimonial_flutter_app/redux/store.dart';
 
 ThunkAction<AppState> galleryImageMiddleware() {
   return (Store<AppState> store) async {
@@ -26,14 +27,17 @@ ThunkAction<AppState> galleryImageDeleteMiddleware({id}) {
       var data = await GalleryRepository().deleteGalleryImage(id: id);
       data.result
           ? store.dispatch(
-              ShowMessageAction(msg: data.message, color: MyTheme.success))
+            ShowMessageAction(msg: data.message, color: MyTheme.success),
+          )
           : store.dispatch(
-              ShowMessageAction(msg: data.message, color: MyTheme.failure));
+            ShowMessageAction(msg: data.message, color: MyTheme.failure),
+          );
       store.dispatch(GalleryImageDeleteSuccessAction());
     } catch (e) {
       //debugPrint(e.toString());
-      store.dispatch(ShowMessageAction(
-          msg: "Something went wrong.", color: MyTheme.failure));
+      store.dispatch(
+        ShowMessageAction(msg: "Something went wrong.", color: MyTheme.failure),
+      );
       store.dispatch(GalleryImageDeleteFailedAction());
       return;
     }
@@ -50,12 +54,14 @@ ThunkAction<AppState> gallery_image_save({dynamic photo}) {
       store.dispatch(galleryImageMiddleware());
       store.dispatch(accountMiddleware());
       store.dispatch(
-          ShowMessageAction(msg: response.message, color: MyTheme.success));
+        ShowMessageAction(msg: response.message, color: MyTheme.success),
+      );
     } else {
       // store.dispatch(galleryImageMiddleware());
 
       store.dispatch(
-          ShowMessageAction(msg: response.message, color: MyTheme.failure));
+        ShowMessageAction(msg: response.message, color: MyTheme.failure),
+      );
     }
 
     store.dispatch(ImageLoader());

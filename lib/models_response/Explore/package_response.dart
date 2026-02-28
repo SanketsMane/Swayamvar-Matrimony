@@ -11,10 +11,7 @@ String packageResponseToJson(PackageResponse data) =>
     json.encode(data.toJson());
 
 class PackageResponse {
-  PackageResponse({
-    this.result,
-    this.data,
-  });
+  PackageResponse({this.result, this.data});
 
   bool? result;
   List<Datum>? data;
@@ -26,9 +23,9 @@ class PackageResponse {
       );
 
   Map<String, dynamic> toJson() => {
-        "result": result,
-        "data": List<dynamic>.from(data!.map((x) => x.toJson())),
-      };
+    "result": result,
+    "data": List<dynamic>.from(data!.map((x) => x.toJson())),
+  };
 }
 
 class Datum {
@@ -61,32 +58,32 @@ class Datum {
   var validity;
 
   factory Datum.fromJson(Map<String, dynamic> json) => Datum(
-        packageId: json["package_id"],
-        name: json["name"],
-        image: json["image"],
-        expressInterest: json["express_interest"],
-        photoGallery: json["photo_gallery"],
-        contact: json["contact"],
-        profileImageView: json["profile_image_view"],
-        galleryImageView: json["gallery_image_view"],
-        autoProfileMatch: json["auto_profile_match"],
-        price: json["price"],
-        priceText: json["price_text"],
-        validity: json["validity"],
-      );
+    packageId: json["package_id"],
+    name: json["name"],
+    image: json["image"],
+    expressInterest: json["express_interest"],
+    photoGallery: json["photo_gallery"],
+    contact: json["contact"],
+    profileImageView: json["profile_image_view"],
+    galleryImageView: json["gallery_image_view"],
+    autoProfileMatch: json["auto_profile_match"],
+    price: json["price"],
+    priceText: json["price_text"],
+    validity: json["validity"],
+  );
 
   Map<String, dynamic> toJson() => {
-        "package_id": packageId,
-        "name": name,
-        "image": image,
-        "express_interest": expressInterest,
-        "photo_gallery": photoGallery,
-        "contact": contact,
-        "profile_image_view": profileImageView,
-        "gallery_image_view": galleryImageView,
-        "auto_profile_match": autoProfileMatch,
-        "price": price,
-        "price_text": priceText,
-        "validity": validity,
-      };
+    "package_id": packageId,
+    "name": name,
+    "image": image,
+    "express_interest": expressInterest,
+    "photo_gallery": photoGallery,
+    "contact": contact,
+    "profile_image_view": profileImageView,
+    "gallery_image_view": galleryImageView,
+    "auto_profile_match": autoProfileMatch,
+    "price": price,
+    "price_text": priceText,
+    "validity": validity,
+  };
 }

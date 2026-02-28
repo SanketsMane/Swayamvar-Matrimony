@@ -14,17 +14,18 @@ class ContainerWithIcon extends StatelessWidget {
   double? opacity = 1;
   bool isChecked;
 
-  ContainerWithIcon(
-      {super.key,
-      this.gradient,
-      this.icon,
-      this.width,
-      this.height,
-      this.radius,
-      this.color,
-      this.onpressed,
-      this.opacity,
-      this.isChecked = false});
+  ContainerWithIcon({
+    super.key,
+    this.gradient,
+    this.icon,
+    this.width,
+    this.height,
+    this.radius,
+    this.color,
+    this.onpressed,
+    this.opacity,
+    this.isChecked = false,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -35,9 +36,7 @@ class ContainerWithIcon extends StatelessWidget {
         height: height,
         padding: EdgeInsets.all(8),
         decoration: BoxDecoration(
-          borderRadius: BorderRadius.all(
-            Radius.circular(radius!),
-          ),
+          borderRadius: BorderRadius.all(Radius.circular(radius!)),
           color: color?.withOpacity(opacity!),
           gradient: color == null ? gradient : null,
         ),

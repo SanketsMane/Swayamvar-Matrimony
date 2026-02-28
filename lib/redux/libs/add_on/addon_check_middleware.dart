@@ -3,6 +3,7 @@ import 'package:active_matrimonial_flutter_app/redux/libs/add_on/addon_action.da
 import 'package:active_matrimonial_flutter_app/repository/app_info_repository.dart';
 import 'package:redux/redux.dart';
 import 'package:redux_thunk/redux_thunk.dart';
+import 'package:active_matrimonial_flutter_app/redux/store.dart';
 
 ThunkAction<AppState> addonCheckMiddleware() {
   return (Store<AppState> store) async {

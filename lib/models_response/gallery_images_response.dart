@@ -11,10 +11,7 @@ String galleryImagesResponseToJson(GalleryImagesResponse data) =>
     json.encode(data.toJson());
 
 class GalleryImagesResponse {
-  GalleryImagesResponse({
-    this.data,
-    this.result,
-  });
+  GalleryImagesResponse({this.data, this.result});
 
   List<Data>? data;
   bool? result;
@@ -26,27 +23,22 @@ class GalleryImagesResponse {
       );
 
   Map<String, dynamic> toJson() => {
-        "data": List<dynamic>.from(data!.map((x) => x.toJson())),
-        "result": result,
-      };
+    "data": List<dynamic>.from(data!.map((x) => x.toJson())),
+    "result": result,
+  };
 }
 
 class Data {
-  Data({
-    this.imageId,
-    this.imagePath,
-  });
+  Data({this.imageId, this.imagePath});
 
   int? imageId;
   String? imagePath;
 
-  factory Data.fromJson(Map<String, dynamic> json) => Data(
-        imageId: json["image_id"],
-        imagePath: json["image_path"],
-      );
+  factory Data.fromJson(Map<String, dynamic> json) =>
+      Data(imageId: json["image_id"], imagePath: json["image_path"]);
 
   Map<String, dynamic> toJson() => {
-        "image_id": imageId,
-        "image_path": imagePath,
-      };
+    "image_id": imageId,
+    "image_path": imagePath,
+  };
 }

@@ -9,11 +9,14 @@ class GalleryRepository {
   Future<GalleryImagesResponse> fetchGalleryImage() async {
     var baseUrl = "${AppConfig.BASE_URL}/member/gallery-image";
     var accessToken = getToken;
-    var response = await http.get(Uri.parse(baseUrl), headers: {
-      "Accept": "application/json",
-      "Content-Type": "application/json",
-      "Authorization": "Bearer $accessToken",
-    });
+    var response = await http.get(
+      Uri.parse(baseUrl),
+      headers: {
+        "Accept": "application/json",
+        "Content-Type": "application/json",
+        "Authorization": "Bearer $accessToken",
+      },
+    );
 
     var data = galleryImagesResponseFromJson(response.body);
     return data;
@@ -22,11 +25,14 @@ class GalleryRepository {
   Future<CommonResponse> deleteGalleryImage({id}) async {
     var baseUrl = "${AppConfig.BASE_URL}/member/gallery-image/$id";
     var accessToken = getToken;
-    var response = await http.delete(Uri.parse(baseUrl), headers: {
-      "Accept": "application/json",
-      "Content-Type": "application/json",
-      "Authorization": "Bearer $accessToken",
-    });
+    var response = await http.delete(
+      Uri.parse(baseUrl),
+      headers: {
+        "Accept": "application/json",
+        "Content-Type": "application/json",
+        "Authorization": "Bearer $accessToken",
+      },
+    );
 
     var data = commonResponseFromJson(response.body);
     return data;

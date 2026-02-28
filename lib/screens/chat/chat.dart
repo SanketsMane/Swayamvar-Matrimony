@@ -36,7 +36,7 @@ class Chat extends StatefulWidget {
 class _ChatState extends State<Chat> {
   final TextEditingController _msgController = TextEditingController();
   final ScrollController _scrollController = ScrollController();
-  final int _myId = store.state.authState!.userData!.id!;
+  int? _myId;
   late Timer _timer;
 
   void _fetchAll() {
@@ -47,6 +47,7 @@ class _ChatState extends State<Chat> {
   @override
   void initState() {
     super.initState();
+    _myId = store.state.authState?.userData?.id;
     _fetchAll();
     _timer = Timer.periodic(const Duration(seconds: 5), (timer) {
       if (mounted) {
@@ -73,21 +74,22 @@ class _ChatState extends State<Chat> {
         return Scaffold(
           backgroundColor: MyTheme.background,
           appBar: _buildHeader(context, compatibility),
-          body: state.chatDetailsState!.isFetching!
-              ? const Center(child: CircularProgressIndicator(color: MyTheme.primary))
-              : Column(
-                  children: [
-                    // Sanket: Premium Match Info Card
-                    _buildMatchInfoCard(),
-                    
-                    Expanded(
-                      child: _buildMessageArea(state),
-                    ),
-                    
-                    // Sanket: Sticky bottom message input
-                    _buildMessageInput(context),
-                  ],
-                ),
+          body:
+              state.chatDetailsState!.isFetching!
+                  ? const Center(
+                    child: CircularProgressIndicator(color: MyTheme.primary),
+                  )
+                  : Column(
+                    children: [
+                      // Sanket: Premium Match Info Card
+                      _buildMatchInfoCard(),
+
+                      Expanded(child: _buildMessageArea(state)),
+
+                      // Sanket: Sticky bottom message input
+                      _buildMessageInput(context),
+                    ],
+                  ),
         );
       },
     );
@@ -138,17 +140,24 @@ class _ChatState extends State<Chat> {
 
   Widget _buildMessageArea(AppState state) {
     final messages = state.chatDetailsState?.chatDetailsList?.messages ?? [];
-    
+
     if (messages.isEmpty) {
       return Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Icon(Icons.chat_bubble_outline_rounded, size: 48, color: MyTheme.text_secondary.withOpacity(0.2)),
+            Icon(
+              Icons.chat_bubble_outline_rounded,
+              size: 48,
+              color: MyTheme.text_secondary.withOpacity(0.2),
+            ),
             const SizedBox(height: 16),
             Text(
               "संवाद सुरू करा",
-              style: Styles.body.copyWith(fontSize: 14, color: MyTheme.text_secondary),
+              style: Styles.body.copyWith(
+                fontSize: 14,
+                color: MyTheme.text_secondary,
+              ),
             ),
           ],
         ),
@@ -164,7 +173,7 @@ class _ChatState extends State<Chat> {
       itemBuilder: (context, index) {
         final msg = messages[index];
         bool isMe = msg.senderUserId == _myId;
-        
+
         return _buildMessageBubble(msg, isMe);
       },
     );
@@ -174,10 +183,13 @@ class _ChatState extends State<Chat> {
     return Align(
       alignment: isMe ? Alignment.centerRight : Alignment.centerLeft,
       child: Column(
-        crossAxisAlignment: isMe ? CrossAxisAlignment.end : CrossAxisAlignment.start,
+        crossAxisAlignment:
+            isMe ? CrossAxisAlignment.end : CrossAxisAlignment.start,
         children: [
           Container(
-            constraints: BoxConstraints(maxWidth: MediaQuery.of(context).size.width * 0.75),
+            constraints: BoxConstraints(
+              maxWidth: MediaQuery.of(context).size.width * 0.75,
+            ),
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
             decoration: BoxDecoration(
               color: isMe ? MyTheme.primary : MyTheme.white,
@@ -195,16 +207,17 @@ class _ChatState extends State<Chat> {
                 ),
               ],
             ),
-            child: (msg.attachment?.isEmpty ?? true)
-                ? Text(
-                    msg.message ?? '',
-                    style: Styles.body.copyWith(
-                      color: isMe ? Colors.white : MyTheme.text_primary,
-                      fontSize: 14,
-                      height: 1.4,
-                    ),
-                  )
-                : _buildAttachments(msg),
+            child:
+                (msg.attachment?.isEmpty ?? true)
+                    ? Text(
+                      msg.message ?? '',
+                      style: Styles.body.copyWith(
+                        color: isMe ? Colors.white : MyTheme.text_primary,
+                        fontSize: 14,
+                        height: 1.4,
+                      ),
+                    )
+                    : _buildAttachments(msg),
           ),
           const SizedBox(height: 4),
           Text(
@@ -233,7 +246,7 @@ class _ChatState extends State<Chat> {
           // Attachment icon
           _inputIconButton(Icons.add_circle_outline_rounded, () {}),
           const SizedBox(width: 8),
-          
+
           Expanded(
             child: Container(
               height: 44,
@@ -249,23 +262,28 @@ class _ChatState extends State<Chat> {
                 decoration: InputDecoration(
                   border: InputBorder.none,
                   hintText: 'आपला संदेश टाइप करा...',
-                  hintStyle: Styles.body.copyWith(color: MyTheme.text_secondary, fontSize: 13),
+                  hintStyle: Styles.body.copyWith(
+                    color: MyTheme.text_secondary,
+                    fontSize: 13,
+                  ),
                   contentPadding: const EdgeInsets.symmetric(vertical: 0),
                 ),
               ),
             ),
           ),
           const SizedBox(width: 8),
-          
+
           // Send button
           GestureDetector(
             onTap: () {
               if (_msgController.text.trim().isNotEmpty) {
-                store.dispatch(chatReplyMiddleware(
-                  id: widget.chatId,
-                  text: _msgController.text,
-                  attachment: null,
-                ));
+                store.dispatch(
+                  chatReplyMiddleware(
+                    id: widget.chatId,
+                    text: _msgController.text,
+                    attachment: null,
+                  ),
+                );
                 _msgController.clear();
                 FocusManager.instance.primaryFocus?.unfocus();
               }
@@ -277,7 +295,11 @@ class _ChatState extends State<Chat> {
                 color: MyTheme.primary,
                 shape: BoxShape.circle,
               ),
-              child: const Icon(Icons.send_rounded, color: Colors.white, size: 20),
+              child: const Icon(
+                Icons.send_rounded,
+                color: Colors.white,
+                size: 20,
+              ),
             ),
           ),
         ],
@@ -298,7 +320,11 @@ class _ChatState extends State<Chat> {
       elevation: 0,
       toolbarHeight: 64,
       leading: IconButton(
-        icon: const Icon(Icons.arrow_back_ios_new_rounded, color: MyTheme.text_primary, size: 20),
+        icon: const Icon(
+          Icons.arrow_back_ios_new_rounded,
+          color: MyTheme.text_primary,
+          size: 20,
+        ),
         onPressed: () => Navigator.pop(context),
       ),
       titleSpacing: 0,
@@ -352,7 +378,10 @@ class _ChatState extends State<Chat> {
                 Text(
                   "${widget.name} | 28",
                   // Sanket: Profile name uses Mukta SemiBold per typography system
-                  style: Styles.profileName.copyWith(fontSize: 16, color: MyTheme.text_primary),
+                  style: Styles.profileName.copyWith(
+                    fontSize: 16,
+                    color: MyTheme.text_primary,
+                  ),
                 ),
                 Text(
                   compatibility,
@@ -414,7 +443,11 @@ class _ChatState extends State<Chat> {
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
-          const Icon(Icons.insert_drive_file_rounded, size: 30, color: Colors.grey),
+          const Icon(
+            Icons.insert_drive_file_rounded,
+            size: 30,
+            color: Colors.grey,
+          ),
           const SizedBox(width: 8),
           Flexible(
             child: Column(
@@ -422,7 +455,10 @@ class _ChatState extends State<Chat> {
               children: [
                 Text(
                   attachment.fileName ?? '',
-                  style: const TextStyle(fontSize: 12, fontWeight: FontWeight.bold),
+                  style: const TextStyle(
+                    fontSize: 12,
+                    fontWeight: FontWeight.bold,
+                  ),
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
                 ),
@@ -438,4 +474,3 @@ class _ChatState extends State<Chat> {
     );
   }
 }
-

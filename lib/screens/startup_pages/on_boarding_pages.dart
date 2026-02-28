@@ -23,19 +23,19 @@ class _OnBoardingPagesState extends State<OnBoardingPages> {
         "image": "assets/images/onboarding_start.png",
         "title": AppLocalizations.of(context)!.onboarding_1_title,
         "subtitle": AppLocalizations.of(context)!.onboarding_1_subtitle,
-        "alignment": "center"
+        "alignment": "center",
       },
       {
         "image": "assets/images/onboarding_connect.png",
         "title": AppLocalizations.of(context)!.onboarding_2_title,
         "subtitle": AppLocalizations.of(context)!.onboarding_2_subtitle,
-        "alignment": "center"
+        "alignment": "center",
       },
       {
         "image": "assets/images/onboarding_interact.png",
         "title": AppLocalizations.of(context)!.onboarding_3_title,
         "subtitle": AppLocalizations.of(context)!.onboarding_3_subtitle,
-        "alignment": "center"
+        "alignment": "center",
       },
     ];
   }
@@ -75,7 +75,7 @@ class _OnBoardingPagesState extends State<OnBoardingPages> {
               return Stack(
                 fit: StackFit.expand,
                 children: [
-                   Positioned.fill(
+                  Positioned.fill(
                     child: Image.asset(
                       pageList[index]['image']!,
                       fit: BoxFit.cover,
@@ -108,17 +108,16 @@ class _OnBoardingPagesState extends State<OnBoardingPages> {
                       children: [
                         // Animated Title (Horizontal Slide)
                         TweenAnimationBuilder<double>(
-                          key: ValueKey('title_$index'), // Unique key for rebuild
+                          key: ValueKey(
+                            'title_$index',
+                          ), // Unique key for rebuild
                           tween: Tween<double>(begin: 0.0, end: 1.0),
                           duration: const Duration(milliseconds: 600),
                           curve: Curves.easeOutCubic,
                           builder: (context, value, child) {
                             return Transform.translate(
                               offset: Offset(-30 * (1 - value), 0),
-                              child: Opacity(
-                                opacity: value,
-                                child: child,
-                              ),
+                              child: Opacity(opacity: value, child: child),
                             );
                           },
                           child: Text(
@@ -142,10 +141,7 @@ class _OnBoardingPagesState extends State<OnBoardingPages> {
                           builder: (context, value, child) {
                             return Transform.translate(
                               offset: Offset(0, 20 * (1 - value)),
-                              child: Opacity(
-                                opacity: value,
-                                child: child,
-                              ),
+                              child: Opacity(opacity: value, child: child),
                             );
                           },
                           child: Text(
@@ -181,11 +177,13 @@ class _OnBoardingPagesState extends State<OnBoardingPages> {
                       duration: const Duration(milliseconds: 300),
                       margin: const EdgeInsets.only(right: 8),
                       height: 8,
-                      width: _currentIndex == index ? 24 : 8, // Expand active dot
+                      width:
+                          _currentIndex == index ? 24 : 8, // Expand active dot
                       decoration: BoxDecoration(
-                        color: _currentIndex == index
-                            ? MyTheme.app_accent_color
-                            : Colors.white38,
+                        color:
+                            _currentIndex == index
+                                ? MyTheme.app_accent_color
+                                : Colors.white38,
                         borderRadius: BorderRadius.circular(4),
                       ),
                     ),
@@ -244,7 +242,7 @@ class _OnBoardingPagesState extends State<OnBoardingPages> {
               ],
             ),
           ),
-          
+
           // 3. Skip Button (Top Right)
           Positioned(
             top: 50,
@@ -254,12 +252,15 @@ class _OnBoardingPagesState extends State<OnBoardingPages> {
               opacity: pageList.length - 1 == _currentIndex ? 0.0 : 1.0,
               child: GestureDetector(
                 onTap: () {
-                   if (_currentIndex != pageList.length - 1) {
-                     _finalizeOnboarding();
-                   }
+                  if (_currentIndex != pageList.length - 1) {
+                    _finalizeOnboarding();
+                  }
                 },
                 child: Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 16,
+                    vertical: 8,
+                  ),
                   decoration: BoxDecoration(
                     color: Colors.black12,
                     borderRadius: BorderRadius.circular(20),

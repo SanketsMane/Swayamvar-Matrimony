@@ -15,8 +15,12 @@ class LifeStyleState {
 
   LifeStyleState({this.isLoading, this.saveChanges, this.lifeStyleGetResponse});
 
-  update(
-      {lifeStyleUpdateResponse, isLoading, saveChanges, lifeStyleGetResponse}) {
+  update({
+    lifeStyleUpdateResponse,
+    isLoading,
+    saveChanges,
+    lifeStyleGetResponse,
+  }) {
     return LifeStyleState(
       lifeStyleGetResponse: lifeStyleGetResponse ?? this.lifeStyleGetResponse,
       isLoading: isLoading ?? this.isLoading,
@@ -25,7 +29,7 @@ class LifeStyleState {
   }
 
   LifeStyleState.initialState()
-      : lifeStyleGetResponse = LifeStyleGetResponse.initialState(),
-        isLoading = false,
-        saveChanges = false;
+    : lifeStyleGetResponse = LifeStyleGetResponse.initialState(),
+      isLoading = false,
+      saveChanges = false;
 }

@@ -1741,4 +1741,509 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get pub_profile_pref_divorce => 'Divorce Accepted';
+
+  @override
+  String get settings_title => 'Settings';
+
+  @override
+  String get settings_section_account => 'Account';
+
+  @override
+  String get settings_item_edit_profile => 'Edit Profile';
+
+  @override
+  String get settings_item_plans => 'Membership Plans';
+
+  @override
+  String get settings_item_verify => 'Verification Status';
+
+  @override
+  String get settings_section_preferences => 'Preferences & Personalization';
+
+  @override
+  String get settings_item_language => 'Language';
+
+  @override
+  String get settings_item_partner_pref => 'Partner Expectations';
+
+  @override
+  String get settings_item_notifications => 'Notifications';
+
+  @override
+  String get settings_item_app_theme => 'App Theme';
+
+  @override
+  String get settings_section_security => 'Security';
+
+  @override
+  String get settings_item_change_password => 'Change Password';
+
+  @override
+  String get settings_item_privacy_settings => 'Privacy Settings';
+
+  @override
+  String get settings_item_deactivate => 'Deactivate Account';
+
+  @override
+  String get settings_section_help => 'Help & Support';
+
+  @override
+  String get settings_item_help_center => 'Help Center';
+
+  @override
+  String get settings_item_faq => 'FAQ';
+
+  @override
+  String get settings_item_contact_us => 'Contact Us';
+
+  @override
+  String get settings_section_legal => 'Legal';
+
+  @override
+  String get settings_item_terms => 'Terms & Conditions';
+
+  @override
+  String get settings_item_privacy_policy => 'Privacy Policy';
+
+  @override
+  String get settings_item_refund_policy => 'Refund Policy';
+
+  @override
+  String get settings_logout => 'Logout';
+
+  @override
+  String get settings_language_dialog_title => 'Select Language';
+
+  @override
+  String get settings_deactivate_confirm =>
+      'Are you sure you want to deactivate your account?';
+
+  @override
+  String get settings_personalization_desc => 'Customize your app experience';
+
+  @override
+  String get profile_title => 'Profile';
+
+  @override
+  String get profile_completion => 'Profile Completion';
+
+  @override
+  String get profile_edit => 'Edit Profile';
+
+  @override
+  String get profile_membership_status => 'Membership Status';
+
+  @override
+  String get profile_interests => 'Interests';
+
+  @override
+  String get profile_contacts => 'Contacts';
+
+  @override
+  String get profile_gallery => 'Gallery';
+
+  @override
+  String get profile_upgrade => 'Upgrade Plan';
+
+  @override
+  String get profile_shortlist => 'Shortlist';
+
+  @override
+  String get profile_interests_sent => 'Interests Sent';
+
+  @override
+  String get profile_packages => 'Packages';
+
+  @override
+  String get profile_referral => 'Referral';
+
+  @override
+  String get common_yes => 'Yes';
+
+  @override
+  String get common_no => 'No';
+
+  @override
+  String get drawer_my_profile => 'My Profile';
+
+  @override
+  String get drawer_edit_profile => 'Edit Profile';
+
+  @override
+  String get drawer_sent_interests => 'Sent Interests';
+
+  @override
+  String get drawer_shortlist => 'Shortlist';
+
+  @override
+  String get drawer_verification => 'Verification';
+
+  @override
+  String get drawer_membership_plans => 'Membership Plans';
+
+  @override
+  String get drawer_settings => 'Settings';
+
+  @override
+  String get drawer_help_center => 'Help Center';
+
+  @override
+  String get drawer_logout => 'Logout';
+
+  @override
+  String get home_why_recommended => 'Why is this profile recommended?';
+
+  @override
+  String get home_same_religion => 'Same Religion';
+
+  @override
+  String get home_same_city => 'Same City';
+
+  @override
+  String get home_same_education => 'Same Education';
+
+  @override
+  String get home_matches_preferences =>
+      'This profile matches your partner preferences.';
+
+  @override
+  String get home_quick_actions => 'Quick Actions';
+
+  @override
+  String get home_action_search => 'Search';
+
+  @override
+  String get home_action_liked => 'Liked';
+
+  @override
+  String get home_action_viewed => 'Viewed';
+
+  @override
+  String get home_action_shortlist => 'Shortlist';
+
+  @override
+  String get home_new_partner => 'New Partner';
+
+  @override
+  String get home_received_likes => 'Received Likes';
+
+  @override
+  String get home_profiles_viewed => 'Profiles Viewed';
+
+  @override
+  String get home_selected => 'Selected';
+
+  @override
+  String get home_recommended_for_you => 'Recommended For You';
+
+  @override
+  String get home_see_all => 'See All';
+
+  @override
+  String get home_recent_activity => 'Recent Activity';
+
+  @override
+  String get home_people => 'People';
+
+  @override
+  String get home_viewed_your_profile => 'viewed your profile';
+
+  @override
+  String get home_new_like_received => 'new like received';
+
+  @override
+  String get home_new_profiles_available => 'new profiles available';
+
+  @override
+  String get home_upgrade_to_platinum => 'Upgrade to Platinum';
+
+  @override
+  String get home_prioritize_profile =>
+      'Prioritize your profile and get more matches.';
+
+  @override
+  String get home_complete_profile_now => 'Complete your profile';
+
+  @override
+  String get home_increase_matches_3x =>
+      'Get 3x more matches by adding your details.';
+
+  @override
+  String get home_add_education => 'Add Education Details';
+
+  @override
+  String get home_add_photos => 'Add Photos';
+
+  @override
+  String get home_add_partner_prefs => 'Add Partner Preferences';
+
+  @override
+  String get chat_no_conversations => 'No conversations yet';
+
+  @override
+  String get chat_start_connecting => 'Start connecting with matches.';
+
+  @override
+  String get chat_search_button => 'Search';
+
+  @override
+  String get home_premium_label => 'Premium';
+
+  @override
+  String get home_verified_profile => 'Verified Profile';
+
+  @override
+  String get home_action_no => 'No';
+
+  @override
+  String get home_action_view => 'View';
+
+  @override
+  String get home_matches_for_you => 'Matches For You';
+
+  @override
+  String get home_handpicked_interests => 'Handpicked based on your interests';
+
+  @override
+  String get home_filter_all => 'All';
+
+  @override
+  String get home_filter_new => 'New';
+
+  @override
+  String get home_filter_near_me => 'Near Me';
+
+  @override
+  String get home_filter_verified => 'Verified';
+
+  @override
+  String get home_filter_online => 'Online';
+
+  @override
+  String get gallery_delete_confirm_title =>
+      'Are You Sure That You Want To Delete This Image?';
+
+  @override
+  String get gallery_delete_confirm_nb =>
+      '**N.B. Deleting An Image Will Not Refund Your Remaining Gallery Capacity**';
+
+  @override
+  String get gallery_add_new_image => 'Add new image';
+
+  @override
+  String get gallery_choose_file => 'Choose file...';
+
+  @override
+  String get gallery_browse => 'Browse';
+
+  @override
+  String get gallery_verify_account_msg => 'Please verify your account';
+
+  @override
+  String get gallery_update_package_msg => 'Please Update Your Package.';
+
+  @override
+  String get common_close => 'Close';
+
+  @override
+  String get common_please_wait => 'Please Wait';
+
+  @override
+  String get gallery_image_view_title => 'Gallery Image View';
+
+  @override
+  String get gallery_remaining_view_prefix =>
+      'Remaining Gallery Picture View: ';
+
+  @override
+  String get gallery_remaining_view_suffix => ' times';
+
+  @override
+  String get gallery_request_note =>
+      'N.B. Requesting to See This Member Gallery Picture Will Cost 1 From Remaining Gallery Picture View.';
+
+  @override
+  String get gallery_send_request_btn => 'Send Gallery Photo View Request';
+
+  @override
+  String get referral_screen_rewards_msg =>
+      'Share this code with your friends and earn rewards!';
+
+  @override
+  String get referral_stat_wallet => 'Wallet Balance';
+
+  @override
+  String get referral_stat_invited => 'Invited Users';
+
+  @override
+  String get referral_stat_successful => 'Successful';
+
+  @override
+  String get referral_stat_pending => 'Pending';
+
+  @override
+  String get referral_btn_withdraw => 'Withdraw';
+
+  @override
+  String get referral_btn_share => 'Share Code';
+
+  @override
+  String get referral_header_invited => 'People You Invited';
+
+  @override
+  String get referral_msg_no_invited => 'No invited users yet';
+
+  @override
+  String referral_joined_on(Object date) {
+    return 'Joined on $date';
+  }
+
+  @override
+  String get referral_status_active => 'Active';
+
+  @override
+  String get referral_copied_msg => 'Copied to clipboard';
+
+  @override
+  String get verify_title => 'Profile Verification';
+
+  @override
+  String get verify_trust_header => 'Get Verified ✔';
+
+  @override
+  String get verify_trust_desc =>
+      'Verified profiles receive more matches and build higher trust with potential partners.';
+
+  @override
+  String get verify_benefit_visibility => 'Higher search visibility';
+
+  @override
+  String get verify_benefit_responses => 'More responses from serious members';
+
+  @override
+  String get verify_benefit_badge => 'Exclusive \"Trusted\" profile badge';
+
+  @override
+  String get verify_steps_header => 'Verification Steps';
+
+  @override
+  String get verify_step_id => 'Upload ID';
+
+  @override
+  String get verify_step_selfie => 'Selfie';
+
+  @override
+  String get verify_step_review => 'Review';
+
+  @override
+  String get verify_upload_desc =>
+      'Upload a clear document for faster approval.';
+
+  @override
+  String get verify_tap_to_upload => 'Tap to upload photo';
+
+  @override
+  String get verify_status_header => 'Verification Status';
+
+  @override
+  String get verify_status_pending => 'Pending Submission';
+
+  @override
+  String get verify_status_desc => 'Verification usually takes 24-48 hours.';
+
+  @override
+  String get verify_submit_btn => 'Submit Verification';
+
+  @override
+  String get verify_already_sent => 'Verification request already sent.';
+
+  @override
+  String get verify_submitting_msg => 'Submitting verification...';
+
+  @override
+  String get verify_enter_details => 'Enter details';
+
+  @override
+  String get verify_select_option => 'Select option';
+
+  @override
+  String get verify_uploaded => 'Uploaded';
+
+  @override
+  String get verify_step_1_title => 'Proof of Identity';
+
+  @override
+  String get verify_select_id_type => 'Select ID Type';
+
+  @override
+  String get verify_enter_id_number => 'Enter ID Number';
+
+  @override
+  String get verify_id_hint => 'Ex: 1234 5678 9012';
+
+  @override
+  String get verify_upload_id => 'Upload ID Documents';
+
+  @override
+  String get verify_front_side => 'Front Side';
+
+  @override
+  String get verify_back_side => 'Back Side';
+
+  @override
+  String get verify_step_2_title => 'Live Selfie';
+
+  @override
+  String get verify_selfie_desc =>
+      'Take a clear selfie to verify your identity';
+
+  @override
+  String get verify_selfie_instruction =>
+      'Ensure your face is well-lit and clearly visible';
+
+  @override
+  String get verify_step_3_title => 'Review Details';
+
+  @override
+  String get verify_review_desc =>
+      'By submitting, you agree that the provided information is accurate and belongs to you.';
+
+  @override
+  String get verify_submit_for_review => 'Submit for Verification';
+
+  @override
+  String get verify_next => 'Next';
+
+  @override
+  String get verify_back => 'Back';
+
+  @override
+  String get verify_upload => 'Upload';
+
+  @override
+  String get verify_id_type_label => 'ID Type';
+
+  @override
+  String get verify_id_number_label => 'ID Number';
+
+  @override
+  String get verify_documents_label => 'Documents';
+
+  @override
+  String get verify_attached => 'Attached';
+
+  @override
+  String get verify_missing => 'Missing';
+
+  @override
+  String get verify_error_id_number => 'Please enter your ID number';
+
+  @override
+  String get verify_error_id_front => 'Please upload ID front side';
+
+  @override
+  String get verify_error_selfie => 'Please upload a selfie';
+
+  @override
+  String get verify_error_failed => 'Submission failed';
 }

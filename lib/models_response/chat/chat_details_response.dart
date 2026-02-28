@@ -4,28 +4,26 @@
 
 import 'dart:convert';
 
-ChatDetailsResponse chatDetailsResponseFromJson(String str) => ChatDetailsResponse.fromJson(json.decode(str));
+ChatDetailsResponse chatDetailsResponseFromJson(String str) =>
+    ChatDetailsResponse.fromJson(json.decode(str));
 
-String chatDetailsResponseToJson(ChatDetailsResponse data) => json.encode(data.toJson());
+String chatDetailsResponseToJson(ChatDetailsResponse data) =>
+    json.encode(data.toJson());
 
 class ChatDetailsResponse {
   ChatDetailsData? data;
   bool? result;
 
-  ChatDetailsResponse({
-    this.data,
-    this.result,
-  });
+  ChatDetailsResponse({this.data, this.result});
 
-  factory ChatDetailsResponse.fromJson(Map<String, dynamic> json) => ChatDetailsResponse(
+  factory ChatDetailsResponse.fromJson(
+    Map<String, dynamic> json,
+  ) => ChatDetailsResponse(
     data: json["data"] == null ? null : ChatDetailsData.fromJson(json["data"]),
     result: json["result"],
   );
 
-  Map<String, dynamic> toJson() => {
-    "data": data?.toJson(),
-    "result": result,
-  };
+  Map<String, dynamic> toJson() => {"data": data?.toJson(), "result": result};
 }
 
 class ChatDetailsData {
@@ -43,20 +41,29 @@ class ChatDetailsData {
     this.messages,
   });
 
-  factory ChatDetailsData.fromJson(Map<String, dynamic> json) => ChatDetailsData(
-    receiverName: json["receiver_name"],
-    receiverPhoto: json["receiver_photo"],
-    senderName: json["sender_name"],
-    authUserPhoto: json["auth_user_photo"],
-    messages: json["messages"] == null ? [] : List<Message>.from(json["messages"]!.map((x) => Message.fromJson(x))),
-  );
+  factory ChatDetailsData.fromJson(Map<String, dynamic> json) =>
+      ChatDetailsData(
+        receiverName: json["receiver_name"],
+        receiverPhoto: json["receiver_photo"],
+        senderName: json["sender_name"],
+        authUserPhoto: json["auth_user_photo"],
+        messages:
+            json["messages"] == null
+                ? []
+                : List<Message>.from(
+                  json["messages"]!.map((x) => Message.fromJson(x)),
+                ),
+      );
 
   Map<String, dynamic> toJson() => {
     "receiver_name": receiverName,
     "receiver_photo": receiverPhoto,
     "sender_name": senderName,
     "auth_user_photo": authUserPhoto,
-    "messages": messages == null ? [] : List<dynamic>.from(messages!.map((x) => x.toJson())),
+    "messages":
+        messages == null
+            ? []
+            : List<dynamic>.from(messages!.map((x) => x.toJson())),
   };
 }
 
@@ -84,7 +91,12 @@ class Message {
     chatThreadId: json["chat_thread_id"],
     senderUserId: json["sender_user_id"],
     message: json["message"],
-    attachment: json["attachment"] == null ? [] : List<Attachment>.from(json["attachment"]!.map((x) => Attachment.fromJson(x))),
+    attachment:
+        json["attachment"] == null
+            ? []
+            : List<Attachment>.from(
+              json["attachment"]!.map((x) => Attachment.fromJson(x)),
+            ),
     seen: json["seen"],
     attachmentType: json["attachment_type"],
   );
@@ -98,7 +110,6 @@ class Message {
     "seen": seen,
   };
 }
-
 
 class Attachment {
   String? attachment;

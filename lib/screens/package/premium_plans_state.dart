@@ -3,16 +3,12 @@ class PremiumPlansState {
   String? error;
   bool? isFetching;
 
-  PremiumPlansState({
-    this.isFetching,
-    this.premiumList,
-    this.error,
-  });
+  PremiumPlansState({this.isFetching, this.premiumList, this.error});
 
   PremiumPlansState.initialState()
-      : premiumList = [],
-        isFetching = true,
-        error = '';
+    : premiumList = [],
+      isFetching = true,
+      error = '';
 
   @override
   String toString() {
