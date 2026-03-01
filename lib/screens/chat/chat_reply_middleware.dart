@@ -5,7 +5,6 @@ import 'package:active_matrimonial_flutter_app/screens/chat/chat_middleware.dart
 import 'package:flutter/material.dart';
 import 'package:redux/redux.dart';
 import 'package:redux_thunk/redux_thunk.dart';
-import 'package:active_matrimonial_flutter_app/redux/store.dart';
 
 ThunkAction<AppState> chatReplyMiddleware({
   int? id,

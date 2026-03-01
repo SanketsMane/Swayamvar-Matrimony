@@ -5,7 +5,6 @@ import 'package:flutter/cupertino.dart';
 import '../../../redux/store.dart';
 import 'forgetpassword_action.dart';
 import 'forgetpassword_middleware.dart';
-import 'package:active_matrimonial_flutter_app/redux/store.dart';
 
 ForgetPasswordState? forgetpassword_reducer(
   ForgetPasswordState? state,
@@ -48,7 +47,7 @@ ForgetPasswordState? forgetpassword_reducer(
   return state;
 }
 
-loader(ForgetPasswordState state, FpLoader action) {
+ForgetPasswordState loader(ForgetPasswordState state, FpLoader action) {
   state.fp_loader = !state.fp_loader!;
   return state;
 }

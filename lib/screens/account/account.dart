@@ -5,8 +5,6 @@ import 'package:active_matrimonial_flutter_app/const/style.dart';
 import 'package:active_matrimonial_flutter_app/helpers/navigator_push.dart';
 import 'package:active_matrimonial_flutter_app/redux/libs/auth/signout_middleware.dart';
 import 'package:active_matrimonial_flutter_app/screens/account/account_middleware.dart';
-import 'package:active_matrimonial_flutter_app/screens/auth/change_password/change_password.dart';
-import 'package:active_matrimonial_flutter_app/screens/contact_us/contact_us.dart';
 import 'package:active_matrimonial_flutter_app/screens/core.dart';
 import 'package:active_matrimonial_flutter_app/screens/manage_profiles/manage_profile.dart';
 import 'package:active_matrimonial_flutter_app/screens/my_dashboard_pages/gallery/my_gallery.dart';
@@ -245,7 +243,7 @@ class _AccountState extends State<Account> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
-                    l.profile_completion ?? "Profile Completion",
+                    l.profile_completion,
                     style: Styles.bold_arsenic_12.copyWith(
                       color: MyTheme.text_primary,
                     ),
@@ -294,7 +292,7 @@ class _AccountState extends State<Account> {
                 padding: const EdgeInsets.symmetric(vertical: 12),
               ),
               child: Text(
-                l.profile_edit ?? "Edit Profile",
+                l.profile_edit,
                 style: const TextStyle(
                   color: MyTheme.primary,
                   fontWeight: FontWeight.bold,
@@ -329,7 +327,7 @@ class _AccountState extends State<Account> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            l.profile_membership_status ?? "Membership Status",
+            l.profile_membership_status,
             style: Styles.regular_gull_grey_12,
           ),
           const SizedBox(height: 4),
@@ -345,17 +343,17 @@ class _AccountState extends State<Account> {
               _creditItem(
                 Icons.favorite_outline,
                 "12",
-                l.profile_interests ?? "Interests",
+                l.profile_interests,
               ),
               _creditItem(
                 Icons.visibility_outlined,
                 "5",
-                l.profile_contacts ?? "Contacts",
+                l.profile_contacts,
               ),
               _creditItem(
                 Icons.photo_library_outlined,
                 "3",
-                l.profile_gallery ?? "Gallery",
+                l.profile_gallery,
               ),
             ],
           ),
@@ -375,7 +373,7 @@ class _AccountState extends State<Account> {
                 padding: const EdgeInsets.symmetric(vertical: 14),
               ),
               child: Text(
-                l.profile_upgrade ?? "Upgrade Plan",
+                l.profile_upgrade,
                 style: const TextStyle(fontWeight: FontWeight.bold),
               ),
             ),
@@ -400,32 +398,32 @@ class _AccountState extends State<Account> {
     final l = AppLocalizations.of(context)!;
     final List<Map<String, dynamic>> items = [
       {
-        'title': l.profile_shortlist ?? 'Shortlist',
+        'title': l.profile_shortlist,
         'icon': Icons.star_outline,
         'onTap': () => NavigatorPush.push(context, MyShortlist()),
       },
       {
-        'title': l.profile_interests_sent ?? 'Interests Sent',
+        'title': l.profile_interests_sent,
         'icon': Icons.favorite_outline,
         'onTap': () => NavigatorPush.push(context, MyInterest()),
       },
       {
-        'title': l.profile_gallery ?? 'Gallery',
+        'title': l.profile_gallery,
         'icon': Icons.photo_library_outlined,
         'onTap': () => NavigatorPush.push(context, const MyGallery()),
       },
       {
-        'title': l.profile_packages ?? 'Packages',
+        'title': l.profile_packages,
         'icon': Icons.card_membership_rounded,
         'onTap': () => NavigatorPush.push(context, PremiumPlans()),
       },
       {
-        'title': l.settings_item_language ?? 'Preferences',
+        'title': l.settings_item_language,
         'icon': Icons.settings_accessibility_rounded,
         'onTap': () => NavigatorPush.push(context, const SettingsScreen()),
       },
       {
-        'title': l.profile_referral ?? 'Referral',
+        'title': l.profile_referral,
         'icon': Icons.share_outlined,
         'onTap': () => NavigatorPush.push(context, Referral()),
       },

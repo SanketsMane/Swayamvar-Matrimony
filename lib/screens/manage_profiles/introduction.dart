@@ -1,5 +1,4 @@
 import 'package:active_matrimonial_flutter_app/components/common_app_bar_manageprofile.dart';
-import 'package:active_matrimonial_flutter_app/const/const.dart';
 import 'package:active_matrimonial_flutter_app/const/my_theme.dart';
 import 'package:active_matrimonial_flutter_app/const/style.dart';
 import 'package:active_matrimonial_flutter_app/helpers/device_info.dart';
@@ -7,6 +6,7 @@ import 'package:active_matrimonial_flutter_app/screens/core.dart';
 import 'package:flutter/material.dart';
 import 'package:active_matrimonial_flutter_app/l10n/app_localizations.dart';
 
+import 'package:active_matrimonial_flutter_app/services/ai_bio_service.dart';
 import '../../components/common_widget.dart';
 
 class Introduction extends StatefulWidget {
@@ -50,9 +50,38 @@ class _IntroductionState extends State<Introduction> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
-          AppLocalizations.of(context)!.public_profile_your_introduction,
-          style: Styles.bold_app_accent_12,
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text(
+              AppLocalizations.of(context)!.public_profile_your_introduction,
+              style: Styles.bold_app_accent_12,
+            ),
+            InkWell(
+              onTap: () {
+                final generatedBio = AiBioService.generateBio(state);
+                state.manageProfileCombineState!.introductionState!.textController!.text = generatedBio;
+                // Optional: Show a subtle toast or snackbar
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(
+                    content: Text('AI Bio व्युत्पन्न केले!'), // Marathi: AI Bio generated!
+                    duration: Duration(seconds: 2),
+                    backgroundColor: MyTheme.primary,
+                  ),
+                );
+              },
+              child: Row(
+                children: [
+                  const Icon(Icons.auto_awesome, size: 16, color: MyTheme.primary),
+                  const SizedBox(width: 4),
+                  Text(
+                    "AI सह व्युत्पन्न करा", // Marathi: Generate with AI
+                    style: Styles.bold_app_accent_12.copyWith(color: MyTheme.primary),
+                  ),
+                ],
+              ),
+            ),
+          ],
         ),
         Const.height25,
         Container(
@@ -68,10 +97,11 @@ class _IntroductionState extends State<Introduction> {
                     .manageProfileCombineState!
                     .introductionState!
                     .textController,
-            decoration: const InputDecoration.collapsed(hintText: "Text..."),
+            decoration: const InputDecoration.collapsed(hintText: "आपली ओळख येथे टाइप करा..."),
+            maxLines: null,
             validator: (value) {
               if (value == null || value.isEmpty) {
-                return 'Please enter Introduction';
+                return 'कृपया आपली ओळख प्रविष्ट करा';
               }
               return null;
             },

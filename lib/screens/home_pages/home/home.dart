@@ -2,9 +2,6 @@ import 'package:active_matrimonial_flutter_app/l10n/app_localizations.dart';
 import 'package:active_matrimonial_flutter_app/helpers/profile_completeness_helper.dart';
 
 import 'dart:io';
-import 'dart:ui';
-import 'package:active_matrimonial_flutter_app/app_config.dart';
-import 'package:active_matrimonial_flutter_app/const/const.dart';
 import 'package:active_matrimonial_flutter_app/const/my_theme.dart';
 import 'package:active_matrimonial_flutter_app/const/style.dart';
 import 'package:active_matrimonial_flutter_app/helpers/device_info.dart';
@@ -14,20 +11,16 @@ import 'package:active_matrimonial_flutter_app/redux/libs/profile_picture_view_r
 import 'package:active_matrimonial_flutter_app/screens/my_dashboard_pages/interest_request/interest_request_middleware.dart';
 import 'package:active_matrimonial_flutter_app/screens/my_dashboard_pages/interest_request/interest_requests.dart';
 import 'package:active_matrimonial_flutter_app/screens/profile_and_gallery_picure_rqst/profile_picture_view_rqst.dart';
-import 'package:active_matrimonial_flutter_app/redux/app/app_state.dart';
 import 'package:active_matrimonial_flutter_app/redux/libs/auth/auth_middleware.dart';
 import 'package:active_matrimonial_flutter_app/redux/libs/manage_profile/manage_profiles_state/manage_profile_combine_state.dart';
 import 'package:active_matrimonial_flutter_app/screens/home_pages/home/activity_pages/new_matches.dart';
 import 'package:active_matrimonial_flutter_app/screens/user_pages/user_public_profile.dart';
 import 'package:active_matrimonial_flutter_app/screens/core.dart';
 import 'package:active_matrimonial_flutter_app/models_response/account_response.dart';
-import 'package:active_matrimonial_flutter_app/components/container_with_icon.dart';
 import 'package:active_matrimonial_flutter_app/components/my_images.dart';
-import 'package:active_matrimonial_flutter_app/components/common_widget.dart';
 import 'package:active_matrimonial_flutter_app/helpers/main_helpers.dart';
 import 'package:active_matrimonial_flutter_app/screens/auth/verify/verify_action.dart';
 import 'package:active_matrimonial_flutter_app/screens/manage_profiles/manage_profile.dart';
-import 'package:active_matrimonial_flutter_app/screens/settings/settings.dart';
 import 'package:active_matrimonial_flutter_app/screens/account/account_middleware.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -35,10 +28,6 @@ import 'package:active_matrimonial_flutter_app/components/main_drawer.dart';
 import 'package:active_matrimonial_flutter_app/components/deactivate_Massage.dart';
 import 'package:active_matrimonial_flutter_app/helpers/aiz_route.dart';
 import 'package:active_matrimonial_flutter_app/redux/libs/report/report_middleware.dart';
-import 'package:active_matrimonial_flutter_app/redux/libs/auth/signout_middleware.dart';
-import 'package:active_matrimonial_flutter_app/helpers/shared_pref.dart';
-import 'package:one_context/one_context.dart';
-import 'package:active_matrimonial_flutter_app/redux/libs/profile_picture_view_request/profile_picture_view_get_middleware.dart';
 import 'package:active_matrimonial_flutter_app/screens/my_dashboard_pages/shortlist/my_shortlist.dart';
 import 'package:active_matrimonial_flutter_app/screens/my_dashboard_pages/interest/express_interest_middleware.dart';
 import 'package:active_matrimonial_flutter_app/screens/my_dashboard_pages/shortlist/add_shortlist_middleware.dart';
@@ -54,9 +43,9 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
-  bool _showFilters = false;
+  final bool _showFilters = false;
 
-  onRefresh() {
+  void onRefresh() {
     store.dispatch(accountMiddleware());
     store.dispatch(homeMiddleware());
   }
@@ -1450,7 +1439,7 @@ class HomeViewModel {
     this.profileData,
   });
 
-  static fromStore(Store<AppState> store) {
+  static HomeViewModel fromStore(Store<AppState> store) {
     bool isLoading = store.state.accountState?.profileData == null;
 
     return HomeViewModel(

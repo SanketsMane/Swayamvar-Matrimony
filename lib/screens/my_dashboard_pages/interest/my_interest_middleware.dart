@@ -3,7 +3,6 @@ import 'package:active_matrimonial_flutter_app/repository/interest_repository.da
 import 'package:active_matrimonial_flutter_app/screens/my_dashboard_pages/interest/my_interest_action.dart';
 import 'package:redux/redux.dart';
 import 'package:redux_thunk/redux_thunk.dart';
-import 'package:active_matrimonial_flutter_app/redux/store.dart';
 
 ThunkAction<AppState> myInterestMiddleware() {
   return (Store<AppState> store) async {

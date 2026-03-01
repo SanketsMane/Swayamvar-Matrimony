@@ -3,7 +3,6 @@ import 'package:active_matrimonial_flutter_app/redux/libs/app_info/app_info_acti
 import 'package:active_matrimonial_flutter_app/repository/app_info_repository.dart';
 import 'package:redux/redux.dart';
 import 'package:redux_thunk/redux_thunk.dart';
-import 'package:active_matrimonial_flutter_app/redux/store.dart';
 
 ThunkAction<AppState> appInfoMiddleware() {
   return (Store<AppState> store) async {

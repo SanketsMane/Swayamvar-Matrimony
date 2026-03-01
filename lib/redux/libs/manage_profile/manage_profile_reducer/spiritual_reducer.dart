@@ -1,9 +1,7 @@
 import 'package:active_matrimonial_flutter_app/models_response/drop_down/caste.dart';
 import 'package:active_matrimonial_flutter_app/models_response/drop_down/subcaste.dart';
 import 'package:active_matrimonial_flutter_app/models_response/manage_profile/get_manage_profile/spiritual_social_get_response.dart';
-import 'package:active_matrimonial_flutter_app/redux/libs/drop_down/sub_caste_middleware.dart';
 import 'package:active_matrimonial_flutter_app/redux/libs/manage_profile/manage_profiles_state/spiritual_social_state.dart';
-import 'package:active_matrimonial_flutter_app/screens/core.dart';
 
 class SLoader {}
 
@@ -65,7 +63,7 @@ SpiritualSocialState? spiritual_reducer(
 /// profile drop down response
 
 /// spiritual social get response
-spiritual_social_get_response(
+SpiritualSocialState spiritual_social_get_response(
   SpiritualSocialState state,
   SpiritualSocialGetResponse action,
 ) {
@@ -75,18 +73,18 @@ spiritual_social_get_response(
 }
 
 ///set values;
-add_religion_value(SpiritualSocialState state, AddReligionValueAction action) {
+SpiritualSocialState add_religion_value(SpiritualSocialState state, AddReligionValueAction action) {
   state.religion_val = action.value;
   return state;
 }
 
-add_family_value(SpiritualSocialState state, AddFamilyValueAction action) {
+SpiritualSocialState add_family_value(SpiritualSocialState state, AddFamilyValueAction action) {
   state.family_val = action.value;
   return state;
 }
 
 ///caste
-caste_response(SpiritualSocialState state, CasteResponse action) {
+SpiritualSocialState caste_response(SpiritualSocialState state, CasteResponse action) {
   state.casteResponse!.data!.addAll(action.data!);
 
   if (state.casteResponse!.data!.isNotEmpty) {
@@ -104,14 +102,14 @@ caste_response(SpiritualSocialState state, CasteResponse action) {
   return state;
 }
 
-add_caste_value(SpiritualSocialState state, AddCasteValueAction action) {
+SpiritualSocialState add_caste_value(SpiritualSocialState state, AddCasteValueAction action) {
   // state.set_caste_val(action.value);
   state.caste_val = action.value;
   return state;
 }
 
 /// subcaste
-sub_caste_response(SpiritualSocialState state, SubcasteResponse action) {
+SpiritualSocialState sub_caste_response(SpiritualSocialState state, SubcasteResponse action) {
   state.subcasteResponse!.data!.addAll(action.data!);
 
   if (state.subcasteResponse!.data!.isNotEmpty) {
@@ -129,18 +127,18 @@ sub_caste_response(SpiritualSocialState state, SubcasteResponse action) {
   return state;
 }
 
-add_sub_caste_value(SpiritualSocialState state, AddSubCasteValueAction action) {
+SpiritualSocialState add_sub_caste_value(SpiritualSocialState state, AddSubCasteValueAction action) {
   state.sub_caste_val = action.value;
   return state;
 }
 
-caste_list_clear(SpiritualSocialState state, EmptyCasteAction action) {
+SpiritualSocialState caste_list_clear(SpiritualSocialState state, EmptyCasteAction action) {
   state.casteResponse!.data!.clear();
   state.caste_val = null;
   return state;
 }
 
-subcaste_list_clear(SpiritualSocialState state, EmptySubCasteAction action) {
+SpiritualSocialState subcaste_list_clear(SpiritualSocialState state, EmptySubCasteAction action) {
   state.subcasteResponse!.data!.clear();
   state.sub_caste_val = null;
   return state;

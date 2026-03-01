@@ -12,7 +12,7 @@ class LanguageState {
     return list.map((e) => {"name": e.name, "id": e.id}).toList();
   }
 
-  update({
+  LanguageState update({
     bool? isloading,
     bool? saveChangesLoader,
     final LanguageGetResponse? languageGetResponse,

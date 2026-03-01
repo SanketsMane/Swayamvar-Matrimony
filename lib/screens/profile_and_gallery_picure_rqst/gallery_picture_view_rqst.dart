@@ -177,7 +177,7 @@ class _ViewModel {
     this.showLoading,
   });
 
-  static fromStore(Store<AppState> store) {
+  static _ViewModel fromStore(Store<AppState> store) {
     return _ViewModel(
       listofdata: store.state.galleryPictureViewState!.galleryPictureViewList,
       status: store.state.galleryPictureViewState!.galleryStatus,

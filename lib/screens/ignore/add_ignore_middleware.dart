@@ -5,7 +5,6 @@ import 'package:active_matrimonial_flutter_app/repository/ignore_repository.dart
 import 'package:active_matrimonial_flutter_app/screens/ignore/ignore_action.dart';
 import 'package:redux/redux.dart';
 import 'package:redux_thunk/redux_thunk.dart';
-import 'package:active_matrimonial_flutter_app/redux/store.dart';
 
 ThunkAction<AppState> addIgnoreMiddleware({from = '', required int userId}) {
   return (Store<AppState> store) async {

@@ -60,6 +60,11 @@ Route::get('/verification-confirmation/{code}', 'Auth\VerificationController@ver
 Route::get('/email_change/callback', 'HomeController@email_change_callback')->name('email_change.callback');
 Route::post('/password/reset/email/submit', 'HomeController@reset_password_with_code')->name('password.update');
 
+// Agent Login [Sanket]
+Route::get('/agent', [App\Http\Controllers\Agent\Auth\LoginController::class, 'showLoginForm'])->name('agent.login');
+Route::post('/agent', [App\Http\Controllers\Agent\Auth\LoginController::class, 'login']);
+Route::get('/agent/logout', [App\Http\Controllers\Agent\Auth\LoginController::class, 'logout'])->name('agent.logout');
+
 
 Route::get('/users/login', 'HomeController@login')->name('user.login');
 

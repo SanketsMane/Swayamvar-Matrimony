@@ -14,7 +14,7 @@ class BasicInfoState {
   TextEditingController? phoneController = TextEditingController();
 
   final _formKey = GlobalKey<FormState>();
-  get formKey => _formKey;
+  GlobalKey<FormState> get formKey => _formKey;
 
   //for image uploading
   ImagePicker picker = ImagePicker();

@@ -65,7 +65,7 @@ class GroupItem extends StatelessWidget {
     );
   }
 
-  itemSpacer({height = 10.0}) {
+  SizedBox itemSpacer({height = 10.0}) {
     return SizedBox(height: height);
   }
 }

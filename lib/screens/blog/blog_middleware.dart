@@ -5,7 +5,6 @@ import 'package:redux/redux.dart';
 import 'package:redux_thunk/redux_thunk.dart';
 
 import 'blog_action.dart';
-import 'package:active_matrimonial_flutter_app/redux/store.dart';
 
 ThunkAction<AppState> blogMiddleware() {
   return (Store<AppState> store) async {

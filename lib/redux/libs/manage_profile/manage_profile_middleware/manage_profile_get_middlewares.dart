@@ -28,7 +28,6 @@ import '../manage_profile_reducer/hobbies_interest_reducer.dart';
 import '../manage_profile_reducer/introduction_reducer.dart';
 import '../manage_profile_reducer/partner_expectation_reducer.dart';
 import '../manage_profile_reducer/present_address_reducer.dart';
-import 'package:active_matrimonial_flutter_app/redux/store.dart';
 
 ThunkAction<AppState> astronomicGetMiddleware() {
   return (Store<AppState> store) async {

@@ -200,7 +200,7 @@ class SettingsScreen extends StatelessWidget {
             actions: [
               TextButton(
                 onPressed: () => Navigator.pop(context),
-                child: Text(l.common_no ?? "No"),
+                child: Text(l.common_no),
               ),
               TextButton(
                 onPressed: () {
@@ -208,7 +208,7 @@ class SettingsScreen extends StatelessWidget {
                   Navigator.pop(context);
                 },
                 child: Text(
-                  l.common_yes ?? "Yes",
+                  l.common_yes,
                   style: const TextStyle(color: MyTheme.primary),
                 ),
               ),

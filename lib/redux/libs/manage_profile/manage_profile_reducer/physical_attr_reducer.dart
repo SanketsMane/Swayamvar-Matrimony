@@ -3,9 +3,6 @@ import 'package:active_matrimonial_flutter_app/models_response/manage_profile/ge
 import 'package:active_matrimonial_flutter_app/redux/libs/manage_profile/manage_profiles_state/physical_attr_state.dart';
 import 'package:flutter/material.dart';
 
-import '../../../../redux/store.dart';
-import '../manage_profile_middleware/manage_profile_update_middlewares.dart';
-import 'package:active_matrimonial_flutter_app/redux/store.dart';
 
 class PhysicalAttrLoader {}
 
@@ -33,7 +30,7 @@ PhysicalAttrState? physical_attr_reducer(
   return state;
 }
 
-setPhysicalAttr(PhysicalAttrState? state) {
+void setPhysicalAttr(PhysicalAttrState? state) {
   state!.heightController!.text = state.physicalAttrData!.height!.toString();
   state.weightController!.text = state.physicalAttrData!.weight!.toString();
   state.eyeColorController!.text = state.physicalAttrData!.eyeColor!.toString();

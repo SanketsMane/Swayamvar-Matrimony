@@ -26,7 +26,7 @@ ChangePasswordState? change_password_reducer(
   return state;
 }
 
-loader(ChangePasswordState state, CpLoader action) {
+ChangePasswordState loader(ChangePasswordState state, CpLoader action) {
   state.cp_loader = !state.cp_loader;
   return state;
 }

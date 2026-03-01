@@ -38,7 +38,7 @@ PublicProfileState? public_profile_reducer(
   return state;
 }
 
-store(PublicProfileState state, PublicProfileStoreAction action) {
+PublicProfileState store(PublicProfileState state, PublicProfileStoreAction action) {
   state.isFetching = false;
   state.introduction =
       action.data.introduction; // Fixed typo and renamed state field

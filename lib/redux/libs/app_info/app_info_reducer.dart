@@ -20,7 +20,7 @@ AppInfoState? app_info_reducer(AppInfoState? state, dynamic action) {
   return state;
 }
 
-appinfostore(AppInfoState state, AppInfoStoreAction action) {
+AppInfoState appinfostore(AppInfoState state, AppInfoStoreAction action) {
   state.isFetching = false;
   state.website_name = action.data.data.websiteName;
   state.logo = action.data.data.systemLogo;

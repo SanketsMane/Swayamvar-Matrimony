@@ -160,10 +160,11 @@ class _PhoneLoginState extends State<PhoneLogin> {
                           ),
                         );
                         Future.delayed(const Duration(seconds: 2), () {
-                          if (mounted)
+                          if (mounted) {
                             setState(() {
                               _isLoading = false;
                             });
+                          }
                         });
                       }
                       : null,

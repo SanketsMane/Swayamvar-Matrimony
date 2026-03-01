@@ -191,7 +191,7 @@ class _VerifyPageState extends State<VerifyPage> {
                 ),
                 const SizedBox(height: 10),
                 DropdownButtonFormField<String>(
-                  value: v.idType,
+                  initialValue: v.idType,
                   decoration: _inputDecoration(),
                   items:
                       ["Aadhaar", "PAN Card", "Passport", "Voter ID"]

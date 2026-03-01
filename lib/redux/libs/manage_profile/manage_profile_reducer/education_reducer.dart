@@ -1,9 +1,6 @@
-import 'package:active_matrimonial_flutter_app/redux/store.dart';
 import 'package:active_matrimonial_flutter_app/redux/libs/manage_profile/manage_profiles_state/education_state.dart';
-import 'package:active_matrimonial_flutter_app/repository/education_repository.dart';
 import 'package:flutter/material.dart';
 
-import '../manage_profile_middleware/manage_profile_get_middlewares.dart';
 
 class IsLoading {}
 
@@ -53,18 +50,18 @@ EducationState education_reducer(EducationState? state, dynamic action) {
   return state;
 }
 
-status_toggler(EducationState? state, dynamic action) {
+EducationState? status_toggler(EducationState? state, dynamic action) {
   // Sanket: Side effect removed from reducer.
   // Repository call moved to middleware/UI.
   return state;
 }
 
-delete(EducationState state, dynamic action) {
+EducationState delete(EducationState state, dynamic action) {
   state.isDelete = !state.isDelete!;
   return state;
 }
 
-delete_education_item(EducationState state, EduDelete action) {
+EducationState delete_education_item(EducationState state, EduDelete action) {
   state.list.remove(action.item);
   // Ensure controllers are cleared after deletion
   state.degreeController?.clear();
@@ -77,7 +74,7 @@ delete_education_item(EducationState state, EduDelete action) {
   return state;
 }
 
-reset_list(EducationState state, dynamic action) {
+EducationState reset_list(EducationState state, dynamic action) {
   state.list.clear();
   state.degreeController?.clear();
   state.institutionController?.clear();
@@ -92,17 +89,17 @@ reset_list(EducationState state, dynamic action) {
   return state;
 }
 
-update_changes(EducationState state, dynamic action) {
+EducationState update_changes(EducationState state, dynamic action) {
   state.update_changes = !state.update_changes!;
   return state;
 }
 
-edu_save_changes(EducationState state, Edusavechanges action) {
+EducationState edu_save_changes(EducationState state, Edusavechanges action) {
   state.saveChanges = !state.saveChanges!; // Toggle saveChanges flag
   return state;
 }
 
-loader(EducationState state, IsLoading action) {
+EducationState loader(EducationState state, IsLoading action) {
   state.isLoading = true;
   return state;
 }

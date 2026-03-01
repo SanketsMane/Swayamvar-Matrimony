@@ -9,7 +9,7 @@ VerifyState? verify_reducer(VerifyState? state, dynamic action) {
 
 class VLoader {}
 
-loader(VerifyState state, VLoader action) {
+VerifyState loader(VerifyState state, VLoader action) {
   state.vloader = !state.vloader!;
   return state;
 }

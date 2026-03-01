@@ -8,7 +8,6 @@ import 'package:redux_thunk/redux_thunk.dart';
 
 import '../../../repository/public_profile_and_gallery_view_request_repository.dart';
 import 'profile_picture_view_get_middleware.dart';
-import 'package:active_matrimonial_flutter_app/redux/store.dart';
 
 ThunkAction<AppState> profilePictureViewRequestAcceptMiddleware({id}) {
   return (Store<AppState> store) async {

@@ -169,7 +169,7 @@ class _ViewModel {
 
   _ViewModel({required this.newMatches});
 
-  static fromStore(Store<AppState> store) {
+  static _ViewModel fromStore(Store<AppState> store) {
     return _ViewModel(newMatches: store.state.homeState?.newMatches ?? []);
   }
 }

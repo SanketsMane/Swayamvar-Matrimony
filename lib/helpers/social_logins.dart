@@ -76,10 +76,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
 import '../redux/store.dart';
-import 'package:active_matrimonial_flutter_app/redux/store.dart';
 
 class SocialLogins {
-  onPressedGoogleLogin(BuildContext context) async {
+  Future<void> onPressedGoogleLogin(BuildContext context) async {
     // 1. Create an instance of GoogleSignIn
     final GoogleSignIn googleSignIn = GoogleSignIn();
 
@@ -122,7 +121,7 @@ class SocialLogins {
   }
 
   // Your onPressedFacebookLogin method remains the same
-  onPressedFacebookLogin(BuildContext context) async {
+  Future<void> onPressedFacebookLogin(BuildContext context) async {
     // ... your existing code
   }
 }

@@ -304,7 +304,7 @@ class _MyGalleryState extends State<MyGallery> {
     }
   }
 
-  browseImageDialog() async {
+  Future<Future<dynamic>> browseImageDialog() async {
     print('browse image dialog');
     return OneContext().showDialog(
       builder:

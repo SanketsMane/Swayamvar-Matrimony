@@ -3,7 +3,6 @@ import '../../repository/support_ticket_repository.dart';
 import '../core.dart';
 import 'support_ticket_middleware.dart';
 import 'support_ticket_reducer.dart';
-import 'package:active_matrimonial_flutter_app/redux/store.dart';
 
 ThunkAction<AppState> supportTicketCreateMiddleware({
   dynamic subject,

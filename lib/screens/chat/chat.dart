@@ -1,5 +1,7 @@
 // Sanket: Chat room screen — premium 2026 layout
 import 'dart:async';
+import 'dart:io';
+import 'package:image_picker/image_picker.dart';
 
 import 'package:active_matrimonial_flutter_app/components/my_images.dart';
 import 'package:active_matrimonial_flutter_app/const/my_theme.dart';
@@ -34,10 +36,46 @@ class Chat extends StatefulWidget {
 }
 
 class _ChatState extends State<Chat> {
-  final TextEditingController _msgController = TextEditingController();
-  final ScrollController _scrollController = ScrollController();
-  int? _myId;
-  late Timer _timer;
+  final ImagePicker _picker = ImagePicker();
+  File? _selectedImage;
+
+  Future<void> _pickImage() async {
+    try {
+      final XFile? image = await _picker.pickImage(source: ImageSource.gallery);
+      if (image != null) {
+        setState(() {
+          _selectedImage = File(image.path);
+        });
+        // Sanket: Proactively show a preview or send immediately? 
+        // For now, let's send it immediately to keep the flow fast.
+        _sendReply(attachment: _selectedImage);
+        setState(() {
+          _selectedImage = null;
+        });
+      }
+    } catch (e) {
+      debugPrint("Error picking image: $e");
+    }
+  }
+
+  void _sendReply({String? text, File? attachment}) {
+    store.dispatch(
+      chatReplyMiddleware(
+        id: widget.chatId,
+        text: text ?? _msgController.text,
+        attachment: attachment,
+      ),
+    );
+    _msgController.clear();
+    FocusManager.instance.primaryFocus?.unfocus();
+    
+    // Optimistic refresh
+    Timer(const Duration(milliseconds: 500), () {
+      if (mounted) {
+        store.dispatch(chatDetailsMiddleware(chatId: widget.chatId));
+      }
+    });
+  }
 
   void _fetchAll() {
     store.dispatch(Reset.chatDetailsList);
@@ -217,11 +255,27 @@ class _ChatState extends State<Chat> {
                         height: 1.4,
                       ),
                     )
-                    : _buildAttachments(msg),
+                    : Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        if (msg.message != null && msg.message!.isNotEmpty)
+                          Padding(
+                            padding: const EdgeInsets.only(bottom: 8.0),
+                            child: Text(
+                              msg.message!,
+                              style: Styles.body.copyWith(
+                                color: isMe ? Colors.white : MyTheme.text_primary,
+                                fontSize: 14,
+                              ),
+                            ),
+                          ),
+                        _buildAttachments(msg),
+                      ],
+                    ),
           ),
           const SizedBox(height: 4),
           Text(
-            "2:45 PM", // Mock timestamp for now as per design spec
+            "आत्ता", // Sanket: "Just now" in Marathi
             style: Styles.regular_gull_grey_12.copyWith(fontSize: 10),
           ),
         ],
@@ -244,7 +298,7 @@ class _ChatState extends State<Chat> {
       child: Row(
         children: [
           // Attachment icon
-          _inputIconButton(Icons.add_circle_outline_rounded, () {}),
+          _inputIconButton(Icons.add_circle_outline_rounded, _pickImage),
           const SizedBox(width: 8),
 
           Expanded(
@@ -259,6 +313,11 @@ class _ChatState extends State<Chat> {
               child: TextField(
                 controller: _msgController,
                 style: const TextStyle(fontSize: 14),
+                onSubmitted: (val) {
+                  if (val.trim().isNotEmpty) {
+                    _sendReply();
+                  }
+                },
                 decoration: InputDecoration(
                   border: InputBorder.none,
                   hintText: 'आपला संदेश टाइप करा...',
@@ -277,15 +336,7 @@ class _ChatState extends State<Chat> {
           GestureDetector(
             onTap: () {
               if (_msgController.text.trim().isNotEmpty) {
-                store.dispatch(
-                  chatReplyMiddleware(
-                    id: widget.chatId,
-                    text: _msgController.text,
-                    attachment: null,
-                  ),
-                );
-                _msgController.clear();
-                FocusManager.instance.primaryFocus?.unfocus();
+                _sendReply();
               }
             },
             child: Container(

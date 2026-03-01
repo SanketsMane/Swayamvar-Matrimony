@@ -4,7 +4,6 @@ import 'package:active_matrimonial_flutter_app/screens/user_pages/public_profile
 import 'package:flutter/material.dart';
 import 'package:redux/redux.dart';
 import 'package:redux_thunk/redux_thunk.dart';
-import 'package:active_matrimonial_flutter_app/redux/store.dart';
 
 ThunkAction<AppState> publicProfileMiddleware({required int userId}) {
   return (Store<AppState> store) async {

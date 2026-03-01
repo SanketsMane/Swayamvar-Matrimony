@@ -18,7 +18,7 @@ import 'package:active_matrimonial_flutter_app/helpers/navigator_push.dart';
 import 'package:active_matrimonial_flutter_app/components/common_privacy_and_terms_page.dart';
 
 class SignUp extends StatefulWidget {
-  const SignUp({Key? key}) : super(key: key);
+  const SignUp({super.key});
 
   @override
   State<SignUp> createState() => _SignUpState();
@@ -32,11 +32,11 @@ class _SignUpState extends State<SignUp> {
   PhoneNumber _selectedPhoneNumber = PhoneNumber(isoCode: 'IN');
   final TextEditingController _otpController = TextEditingController();
   final TextEditingController _phoneController = TextEditingController();
-  bool _isCodeSent = false;
-  bool _isSendingCode = false;
-  bool _isVerified = false;
-  bool _verificationFailed = false;
-  bool _isVerifyingCode = false;
+  final bool _isCodeSent = false;
+  final bool _isSendingCode = false;
+  final bool _isVerified = false;
+  final bool _verificationFailed = false;
+  final bool _isVerifyingCode = false;
 
   bool? isGoogle;
   bool? isFacebook;
@@ -154,7 +154,7 @@ class _SignUpState extends State<SignUp> {
                                 isDense: true,
                                 contentPadding: EdgeInsets.zero,
                               ),
-                              value: state.signUpState!.on_behalves_value,
+                              initialValue: state.signUpState!.on_behalves_value,
                               items:
                                   state.signUpState!.onBehalfList
                                       ?.map(
@@ -234,7 +234,7 @@ class _SignUpState extends State<SignUp> {
                                 isDense: true,
                                 contentPadding: EdgeInsets.zero,
                               ),
-                              value: state.signUpState!.currentGender,
+                              initialValue: state.signUpState!.currentGender,
                               items:
                                   state.signUpState!.genderItems
                                       ?.map(
@@ -272,10 +272,11 @@ class _SignUpState extends State<SignUp> {
                                   firstDate: DateTime(1950),
                                   lastDate: DateTime.now(),
                                 );
-                                if (picked != null)
+                                if (picked != null) {
                                   store.dispatch(
                                     SignupSetDateTimeAction(payload: picked),
                                   );
+                                }
                               },
                               child: Row(
                                 mainAxisAlignment:

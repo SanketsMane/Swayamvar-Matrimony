@@ -1,0 +1,269 @@
+warning • Duplicate import • lib/components/common_offline_payment.dart:16:8 • duplicate_import
+warning • This class (or a class that this class inherits from) is marked as '@immutable', but one or more of its instance fields aren't final: CommonOfflinePayment.amount, CommonOfflinePayment.payment_type, CommonOfflinePayment.payment_method_key, CommonOfflinePayment.package_id, CommonOfflinePayment.details, CommonOfflinePayment.manual_payment_id, CommonOfflinePayment.title • lib/components/common_offline_payment.dart:18:7 • must_be_immutable
+warning • This class (or a class that this class inherits from) is marked as '@immutable', but one or more of its instance fields aren't final: ContainerWithIcon.width, ContainerWithIcon.height, ContainerWithIcon.radius, ContainerWithIcon.opacity, ContainerWithIcon.isChecked • lib/components/container_with_icon.dart:4:7 • must_be_immutable
+warning • This class (or a class that this class inherits from) is marked as '@immutable', but one or more of its instance fields aren't final: EducationCard.delIndex, EducationCard.educationStateIndex • lib/components/education_card.dart:14:7 • must_be_immutable
+warning • This class (or a class that this class inherits from) is marked as '@immutable', but one or more of its instance fields aren't final: Captcha.callback, Captcha.handleCaptcha, Captcha.isIOS • lib/components/google_recaptcha.dart:9:7 • must_be_immutable
+warning • The declaration '_onLoadFlutterAssetExample' isn't referenced • lib/components/google_recaptcha.dart:26:16 • unused_element
+warning • Unused import: 'package:active_matrimonial_flutter_app/l10n/app_localizations.dart' • lib/components/matched_profile_widget.dart:5:8 • unused_import
+warning • Unused import: '../const/const.dart' • lib/components/matched_profile_widget.dart:7:8 • unused_import
+warning • This class (or a class that this class inherits from) is marked as '@immutable', but one or more of its instance fields aren't final: MyCircularIndicator.width, MyCircularIndicator.height, MyCircularIndicator.radius, MyCircularIndicator.opacity • lib/components/my_circular_indicator.dart:3:7 • must_be_immutable
+warning • This class (or a class that this class inherits from) is marked as '@immutable', but one or more of its instance fields aren't final: MyTextButton.onPressed • lib/components/my_text_button.dart:4:7 • must_be_immutable
+warning • The '!' will have no effect because the receiver can't be null • lib/components/package_card.dart:214:64 • unnecessary_non_null_assertion
+warning • Duplicate import • lib/components/payment_card.dart:8:8 • duplicate_import
+warning • Unused import: 'package:active_matrimonial_flutter_app/helpers/device_info.dart' • lib/const/style.dart:2:8 • unused_import
+warning • Duplicate import • lib/helpers/functions.dart:2:8 • duplicate_import
+warning • Duplicate import • lib/helpers/social_logins.dart:79:8 • duplicate_import
+  error • Directives must appear before any declarations • lib/main.dart:55:1 • directive_after_declaration
+warning • Unused import: 'package:active_matrimonial_flutter_app/models_response/drop_down/profile_dropdown_response.dart' • lib/models_response/drop_down/city.dart:8:8 • unused_import
+warning • Unused import: 'package:active_matrimonial_flutter_app/models_response/drop_down/profile_dropdown_response.dart' • lib/models_response/drop_down/state.dart:8:8 • unused_import
+warning • Unused import: 'package:active_matrimonial_flutter_app/models_response/gallery_picture_view_request_get_response.dart' • lib/models_response/home_response.dart:119:8 • unused_import
+warning • Unnecessary cast • lib/models_response/home_response.dart:149:13 • unnecessary_cast
+warning • This class (or a class that this class inherits from) is marked as '@immutable', but one or more of its instance fields aren't final: AppState.commonState • lib/redux/app/app_state.dart:57:7 • must_be_immutable
+warning • Unused import: 'package:active_matrimonial_flutter_app/app_config.dart' • lib/redux/app/reducer.dart:1:8 • unused_import
+warning • Unused import: 'package:active_matrimonial_flutter_app/helpers/aiz_api_request.dart' • lib/redux/app/reducer.dart:2:8 • unused_import
+warning • Unused import: 'package:active_matrimonial_flutter_app/helpers/shared_pref.dart' • lib/redux/app/reducer.dart:3:8 • unused_import
+warning • Unused import: 'package:active_matrimonial_flutter_app/redux/store.dart' • lib/redux/libs/add_on/addon_check_middleware.dart:6:8 • unused_import
+warning • Unused import: 'package:active_matrimonial_flutter_app/redux/store.dart' • lib/redux/libs/app_info/app_info_middleware.dart:6:8 • unused_import
+warning • Unused import: 'package:active_matrimonial_flutter_app/redux/store.dart' • lib/redux/libs/auth/acccount_delete_middleware.dart:13:8 • unused_import
+warning • Unused import: 'package:active_matrimonial_flutter_app/redux/store.dart' • lib/redux/libs/auth/auth_middleware.dart:7:8 • unused_import
+warning • Unused import: 'package:active_matrimonial_flutter_app/redux/store.dart' • lib/redux/libs/auth/deactivate_middleware.dart:10:8 • unused_import
+warning • Unused import: 'package:active_matrimonial_flutter_app/redux/store.dart' • lib/redux/libs/auth/reset_password_middleware.dart:8:8 • unused_import
+warning • Unused import: 'package:active_matrimonial_flutter_app/redux/store.dart' • lib/redux/libs/auth/signout_middleware.dart:13:8 • unused_import
+warning • Unused import: 'package:active_matrimonial_flutter_app/redux/store.dart' • lib/redux/libs/auth/vertify_middleware.dart:12:8 • unused_import
+warning • Unused import: 'package:active_matrimonial_flutter_app/redux/store.dart' • lib/redux/libs/common/common_states_middleware.dart:6:8 • unused_import
+warning • Unused import: 'package:active_matrimonial_flutter_app/redux/store.dart' • lib/redux/libs/drop_down/caste_middleware.dart:8:8 • unused_import
+warning • Unused import: 'package:active_matrimonial_flutter_app/redux/store.dart' • lib/redux/libs/drop_down/city_middleware.dart:12:8 • unused_import
+warning • Unused import: 'package:active_matrimonial_flutter_app/redux/store.dart' • lib/redux/libs/drop_down/on_behalf_middleware.dart:7:8 • unused_import
+warning • Unused import: 'package:active_matrimonial_flutter_app/redux/store.dart' • lib/redux/libs/drop_down/profile_dropdown_middleware.dart:7:8 • unused_import
+warning • Unused import: 'package:active_matrimonial_flutter_app/redux/store.dart' • lib/redux/libs/drop_down/state_middleware.dart:13:8 • unused_import
+warning • Unused import: 'package:active_matrimonial_flutter_app/redux/store.dart' • lib/redux/libs/drop_down/sub_caste_middleware.dart:9:8 • unused_import
+warning • Unused import: 'package:active_matrimonial_flutter_app/redux/store.dart' • lib/redux/libs/feature/feature_check_middleware.dart:6:8 • unused_import
+warning • Unused import: 'package:active_matrimonial_flutter_app/redux/store.dart' • lib/redux/libs/manage_profile/manage_profile_middleware/manage_profile_create_middlewares.dart:11:8 • unused_import
+warning • Unused import: 'package:active_matrimonial_flutter_app/redux/store.dart' • lib/redux/libs/manage_profile/manage_profile_middleware/manage_profile_delete_middlewares.dart:11:8 • unused_import
+warning • Unused import: '../manage_profile_reducer/partner_expectation_action.dart' • lib/redux/libs/manage_profile/manage_profile_middleware/manage_profile_get_middlewares.dart:30:8 • unused_import
+warning • Unused import: 'package:active_matrimonial_flutter_app/redux/store.dart' • lib/redux/libs/manage_profile/manage_profile_middleware/manage_profile_get_middlewares.dart:32:8 • unused_import
+warning • Unused import: '../manage_profile_reducer/partner_expectation_reducer.dart' • lib/redux/libs/manage_profile/manage_profile_middleware/manage_profile_update_middlewares.dart:18:8 • unused_import
+warning • Unused import: 'package:active_matrimonial_flutter_app/redux/store.dart' • lib/redux/libs/manage_profile/manage_profile_middleware/manage_profile_update_middlewares.dart:26:8 • unused_import
+warning • Unused import: '../../../../redux/store.dart' • lib/redux/libs/manage_profile/manage_profile_reducer/attitude_behavior_reducer.dart:6:8 • unused_import
+warning • Unused import: '../manage_profile_middleware/manage_profile_update_middlewares.dart' • lib/redux/libs/manage_profile/manage_profile_reducer/attitude_behavior_reducer.dart:7:8 • unused_import
+warning • Duplicate import • lib/redux/libs/manage_profile/manage_profile_reducer/attitude_behavior_reducer.dart:8:8 • duplicate_import
+warning • Unused import: 'package:active_matrimonial_flutter_app/redux/store.dart' • lib/redux/libs/manage_profile/manage_profile_reducer/attitude_behavior_reducer.dart:8:8 • unused_import
+warning • Unused import: 'package:active_matrimonial_flutter_app/redux/libs/auth/auth_middleware.dart' • lib/redux/libs/manage_profile/manage_profile_reducer/basic_info_reducer.dart:4:8 • unused_import
+warning • Unused import: 'package:active_matrimonial_flutter_app/redux/store.dart' • lib/redux/libs/manage_profile/manage_profile_reducer/education_reducer.dart:1:8 • unused_import
+warning • Unused import: 'package:active_matrimonial_flutter_app/repository/education_repository.dart' • lib/redux/libs/manage_profile/manage_profile_reducer/education_reducer.dart:3:8 • unused_import
+warning • Unused import: '../manage_profile_middleware/manage_profile_get_middlewares.dart' • lib/redux/libs/manage_profile/manage_profile_reducer/education_reducer.dart:6:8 • unused_import
+warning • Unused import: '../../../../redux/store.dart' • lib/redux/libs/manage_profile/manage_profile_reducer/family_reducer.dart:6:8 • unused_import
+warning • Unused import: '../manage_profile_middleware/manage_profile_update_middlewares.dart' • lib/redux/libs/manage_profile/manage_profile_reducer/family_reducer.dart:7:8 • unused_import
+warning • Duplicate import • lib/redux/libs/manage_profile/manage_profile_reducer/family_reducer.dart:8:8 • duplicate_import
+warning • Unused import: 'package:active_matrimonial_flutter_app/redux/store.dart' • lib/redux/libs/manage_profile/manage_profile_reducer/family_reducer.dart:8:8 • unused_import
+warning • Unused import: '../../../../redux/store.dart' • lib/redux/libs/manage_profile/manage_profile_reducer/hobbies_interest_reducer.dart:6:8 • unused_import
+warning • Unused import: '../manage_profile_middleware/manage_profile_update_middlewares.dart' • lib/redux/libs/manage_profile/manage_profile_reducer/hobbies_interest_reducer.dart:7:8 • unused_import
+warning • Duplicate import • lib/redux/libs/manage_profile/manage_profile_reducer/hobbies_interest_reducer.dart:8:8 • duplicate_import
+warning • Unused import: 'package:active_matrimonial_flutter_app/redux/store.dart' • lib/redux/libs/manage_profile/manage_profile_reducer/hobbies_interest_reducer.dart:8:8 • unused_import
+warning • Unused import: '../../../../redux/store.dart' • lib/redux/libs/manage_profile/manage_profile_reducer/introduction_reducer.dart:6:8 • unused_import
+warning • Unused import: '../manage_profile_middleware/manage_profile_update_middlewares.dart' • lib/redux/libs/manage_profile/manage_profile_reducer/introduction_reducer.dart:7:8 • unused_import
+warning • Duplicate import • lib/redux/libs/manage_profile/manage_profile_reducer/introduction_reducer.dart:8:8 • duplicate_import
+warning • Unused import: 'package:active_matrimonial_flutter_app/redux/store.dart' • lib/redux/libs/manage_profile/manage_profile_reducer/introduction_reducer.dart:8:8 • unused_import
+warning • Unused import: 'package:active_matrimonial_flutter_app/enums/enums.dart' • lib/redux/libs/manage_profile/manage_profile_reducer/partner_expectation_reducer.dart:1:8 • unused_import
+warning • Unused import: 'package:active_matrimonial_flutter_app/redux/store.dart' • lib/redux/libs/manage_profile/manage_profile_reducer/partner_expectation_reducer.dart:2:8 • unused_import
+warning • Unused import: 'package:active_matrimonial_flutter_app/models_response/common_models/ddown.dart' • lib/redux/libs/manage_profile/manage_profile_reducer/partner_expectation_reducer.dart:3:8 • unused_import
+warning • Unused import: 'package:active_matrimonial_flutter_app/redux/libs/drop_down/caste_middleware.dart' • lib/redux/libs/manage_profile/manage_profile_reducer/partner_expectation_reducer.dart:7:8 • unused_import
+warning • Unused import: 'package:active_matrimonial_flutter_app/redux/libs/drop_down/state_middleware.dart' • lib/redux/libs/manage_profile/manage_profile_reducer/partner_expectation_reducer.dart:8:8 • unused_import
+warning • Unused import: 'package:active_matrimonial_flutter_app/redux/libs/drop_down/sub_caste_middleware.dart' • lib/redux/libs/manage_profile/manage_profile_reducer/partner_expectation_reducer.dart:9:8 • unused_import
+warning • Unused import: '../../../../redux/store.dart' • lib/redux/libs/manage_profile/manage_profile_reducer/physical_attr_reducer.dart:6:8 • unused_import
+warning • Unused import: '../manage_profile_middleware/manage_profile_update_middlewares.dart' • lib/redux/libs/manage_profile/manage_profile_reducer/physical_attr_reducer.dart:7:8 • unused_import
+warning • Duplicate import • lib/redux/libs/manage_profile/manage_profile_reducer/physical_attr_reducer.dart:8:8 • duplicate_import
+warning • Unused import: 'package:active_matrimonial_flutter_app/redux/store.dart' • lib/redux/libs/manage_profile/manage_profile_reducer/physical_attr_reducer.dart:8:8 • unused_import
+warning • Unused import: 'package:active_matrimonial_flutter_app/redux/libs/drop_down/sub_caste_middleware.dart' • lib/redux/libs/manage_profile/manage_profile_reducer/spiritual_reducer.dart:4:8 • unused_import
+warning • Unused import: 'package:active_matrimonial_flutter_app/screens/core.dart' • lib/redux/libs/manage_profile/manage_profile_reducer/spiritual_reducer.dart:6:8 • unused_import
+warning • Unused import: 'package:active_matrimonial_flutter_app/redux/store.dart' • lib/redux/libs/matched_profile/matched_profile_middleware.dart:5:8 • unused_import
+warning • Unused import: 'package:active_matrimonial_flutter_app/redux/store.dart' • lib/redux/libs/member_info/member_info.dart:7:8 • unused_import
+warning • Unused import: 'package:active_matrimonial_flutter_app/redux/store.dart' • lib/redux/libs/profile_picture_view_request/profile_picture_view_get_middleware.dart:10:8 • unused_import
+warning • Unused import: 'package:active_matrimonial_flutter_app/redux/store.dart' • lib/redux/libs/profile_picture_view_request/profile_picture_view_request_accept.dart:11:8 • unused_import
+warning • Unused import: 'package:active_matrimonial_flutter_app/redux/store.dart' • lib/redux/libs/profile_picture_view_request/profile_picture_view_request_reject.dart:11:8 • unused_import
+warning • Unused import: 'package:active_matrimonial_flutter_app/redux/store.dart' • lib/redux/libs/profile_picture_view_request/profile_picture_view_request_send.dart:11:8 • unused_import
+warning • Unused import: 'package:active_matrimonial_flutter_app/redux/store.dart' • lib/redux/libs/report/report_middleware.dart:7:8 • unused_import
+warning • Unused import: 'package:active_matrimonial_flutter_app/redux/store.dart' • lib/redux/libs/staticPage/static_page.dart:5:8 • unused_import
+warning • Unused import: 'dart:convert' • lib/repository/chat_repository.dart:1:8 • unused_import
+warning • The operand can't be 'null', so the condition is always 'false' • lib/repository/drop_down_repository.dart:70:21 • unnecessary_null_comparison
+warning • Duplicate import • lib/repository/feature_repository.dart:2:8 • duplicate_import
+warning • Unused import: 'package:active_matrimonial_flutter_app/redux/libs/helpers/show_message_state.dart' • lib/repository/payment_repository.dart:5:8 • unused_import
+warning • Unused import: 'package:flutter/material.dart' • lib/repository/payment_repository.dart:6:8 • unused_import
+warning • Unused import: '../redux/store.dart' • lib/repository/payment_repository.dart:10:8 • unused_import
+warning • Unused import: 'package:active_matrimonial_flutter_app/screens/auth/change_password/change_password.dart' • lib/screens/account/account.dart:8:8 • unused_import
+warning • Unused import: 'package:active_matrimonial_flutter_app/screens/contact_us/contact_us.dart' • lib/screens/account/account.dart:9:8 • unused_import
+warning • The left operand can't be null, so the right operand is never executed • lib/screens/account/account.dart:248:45 • dead_null_aware_expression
+warning • The left operand can't be null, so the right operand is never executed • lib/screens/account/account.dart:297:35 • dead_null_aware_expression
+warning • The left operand can't be null, so the right operand is never executed • lib/screens/account/account.dart:332:44 • dead_null_aware_expression
+warning • The left operand can't be null, so the right operand is never executed • lib/screens/account/account.dart:348:40 • dead_null_aware_expression
+warning • The left operand can't be null, so the right operand is never executed • lib/screens/account/account.dart:353:39 • dead_null_aware_expression
+warning • The left operand can't be null, so the right operand is never executed • lib/screens/account/account.dart:358:38 • dead_null_aware_expression
+warning • The left operand can't be null, so the right operand is never executed • lib/screens/account/account.dart:378:38 • dead_null_aware_expression
+warning • The left operand can't be null, so the right operand is never executed • lib/screens/account/account.dart:403:41 • dead_null_aware_expression
+warning • The left operand can't be null, so the right operand is never executed • lib/screens/account/account.dart:408:46 • dead_null_aware_expression
+warning • The left operand can't be null, so the right operand is never executed • lib/screens/account/account.dart:413:39 • dead_null_aware_expression
+warning • The left operand can't be null, so the right operand is never executed • lib/screens/account/account.dart:418:40 • dead_null_aware_expression
+warning • The left operand can't be null, so the right operand is never executed • lib/screens/account/account.dart:423:46 • dead_null_aware_expression
+warning • The left operand can't be null, so the right operand is never executed • lib/screens/account/account.dart:428:40 • dead_null_aware_expression
+warning • Unused import: 'package:active_matrimonial_flutter_app/redux/store.dart' • lib/screens/account/account_middleware.dart:7:8 • unused_import
+warning • Unused import: 'dart:ui' • lib/screens/app_navigation.dart:1:8 • unused_import
+warning • Unused import: 'package:active_matrimonial_flutter_app/const/my_theme.dart' • lib/screens/app_navigation.dart:2:8 • unused_import
+warning • Unused import: 'package:active_matrimonial_flutter_app/const/style.dart' • lib/screens/app_navigation.dart:3:8 • unused_import
+warning • Unused import: 'package:active_matrimonial_flutter_app/l10n/app_localizations.dart' • lib/screens/app_navigation.dart:16:8 • unused_import
+warning • This class (or a class that this class inherits from) is marked as '@immutable', but one or more of its instance fields aren't final: FormFields.value, FormFields.controller, FormFields.text, FormFields.title, FormFields.validator, FormFields.obscure_toggler, FormFields.obscure_text • lib/screens/auth/change_password/change_password.dart:173:7 • must_be_immutable
+warning • Unused import: 'package:active_matrimonial_flutter_app/redux/store.dart' • lib/screens/auth/change_password/change_password_middleware.dart:10:8 • unused_import
+warning • Unused import: 'package:active_matrimonial_flutter_app/const/my_theme.dart' • lib/screens/auth/forgetPassword/forget_password.dart:4:8 • unused_import
+warning • Unused import: 'package:active_matrimonial_flutter_app/l10n/app_localizations.dart' • lib/screens/auth/forgetPassword/forget_password.dart:9:8 • unused_import
+warning • Unused import: 'package:active_matrimonial_flutter_app/redux/store.dart' • lib/screens/auth/forgetPassword/forgetpassword_middleware.dart:12:8 • unused_import
+warning • Duplicate import • lib/screens/auth/forgetPassword/forgetpassword_reducer.dart:8:8 • duplicate_import
+warning • Unused import: 'package:active_matrimonial_flutter_app/const/my_theme.dart' • lib/screens/auth/signin/email_login.dart:4:8 • unused_import
+warning • Unused import: 'package:active_matrimonial_flutter_app/l10n/app_localizations.dart' • lib/screens/auth/signin/email_login.dart:7:8 • unused_import
+warning • Unused import: 'package:active_matrimonial_flutter_app/redux/store.dart' • lib/screens/auth/signin/email_login.dart:17:8 • unused_import
+warning • The value of the field '_isPhoneValid' isn't used • lib/screens/auth/signin/phone_login.dart:27:8 • unused_field
+warning • The value of the field '_controller' isn't used • lib/screens/auth/signup/signup.dart:29:32 • unused_field
+warning • The value of the field '_isCodeSent' isn't used • lib/screens/auth/signup/signup.dart:35:8 • unused_field
+warning • The value of the field '_isSendingCode' isn't used • lib/screens/auth/signup/signup.dart:36:8 • unused_field
+warning • The value of the field '_isVerified' isn't used • lib/screens/auth/signup/signup.dart:37:8 • unused_field
+warning • The value of the field '_verificationFailed' isn't used • lib/screens/auth/signup/signup.dart:38:8 • unused_field
+warning • The value of the field '_isVerifyingCode' isn't used • lib/screens/auth/signup/signup.dart:39:8 • unused_field
+warning • Unused import: 'package:active_matrimonial_flutter_app/redux/store.dart' • lib/screens/auth/signup/signup_middleware.dart:14:8 • unused_import
+warning • Unused import: 'package:active_matrimonial_flutter_app/redux/store.dart' • lib/screens/blog/blog_middleware.dart:8:8 • unused_import
+  error • Undefined name '_msgController' • lib/screens/chat/chat.dart:65:23 • undefined_identifier
+  error • Undefined name '_msgController' • lib/screens/chat/chat.dart:69:5 • undefined_identifier
+  error • Undefined name '_myId' • lib/screens/chat/chat.dart:88:5 • undefined_identifier
+  error • Undefined name '_timer' • lib/screens/chat/chat.dart:90:5 • undefined_identifier
+  error • Undefined name '_msgController' • lib/screens/chat/chat.dart:99:5 • undefined_identifier
+  error • Undefined name '_scrollController' • lib/screens/chat/chat.dart:100:5 • undefined_identifier
+  error • Undefined name '_timer' • lib/screens/chat/chat.dart:101:5 • undefined_identifier
+  error • Undefined name '_scrollController' • lib/screens/chat/chat.dart:206:19 • undefined_identifier
+  error • Undefined name '_myId' • lib/screens/chat/chat.dart:213:41 • undefined_identifier
+  error • Undefined name '_msgController' • lib/screens/chat/chat.dart:314:29 • undefined_identifier
+  error • Undefined name '_msgController' • lib/screens/chat/chat.dart:338:19 • undefined_identifier
+warning • Unused import: 'package:active_matrimonial_flutter_app/redux/store.dart' • lib/screens/chat/chat_details_middleware.dart:6:8 • unused_import
+warning • Unused import: 'package:active_matrimonial_flutter_app/redux/store.dart' • lib/screens/chat/chat_middleware.dart:6:8 • unused_import
+warning • Unused import: 'package:active_matrimonial_flutter_app/redux/store.dart' • lib/screens/chat/chat_reply_middleware.dart:8:8 • unused_import
+warning • Unused import: 'package:active_matrimonial_flutter_app/redux/store.dart' • lib/screens/contact_us/contact_us_middleware.dart:6:8 • unused_import
+warning • Unused import: 'package:active_matrimonial_flutter_app/redux/store.dart' • lib/screens/happy_story/happy_stories_middleware.dart:7:8 • unused_import
+warning • Unused import: 'package:active_matrimonial_flutter_app/redux/store.dart' • lib/screens/happy_story/my_happy_stories/get_happy_story_middleware.dart:5:8 • unused_import
+warning • Unused import: 'package:active_matrimonial_flutter_app/redux/store.dart' • lib/screens/happy_story/my_happy_stories/post_happy_story_middleware.dart:11:8 • unused_import
+warning • Unused import: 'package:active_matrimonial_flutter_app/const/style.dart' • lib/screens/help_center/help_center.dart:3:8 • unused_import
+warning • Unused import: 'package:active_matrimonial_flutter_app/screens/core.dart' • lib/screens/help_center/help_center.dart:5:8 • unused_import
+warning • Unused import: 'package:active_matrimonial_flutter_app/screens/contact_us/contact_us.dart' • lib/screens/help_center/help_center.dart:7:8 • unused_import
+warning • Unused import: '../../search_screens/search_action.dart' • lib/screens/home_pages/explore/explore.dart:17:8 • unused_import
+warning • Unused import: '../../search_screens/search_middleware.dart' • lib/screens/home_pages/explore/explore.dart:18:8 • unused_import
+warning • Duplicate import • lib/screens/home_pages/explore/explore.dart:19:8 • duplicate_import
+warning • Unused import: '../../search_screens/search_middleware.dart' • lib/screens/home_pages/explore/explore.dart:19:8 • unused_import
+warning • Unused import: '../../account/account_middleware.dart' • lib/screens/home_pages/explore/explore.dart:27:8 • unused_import
+warning • Unused import: '../../auth/signin/phone_login.dart' • lib/screens/home_pages/explore/explore.dart:28:8 • unused_import
+warning • Unused import: '../../../middleware/profile_view_middleware.dart' • lib/screens/home_pages/explore/explore.dart:29:8 • unused_import
+warning • Unused import: '../../manage_profiles/manage_profile.dart' • lib/screens/home_pages/explore/explore.dart:30:8 • unused_import
+warning • The declaration '_buildTopMatches' isn't referenced • lib/screens/home_pages/explore/explore.dart:386:10 • unused_element
+warning • The declaration '_buildNearbyMatches' isn't referenced • lib/screens/home_pages/explore/explore.dart:571:10 • unused_element
+warning • The declaration '_buildNewMatchesGrid' isn't referenced • lib/screens/home_pages/explore/explore.dart:933:10 • unused_element
+warning • Unused import: 'package:active_matrimonial_flutter_app/redux/store.dart' • lib/screens/home_pages/explore/explore_middleware.dart:7:8 • unused_import
+warning • Unused import: 'package:active_matrimonial_flutter_app/app_config.dart' • lib/screens/home_pages/home/home.dart:6:8 • unused_import
+warning • Unused import: 'package:active_matrimonial_flutter_app/const/const.dart' • lib/screens/home_pages/home/home.dart:7:8 • unused_import
+warning • Unused import: 'package:active_matrimonial_flutter_app/components/container_with_icon.dart' • lib/screens/home_pages/home/home.dart:24:8 • unused_import
+warning • Unused import: 'package:active_matrimonial_flutter_app/components/common_widget.dart' • lib/screens/home_pages/home/home.dart:26:8 • unused_import
+warning • Unused import: 'package:active_matrimonial_flutter_app/screens/settings/settings.dart' • lib/screens/home_pages/home/home.dart:30:8 • unused_import
+warning • Unused import: 'package:active_matrimonial_flutter_app/redux/libs/auth/signout_middleware.dart' • lib/screens/home_pages/home/home.dart:38:8 • unused_import
+warning • Unused import: 'package:active_matrimonial_flutter_app/helpers/shared_pref.dart' • lib/screens/home_pages/home/home.dart:39:8 • unused_import
+warning • Unused import: 'package:one_context/one_context.dart' • lib/screens/home_pages/home/home.dart:40:8 • unused_import
+warning • Duplicate import • lib/screens/home_pages/home/home.dart:41:8 • duplicate_import
+warning • The value of the field '_showFilters' isn't used • lib/screens/home_pages/home/home.dart:57:8 • unused_field
+warning • The value of the local variable 'primaryColor' isn't used • lib/screens/home_pages/home/home.dart:82:11 • unused_local_variable
+warning • The value of the local variable 'textPrimary' isn't used • lib/screens/home_pages/home/home.dart:83:11 • unused_local_variable
+warning • The value of the local variable 'textSecondary' isn't used • lib/screens/home_pages/home/home.dart:84:11 • unused_local_variable
+warning • The declaration '_buildFilterChips' isn't referenced • lib/screens/home_pages/home/home.dart:150:10 • unused_element
+warning • The declaration '_buildSmartMatches' isn't referenced • lib/screens/home_pages/home/home.dart:827:10 • unused_element
+warning • The declaration '_buildProfileBoost' isn't referenced • lib/screens/home_pages/home/home.dart:859:10 • unused_element
+warning • The declaration '_buildEmptyState' isn't referenced • lib/screens/home_pages/home/home.dart:933:10 • unused_element
+warning • The declaration '_buildHeroMatchCard' isn't referenced • lib/screens/home_pages/home/home.dart:955:10 • unused_element
+warning • The declaration '_buildHorizontalMatches' isn't referenced • lib/screens/home_pages/home/home.dart:1190:10 • unused_element
+warning • The declaration '_buildActionBtn' isn't referenced • lib/screens/home_pages/home/home.dart:1303:10 • unused_element
+warning • The declaration '_showFullProfileSheet' isn't referenced • lib/screens/home_pages/home/home.dart:1324:8 • unused_element
+warning • Unused import: 'package:active_matrimonial_flutter_app/redux/store.dart' • lib/screens/home_pages/home/home_middleware.dart:7:8 • unused_import
+warning • Unused import: 'package:active_matrimonial_flutter_app/redux/libs/helpers/show_message_state.dart' • lib/screens/home_pages/home/home_reducer.dart:2:8 • unused_import
+warning • Unused import: 'package:active_matrimonial_flutter_app/helpers/device_info.dart' • lib/screens/home_pages/home_without_login.dart:9:8 • unused_import
+warning • Unused import: 'package:active_matrimonial_flutter_app/redux/store.dart' • lib/screens/ignore/add_ignore_middleware.dart:8:8 • unused_import
+warning • Unused import: 'package:active_matrimonial_flutter_app/redux/store.dart' • lib/screens/ignore/ignore_middleware.dart:9:8 • unused_import
+warning • Duplicate import • lib/screens/ignore/ignore_reducer.dart:13:8 • duplicate_import
+warning • Unused import: 'package:intl/intl.dart' • lib/screens/manage_profiles/astronomic_info.dart:11:8 • unused_import
+warning • The value of the local variable 'validated' isn't used • lib/screens/manage_profiles/change_email.dart:75:19 • unused_local_variable
+warning • The left operand can't be null, so the right operand is never executed • lib/screens/manage_profiles/language.dart:194:61 • dead_null_aware_expression
+warning • Unused import: 'package:active_matrimonial_flutter_app/redux/store.dart' • lib/screens/my_dashboard_pages/gallery/gallery_image_middleware.dart:9:8 • unused_import
+warning • Unused import: 'package:active_matrimonial_flutter_app/redux/store.dart' • lib/screens/my_dashboard_pages/interest/add_to_interest_middleware.dart:9:8 • unused_import
+warning • Unused import: 'package:active_matrimonial_flutter_app/redux/store.dart' • lib/screens/my_dashboard_pages/interest/my_interest_middleware.dart:6:8 • unused_import
+warning • Unused import: 'package:active_matrimonial_flutter_app/redux/store.dart' • lib/screens/my_dashboard_pages/interest_request/accept_interest_middleware.dart:11:8 • unused_import
+warning • Unused import: 'package:active_matrimonial_flutter_app/redux/store.dart' • lib/screens/my_dashboard_pages/interest_request/interest_request_middleware.dart:6:8 • unused_import
+warning • Unused import: 'package:active_matrimonial_flutter_app/redux/store.dart' • lib/screens/my_dashboard_pages/interest_request/reject_interest_middleware.dart:6:8 • unused_import
+warning • Unused import: 'package:active_matrimonial_flutter_app/redux/store.dart' • lib/screens/my_dashboard_pages/shortlist/add_shortlist_middleware.dart:10:8 • unused_import
+warning • The operand can't be 'null', so the condition is always 'false' • lib/screens/my_dashboard_pages/shortlist/my_shortlist.dart:104:73 • unnecessary_null_comparison
+warning • Unused import: 'package:active_matrimonial_flutter_app/redux/store.dart' • lib/screens/my_dashboard_pages/shortlist/removeFromShortlistMiddleware.dart:9:8 • unused_import
+warning • Unused import: 'package:active_matrimonial_flutter_app/redux/store.dart' • lib/screens/my_dashboard_pages/shortlist/shortlist_middleware.dart:7:8 • unused_import
+warning • This class (or a class that this class inherits from) is marked as '@immutable', but one or more of its instance fields aren't final: MyWallet.from_wallet • lib/screens/my_dashboard_pages/wallet/my_wallet.dart:17:7 • must_be_immutable
+warning • Unused import: 'package:active_matrimonial_flutter_app/redux/store.dart' • lib/screens/my_dashboard_pages/wallet/wallet_balance_middleware.dart:6:8 • unused_import
+warning • Unused import: 'package:active_matrimonial_flutter_app/redux/store.dart' • lib/screens/my_dashboard_pages/wallet/wallet_history_middleware.dart:6:8 • unused_import
+warning • Unused import: 'package:active_matrimonial_flutter_app/redux/store.dart' • lib/screens/my_dashboard_pages/wallet/wallet_recharge_middleware.dart:6:8 • unused_import
+warning • Unused import: 'package:active_matrimonial_flutter_app/redux/store.dart' • lib/screens/notifications/notification_get_middleware.dart:6:8 • unused_import
+warning • Unused import: 'package:active_matrimonial_flutter_app/redux/store.dart' • lib/screens/notifications/notification_read_middleware.dart:8:8 • unused_import
+warning • Unused import: 'package:active_matrimonial_flutter_app/redux/store.dart' • lib/screens/others/offline/offline_payment_middleware.dart:7:8 • unused_import
+warning • This class (or a class that this class inherits from) is marked as '@immutable', but one or more of its instance fields aren't final: PackageDetails.packageId • lib/screens/package/package_details.dart:15:7 • must_be_immutable
+warning • This class (or a class that this class inherits from) is marked as '@immutable', but one or more of its instance fields aren't final: PackageHistory.from_package • lib/screens/package/package_history.dart:12:7 • must_be_immutable
+warning • Unused import: 'package:active_matrimonial_flutter_app/redux/store.dart' • lib/screens/package/package_middlewares.dart:15:8 • unused_import
+warning • Unused import: 'package:active_matrimonial_flutter_app/components/common_widget.dart' • lib/screens/package/premium_plans.dart:2:8 • unused_import
+warning • Unused import: 'package:active_matrimonial_flutter_app/const/style.dart' • lib/screens/package/premium_plans.dart:4:8 • unused_import
+warning • Unused import: '../../helpers/shared_pref.dart' • lib/screens/payment_methods/instamojo_screen.dart:16:8 • unused_import
+warning • This class (or a class that this class inherits from) is marked as '@immutable', but one or more of its instance fields aren't final: Payment.amount, Payment.payment_type, Payment.package_id, Payment.title • lib/screens/payment_methods/payment.dart:23:7 • must_be_immutable
+warning • Unused import: 'package:active_matrimonial_flutter_app/redux/store.dart' • lib/screens/payment_methods/payment_types_middleware.dart:6:8 • unused_import
+warning • Duplicate import • lib/screens/payment_methods/paytm_screen.dart:17:8 • duplicate_import
+warning • This class (or a class that this class inherits from) is marked as '@immutable', but one or more of its instance fields aren't final: PaytmScreen.amount, PaytmScreen.payment_type, PaytmScreen.payment_method_key, PaytmScreen.package_id • lib/screens/payment_methods/paytm_screen.dart:19:7 • must_be_immutable
+warning • Unused import: 'package:active_matrimonial_flutter_app/redux/store.dart' • lib/screens/payment_methods/phonepe_screen.dart:16:8 • unused_import
+warning • Duplicate import • lib/screens/payment_methods/razorpay_screen.dart:17:8 • duplicate_import
+warning • This class (or a class that this class inherits from) is marked as '@immutable', but one or more of its instance fields aren't final: RazorpayScreen.amount, RazorpayScreen.payment_type, RazorpayScreen.payment_method_key, RazorpayScreen.package_id • lib/screens/payment_methods/razorpay_screen.dart:19:7 • must_be_immutable
+warning • The operand can't be 'null', so the condition is always 'false' • lib/screens/payment_methods/razorpay_screen.dart:93:20 • unnecessary_null_comparison
+warning • Duplicate import • lib/screens/payment_methods/stripe_screen.dart:17:8 • duplicate_import
+warning • This class (or a class that this class inherits from) is marked as '@immutable', but one or more of its instance fields aren't final: StripeScreen.amount, StripeScreen.payment_type, StripeScreen.payment_method_key, StripeScreen.package_id • lib/screens/payment_methods/stripe_screen.dart:19:7 • must_be_immutable
+warning • Unused import: 'package:active_matrimonial_flutter_app/redux/store.dart' • lib/screens/profile_and_gallery_picure_rqst/gallery_picture_accept_reject_middleware.dart:11:8 • unused_import
+warning • Unused import: 'package:active_matrimonial_flutter_app/redux/store.dart' • lib/screens/profile_and_gallery_picure_rqst/gallery_picture_view_get_middleware.dart:10:8 • unused_import
+warning • Unused import: 'package:active_matrimonial_flutter_app/redux/store.dart' • lib/screens/profile_and_gallery_picure_rqst/gallery_picture_view_request_send.dart:11:8 • unused_import
+warning • Duplicate import • lib/screens/public_profile_expandable_cards/pp_astronomic_Info.dart:6:8 • duplicate_import
+warning • Unused import: 'package:active_matrimonial_flutter_app/helpers/device_info.dart' • lib/screens/public_profile_expandable_cards/pp_career_info.dart:1:8 • unused_import
+warning • The left operand can't be null, so the right operand is never executed • lib/screens/public_profile_expandable_cards/pp_pertner_expectation.dart:58:102 • dead_null_aware_expression
+warning • The left operand can't be null, so the right operand is never executed • lib/screens/public_profile_expandable_cards/pp_pertner_expectation.dart:73:33 • dead_null_aware_expression
+warning • This class (or a class that this class inherits from) is marked as '@immutable', but one or more of its instance fields aren't final: PP_UserContactDetails.userid • lib/screens/public_profile_expandable_cards/pp_usercontact_details.dart:11:7 • must_be_immutable
+warning • Unused import: 'package:active_matrimonial_flutter_app/redux/store.dart' • lib/screens/referral/referral_code_middleware.dart:6:8 • unused_import
+warning • Unused import: 'package:active_matrimonial_flutter_app/redux/store.dart' • lib/screens/referral/referral_earning_middleware.dart:6:8 • unused_import
+warning • Unused import: 'package:active_matrimonial_flutter_app/redux/store.dart' • lib/screens/referral/referral_users_middleware.dart:6:8 • unused_import
+warning • Unused import: 'package:active_matrimonial_flutter_app/redux/store.dart' • lib/screens/referral/referral_withdraw_request_history_middleware.dart:6:8 • unused_import
+warning • Unused import: 'package:active_matrimonial_flutter_app/components/common_widget.dart' • lib/screens/search_screens/advanced_search.dart:2:8 • unused_import
+warning • Unused import: 'package:active_matrimonial_flutter_app/helpers/navigator_push.dart' • lib/screens/search_screens/advanced_search.dart:5:8 • unused_import
+warning • Unused import: 'package:active_matrimonial_flutter_app/screens/search_screens/show_basic_search.dart' • lib/screens/search_screens/advanced_search.dart:11:8 • unused_import
+warning • The declaration '_getNameById' isn't referenced • lib/screens/search_screens/advanced_search.dart:88:11 • unused_element
+warning • The left operand can't be null, so the right operand is never executed • lib/screens/search_screens/advanced_search.dart:181:15 • dead_null_aware_expression
+warning • The left operand can't be null, so the right operand is never executed • lib/screens/search_screens/advanced_search.dart:677:64 • dead_null_aware_expression
+warning • Unused import: 'package:active_matrimonial_flutter_app/redux/store.dart' • lib/screens/search_screens/search_middleware.dart:7:8 • unused_import
+warning • The left operand can't be null, so the right operand is never executed • lib/screens/settings/settings.dart:203:44 • dead_null_aware_expression
+warning • The left operand can't be null, so the right operand is never executed • lib/screens/settings/settings.dart:211:35 • dead_null_aware_expression
+warning • Unused import: 'package:active_matrimonial_flutter_app/redux/store.dart' • lib/screens/startup_pages/landing_page/landing.dart:6:8 • unused_import
+warning • Unused import: 'package:active_matrimonial_flutter_app/components/common_widget.dart' • lib/screens/startup_pages/landing_page/landing_page.dart:1:8 • unused_import
+warning • Unused import: 'package:active_matrimonial_flutter_app/components/my_images.dart' • lib/screens/startup_pages/landing_page/landing_page.dart:3:8 • unused_import
+warning • Unused import: 'package:active_matrimonial_flutter_app/components/my_text_button.dart' • lib/screens/startup_pages/landing_page/landing_page.dart:4:8 • unused_import
+warning • Unused import: 'package:carousel_slider/carousel_slider.dart' • lib/screens/startup_pages/landing_page/landing_page.dart:12:8 • unused_import
+warning • Unused import: 'package:active_matrimonial_flutter_app/helpers/device_info.dart' • lib/screens/startup_pages/on_boarding_pages.dart:4:8 • unused_import
+warning • Unused import: 'package:active_matrimonial_flutter_app/const/my_theme.dart' • lib/screens/startup_pages/splash_screen.dart:4:8 • unused_import
+warning • Unused import: 'package:active_matrimonial_flutter_app/const/style.dart' • lib/screens/startup_pages/splash_screen.dart:5:8 • unused_import
+warning • Unused import: 'package:active_matrimonial_flutter_app/helpers/device_info.dart' • lib/screens/startup_pages/splash_screen.dart:6:8 • unused_import
+warning • Unused import: 'package:active_matrimonial_flutter_app/helpers/navigator_push.dart' • lib/screens/startup_pages/splash_screen.dart:7:8 • unused_import
+warning • Unused import: 'package:active_matrimonial_flutter_app/redux/libs/auth/auth_middleware.dart' • lib/screens/startup_pages/splash_screen.dart:10:8 • unused_import
+warning • Unused import: 'package:active_matrimonial_flutter_app/screens/app_navigation.dart' • lib/screens/startup_pages/splash_screen.dart:12:8 • unused_import
+warning • Unused import: 'package:active_matrimonial_flutter_app/screens/startup_pages/landing_page/landing_page.dart' • lib/screens/startup_pages/splash_screen.dart:14:8 • unused_import
+warning • Unused import: 'package:active_matrimonial_flutter_app/redux/store.dart' • lib/screens/support_ticket/support_ticket_create_middleware.dart:6:8 • unused_import
+warning • Unused import: 'package:active_matrimonial_flutter_app/redux/store.dart' • lib/screens/support_ticket/support_ticket_middleware.dart:9:8 • unused_import
+warning • Unused import: 'package:active_matrimonial_flutter_app/redux/store.dart' • lib/screens/user_pages/public_profile_middleware.dart:7:8 • unused_import
+warning • Unused import: 'package:active_matrimonial_flutter_app/components/common_widget.dart' • lib/screens/user_pages/user_public_profile.dart:2:8 • unused_import
+warning • Unused import: 'package:active_matrimonial_flutter_app/screens/ignore/add_ignore_middleware.dart' • lib/screens/user_pages/user_public_profile.dart:9:8 • unused_import
+warning • The value of the field '_reportController' isn't used • lib/screens/user_pages/user_public_profile.dart:27:31 • unused_field
+warning • Unused import: 'package:shared_preferences/shared_preferences.dart' • lib/services/auth_service.dart:2:8 • unused_import
+warning • Unused import: '../const/style.dart' • lib/widgets/custom_bottom_navbar.dart:4:8 • unused_import
+warning • The value of the local variable 'labels' isn't used • lib/widgets/custom_bottom_navbar.dart:73:11 • unused_local_variable

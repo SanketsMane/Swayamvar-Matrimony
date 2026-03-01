@@ -5,16 +5,16 @@ class ContainerWithIcon extends StatelessWidget {
   // variables
   final Gradient? gradient;
   final String? icon;
-  double? width = 36;
-  double? height = 36;
-  double? radius = 12;
+  final double? width;
+  final double? height;
+  final double? radius;
 
   final Color? color;
   final Function? onpressed;
-  double? opacity = 1;
-  bool isChecked;
+  final double? opacity;
+  final bool isChecked;
 
-  ContainerWithIcon({
+  const ContainerWithIcon({
     super.key,
     this.gradient,
     this.icon,

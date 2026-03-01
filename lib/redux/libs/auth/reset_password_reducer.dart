@@ -23,22 +23,22 @@ ResetPasswordState? reset_password_reducer(
   return state;
 }
 
-reset(ResetPasswordState? state, RpReset action) {
+ResetPasswordState reset(ResetPasswordState? state, RpReset action) {
   state = ResetPasswordState.initialState();
   return state;
 }
 
-password_obscure(ResetPasswordState state, dynamic action) {
+ResetPasswordState password_obscure(ResetPasswordState state, dynamic action) {
   state.passwordObscure = !state.passwordObscure!;
   return state;
 }
 
-confirm_password_obscure(ResetPasswordState state, dynamic action) {
+ResetPasswordState confirm_password_obscure(ResetPasswordState state, dynamic action) {
   state.confirmPasswordObscure = !state.confirmPasswordObscure!;
   return state;
 }
 
-loader(ResetPasswordState state, RpLoader action) {
+ResetPasswordState loader(ResetPasswordState state, RpLoader action) {
   state.rp_loader = !state.rp_loader!;
   return state;
 }

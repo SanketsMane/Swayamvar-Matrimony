@@ -20,7 +20,7 @@ class PaypalScreen extends StatefulWidget {
   final String? payment_method_key;
   final String? package_id;
 
-  PaypalScreen({
+  const PaypalScreen({
     super.key,
     this.amount,
     this.payment_type,
@@ -46,7 +46,7 @@ class _PaypalScreenState extends State<PaypalScreen> {
     getSetInitialUrl();
   }
 
-  paypal() {
+  void paypal() {
     _webViewController
       ..setJavaScriptMode(JavaScriptMode.unrestricted)
       ..setNavigationDelegate(
@@ -72,7 +72,7 @@ class _PaypalScreenState extends State<PaypalScreen> {
       );
   }
 
-  getSetInitialUrl() async {
+  Future<void> getSetInitialUrl() async {
     Map paypalUrlResponse = await (PaymentRepository().getPaypalUrlResponse(
       amount: widget.amount.toString(),
       payment_method: widget.payment_method_key,

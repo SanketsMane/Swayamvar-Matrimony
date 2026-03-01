@@ -1,17 +1,10 @@
 import 'dart:async';
 
 import 'package:active_matrimonial_flutter_app/app_config.dart';
-import 'package:active_matrimonial_flutter_app/const/my_theme.dart';
-import 'package:active_matrimonial_flutter_app/const/style.dart';
-import 'package:active_matrimonial_flutter_app/helpers/device_info.dart';
-import 'package:active_matrimonial_flutter_app/helpers/navigator_push.dart';
 import 'package:active_matrimonial_flutter_app/redux/libs/add_on/addon_check_middleware.dart';
 import 'package:active_matrimonial_flutter_app/redux/libs/app_info/app_info_middleware.dart';
-import 'package:active_matrimonial_flutter_app/redux/libs/auth/auth_middleware.dart';
 import 'package:active_matrimonial_flutter_app/redux/libs/feature/feature_check_middleware.dart';
-import 'package:active_matrimonial_flutter_app/screens/app_navigation.dart';
 import 'package:active_matrimonial_flutter_app/screens/core.dart';
-import 'package:active_matrimonial_flutter_app/screens/startup_pages/landing_page/landing_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:info_getter/info_getter.dart';

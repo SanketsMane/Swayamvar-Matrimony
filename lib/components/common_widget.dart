@@ -69,7 +69,7 @@ class CommonWidget {
     final screenWidth = MediaQuery.of(context).size.width;
 
     return DropdownButtonFormField<DDown>(
-      value: value,
+      initialValue: value,
       isExpanded: true,
       iconSize: 0.0,
       decoration: InputDecoration(
@@ -110,7 +110,7 @@ class CommonWidget {
     dynamic onchange,
   ) {
     return DropdownButtonFormField<DDown>(
-      value: value,
+      initialValue: value,
       isExpanded: true,
       iconSize: 0.0,
       decoration: InputDecoration(

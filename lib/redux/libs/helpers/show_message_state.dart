@@ -28,7 +28,7 @@ ShowMessageState? show_message_reducer(
   return state;
 }
 
-show_message(ShowMessageState? state, dynamic action) {
+void show_message(ShowMessageState? state, dynamic action) {
   OneContext().showSnackBar(
     builder:
         (_) => SnackBar(

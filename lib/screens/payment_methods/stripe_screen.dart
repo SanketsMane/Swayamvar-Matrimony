@@ -14,15 +14,14 @@ import '../../helpers/main_helpers.dart';
 import '../../redux/store.dart';
 import '../../redux/libs/helpers/show_message_state.dart';
 import '../account/account_middleware.dart';
-import 'package:active_matrimonial_flutter_app/redux/store.dart';
 
 class StripeScreen extends StatefulWidget {
-  var amount;
-  String? payment_type;
-  String? payment_method_key;
-  String? package_id;
+  final dynamic amount;
+  final String? payment_type;
+  final String? payment_method_key;
+  final String? package_id;
 
-  StripeScreen({
+  const StripeScreen({
     super.key,
     this.amount,
     this.payment_type,
@@ -51,7 +50,7 @@ class _StripeScreenState extends State<StripeScreen> {
     stripe();
   }
 
-  stripe() {
+  void stripe() {
     print(initialUrl);
     // print("Bearer $accessToken");
 

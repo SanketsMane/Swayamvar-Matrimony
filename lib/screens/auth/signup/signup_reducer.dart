@@ -1,11 +1,9 @@
-import 'package:active_matrimonial_flutter_app/redux/libs/helpers/show_message_state.dart';
 import 'package:active_matrimonial_flutter_app/screens/auth/signup/signup_action.dart';
 import 'package:active_matrimonial_flutter_app/screens/auth/signup/signup_state.dart';
 import 'package:flutter/cupertino.dart';
 import '../../../helpers/data_time_format.dart';
 import '../../core.dart';
 import 'signup_middleware.dart';
-import 'package:active_matrimonial_flutter_app/redux/store.dart';
 
 SignUpState sign_up_reducer(SignUpState state, dynamic action) {
   if (action is SignupReset) {
@@ -129,6 +127,6 @@ SignUpState sign_up_reducer(SignUpState state, dynamic action) {
   return state;
 }
 
-loader(SignUpState state, SignUpAction action) {
+SignUpState loader(SignUpState state, SignUpAction action) {
   return state.copyWith(isLoading: !state.isLoading!);
 }

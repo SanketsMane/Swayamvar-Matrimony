@@ -17,7 +17,7 @@ class _OfflineState extends State<Offline> {
     return Scaffold(body: buildBody(context));
   }
 
-  buildBody(context) {
+  Container buildBody(context) {
     return Container(
       decoration: BoxDecoration(
         gradient: Styles.buildLinearGradient(

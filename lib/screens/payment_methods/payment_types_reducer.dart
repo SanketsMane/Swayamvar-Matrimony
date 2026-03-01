@@ -30,7 +30,7 @@ PaymentTypesState? payment_types_reducer(
   return state;
 }
 
-add_payment_method_key(
+PaymentTypesState add_payment_method_key(
   PaymentTypesState state,
   AddPaymentMethodKeyAction action,
 ) {
@@ -40,7 +40,7 @@ add_payment_method_key(
   return state;
 }
 
-update_payment_method_key(
+PaymentTypesState update_payment_method_key(
   PaymentTypesState state,
   UpdatePaymentMethodKeyAction action,
 ) {

@@ -1,14 +1,11 @@
 // Sanket: Updated Filter screen — premium 2026 design system
-import 'package:active_matrimonial_flutter_app/components/common_widget.dart';
 import 'package:active_matrimonial_flutter_app/const/my_theme.dart';
 import 'package:active_matrimonial_flutter_app/const/style.dart';
-import 'package:active_matrimonial_flutter_app/helpers/navigator_push.dart';
 import 'package:active_matrimonial_flutter_app/redux/libs/drop_down/caste_middleware.dart';
 import 'package:active_matrimonial_flutter_app/redux/libs/drop_down/city_middleware.dart';
 import 'package:active_matrimonial_flutter_app/redux/libs/drop_down/state_middleware.dart';
 import 'package:active_matrimonial_flutter_app/screens/core.dart';
 import 'package:active_matrimonial_flutter_app/screens/search_screens/search_middleware.dart';
-import 'package:active_matrimonial_flutter_app/screens/search_screens/show_basic_search.dart';
 import 'package:active_matrimonial_flutter_app/screens/search_screens/search_action.dart';
 import 'package:active_matrimonial_flutter_app/l10n/app_localizations.dart';
 import 'package:active_matrimonial_flutter_app/helpers/shared_pref.dart';
@@ -177,8 +174,7 @@ class _AdvancedSearchState extends State<AdvancedSearch> {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
         content: Text(
-          AppLocalizations.of(context)!.common_success_msg ??
-              "Filters applied successfully",
+          AppLocalizations.of(context)!.common_success_msg,
         ),
         backgroundColor: MyTheme.success,
         behavior: SnackBarBehavior.floating,
@@ -674,7 +670,7 @@ class _AdvancedSearchState extends State<AdvancedSearch> {
               isExpanded: true,
               value: (items.contains(value)) ? value : null,
               hint: Text(
-                AppLocalizations.of(context)!.filter_select ?? "Select",
+                AppLocalizations.of(context)!.filter_select,
               ),
               items:
                   items.map((String item) {

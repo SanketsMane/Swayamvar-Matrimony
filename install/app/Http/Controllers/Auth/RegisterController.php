@@ -129,6 +129,25 @@ class RegisterController extends Controller
             }
         }
 
+        // Agent Coupon Logic [Sanket]
+        if (!empty($data['agent_coupon_code'])) {
+            $telecaller_detail = \App\Models\TelecallerDetail::where('coupon_code', $data['agent_coupon_code'])->first();
+            if ($telecaller_detail) {
+                $user->telecaller_id = $telecaller_detail->user_id;
+                $user->save();
+
+                // Add to ActiveLeads as well for telecaller visibility
+                \App\Models\ActiveLead::create([
+                    'name' => $user->first_name . ' ' . $user->last_name,
+                    'mobile' => $user->phone,
+                    'email' => $user->email,
+                    'source' => 'Coupon Registration',
+                    'assigned_to' => $telecaller_detail->user_id,
+                    'status' => 'Assigned',
+                ]);
+            }
+        }
+
         $member                             = new Member;
         $member->user_id                    = $user->id;
         $member->save();

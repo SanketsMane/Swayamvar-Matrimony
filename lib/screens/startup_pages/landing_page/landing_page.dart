@@ -1,7 +1,4 @@
-import 'package:active_matrimonial_flutter_app/components/common_widget.dart';
 import 'package:active_matrimonial_flutter_app/const/my_theme.dart';
-import 'package:active_matrimonial_flutter_app/components/my_images.dart';
-import 'package:active_matrimonial_flutter_app/components/my_text_button.dart';
 import 'package:active_matrimonial_flutter_app/const/style.dart';
 import 'package:active_matrimonial_flutter_app/helpers/device_info.dart';
 import 'package:active_matrimonial_flutter_app/helpers/navigator_push.dart';
@@ -9,7 +6,6 @@ import 'package:active_matrimonial_flutter_app/screens/app_navigation.dart';
 import 'package:active_matrimonial_flutter_app/screens/core.dart';
 import 'package:active_matrimonial_flutter_app/screens/startup_pages/landing_page/landing.dart';
 import 'package:active_matrimonial_flutter_app/screens/startup_pages/on_boarding_pages.dart';
-import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:active_matrimonial_flutter_app/l10n/app_localizations.dart';
 

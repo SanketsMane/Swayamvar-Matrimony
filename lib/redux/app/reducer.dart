@@ -1,6 +1,3 @@
-import 'package:active_matrimonial_flutter_app/app_config.dart';
-import 'package:active_matrimonial_flutter_app/helpers/aiz_api_request.dart';
-import 'package:active_matrimonial_flutter_app/helpers/shared_pref.dart';
 import 'package:active_matrimonial_flutter_app/redux/app/app_state.dart';
 import 'package:active_matrimonial_flutter_app/redux/libs/app_info/app_info_reducer.dart';
 import 'package:active_matrimonial_flutter_app/redux/libs/auth/auth_reducer.dart';

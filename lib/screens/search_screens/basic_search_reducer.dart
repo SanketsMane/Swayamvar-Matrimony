@@ -146,46 +146,46 @@ BasicSearchState? basic_search_reducer(
   return state;
 }
 
-addReligionValue(BasicSearchState state, BasicSearchReligionAdd action) {
+BasicSearchState addReligionValue(BasicSearchState state, BasicSearchReligionAdd action) {
   state.religion_value = action.value;
   return state;
 }
 
-addMotherTongue(BasicSearchState state, BasicSearchMotherTongueAdd action) {
+BasicSearchState addMotherTongue(BasicSearchState state, BasicSearchMotherTongueAdd action) {
   state.mother_tongue = action.value;
   return state;
 }
 
-basic_search_mother_tongue_clear(BasicSearchState state, dynamic action) {
+BasicSearchState basic_search_mother_tongue_clear(BasicSearchState state, dynamic action) {
   state.mother_tongue = null;
   return state;
 }
 
-basic_search_religion_clear(BasicSearchState state, dynamic action) {
+BasicSearchState basic_search_religion_clear(BasicSearchState state, dynamic action) {
   state.religion_value = null;
   return state;
 }
 
 /// empty caste value
-empty_caste(BasicSearchState state, SearchEmptyCaste action) {
+BasicSearchState empty_caste(BasicSearchState state, SearchEmptyCaste action) {
   state.casteResponse!.data!.clear();
   state.caste_value = null;
   return state;
 }
 
-empty_sub_caste(BasicSearchState state, SearchEmptySubCaste action) {
+BasicSearchState empty_sub_caste(BasicSearchState state, SearchEmptySubCaste action) {
   state.subcasteResponse!.data!.clear();
   state.sub_caste_value = null;
   return state;
 }
 
-empty_state(BasicSearchState state, SearchEmptyState action) {
+BasicSearchState empty_state(BasicSearchState state, SearchEmptyState action) {
   state.stateResponse!.data!.clear();
   state.state_value = null;
   return state;
 }
 
-empty_city(BasicSearchState state, SearchEmptyCity action) {
+BasicSearchState empty_city(BasicSearchState state, SearchEmptyCity action) {
   state.cityResponse!.data!.clear();
   state.city_value = null;
   return state;
@@ -193,22 +193,22 @@ empty_city(BasicSearchState state, SearchEmptyCity action) {
 
 ///-----------------------------------------------------------------------------
 
-caste_response(BasicSearchState state, CasteResponse action) {
+BasicSearchState caste_response(BasicSearchState state, CasteResponse action) {
   state.casteResponse!.data = action.data;
   return state;
 }
 
-sub_caste_response(BasicSearchState state, SubcasteResponse action) {
+BasicSearchState sub_caste_response(BasicSearchState state, SubcasteResponse action) {
   state.subcasteResponse!.data = action.data;
   return state;
 }
 
-state_response(BasicSearchState state, SearchGetStateValueAction action) {
+BasicSearchState state_response(BasicSearchState state, SearchGetStateValueAction action) {
   state.stateResponse!.data = action.data;
   return state;
 }
 
-city_response(BasicSearchState state, SearchGetCityValueAction action) {
+BasicSearchState city_response(BasicSearchState state, SearchGetCityValueAction action) {
   state.cityResponse!.data = action.data;
   return state;
 }

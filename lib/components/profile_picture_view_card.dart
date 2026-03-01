@@ -245,7 +245,7 @@ class ProfilePictureViewCard extends StatelessWidget {
     );
   }
 
-  pleaseWaitDialog() {
+  Future<void> pleaseWaitDialog() {
     return OneContext().showDialog<void>(
       builder: (BuildContext context) {
         store.state.pictureProfileViewState!.loadingContext = context;

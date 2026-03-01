@@ -1,9 +1,7 @@
-import 'package:active_matrimonial_flutter_app/redux/app/app_state.dart';
 import 'package:active_matrimonial_flutter_app/screens/core.dart';
 import 'package:flutter/material.dart';
 import 'package:active_matrimonial_flutter_app/l10n/app_localizations.dart';
 import 'package:active_matrimonial_flutter_app/const/style.dart';
-import 'package:active_matrimonial_flutter_app/l10n/app_localizations.dart';
 
 class PP_AstronomicInfo extends StatelessWidget {
   const PP_AstronomicInfo({super.key});

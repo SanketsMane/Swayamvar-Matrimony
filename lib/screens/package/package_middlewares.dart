@@ -12,7 +12,6 @@ import 'package:redux_thunk/redux_thunk.dart';
 
 import '../account/account_middleware.dart';
 import 'package_history.dart';
-import 'package:active_matrimonial_flutter_app/redux/store.dart';
 
 ThunkAction<AppState> packageListMiddleware() {
   return (Store<AppState> store) async {

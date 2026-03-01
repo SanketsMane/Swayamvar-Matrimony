@@ -1,9 +1,6 @@
 // Sanket: Consolidated Membership Plans screen — premium 2026 design system
-import 'package:active_matrimonial_flutter_app/components/common_widget.dart';
 import 'package:active_matrimonial_flutter_app/const/my_theme.dart';
-import 'package:active_matrimonial_flutter_app/const/style.dart';
 import 'package:active_matrimonial_flutter_app/helpers/navigator_push.dart';
-import 'package:active_matrimonial_flutter_app/redux/libs/helpers/show_message_state.dart';
 import 'package:active_matrimonial_flutter_app/screens/core.dart';
 import 'package:active_matrimonial_flutter_app/screens/package/package_middlewares.dart';
 import 'package:active_matrimonial_flutter_app/screens/payment_methods/payment.dart';
@@ -418,7 +415,7 @@ class PremiumPlansViewModel {
 
   PremiumPlansViewModel({this.list, this.fetch, this.isDeactivated});
 
-  static fromStore(Store<AppState> store) {
+  static PremiumPlansViewModel fromStore(Store<AppState> store) {
     return PremiumPlansViewModel(
       list: store.state.premiumPlansState!.premiumList,
       fetch: store.state.premiumPlansState!.isFetching,

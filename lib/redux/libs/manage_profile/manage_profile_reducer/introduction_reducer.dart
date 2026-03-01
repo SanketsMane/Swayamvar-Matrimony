@@ -3,9 +3,6 @@ import 'package:active_matrimonial_flutter_app/models_response/manage_profile/ge
 import 'package:active_matrimonial_flutter_app/redux/libs/manage_profile/manage_profiles_state/introduction_state.dart';
 import 'package:flutter/material.dart';
 
-import '../../../../redux/store.dart';
-import '../manage_profile_middleware/manage_profile_update_middlewares.dart';
-import 'package:active_matrimonial_flutter_app/redux/store.dart';
 
 IntroductionState? introduction_reducer(IntroductionState? state, action) {
   if (action == SaveChanges.introduction) {

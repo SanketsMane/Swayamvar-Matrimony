@@ -6,7 +6,6 @@ import 'package:active_matrimonial_flutter_app/components/container_with_icon.da
 import 'package:active_matrimonial_flutter_app/components/custom_popup.dart';
 import 'package:active_matrimonial_flutter_app/const/my_theme.dart';
 import 'package:active_matrimonial_flutter_app/const/style.dart';
-import 'package:active_matrimonial_flutter_app/helpers/device_info.dart';
 import 'package:active_matrimonial_flutter_app/helpers/shared_pref.dart';
 import 'package:active_matrimonial_flutter_app/screens/core.dart';
 import 'package:active_matrimonial_flutter_app/screens/home_pages/explore/explore_middleware.dart';

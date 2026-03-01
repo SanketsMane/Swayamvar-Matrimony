@@ -1,7 +1,6 @@
 import 'package:active_matrimonial_flutter_app/components/common_app_bar_manageprofile.dart';
 import 'package:active_matrimonial_flutter_app/components/common_input.dart';
 import 'package:active_matrimonial_flutter_app/components/common_widget.dart';
-import 'package:active_matrimonial_flutter_app/const/const.dart';
 import 'package:active_matrimonial_flutter_app/const/my_theme.dart';
 import 'package:active_matrimonial_flutter_app/const/style.dart';
 import 'package:active_matrimonial_flutter_app/helpers/device_info.dart';
@@ -149,7 +148,7 @@ class _ResidencyInformationState extends State<ResidencyInformation> {
     );
   }
 
-  build_birth_country(BuildContext context, AppState state) {
+  Column build_birth_country(BuildContext context, AppState state) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -178,7 +177,7 @@ class _ResidencyInformationState extends State<ResidencyInformation> {
                 color: MyTheme.gull_grey,
               ),
             ),
-            value: country_value,
+            initialValue: country_value,
             items:
                 state
                     .manageProfileCombineState!
@@ -211,7 +210,7 @@ class _ResidencyInformationState extends State<ResidencyInformation> {
     );
   }
 
-  build_residency_country(BuildContext context, AppState state) {
+  Column build_residency_country(BuildContext context, AppState state) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -246,7 +245,7 @@ class _ResidencyInformationState extends State<ResidencyInformation> {
                 color: MyTheme.gull_grey,
               ),
             ),
-            value: residency_country_value,
+            initialValue: residency_country_value,
             items:
                 state
                     .manageProfileCombineState!
@@ -279,7 +278,7 @@ class _ResidencyInformationState extends State<ResidencyInformation> {
     );
   }
 
-  build_immigration_status(BuildContext context, AppState state) {
+  Column build_immigration_status(BuildContext context, AppState state) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -299,7 +298,7 @@ class _ResidencyInformationState extends State<ResidencyInformation> {
     );
   }
 
-  build_growup_country(BuildContext context, AppState state) {
+  Column build_growup_country(BuildContext context, AppState state) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -328,7 +327,7 @@ class _ResidencyInformationState extends State<ResidencyInformation> {
                 color: MyTheme.gull_grey,
               ),
             ),
-            value: grow_up_country_value,
+            initialValue: grow_up_country_value,
             items:
                 state
                     .manageProfileCombineState!

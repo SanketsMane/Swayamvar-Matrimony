@@ -14,7 +14,6 @@ import '../../const/style.dart';
 import '../../helpers/main_helpers.dart';
 import '../core.dart';
 import 'contact_us_action.dart';
-import 'package:active_matrimonial_flutter_app/redux/store.dart';
 
 class ContactUs extends StatefulWidget {
   const ContactUs({super.key});
@@ -130,7 +129,7 @@ class _ContactUsState extends State<ContactUs> {
   }
 
   String? name, email, subject, description, gCaptcha;
-  setValues() {
+  void setValues() {
     name = store.state.contactUsState!.nameController!.text.trim();
     email = store.state.contactUsState!.emailController!.text.trim();
     subject = store.state.contactUsState!.subjectController!.text.trim();
@@ -139,11 +138,11 @@ class _ContactUsState extends State<ContactUs> {
     gCaptcha = store.state.contactUsState!.googleRecaptchaKey;
   }
 
-  send() async {
+  Future<void> send() async {
     if (!requiredFieldVerification()) {
       return;
     }
-    await setValues();
+    setValues();
     Map postValue = {};
     postValue.addAll({
       "name": name,
@@ -242,7 +241,7 @@ class _ContactUsState extends State<ContactUs> {
     );
   }
 
-  itemSpacer({height = 10.0}) {
+  SizedBox itemSpacer({height = 10.0}) {
     return SizedBox(height: height);
   }
 }

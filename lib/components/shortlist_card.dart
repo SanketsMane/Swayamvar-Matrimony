@@ -7,7 +7,6 @@ import '../screens/my_dashboard_pages/interest/express_interest_middleware.dart'
 import '../screens/my_dashboard_pages/shortlist/shortlist_action.dart';
 import 'common_widget.dart';
 import 'my_images.dart';
-import 'package:active_matrimonial_flutter_app/redux/store.dart';
 
 class ShortlistCard extends StatelessWidget {
   final AppState? state;

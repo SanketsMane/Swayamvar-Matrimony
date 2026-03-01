@@ -7,7 +7,6 @@ import 'package:redux_thunk/redux_thunk.dart';
 
 import '../../../const/my_theme.dart';
 import '../../../redux/libs/helpers/show_message_state.dart';
-import 'package:active_matrimonial_flutter_app/redux/store.dart';
 
 ThunkAction<AppState> addShortlistMiddleware({required int userId}) {
   return (Store<AppState> store) async {

@@ -73,7 +73,7 @@ class _NewPasswordState extends State<NewPassword> {
     return true;
   }
 
-  confirm(context) {
+  void confirm(context) {
     print('on confirm');
     FocusManager.instance.primaryFocus?.unfocus();
     if (!requiredFieldVerification()) {

@@ -21,7 +21,7 @@ NotificationState? notification_reducer(
   return state;
 }
 
-store_notification(NotificationState state, StoreNotification action) {
+NotificationState store_notification(NotificationState state, StoreNotification action) {
   state.isFetching = false;
   if (action.payload?.meta != null &&
       action.payload!.meta!.lastPage != state.page) {
@@ -36,7 +36,7 @@ store_notification(NotificationState state, StoreNotification action) {
   return state;
 }
 
-reset(NotificationState? state, dynamic action) {
+NotificationState reset(NotificationState? state, dynamic action) {
   state = NotificationState.initialState();
   // state?.notification_list = [];
   // state?.page = 1;

@@ -13,7 +13,6 @@ import 'package:webview_flutter/webview_flutter.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../../helpers/main_helpers.dart';
-import '../../helpers/shared_pref.dart';
 import '../../redux/libs/helpers/show_message_state.dart';
 
 class InstamojoScreen extends StatefulWidget {
@@ -73,7 +72,7 @@ class _InstamojoScreenState extends State<InstamojoScreen> {
       );
   }
 
-  getSetInitialUrl() async {
+  Future<void> getSetInitialUrl() async {
     try {
       Map instamojoUrlResponse = await (PaymentRepository()
           .getInstamojoUrlResponse(

@@ -121,7 +121,7 @@ class LoginRequest {
 
 class ClearAction {}
 
-loader(SignInState? state, SignInAction action) {
+SignInState loader(SignInState? state, SignInAction action) {
   if (action.from == "custom") {
     state!.isCustomLogin = !state.isCustomLogin!;
   } else {

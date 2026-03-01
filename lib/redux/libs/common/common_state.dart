@@ -3,7 +3,7 @@ import 'package:active_matrimonial_flutter_app/models_response/others/country_re
 class CommonState {
   List<CountryInfo>? countries = [];
 
-  update({List<CountryInfo>? countries}) {
+  void update({List<CountryInfo>? countries}) {
     this.countries = countries ?? this.countries;
   }
 

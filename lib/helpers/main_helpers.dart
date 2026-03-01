@@ -22,7 +22,7 @@ dynamic getSettingValue(String key) {
   return store.state.systemSettingState!.settingResponse?.data![key];
 }
 
-setProfileDropdownValues() {
+void setProfileDropdownValues() {
   !store.state.manageProfileCombineState!.profiledropdownResponseData!.result!
       ? store.dispatch(profiledropdownMiddleware())
       : null;

@@ -7,9 +7,9 @@ class MyTextButton extends StatelessWidget {
   final text;
   final horizontal;
   final vertical;
-  Function? onPressed;
+  final Function? onPressed;
 
-  MyTextButton({
+  const MyTextButton({
     super.key,
     this.horizontal = 10.0,
     this.vertical = 0.0,

@@ -872,6 +872,45 @@ class AppLocalizationsMr extends AppLocalizations {
   String get manage_profile_city_of_birth => 'City of Birth';
 
   @override
+  String get astro_sign_aries => 'मेष (Aries)';
+
+  @override
+  String get astro_sign_taurus => 'वृषभ (Taurus)';
+
+  @override
+  String get astro_sign_gemini => 'मिथुन (Gemini)';
+
+  @override
+  String get astro_sign_cancer => 'कर्क (Cancer)';
+
+  @override
+  String get astro_sign_leo => 'सिंह (Leo)';
+
+  @override
+  String get astro_sign_virgo => 'कन्या (Virgo)';
+
+  @override
+  String get astro_sign_libra => 'तुळ (Libra)';
+
+  @override
+  String get astro_sign_scorpio => 'वृश्चिक (Scorpio)';
+
+  @override
+  String get astro_sign_sagittarius => 'धनु (Sagittarius)';
+
+  @override
+  String get astro_sign_capricorn => 'मकर (Capricorn)';
+
+  @override
+  String get astro_sign_aquarius => 'कुंभ (Aquarius)';
+
+  @override
+  String get astro_sign_pisces => 'मीन (Pisces)';
+
+  @override
+  String get astro_pick_time => 'वेळ निवडा';
+
+  @override
   String get manage_profile_permanent_address => 'Permanent Address';
 
   @override

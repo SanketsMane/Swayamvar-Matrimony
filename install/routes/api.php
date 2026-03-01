@@ -250,8 +250,11 @@ Route::group(['namespace' => 'Api', 'middleware' => ['app_language']], function 
             Route::get('/notifications', 'NotificationController@notifications');
             Route::get('/notification/{id}', 'NotificationController@single_notification_read');
             Route::get('/mark-all-as-read', 'NotificationController@mark_all_as_read');
-            // Happy tory
-            Route::get('/happy-story', 'HappyStoryController@happy_story');
         });
+        // Happy story
+        Route::get('/happy-story', 'HappyStoryController@happy_story');
     });
+
+    // Meta Webhook [Sanket]
+    Route::post('/meta-webhook', 'Api\MetaLeadController@webhook');
 });

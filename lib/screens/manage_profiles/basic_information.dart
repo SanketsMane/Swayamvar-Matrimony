@@ -3,7 +3,6 @@ import 'package:active_matrimonial_flutter_app/components/common_app_bar_managep
 import 'package:active_matrimonial_flutter_app/components/common_input.dart';
 import 'package:active_matrimonial_flutter_app/components/common_widget.dart';
 import 'package:active_matrimonial_flutter_app/components/group_item_with_child.dart';
-import 'package:active_matrimonial_flutter_app/const/const.dart';
 import 'package:active_matrimonial_flutter_app/const/my_theme.dart';
 import 'package:active_matrimonial_flutter_app/const/style.dart';
 import 'package:active_matrimonial_flutter_app/helpers/device_info.dart';
@@ -128,7 +127,7 @@ class _BasicInformationState extends State<BasicInformation> {
                   ),
                   // helperText: 'Helper text',
                 ),
-                value:
+                initialValue:
                     state
                         .manageProfileCombineState!
                         .basicInfoState!
@@ -299,7 +298,7 @@ class _BasicInformationState extends State<BasicInformation> {
                     color: MyTheme.gull_grey,
                   ),
                 ),
-                value:
+                initialValue:
                     state
                         .manageProfileCombineState!
                         .basicInfoState!
@@ -357,7 +356,7 @@ class _BasicInformationState extends State<BasicInformation> {
                     color: MyTheme.gull_grey,
                   ),
                 ),
-                value:
+                initialValue:
                     state
                         .manageProfileCombineState!
                         .basicInfoState!

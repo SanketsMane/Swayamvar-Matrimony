@@ -67,7 +67,7 @@ class DropDownRepository {
   Future<ProfiledropdownResponse> fetchProfileDropDown() async {
     var baseUrl = "${AppConfig.BASE_URL}/member/profile-dropdown";
     var accessToken = SharedPref().accessToken;
-    if (accessToken == null || accessToken.isEmpty) {
+    if (accessToken.isEmpty) {
       return ProfiledropdownResponse.initialState();
     }
 

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:toast/toast.dart';
 
 class ToastComponent {
-  static showDialog(
+  static void showDialog(
     BuildContext context,
     String msg, {
     duration = 0,

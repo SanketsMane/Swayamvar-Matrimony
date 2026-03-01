@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import '../../const/my_theme.dart';
 import '../../repository/contact_us_repository.dart';
 import '../core.dart';
-import 'package:active_matrimonial_flutter_app/redux/store.dart';
 
 ThunkAction<AppState> contactUsMiddleware({postBody, context}) {
   return (Store<AppState> store) async {

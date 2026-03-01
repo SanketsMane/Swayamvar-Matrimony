@@ -10,7 +10,6 @@ import '../../const/style.dart';
 import '../../helpers/main_helpers.dart';
 import '../core.dart';
 import '../profile_and_gallery_picure_rqst/gallery_picture_view_request_send.dart';
-import 'package:active_matrimonial_flutter_app/redux/store.dart';
 
 class UserGallery extends StatelessWidget {
   final AppState state;
@@ -307,7 +306,7 @@ class UserGallery extends StatelessWidget {
     );
   }
 
-  pleaseWaitDialog() {
+  Future<void> pleaseWaitDialog() {
     return OneContext().showDialog<void>(
       builder: (BuildContext context) {
         store.state.publicProfileState!.loadingContext = context;

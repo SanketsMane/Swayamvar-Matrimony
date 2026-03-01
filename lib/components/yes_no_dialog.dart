@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:one_context/one_context.dart';
 
 class YesNoDialog {
-  static show({
+  static Future<dynamic> show({
     required String title,
     String? content,
     required VoidCallback onClickYes,

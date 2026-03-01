@@ -4,7 +4,6 @@ import 'package:http/http.dart' as http;
 
 import '../../../app_config.dart';
 import '../../../screens/core.dart';
-import 'package:active_matrimonial_flutter_app/redux/store.dart';
 
 class MemberInfoStoreAction {
   MemberInfoResponse? payload;

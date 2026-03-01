@@ -233,7 +233,7 @@ class GalleryPictureViewCard extends StatelessWidget {
     );
   }
 
-  pleaseWaitDialog() {
+  Future<void> pleaseWaitDialog() {
     return OneContext().showDialog<void>(
       builder: (BuildContext context) {
         store.state.galleryPictureViewState!.loadingContext = context;

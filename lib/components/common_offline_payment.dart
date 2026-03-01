@@ -13,18 +13,17 @@ import '../redux/app/app_state.dart';
 import '../screens/others/offline/offline_payment_reducer.dart';
 import 'common_app_bar.dart';
 import 'common_input.dart';
-import 'package:active_matrimonial_flutter_app/redux/store.dart';
 
 class CommonOfflinePayment extends StatefulWidget {
-  var amount;
-  String payment_type;
-  String? payment_method_key;
-  String package_id;
-  var details;
-  var manual_payment_id;
-  String? title;
+  final dynamic amount;
+  final String payment_type;
+  final String? payment_method_key;
+  final String package_id;
+  final dynamic details;
+  final dynamic manual_payment_id;
+  final String? title;
 
-  CommonOfflinePayment({
+  const CommonOfflinePayment({
     super.key,
     this.amount = 0.00,
     this.payment_type = "",
@@ -53,7 +52,7 @@ class _CommonOfflinePaymentState extends State<CommonOfflinePayment> {
         .then((value) => makeHeight());
   }
 
-  makeHeight() async {
+  Future<void> makeHeight() async {
     await Future.delayed(Duration(seconds: 1));
     var h = await controller.runJavaScriptReturningResult(
       "document.getElementById('scaled-frame').clientHeight",

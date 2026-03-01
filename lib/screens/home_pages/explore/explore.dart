@@ -2,7 +2,6 @@
 import 'dart:math';
 import 'dart:io';
 import 'package:flutter/services.dart';
-import 'package:one_context/one_context.dart';
 import 'package:active_matrimonial_flutter_app/l10n/app_localizations.dart';
 import 'package:active_matrimonial_flutter_app/const/my_theme.dart';
 import 'package:active_matrimonial_flutter_app/const/style.dart';
@@ -14,9 +13,6 @@ import '../../../components/my_images.dart';
 import '../../../helpers/aiz_route.dart';
 import '../../user_pages/user_public_profile.dart';
 import '../../search_screens/advanced_search.dart';
-import '../../search_screens/search_action.dart';
-import '../../search_screens/search_middleware.dart';
-import '../../search_screens/search_middleware.dart';
 import '../../notifications/notifications.dart';
 import 'explore_middleware.dart';
 
@@ -24,10 +20,7 @@ import '../../../components/main_drawer.dart';
 import '../../my_dashboard_pages/shortlist/add_shortlist_middleware.dart';
 import '../../my_dashboard_pages/interest/express_interest_middleware.dart';
 import '../home/home_action.dart';
-import '../../account/account_middleware.dart';
-import '../../auth/signin/phone_login.dart';
-import '../../../middleware/profile_view_middleware.dart';
-import '../../manage_profiles/manage_profile.dart'; // For MyProfile import if needed, but it's used in home.dart
+// For MyProfile import if needed, but it's used in home.dart
 
 class Explore extends StatefulWidget {
   const Explore({super.key});
@@ -355,9 +348,9 @@ class _ExploreState extends State<Explore> {
 
   Widget _buildCompBadge(int match) {
     Color bColor;
-    if (match >= 85)
+    if (match >= 85) {
       bColor = MyTheme.success;
-    else if (match >= 60)
+    } else if (match >= 60)
       bColor = Colors.orange;
     else
       bColor = MyTheme.text_secondary;

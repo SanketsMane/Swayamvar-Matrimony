@@ -10,7 +10,6 @@ import 'package:redux_thunk/redux_thunk.dart';
 
 import '../../../helpers/shared_pref.dart';
 import '../../../screens/search_screens/search_action.dart';
-import 'package:active_matrimonial_flutter_app/redux/store.dart';
 
 ThunkAction<AppState> stateMiddleware(
   country, {

@@ -1,4 +1,3 @@
-import 'dart:convert';
 
 import 'package:active_matrimonial_flutter_app/app_config.dart';
 import 'package:active_matrimonial_flutter_app/models_response/chat/chat_details_response.dart';
@@ -51,23 +50,34 @@ class ChatRepository {
   }) async {
     var baseUrl = "${AppConfig.BASE_URL}/member/chat-reply";
     var accessToken = SharedPref().accessToken;
-    var postBody = jsonEncode({
-      "chat_thread_id": id,
-      "message": text,
-      "attachment": attachment,
+
+    var uri = Uri.parse(baseUrl);
+    var request = http.MultipartRequest('POST', uri);
+
+    request.fields["chat_thread_id"] = id.toString();
+    request.fields["message"] = text ?? "";
+
+    if (attachment != null) {
+      if (attachment is List) {
+        for (var file in attachment) {
+          var pic = await http.MultipartFile.fromPath("attachment[]", file.path);
+          request.files.add(pic);
+        }
+      } else {
+        var pic = await http.MultipartFile.fromPath("attachment[]", attachment.path);
+        request.files.add(pic);
+      }
+    }
+
+    request.headers.addAll({
+      "Accept": "application/json",
+      "Authorization": "Bearer $accessToken",
     });
 
-    var response = await http.post(
-      Uri.parse(baseUrl),
-      headers: {
-        "Accept": "application/json",
-        "Content-Type": "application/json",
-        "Authorization": "Bearer $accessToken",
-      },
-      body: postBody,
-    );
+    var response = await request.send();
+    var responseString = await response.stream.bytesToString();
 
-    var data = commonResponseFromJson(response.body);
+    var data = commonResponseFromJson(responseString);
 
     return data;
   }

@@ -67,10 +67,18 @@ class ChatController extends Controller
                 $attachment = upload_api_file($file);
                 $attachments[] = $attachment;
             }
-        }      
+        }
 
-        $chat = new ChatService();
-        $new_chat = $chat->store($request->except(['_token']), $attachments);
+        $chat_service = new ChatService();
+        $new_chat = $chat_service->store($request->except(['_token']), $attachments);
+
+        // Trigger real-time event
+        try {
+            event(new \App\Events\MessageSent($new_chat));
+        } catch (\Exception $e) {
+            // Silently fail if broadcasting is not configured
+        }
+
         return $this->success_message('Data inserted successfully!');
     }
 }

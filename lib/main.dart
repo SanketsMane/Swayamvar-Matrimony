@@ -52,6 +52,8 @@ void main() async {
 
 // redux store moved to lib/redux/store.dart
 
+import 'package:screen_protector/screen_protector.dart';
+
 class MyApp extends StatefulWidget {
   const MyApp({super.key});
 
@@ -60,6 +62,28 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
+  @override
+  void initState() {
+    super.initState();
+    _initScreenProtection();
+  }
+
+  void _initScreenProtection() async {
+    // Android: Protects against screenshots and screen recording (black screen)
+    // iOS: Protects against screen recording and task switcher leaking
+    await ScreenProtector.protectDataLeakageWithBlur();
+    await ScreenProtector.protectDataLeakageOn();
+    // iOS: Prevent screenshot (shows warning toast natively if possible)
+    await ScreenProtector.preventScreenshotOn();
+  }
+
+  @override
+  void dispose() {
+    ScreenProtector.protectDataLeakageOff();
+    ScreenProtector.preventScreenshotOff();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return StoreProvider(

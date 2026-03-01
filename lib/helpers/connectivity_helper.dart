@@ -13,7 +13,7 @@ class ConnectivityHelper {
     }
   }
 
-  abortIfNotConnected(context, onPop) async {
+  Future<void> abortIfNotConnected(context, onPop) async {
     if (await checkInternetConnection() == false) {
       Navigator.push(
         context,

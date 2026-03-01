@@ -2,12 +2,9 @@ import 'dart:convert';
 
 import 'package:active_matrimonial_flutter_app/app_config.dart';
 import 'package:active_matrimonial_flutter_app/models_response/payments/payment_types_response.dart';
-import 'package:active_matrimonial_flutter_app/redux/libs/helpers/show_message_state.dart';
-import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
 import '../helpers/main_helpers.dart';
-import '../redux/store.dart';
 import '../models_response/others/common_response.dart';
 
 class PaymentRepository {

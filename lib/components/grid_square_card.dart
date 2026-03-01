@@ -13,8 +13,8 @@ class GridSquareCard extends StatelessWidget {
     required this.icon,
     this.isSmallScreen = false,
     required this.text,
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context) {

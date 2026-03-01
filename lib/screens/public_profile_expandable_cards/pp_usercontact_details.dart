@@ -9,9 +9,9 @@ import 'package:flutter/material.dart';
 import 'package:active_matrimonial_flutter_app/l10n/app_localizations.dart';
 
 class PP_UserContactDetails extends StatelessWidget {
-  var userid;
+  final dynamic userid;
 
-  PP_UserContactDetails({super.key, required this.userid});
+  const PP_UserContactDetails({super.key, required this.userid});
 
   @override
   Widget build(BuildContext context) {
@@ -160,7 +160,7 @@ class UserContactViewModel {
     this.contactView,
   });
 
-  static fromStore(Store<AppState> store) {
+  static UserContactViewModel fromStore(Store<AppState> store) {
     return UserContactViewModel(
       contact: store.state.publicProfileState!.contact,
       isviewed: store.state.publicProfileState!.viewContactCheck,

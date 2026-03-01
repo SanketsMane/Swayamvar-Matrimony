@@ -35,7 +35,7 @@ ThunkAction<AppState> referralWithdrawRequestMiddleware({
   };
 }
 
-fetch() {
+void fetch() {
   store.dispatch(Reset.referralHistoryRequestList);
   store.dispatch(referralWithdrawRequestHistoryMiddleware());
   store.dispatch(walletBalanceMiddleware());

@@ -3,7 +3,6 @@ import 'package:carousel_slider/carousel_slider.dart';
 import '../../../models_response/Explore/slider_response.dart';
 import '../../../repository/explore_repository.dart';
 import '../../core.dart';
-import 'package:active_matrimonial_flutter_app/redux/store.dart';
 
 class LandingState {
   final CarouselSliderController carouselController =

@@ -60,7 +60,18 @@ class PackagePaymentController extends Controller
         // dd($request->all());
 
         $user = Auth::user();
-        $data['amount']         = $request->amount;
+        $amount = $request->amount;
+
+        // Apply Telecaller Discount [Sanket]
+        if ($user->telecaller_id) {
+            $telecaller_detail = \App\Models\TelecallerDetail::where('user_id', $user->telecaller_id)->first();
+            if ($telecaller_detail && $telecaller_detail->discount_percent > 0) {
+                $discount = ($amount * $telecaller_detail->discount_percent) / 100;
+                $amount -= $discount;
+            }
+        }
+
+        $data['amount']         = $amount;
         $data['package_id']     = $request->package_id;
         $data['payment_method'] = $request->payment_option;
 
@@ -182,22 +193,36 @@ class PackagePaymentController extends Controller
             $user->membership = 2;
             $user->save();
 
-            if (addon_activation('referral_system') && $user->referred_by != null && $user->referral_comission == 0) {
-                // For Referred by user
-                $reffered_by = User::where('id', $user->referred_by)->first();
+            if (addon_activation("referral_system") && $user->referred_by != null && $user->referral_comission == 0) {
+                $reffered_by = User::where("id", $user->referred_by)->first();
                 $wallet = new Wallet();
                 $wallet->user_id = $reffered_by->id;
-                $wallet->amount = get_setting('referred_by_user_commission');
-                $wallet->payment_method = 'reffered_commission';
-                $wallet->payment_details = '';
+                $wallet->amount = get_setting("referred_by_user_commission");
+                $wallet->payment_method = "reffered_commission";
+                $wallet->payment_details = "";
                 $wallet->referral_user = $user->id;
                 $wallet->save();
-
-                $reffered_by->balance = $reffered_by->balance + get_setting('referred_by_user_commission');
+                $reffered_by->balance = $reffered_by->balance + get_setting("referred_by_user_commission");
                 $reffered_by->save();
-
                 $user->referral_comission = 1;
                 $user->save();
+            }
+
+            // Record Telecaller Commission [Sanket]
+            if ($user->telecaller_id) {
+                $telecaller_detail = \App\Models\TelecallerDetail::where('user_id', $user->telecaller_id)->first();
+                if ($telecaller_detail && $telecaller_detail->commission_percent > 0) {
+                    $commission_amount = ($package_payment->amount * $telecaller_detail->commission_percent) / 100;
+                    
+                    \App\Models\TelecallerCouponUsage::create([
+                        'telecaller_id' => $user->telecaller_id,
+                        'user_id' => $user->id,
+                        'coupon_code' => $telecaller_detail->coupon_code,
+                        'discount_amount' => ($package->price - $package_payment->amount),
+                        'commission_amount' => $commission_amount,
+                        'status' => 'paid',
+                    ]);
+                }
             }
 
             // Package Payment Store Notification for member

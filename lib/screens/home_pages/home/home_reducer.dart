@@ -1,5 +1,4 @@
 import 'package:active_matrimonial_flutter_app/redux/store.dart';
-import 'package:active_matrimonial_flutter_app/redux/libs/helpers/show_message_state.dart';
 import 'package:active_matrimonial_flutter_app/screens/home_pages/home/home_action.dart';
 import 'package:active_matrimonial_flutter_app/screens/home_pages/home/home_state.dart';
 import 'package:active_matrimonial_flutter_app/screens/ignore/add_ignore_middleware.dart';
@@ -7,13 +6,13 @@ import 'package:flutter/material.dart';
 import 'package:redux/redux.dart';
 
 final homeReducer = combineReducers<HomeState>([
-  TypedReducer<HomeState, HomeFetchingAction>(_homeFetching),
-  TypedReducer<HomeState, HomeStoreAction>(_homeStore),
-  TypedReducer<HomeState, HomeFailureAction>(_homeFailure),
-  TypedReducer<HomeState, AddToIgnoreListFromHome>(_addToIgnore),
-  TypedReducer<HomeState, SetCurrentIndex>(_setCurrentIndex),
-  TypedReducer<HomeState, GoNextPage>(_goNextPage),
-  TypedReducer<HomeState, GoPrevPage>(_goPrevPage),
+  TypedReducer<HomeState, HomeFetchingAction>(_homeFetching).call,
+  TypedReducer<HomeState, HomeStoreAction>(_homeStore).call,
+  TypedReducer<HomeState, HomeFailureAction>(_homeFailure).call,
+  TypedReducer<HomeState, AddToIgnoreListFromHome>(_addToIgnore).call,
+  TypedReducer<HomeState, SetCurrentIndex>(_setCurrentIndex).call,
+  TypedReducer<HomeState, GoNextPage>(_goNextPage).call,
+  TypedReducer<HomeState, GoPrevPage>(_goPrevPage).call,
 ]);
 
 HomeState _homeFetching(HomeState state, HomeFetchingAction action) {

@@ -1,12 +1,10 @@
 // Sanket: Public Profile screen — premium 2026 layout
-import 'package:active_matrimonial_flutter_app/components/common_widget.dart';
 import 'package:active_matrimonial_flutter_app/components/my_images.dart';
 import 'package:active_matrimonial_flutter_app/const/my_theme.dart';
 import 'package:active_matrimonial_flutter_app/const/style.dart';
 import 'package:active_matrimonial_flutter_app/redux/libs/member_info/member_info.dart';
 import 'package:active_matrimonial_flutter_app/screens/chat/chat.dart';
 import 'package:active_matrimonial_flutter_app/screens/core.dart';
-import 'package:active_matrimonial_flutter_app/screens/ignore/add_ignore_middleware.dart';
 import 'package:active_matrimonial_flutter_app/screens/my_dashboard_pages/interest/express_interest_middleware.dart';
 import 'package:active_matrimonial_flutter_app/screens/my_dashboard_pages/shortlist/add_shortlist_middleware.dart';
 import 'package:active_matrimonial_flutter_app/screens/user_pages/public_profile_middleware.dart';
@@ -625,7 +623,7 @@ class _UserPublicProfileState extends State<UserPublicProfile> {
           height: 120,
           child: ListView.separated(
             scrollDirection: Axis.horizontal,
-            itemCount: images.length > 0 ? images.length : 3,
+            itemCount: images.isNotEmpty ? images.length : 3,
             separatorBuilder: (_, __) => const SizedBox(width: 12),
             itemBuilder: (context, index) {
               return Container(

@@ -19,7 +19,7 @@ SystemSettingState? feature_reducer(SystemSettingState? state, dynamic action) {
   return state;
 }
 
-fetch_feature(SystemSettingState state, dynamic action) {
+SystemSettingState fetch_feature(SystemSettingState state, dynamic action) {
   state.settingResponse = action.payload;
   state.isMinimumAge =
       (state.settingResponse?.data!['member_min_age'] != "") &&

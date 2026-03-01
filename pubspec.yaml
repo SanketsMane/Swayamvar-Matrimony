@@ -83,12 +83,14 @@ dependencies:
   appflowy_editor: ^6.1.0
   info_getter: ^1.0.0
   flutter_secure_storage: ^9.2.4
+  screen_protector: ^1.5.1
 
 
 
 
 
 
+  collection: any
 dev_dependencies:
   flutter_test:
     sdk: flutter

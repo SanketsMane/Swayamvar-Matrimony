@@ -14,15 +14,14 @@ import '../../helpers/main_helpers.dart';
 import '../../redux/store.dart';
 import '../../redux/libs/helpers/show_message_state.dart';
 import '../account/account_middleware.dart';
-import 'package:active_matrimonial_flutter_app/redux/store.dart';
 
 class RazorpayScreen extends StatefulWidget {
-  var amount;
-  String? payment_type;
-  String? payment_method_key;
-  String? package_id;
+  final dynamic amount;
+  final String? payment_type;
+  final String? payment_method_key;
+  final String? package_id;
 
-  RazorpayScreen({
+  const RazorpayScreen({
     super.key,
     this.amount,
     this.payment_type,
@@ -81,7 +80,7 @@ class _RazorpayScreenState extends State<RazorpayScreen> {
   }
 
   Future<void> initializeAccessToken() async {
-    accessToken = await getToken;
+    accessToken = getToken;
 
     if (accessToken == null) {
       print("Access Token is still null after fetch");
@@ -89,12 +88,7 @@ class _RazorpayScreenState extends State<RazorpayScreen> {
     }
   }
 
-  razorpay() {
-    if (initialUrl == null) {
-      print("Initial URL is null");
-      return;
-    }
-
+  void razorpay() {
     print("Loading URL: $initialUrl");
 
     _webViewController.loadRequest(

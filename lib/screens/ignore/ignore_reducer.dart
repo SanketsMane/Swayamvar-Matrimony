@@ -10,7 +10,6 @@ import 'package:one_context/one_context.dart';
 
 import '../../redux/store.dart';
 import 'ignore_middleware.dart';
-import 'package:active_matrimonial_flutter_app/redux/store.dart';
 
 IgnoreState? ignore_reducer(IgnoreState? state, dynamic action) {
   if (action is IgnoreItemRemoveAction) {
@@ -42,7 +41,7 @@ IgnoreState? ignore_reducer(IgnoreState? state, dynamic action) {
   return state;
 }
 
-backtomain(IgnoreState? state, AddIgnoreAction action) {
+IgnoreState? backtomain(IgnoreState? state, AddIgnoreAction action) {
   store.dispatch(homeMiddleware());
 
   Timer(Duration(seconds: 1), () {
@@ -54,7 +53,7 @@ backtomain(IgnoreState? state, AddIgnoreAction action) {
   return state;
 }
 
-remove_item(IgnoreState state, IgnoreItemRemoveAction action) {
+IgnoreState remove_item(IgnoreState state, IgnoreItemRemoveAction action) {
   state.ignoreList!.remove(action.data);
   store.dispatch(removeIgnoreMiddleware(user: action.data));
 

@@ -34,18 +34,18 @@ LanguageState? language_reducer(LanguageState? state, dynamic action) {
   return state;
 }
 
-language_get_response(LanguageState state, LanguageGetResponse action) {
+LanguageState language_get_response(LanguageState state, LanguageGetResponse action) {
   state.languageGetResponse!.data = action.data;
   state.languageGetResponse!.result = action.result;
   return state;
 }
 
-language_loader(LanguageState state, LanguageLoader action) {
+LanguageState language_loader(LanguageState state, LanguageLoader action) {
   state.isloading = !state.isloading!;
   return state;
 }
 
-language_save_changes_loader(LanguageState state, LanguageSaveChanges action) {
+LanguageState language_save_changes_loader(LanguageState state, LanguageSaveChanges action) {
   state.saveChangesLoader = !state.saveChangesLoader!;
   return state;
 }

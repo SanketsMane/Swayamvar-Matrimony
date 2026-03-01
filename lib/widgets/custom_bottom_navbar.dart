@@ -1,7 +1,6 @@
 // Sanket: True Custom Painted Cut Bottom Navigation Bar (Real Fix - Final Stable)
 import 'package:flutter/material.dart';
 import '../const/my_theme.dart';
-import '../const/style.dart';
 
 class CustomBottomNavBar extends StatefulWidget {
   final int currentIndex;

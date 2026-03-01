@@ -19,18 +19,18 @@ AstronomicState? astronomic_reducer(AstronomicState? state, dynamic action) {
   return state;
 }
 
-astro_get_response(AstronomicState state, AstronomicGetResponse action) {
+AstronomicState astro_get_response(AstronomicState state, AstronomicGetResponse action) {
   state.astronomicGetResponse!.result = action.result;
   state.astronomicGetResponse!.data = action.data;
   return state;
 }
 
-astro_save_changes(AstronomicState state, AstroSaveChanges action) {
+AstronomicState astro_save_changes(AstronomicState state, AstroSaveChanges action) {
   state.pageloader = !state.pageloader!;
   return state;
 }
 
-loader(AstronomicState state, Loader action) {
+AstronomicState loader(AstronomicState state, Loader action) {
   state.isloading = !state.isloading!;
   return state;
 }

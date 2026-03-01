@@ -76,7 +76,7 @@ class HomeController extends Controller
 
     public function admin_login()
     {
-        if (auth()->user() != null && (auth()->user()->user_type == 'admin' || auth()->user()->user_type == 'staff')) {
+        if (auth()->user() != null && (auth()->user()->user_type == 'admin' || auth()->user()->user_type == 'staff' || auth()->user()->user_type == 'telecaller')) {
             return redirect()->route('admin.dashboard');
         } else {
             return view("auth.login");
@@ -94,6 +94,9 @@ class HomeController extends Controller
 
     public function admin_dashboard()
     {
+        if (Auth::user()->user_type == 'telecaller') {
+            return redirect()->route('telecalling.dashboard');
+        }
         return view('admin.dashboard');
     }
     

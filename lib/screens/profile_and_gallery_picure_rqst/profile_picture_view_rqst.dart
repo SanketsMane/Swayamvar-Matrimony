@@ -173,7 +173,7 @@ class _ViewModel {
     return '_ViewModel{listofdata: $listofdata, status: $status, error: $error, showLoading: $showLoading, noMoreData: $noMoreData}';
   }
 
-  static fromStore(Store<AppState> store) {
+  static _ViewModel fromStore(Store<AppState> store) {
     return _ViewModel(
       listofdata: store.state.pictureProfileViewState!.pictureProfileList,
       status: store.state.pictureProfileViewState!.pictureProfileStatus,

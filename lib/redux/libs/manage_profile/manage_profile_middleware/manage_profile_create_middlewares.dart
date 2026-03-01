@@ -8,7 +8,6 @@ import 'package:redux_thunk/redux_thunk.dart';
 import '../../helpers/show_message_state.dart';
 import '../manage_profile_reducer/career_reducer.dart';
 import 'manage_profile_get_middlewares.dart';
-import 'package:active_matrimonial_flutter_app/redux/store.dart';
 
 ThunkAction<AppState> education_create_middleware({
   dynamic degree,

@@ -171,15 +171,15 @@ class ChangePassword extends StatelessWidget {
 }
 
 class FormFields extends StatelessWidget {
-  var value;
-  var controller;
-  var text;
-  var title;
-  var validator;
-  Function? obscure_toggler;
-  var obscure_text;
+  final dynamic value;
+  final dynamic controller;
+  final dynamic text;
+  final dynamic title;
+  final dynamic validator;
+  final Function? obscure_toggler;
+  final dynamic obscure_text;
 
-  FormFields({
+  const FormFields({
     super.key,
     this.value,
     this.controller,
@@ -255,7 +255,7 @@ class ChangePasswordViewModel {
     this.changepasswordmiddleware,
   });
 
-  static fromStore(Store<AppState> store) {
+  static ChangePasswordViewModel fromStore(Store<AppState> store) {
     return ChangePasswordViewModel(
       oldPasswordController:
           store.state.changePasswordState!.oldPasswordController,

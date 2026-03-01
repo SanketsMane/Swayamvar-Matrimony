@@ -7,11 +7,11 @@ import '../app_config.dart';
 import '../helpers/device_info.dart';
 
 class Captcha extends StatefulWidget {
-  Function callback;
-  Function? handleCaptcha;
-  bool isIOS;
+  final Function callback;
+  final Function? handleCaptcha;
+  final bool isIOS;
 
-  Captcha(this.callback, {this.handleCaptcha, this.isIOS = false});
+  const Captcha(this.callback, {super.key, this.handleCaptcha, this.isIOS = false});
 
   @override
   State<StatefulWidget> createState() {
@@ -20,7 +20,7 @@ class Captcha extends StatefulWidget {
 }
 
 class CaptchaState extends State<Captcha> {
-  WebViewController _webViewController = WebViewController();
+  final WebViewController _webViewController = WebViewController();
   double zoomValue = 2;
 
   Future<void> _onLoadFlutterAssetExample(
@@ -38,7 +38,7 @@ class CaptchaState extends State<Captcha> {
     super.initState();
   }
 
-  google_recaptcha() {
+  void google_recaptcha() {
     _webViewController
       ..setJavaScriptMode(JavaScriptMode.unrestricted)
       ..setBackgroundColor(const Color(0x00000000))
@@ -115,7 +115,7 @@ class CaptchaState extends State<Captcha> {
   <body>
     <div id="wrap">
 	
-	<iframe id="scaled-frame" src="${url}/google-recaptcha" allowfullscreen></iframe>
+	<iframe id="scaled-frame" src="$url/google-recaptcha" allowfullscreen></iframe>
     </div>
   </body>
 </html>

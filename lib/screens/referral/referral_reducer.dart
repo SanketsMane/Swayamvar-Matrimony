@@ -34,7 +34,7 @@ ReferralState? referral_reducer(ReferralState? state, dynamic action) {
   return state;
 }
 
-referral_code_store(ReferralState state, ReferralCodeStoreAction action) {
+ReferralState referral_code_store(ReferralState state, ReferralCodeStoreAction action) {
   // Sanket: Safe access to avoid "Unexpected null value" crash
   state.referralCode = action.payload?.data?.referralCode ?? '--------';
   return state;

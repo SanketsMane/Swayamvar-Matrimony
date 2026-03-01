@@ -95,7 +95,7 @@ PresentAddressState? present_address_reducer(
 }
 
 /// city
-city_response(PresentAddressState state, CityResponseForPresentAddress action) {
+PresentAddressState city_response(PresentAddressState state, CityResponseForPresentAddress action) {
   state.cityResponse!.data!.addAll(action.data!);
   state.selected_city = state.cityResponse!.data!.first;
 
@@ -112,7 +112,7 @@ city_response(PresentAddressState state, CityResponseForPresentAddress action) {
 }
 
 ///state
-state_response(PresentAddressState state, StateResponse action) {
+PresentAddressState state_response(PresentAddressState state, StateResponse action) {
   state.stateResponse!.data!.addAll(action.data!);
   state.selected_state = action.data!.first;
   if (state.presentAddressData?.state != null) {
@@ -131,7 +131,7 @@ state_response(PresentAddressState state, StateResponse action) {
   return state;
 }
 
-state_list_clear(PresentAddressState state, EmptyStateAction action) {
+PresentAddressState state_list_clear(PresentAddressState state, EmptyStateAction action) {
   state.stateResponse!.data!.clear();
   // state.state_value = null;
   state.selected_state = null;
@@ -140,7 +140,7 @@ state_list_clear(PresentAddressState state, EmptyStateAction action) {
 
 ///cities
 
-city_list_clear(PresentAddressState state, EmptyCityAction action) {
+PresentAddressState city_list_clear(PresentAddressState state, EmptyCityAction action) {
   state.cityResponse!.data!.clear();
   // state.city_value = null;
   state.selected_city = null;

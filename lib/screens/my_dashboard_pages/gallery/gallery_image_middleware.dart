@@ -6,7 +6,6 @@ import 'package:active_matrimonial_flutter_app/screens/account/account_middlewar
 import 'package:active_matrimonial_flutter_app/screens/my_dashboard_pages/gallery/gallery_image_action.dart';
 import 'package:redux/redux.dart';
 import 'package:redux_thunk/redux_thunk.dart';
-import 'package:active_matrimonial_flutter_app/redux/store.dart';
 
 ThunkAction<AppState> galleryImageMiddleware() {
   return (Store<AppState> store) async {

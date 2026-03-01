@@ -15,9 +15,9 @@ import '../../../components/recharge_wallet_card.dart';
 import '../../../components/wallet_history_card.dart';
 
 class MyWallet extends StatefulWidget {
-  bool from_wallet;
+  final bool from_wallet;
 
-  MyWallet({this.from_wallet = false, super.key});
+  const MyWallet({this.from_wallet = false, super.key});
 
   @override
   State<MyWallet> createState() => _MyWalletState();
@@ -26,7 +26,7 @@ class MyWallet extends StatefulWidget {
 class _MyWalletState extends State<MyWallet> {
   ScrollController scrollController = ScrollController();
 
-  refresh() async {
+  Future<void> refresh() async {
     {
       store.dispatch(Reset.myWallet);
       store.dispatch(walletHistoryMiddleware());

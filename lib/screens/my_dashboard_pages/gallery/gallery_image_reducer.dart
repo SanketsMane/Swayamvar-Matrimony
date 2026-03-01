@@ -8,7 +8,6 @@ import 'package:image_picker/image_picker.dart';
 
 import '../../core.dart';
 import 'gallery_image_middleware.dart';
-import 'package:active_matrimonial_flutter_app/redux/store.dart';
 
 GalleryImageState? gallery_image_reducer(GalleryImageState? state, action) {
   if (action is GalleryImageStoreAction) {
@@ -47,7 +46,7 @@ GalleryImageState? gallery_image_reducer(GalleryImageState? state, action) {
   return state;
 }
 
-set(setState, state, action) {
+void set(setState, state, action) {
   setState(() {
     state.imgName = action.imageName;
   });

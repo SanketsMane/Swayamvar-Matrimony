@@ -174,7 +174,7 @@ class _ViewModel {
 
   _ViewModel({this.hasMore, this.listofdata, this.error, this.isFetching});
 
-  static fromStore(Store<AppState> store) {
+  static _ViewModel fromStore(Store<AppState> store) {
     return _ViewModel(
       listofdata: store.state.notificationState!.notification_list,
       error: store.state.notificationState!.error,

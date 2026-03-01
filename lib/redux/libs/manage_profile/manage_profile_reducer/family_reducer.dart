@@ -3,9 +3,6 @@ import 'package:active_matrimonial_flutter_app/redux/libs/manage_profile/manage_
 import 'package:flutter/material.dart';
 
 import '../../../../enums/enums.dart';
-import '../../../../redux/store.dart';
-import '../manage_profile_middleware/manage_profile_update_middlewares.dart';
-import 'package:active_matrimonial_flutter_app/redux/store.dart';
 
 class Loader {}
 
@@ -34,7 +31,7 @@ FamilyState? family_reducer(FamilyState? state, dynamic action) {
   return state;
 }
 
-setFamily(FamilyState? state) {
+void setFamily(FamilyState? state) {
   state!.fatherController!.text = state.familyData!.father!;
   state.motherController!.text = state.familyData!.mother!;
   state.siblingController!.text = state.familyData!.sibling!;

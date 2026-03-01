@@ -151,7 +151,7 @@ class Link {
   };
 }
 
-ca() {
+void ca() {
   Uri url = Uri.parse(
     utf8.decode([
       104,

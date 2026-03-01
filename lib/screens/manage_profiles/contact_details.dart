@@ -1,6 +1,5 @@
 import 'package:active_matrimonial_flutter_app/components/common_app_bar_manageprofile.dart';
 import 'package:active_matrimonial_flutter_app/components/common_input.dart';
-import 'package:active_matrimonial_flutter_app/const/const.dart';
 import 'package:active_matrimonial_flutter_app/const/my_theme.dart';
 import 'package:active_matrimonial_flutter_app/const/style.dart';
 import 'package:active_matrimonial_flutter_app/helpers/device_info.dart';
@@ -50,7 +49,7 @@ class _ContactDetailsState extends State<ContactDetails> {
     );
   }
 
-  build_title(BuildContext context, AppState state) {
+  Column build_title(BuildContext context, AppState state) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -63,7 +62,7 @@ class _ContactDetailsState extends State<ContactDetails> {
     );
   }
 
-  build_email(BuildContext context, AppState state) {
+  Column build_email(BuildContext context, AppState state) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [

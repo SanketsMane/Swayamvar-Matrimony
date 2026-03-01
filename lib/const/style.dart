@@ -1,5 +1,4 @@
 import 'package:active_matrimonial_flutter_app/const/my_theme.dart';
-import 'package:active_matrimonial_flutter_app/helpers/device_info.dart';
 import 'package:flutter/material.dart';
 
 var white = MyTheme.white;

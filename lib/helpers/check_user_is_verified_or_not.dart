@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 
 import '../const/my_theme.dart';
 import '../screens/core.dart';
-import 'package:active_matrimonial_flutter_app/redux/store.dart';
 
 Future<void> checkUserVerificationAndNavigate(
   BuildContext context,

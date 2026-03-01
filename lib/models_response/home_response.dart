@@ -116,7 +116,6 @@
 
 import 'dart:convert';
 import 'package:active_matrimonial_flutter_app/models_response/common_models/member_data.dart';
-import 'package:active_matrimonial_flutter_app/models_response/gallery_picture_view_request_get_response.dart';
 
 HomeResponse homeResponseFromJson(String str) =>
     HomeResponse.fromJson(json.decode(str));
@@ -146,7 +145,7 @@ class HomeResponse {
   // Helper to parse a list of MemberData from json safely
   static List<MemberData> _parseMembers(dynamic jsonList) {
     if (jsonList == null || jsonList is! List) return [];
-    return (jsonList as List<dynamic>)
+    return (jsonList)
         .where((item) => item != null)
         .map((x) => MemberData.fromJson(x))
         .toList();

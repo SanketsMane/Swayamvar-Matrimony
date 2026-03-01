@@ -28,7 +28,7 @@ HappyStoriesState? happy_stories_reducer(
   return state;
 }
 
-reset(HappyStoriesState? state, dynamic action) {
+HappyStoriesState reset(HappyStoriesState? state, dynamic action) {
   state = HappyStoriesState.initialState();
   return state;
 }

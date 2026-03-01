@@ -3,9 +3,6 @@ import 'package:active_matrimonial_flutter_app/models_response/manage_profile/ge
 import 'package:active_matrimonial_flutter_app/redux/libs/manage_profile/manage_profiles_state/hobbies_interest_state.dart';
 import 'package:flutter/material.dart';
 
-import '../../../../redux/store.dart';
-import '../manage_profile_middleware/manage_profile_update_middlewares.dart';
-import 'package:active_matrimonial_flutter_app/redux/store.dart';
 
 class HobbiesInterestLoader {}
 
@@ -34,7 +31,7 @@ HobbiesInterestState? hobbies_interest_reducer(
   return state;
 }
 
-setHobbiesInterest(HobbiesInterestState? state) {
+void setHobbiesInterest(HobbiesInterestState? state) {
   state!.hobbiesController!.text = state.hobbiesInterestData!.hobbies!;
   state.interestsController!.text = state.hobbiesInterestData!.interests!;
   state.musicController!.text = state.hobbiesInterestData!.music!;

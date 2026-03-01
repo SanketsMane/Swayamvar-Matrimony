@@ -1,10 +1,7 @@
 // Sanket: New Help Center Hub — premium 2026 design system
 import 'package:active_matrimonial_flutter_app/const/my_theme.dart';
-import 'package:active_matrimonial_flutter_app/const/style.dart';
 import 'package:active_matrimonial_flutter_app/helpers/navigator_push.dart';
-import 'package:active_matrimonial_flutter_app/screens/core.dart';
 import 'package:active_matrimonial_flutter_app/screens/support_ticket/support_ticket.dart';
-import 'package:active_matrimonial_flutter_app/screens/contact_us/contact_us.dart';
 import 'package:flutter/material.dart';
 
 class HelpCenter extends StatefulWidget {

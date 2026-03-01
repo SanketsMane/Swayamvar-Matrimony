@@ -3,7 +3,6 @@ import 'package:active_matrimonial_flutter_app/repository/chat_repository.dart';
 import 'package:active_matrimonial_flutter_app/screens/chat/chat_action.dart';
 import 'package:redux/redux.dart';
 import 'package:redux_thunk/redux_thunk.dart';
-import 'package:active_matrimonial_flutter_app/redux/store.dart';
 
 ThunkAction<AppState> chatMiddleware() {
   return (Store<AppState> store) async {

@@ -13,8 +13,8 @@ import 'package:flutter/material.dart';
 import 'package:active_matrimonial_flutter_app/l10n/app_localizations.dart';
 
 class PackageDetails extends StatelessWidget {
-  int? packageId;
-  PackageDetails({super.key, this.packageId});
+  final int? packageId;
+  const PackageDetails({super.key, this.packageId});
 
   @override
   Widget build(BuildContext context) {

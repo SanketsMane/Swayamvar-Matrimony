@@ -848,7 +848,7 @@ class CustomPopUpViewModel {
     this.isLogin,
   });
 
-  static fromStore(BuildContext context, Store<AppState> store) {
+  static CustomPopUpViewModel fromStore(BuildContext context, Store<AppState> store) {
     bool isOtpSystemAvailable =
         store.state.addonState?.data?.otpSystem ?? false;
 

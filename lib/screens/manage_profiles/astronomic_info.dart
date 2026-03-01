@@ -1,13 +1,11 @@
 import 'package:active_matrimonial_flutter_app/components/common_app_bar_manageprofile.dart';
 import 'package:active_matrimonial_flutter_app/components/common_input.dart';
 import 'package:active_matrimonial_flutter_app/components/common_widget.dart';
-import 'package:active_matrimonial_flutter_app/const/const.dart';
 import 'package:active_matrimonial_flutter_app/const/my_theme.dart';
 import 'package:active_matrimonial_flutter_app/const/style.dart';
 import 'package:active_matrimonial_flutter_app/helpers/device_info.dart';
 import 'package:active_matrimonial_flutter_app/screens/core.dart';
 import 'package:flutter/material.dart';
-//import 'package:active_matrimonial_flutter_app/l10n/app_localizations.dart';
 import 'package:active_matrimonial_flutter_app/l10n/app_localizations.dart';
 import '../../redux/libs/manage_profile/manage_profile_middleware/manage_profile_update_middlewares.dart';
 
@@ -100,6 +98,45 @@ class _AstronomicInformationState extends State<AstronomicInformation> {
                 "",
   );
 
+  Future<void> _selectTime(BuildContext context) async {
+    final TimeOfDay? picked = await showTimePicker(
+      context: context,
+      initialTime: TimeOfDay.now(),
+      builder: (BuildContext context, Widget? child) {
+        return Theme(
+          data: ThemeData.light().copyWith(
+            primaryColor: MyTheme.primary,
+            colorScheme: const ColorScheme.light(primary: MyTheme.primary),
+            buttonTheme: const ButtonThemeData(textTheme: ButtonTextTheme.primary),
+          ),
+          child: child!,
+        );
+      },
+    );
+    if (picked != null) {
+      setState(() {
+        _timeController.text = picked.format(context);
+      });
+    }
+  }
+
+  Map<String, String> getZodiacMap(BuildContext context) {
+    return {
+      "Aries": AppLocalizations.of(context)!.astro_sign_aries,
+      "Taurus": AppLocalizations.of(context)!.astro_sign_taurus,
+      "Gemini": AppLocalizations.of(context)!.astro_sign_gemini,
+      "Cancer": AppLocalizations.of(context)!.astro_sign_cancer,
+      "Leo": AppLocalizations.of(context)!.astro_sign_leo,
+      "Virgo": AppLocalizations.of(context)!.astro_sign_virgo,
+      "Libra": AppLocalizations.of(context)!.astro_sign_libra,
+      "Scorpio": AppLocalizations.of(context)!.astro_sign_scorpio,
+      "Sagittarius": AppLocalizations.of(context)!.astro_sign_sagittarius,
+      "Capricorn": AppLocalizations.of(context)!.astro_sign_capricorn,
+      "Aquarius": AppLocalizations.of(context)!.astro_sign_aquarius,
+      "Pisces": AppLocalizations.of(context)!.astro_sign_pisces,
+    };
+  }
+
   @override
   Widget build(BuildContext context) {
     return StoreConnector<AppState, AppState>(
@@ -155,9 +192,6 @@ class _AstronomicInformationState extends State<AstronomicInformation> {
             onTap: () {
               FocusManager.instance.primaryFocus?.unfocus();
               if (!_formKey.currentState!.validate()) {
-                // store.dispatch(ShowMessageAction(
-                //   msg: "Form's not validated!",
-                // ));
               } else {
                 store.dispatch(
                   astronomicUpdateMiddleware(
@@ -214,6 +248,7 @@ class _AstronomicInformationState extends State<AstronomicInformation> {
   }
 
   Widget buildsun(BuildContext context, AppState state) {
+    Map<String, String> signsMap = getZodiacMap(context);
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -222,18 +257,22 @@ class _AstronomicInformationState extends State<AstronomicInformation> {
           style: Styles.bold_arsenic_12,
         ),
         const SizedBox(height: 5),
-        TextFormField(
-          controller: _sunController,
-          validator: (val) {
-            if (val == null || val.isEmpty) {
-              return "This field is required";
-            }
-            if (val.length > 255) {
-              return "Max 255 characters";
-            }
-            return null;
+        DropdownButtonFormField<String>(
+          isExpanded: true,
+          initialValue: signsMap.containsKey(_sunController.text) ? _sunController.text : null,
+          items: signsMap.entries.map((entry) {
+            return DropdownMenuItem(
+              value: entry.key,
+              child: Text(entry.value, style: Styles.regular_arsenic_14),
+            );
+          }).toList(),
+          onChanged: (val) {
+            setState(() {
+              _sunController.text = val!;
+            });
           },
-          decoration: InputStyle.inputDecoration_text_field(hint: "Sun Sign"),
+          validator: (val) => (val == null || val.isEmpty) ? "Required" : null,
+          decoration: InputStyle.inputDecoration_text_field(hint: "Select Sun Sign"),
         ),
         const SizedBox(height: 20),
       ],
@@ -241,6 +280,7 @@ class _AstronomicInformationState extends State<AstronomicInformation> {
   }
 
   Widget buildmoon(BuildContext context, AppState state) {
+    Map<String, String> signsMap = getZodiacMap(context);
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -249,18 +289,22 @@ class _AstronomicInformationState extends State<AstronomicInformation> {
           style: Styles.bold_arsenic_12,
         ),
         const SizedBox(height: 5),
-        TextFormField(
-          controller: _moonController,
-          validator: (val) {
-            if (val == null || val.isEmpty) {
-              return "This field is required";
-            }
-            if (val.length > 255) {
-              return "Max 255 characters";
-            }
-            return null;
+        DropdownButtonFormField<String>(
+          isExpanded: true,
+          initialValue: signsMap.containsKey(_moonController.text) ? _moonController.text : null,
+          items: signsMap.entries.map((entry) {
+            return DropdownMenuItem(
+              value: entry.key,
+              child: Text(entry.value, style: Styles.regular_arsenic_14),
+            );
+          }).toList(),
+          onChanged: (val) {
+            setState(() {
+              _moonController.text = val!;
+            });
           },
-          decoration: InputStyle.inputDecoration_text_field(hint: "Moon Sign"),
+          validator: (val) => (val == null || val.isEmpty) ? "Required" : null,
+          decoration: InputStyle.inputDecoration_text_field(hint: "Select Moon Sign"),
         ),
         const SizedBox(height: 20),
       ],
@@ -276,60 +320,24 @@ class _AstronomicInformationState extends State<AstronomicInformation> {
           style: Styles.bold_arsenic_12,
         ),
         Const.height5,
-        TextFormField(
-          controller: _timeController,
-          validator: (val) {
-            if (val == null || val.isEmpty) {
-              return "This field is required";
-            }
-            if (val.length > 10) {
-              return "Max10 characters";
-            }
-            return null;
-          },
-          decoration: InputStyle.inputDecoration_text_field(
-            hint: "Time Of Birth",
+        InkWell(
+          onTap: () => _selectTime(context),
+          child: IgnorePointer(
+            child: TextFormField(
+              controller: _timeController,
+              validator: (val) {
+                if (val == null || val.isEmpty) {
+                  return "This field is required";
+                }
+                return null;
+              },
+              decoration: InputStyle.inputDecoration_text_field(
+                hint: AppLocalizations.of(context)!.astro_pick_time,
+                suffixIcon: const Icon(Icons.access_time_rounded, color: MyTheme.primary),
+              ),
+            ),
           ),
         ),
-        /*TextButton(
-          style: TextButton.styleFrom(
-            backgroundColor: MyTheme.solitude,
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(8),
-            ),
-          ),
-          onPressed: () async {
-            DateTime? newDate = await showDatePicker(
-              context: context,
-              initialDate: DateTime.now(),
-              firstDate: DateTime(1970),
-              lastDate: DateTime(2100),
-            );
-
-            if (newDate == null) return;
-            setState(() => date = newDate);
-          },
-          child: Container(
-            padding: const EdgeInsets.symmetric(horizontal: 10),
-            height: 35,
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Center(
-                  child: Text(
-                    DateFormat('d MMMM yyyy')
-                        .format(DateTime.parse(date.toString())),
-                    style: Styles.regular_arsenic_14,
-                  ),
-                ),
-                Icon(
-                  Icons.keyboard_arrow_down,
-                  color: MyTheme.gull_grey,
-                )
-              ],
-            ),
-          ),
-        ),*/
         Const.height20,
       ],
     );

@@ -3,7 +3,6 @@ import '../../../helpers/navigator_push.dart';
 import '../../../repository/wallet_repository.dart';
 import '../../core.dart';
 import 'my_wallet.dart';
-import 'package:active_matrimonial_flutter_app/redux/store.dart';
 
 ThunkAction<AppState> walletRechargeMiddleware({postBody}) {
   return (Store<AppState> store) async {

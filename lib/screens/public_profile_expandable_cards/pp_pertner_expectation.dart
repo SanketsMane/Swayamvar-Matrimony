@@ -55,7 +55,7 @@ class PP_PartnerExpectation extends StatelessWidget {
                                   context,
                                 )!.public_profile_height,
                             data:
-                                "${state.publicProfileState!.partnerExpectation.height.toString() ?? ''} ft",
+                                "${state.publicProfileState!.partnerExpectation.height?.toString() ?? ''} ft",
                           ),
                           const SizedBox(height: 10),
                           buildRow(
@@ -68,9 +68,7 @@ class PP_PartnerExpectation extends StatelessWidget {
                                 state
                                     .publicProfileState!
                                     .partnerExpectation
-                                    .weight
-                                    .toString() ??
-                                '',
+                                    .weight?.toString() ?? '',
                           ),
                           const SizedBox(height: 10),
                           buildRow(

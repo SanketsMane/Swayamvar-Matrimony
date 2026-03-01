@@ -15,7 +15,7 @@ class LifeStyleState {
 
   LifeStyleState({this.isLoading, this.saveChanges, this.lifeStyleGetResponse});
 
-  update({
+  LifeStyleState update({
     lifeStyleUpdateResponse,
     isLoading,
     saveChanges,

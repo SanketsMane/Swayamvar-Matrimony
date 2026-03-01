@@ -4,14 +4,14 @@ class MyCircularIndicator extends StatelessWidget {
   // variables
   final Gradient? gradient;
   final String? icon;
-  double? width = 36;
-  double? height = 36;
-  double? radius = 12;
+  final double? width;
+  final double? height;
+  final double? radius;
 
   final Color? color;
-  double? opacity = 1;
+  final double? opacity;
 
-  MyCircularIndicator({
+  const MyCircularIndicator({
     super.key,
     this.gradient,
     this.icon,

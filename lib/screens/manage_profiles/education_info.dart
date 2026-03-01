@@ -179,7 +179,7 @@ class _EducationInfoState extends State<EducationInfo> {
     );
   }
 
-  buildTitle(BuildContext context, AppState state) {
+  Column buildTitle(BuildContext context, AppState state) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [

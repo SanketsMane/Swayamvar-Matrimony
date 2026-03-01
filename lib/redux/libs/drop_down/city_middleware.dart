@@ -9,7 +9,6 @@ import 'package:redux/redux.dart';
 import 'package:redux_thunk/redux_thunk.dart';
 
 import '../../../screens/search_screens/search_action.dart';
-import 'package:active_matrimonial_flutter_app/redux/store.dart';
 
 ThunkAction<AppState> cityMiddleware(state, AppStates appStates) {
   return (Store<AppState> store) async {

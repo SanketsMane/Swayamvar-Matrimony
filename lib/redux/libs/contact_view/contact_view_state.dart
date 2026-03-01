@@ -17,7 +17,7 @@ ContactViewState? contact_view_reducer(
   return state;
 }
 
-contact_view(ContactViewState state, dynamic action) {
+ContactViewState contact_view(ContactViewState state, dynamic action) {
   state.isviewed = true;
 
   return state;

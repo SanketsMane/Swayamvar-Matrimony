@@ -23,8 +23,8 @@ class AccountState {
     return AccountState(
       profileData: profileData ?? this.profileData,
       error: error ?? this.error,
-      matched_profile_controller: this.matched_profile_controller,
-      gridScrollController: this.gridScrollController,
+      matched_profile_controller: matched_profile_controller,
+      gridScrollController: gridScrollController,
     );
   }
 

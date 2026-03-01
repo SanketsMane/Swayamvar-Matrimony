@@ -121,7 +121,7 @@ class _MyHappyStoriesState extends State<MyHappyStories> {
     }
   }
 
-  send() async {
+  Future<void> send() async {
     if (!_formKey.currentState!.validate()) {
     } else {
       store.dispatch(
@@ -243,7 +243,7 @@ class _MyHappyStoriesState extends State<MyHappyStories> {
 
   Widget buildHappyStoriesFormContainer(
     BuildContext context,
-    f_key,
+    fKey,
     AppState state,
   ) {
     return Column(
@@ -276,7 +276,7 @@ class _MyHappyStoriesState extends State<MyHappyStories> {
 
         /// photos upload
         GroupItemWithChild(
-          title: AppLocalizations.of(context)!.happy_stories_form_photos + '*',
+          title: '${AppLocalizations.of(context)!.happy_stories_form_photos}*',
           child: InkWell(
             onTap: () {
               getImage();
@@ -352,7 +352,7 @@ class _MyHappyStoriesState extends State<MyHappyStories> {
                 ),
                 // helperText: 'Helper text',
               ),
-              value: video_provider_value,
+              initialValue: video_provider_value,
               items:
                   video_provider.map<DropdownMenuItem<dynamic>>((e) {
                     return DropdownMenuItem<dynamic>(value: e, child: Text(e));
@@ -434,7 +434,7 @@ class _MyHappyStoriesState extends State<MyHappyStories> {
     );
   }
 
-  buildGroupItem({
+  Column buildGroupItem({
     String? title,
     TextEditingController? controller,
     String? hint,

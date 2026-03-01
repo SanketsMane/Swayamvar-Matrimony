@@ -1790,6 +1790,84 @@ abstract class AppLocalizations {
   /// **'City of Birth'**
   String get manage_profile_city_of_birth;
 
+  /// No description provided for @astro_sign_aries.
+  ///
+  /// In en, this message translates to:
+  /// **'Aries'**
+  String get astro_sign_aries;
+
+  /// No description provided for @astro_sign_taurus.
+  ///
+  /// In en, this message translates to:
+  /// **'Taurus'**
+  String get astro_sign_taurus;
+
+  /// No description provided for @astro_sign_gemini.
+  ///
+  /// In en, this message translates to:
+  /// **'Gemini'**
+  String get astro_sign_gemini;
+
+  /// No description provided for @astro_sign_cancer.
+  ///
+  /// In en, this message translates to:
+  /// **'Cancer'**
+  String get astro_sign_cancer;
+
+  /// No description provided for @astro_sign_leo.
+  ///
+  /// In en, this message translates to:
+  /// **'Leo'**
+  String get astro_sign_leo;
+
+  /// No description provided for @astro_sign_virgo.
+  ///
+  /// In en, this message translates to:
+  /// **'Virgo'**
+  String get astro_sign_virgo;
+
+  /// No description provided for @astro_sign_libra.
+  ///
+  /// In en, this message translates to:
+  /// **'Libra'**
+  String get astro_sign_libra;
+
+  /// No description provided for @astro_sign_scorpio.
+  ///
+  /// In en, this message translates to:
+  /// **'Scorpio'**
+  String get astro_sign_scorpio;
+
+  /// No description provided for @astro_sign_sagittarius.
+  ///
+  /// In en, this message translates to:
+  /// **'Sagittarius'**
+  String get astro_sign_sagittarius;
+
+  /// No description provided for @astro_sign_capricorn.
+  ///
+  /// In en, this message translates to:
+  /// **'Capricorn'**
+  String get astro_sign_capricorn;
+
+  /// No description provided for @astro_sign_aquarius.
+  ///
+  /// In en, this message translates to:
+  /// **'Aquarius'**
+  String get astro_sign_aquarius;
+
+  /// No description provided for @astro_sign_pisces.
+  ///
+  /// In en, this message translates to:
+  /// **'Pisces'**
+  String get astro_sign_pisces;
+
+  /// No description provided for @astro_pick_time.
+  ///
+  /// In en, this message translates to:
+  /// **'Select Time'**
+  String get astro_pick_time;
+
   /// No description provided for @manage_profile_permanent_address.
   ///
   /// In en, this message translates to:

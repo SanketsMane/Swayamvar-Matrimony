@@ -101,9 +101,7 @@ class _MyShortlistState extends State<MyShortlist> {
                     itemCount: state.shortlistState!.shortlistData!.length + 1,
                     separatorBuilder:
                         (BuildContext context, int index) =>
-                            state.shortlistState!.shortlistData![index] == null
-                                ? Const.heightShrink
-                                : Const.height15,
+                            Const.height15,
                     itemBuilder: (BuildContext context, int index) {
                       if (index < state.shortlistState!.shortlistData!.length) {
                         return GestureDetector(

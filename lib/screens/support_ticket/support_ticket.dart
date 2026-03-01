@@ -17,7 +17,6 @@ import 'package:flutter_html/flutter_html.dart';
 import 'package:flutter_summernote/flutter_summernote.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
-import 'package:one_context/one_context.dart';
 
 class SupportTicket extends StatefulWidget {
   const SupportTicket({super.key});
@@ -742,7 +741,7 @@ class _CreateTicketFormState extends State<CreateTicketForm> {
           SizedBox(
             height: 50,
             child: DropdownButtonFormField<dynamic>(
-              value: _selectedCategoryId,
+              initialValue: _selectedCategoryId,
               hint: Text('Select One', style: Styles.regular_gull_grey_12),
               iconSize: 0.0,
               decoration: InputStyle.inputDecoration_text_field(
@@ -820,10 +819,10 @@ class _CreateTicketFormState extends State<CreateTicketForm> {
                         width: 100,
                         child: TextButton(
                           style: ButtonStyle(
-                            backgroundColor: MaterialStateProperty.all<Color>(
+                            backgroundColor: WidgetStateProperty.all<Color>(
                               MyTheme.white,
                             ),
-                            shape: MaterialStateProperty.all(
+                            shape: WidgetStateProperty.all(
                               const RoundedRectangleBorder(
                                 borderRadius: BorderRadius.only(
                                   topRight: Radius.circular(8),

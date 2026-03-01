@@ -5,7 +5,7 @@ import 'package:active_matrimonial_flutter_app/const/style.dart';
 class DeactivatedAccountMessage extends StatelessWidget {
   final String? message;
 
-  const DeactivatedAccountMessage({Key? key, this.message}) : super(key: key);
+  const DeactivatedAccountMessage({super.key, this.message});
 
   @override
   Widget build(BuildContext context) {

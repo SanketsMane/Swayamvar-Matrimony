@@ -73,7 +73,7 @@ PermanentAddressState? permanent_address_reducer(
   return state;
 }
 
-permanent_get_response(
+PermanentAddressState permanent_get_response(
   PermanentAddressState state,
   PermanentGetResponse action,
 ) {
@@ -82,7 +82,7 @@ permanent_get_response(
   return state;
 }
 
-state_response(
+PermanentAddressState state_response(
   PermanentAddressState state,
   PermanentAddressStateListAction action,
 ) {
@@ -102,7 +102,7 @@ state_response(
   return state;
 }
 
-city_responose(
+PermanentAddressState city_responose(
   PermanentAddressState state,
   PermanentAddressCityListAction action,
 ) {
@@ -119,7 +119,7 @@ city_responose(
   return state;
 }
 
-permanent_address_save_changes_toggler(
+PermanentAddressState permanent_address_save_changes_toggler(
   PermanentAddressState state,
   PermanentAddressSaveChanges action,
 ) {
@@ -127,19 +127,19 @@ permanent_address_save_changes_toggler(
   return state;
 }
 
-is_loading_toggler(PermanentAddressState state, IsLoading action) {
+PermanentAddressState is_loading_toggler(PermanentAddressState state, IsLoading action) {
   state.is_loading = !state.is_loading!;
   return state;
 }
 
-state_list_clear(PermanentAddressState state, PEmptyStateValueAction action) {
+PermanentAddressState state_list_clear(PermanentAddressState state, PEmptyStateValueAction action) {
   state.stateResponse!.data!.clear();
   // state.state_val = null;
   state.selected_state = null;
   return state;
 }
 
-city_list_clear(PermanentAddressState state, PEmptyCityValueAction action) {
+PermanentAddressState city_list_clear(PermanentAddressState state, PEmptyCityValueAction action) {
   state.cityResponse!.data!.clear();
   // state.city_val = null;
   state.selected_city = null;

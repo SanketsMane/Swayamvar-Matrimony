@@ -9,7 +9,6 @@ import 'package:image_picker/image_picker.dart';
 import '../../core.dart';
 import '../../my_dashboard_pages/wallet/wallet_recharge_middleware.dart';
 import 'offline_payment_middleware.dart';
-import 'package:active_matrimonial_flutter_app/redux/store.dart';
 
 OfflinePaymentState? offlinePaymentReducer(
   OfflinePaymentState? state,
@@ -38,7 +37,7 @@ OfflinePaymentState? offlinePaymentReducer(
   return state;
 }
 
-offLineWalletRecharge(
+OfflinePaymentState offLineWalletRecharge(
   OfflinePaymentState? state,
   OfflineRechargeWalletAction action,
 ) {
@@ -73,7 +72,7 @@ ThunkAction<AppState> getImageAction() {
   };
 }
 
-offlineBuyPackage(
+Future<OfflinePaymentState> offlineBuyPackage(
   OfflinePaymentState? state,
   OfflineBuyPackageAction action,
 ) async {

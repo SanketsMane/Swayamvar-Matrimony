@@ -655,7 +655,7 @@ class _SearchState extends State<Search> {
           child: DropdownButtonFormField<dynamic>(
             isExpanded: true,
             iconSize: 0.0,
-            value: value,
+            initialValue: value,
             decoration: InputDecoration(
               hintText: "निवडा",
               isDense: true,

@@ -1,10 +1,8 @@
 // Sanket: Updated Sign In screen with Marathi translations and clean UI
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
-import 'package:active_matrimonial_flutter_app/const/my_theme.dart';
 import 'package:active_matrimonial_flutter_app/const/style.dart';
 import 'package:active_matrimonial_flutter_app/helpers/shared_pref.dart';
-import 'package:active_matrimonial_flutter_app/l10n/app_localizations.dart';
 import 'package:active_matrimonial_flutter_app/redux/app/app_state.dart';
 import 'package:active_matrimonial_flutter_app/redux/libs/feature/feature_check_middleware.dart';
 import 'package:active_matrimonial_flutter_app/screens/auth/signin/signin_action.dart';
@@ -14,7 +12,6 @@ import 'package:active_matrimonial_flutter_app/components/social_login_widget.da
 import 'package:active_matrimonial_flutter_app/helpers/main_helpers.dart';
 import 'package:active_matrimonial_flutter_app/redux/libs/staticPage/static_page.dart';
 import 'package:active_matrimonial_flutter_app/screens/auth/signin/signin_reducer.dart';
-import 'package:active_matrimonial_flutter_app/redux/store.dart';
 
 class EmailLogin extends StatefulWidget {
   const EmailLogin({super.key});
@@ -106,8 +103,7 @@ class _EmailLoginState extends State<EmailLogin> {
                       () => Navigator.push(
                         context,
                         MaterialPageRoute(builder: (context) => const SignUp()),
-                      ),
-                  child: const Text('नोंदणी करा'), // Register/Sign Up
+                      ), // Register/Sign Up
                   style: TextButton.styleFrom(
                     foregroundColor: primaryColor,
                     textStyle: Styles.buttonText.copyWith(
@@ -115,6 +111,7 @@ class _EmailLoginState extends State<EmailLogin> {
                       fontSize: 15,
                     ),
                   ),
+                  child: const Text('नोंदणी करा'),
                 ),
               ],
             ),

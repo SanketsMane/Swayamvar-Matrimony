@@ -3,7 +3,6 @@ import 'package:active_matrimonial_flutter_app/repository/referral_repository.da
 import 'package:active_matrimonial_flutter_app/screens/referral/referral_withdraw_request_history_action.dart';
 import 'package:redux/redux.dart';
 import 'package:redux_thunk/redux_thunk.dart';
-import 'package:active_matrimonial_flutter_app/redux/store.dart';
 
 ThunkAction<AppState> referralWithdrawRequestHistoryMiddleware() {
   return (Store<AppState> store) async {

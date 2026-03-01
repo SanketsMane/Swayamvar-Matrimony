@@ -182,7 +182,7 @@ class MyProfileListData {
                 ),
                 SizedBox(width: 10),
                 Text(
-                  "${(this.percentage == null ? 0 : this.percentage * 100).toString().split(".").first}%",
+                  "${(percentage == null ? 0 : percentage * 100).toString().split(".").first}%",
                   style: TextStyle(color: MyTheme.storm_grey),
                 ),
               ],

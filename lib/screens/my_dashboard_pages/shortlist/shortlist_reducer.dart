@@ -45,17 +45,17 @@ ShortlistState? shortlist_reducer(ShortlistState? state, dynamic action) {
   return state;
 }
 
-rest_add_short_list_response(ShortlistState? state, dynamic action) {
+ShortlistState rest_add_short_list_response(ShortlistState? state, dynamic action) {
   state = ShortlistState.initialState();
   return state;
 }
 
-delete_from_shortlist(ShortlistState state, DeleteShortlist action) {
+ShortlistState delete_from_shortlist(ShortlistState state, DeleteShortlist action) {
   state.delete = !state.delete!;
   return state;
 }
 
-deleteShortlistItem(ShortlistState state, RemoveShortlistAction action) {
+ShortlistState deleteShortlistItem(ShortlistState state, RemoveShortlistAction action) {
   state.shortlistData!.remove(action.data);
   store.dispatch(
     removeFromShortlistMiddleware(context: action.context, user: action.data),
@@ -63,6 +63,6 @@ deleteShortlistItem(ShortlistState state, RemoveShortlistAction action) {
   return state;
 }
 
-addShortlistItem(ShortlistState? state, AddShortlistAction action) {
+ShortlistState? addShortlistItem(ShortlistState? state, AddShortlistAction action) {
   return state;
 }

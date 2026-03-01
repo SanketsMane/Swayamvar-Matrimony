@@ -1,6 +1,5 @@
 import 'package:active_matrimonial_flutter_app/components/common_app_bar_manageprofile.dart';
 import 'package:active_matrimonial_flutter_app/components/common_input.dart';
-import 'package:active_matrimonial_flutter_app/const/const.dart';
 import 'package:active_matrimonial_flutter_app/const/my_theme.dart';
 import 'package:active_matrimonial_flutter_app/const/style.dart';
 import 'package:active_matrimonial_flutter_app/helpers/device_info.dart';
@@ -111,7 +110,7 @@ class _LifeStyleState extends State<LifeStyle> {
     );
   }
 
-  build_title(BuildContext context, AppState state) {
+  Column build_title(BuildContext context, AppState state) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -124,7 +123,7 @@ class _LifeStyleState extends State<LifeStyle> {
     );
   }
 
-  build_diet(BuildContext context, AppState state) {
+  Column build_diet(BuildContext context, AppState state) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -159,7 +158,7 @@ class _LifeStyleState extends State<LifeStyle> {
               ),
               // helperText: 'Helper text',
             ),
-            value:
+            initialValue:
                 store
                     .state
                     .manageProfileCombineState!
@@ -190,7 +189,7 @@ class _LifeStyleState extends State<LifeStyle> {
     );
   }
 
-  build_drink(BuildContext context, AppState state) {
+  Column build_drink(BuildContext context, AppState state) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -225,7 +224,7 @@ class _LifeStyleState extends State<LifeStyle> {
               ),
               // helperText: 'Helper text',
             ),
-            value:
+            initialValue:
                 store
                     .state
                     .manageProfileCombineState!
@@ -256,7 +255,7 @@ class _LifeStyleState extends State<LifeStyle> {
     );
   }
 
-  build_smoke(BuildContext context, AppState state) {
+  Column build_smoke(BuildContext context, AppState state) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -291,7 +290,7 @@ class _LifeStyleState extends State<LifeStyle> {
               ),
               // helperText: 'Helper text',
             ),
-            value:
+            initialValue:
                 store
                     .state
                     .manageProfileCombineState!
@@ -322,7 +321,7 @@ class _LifeStyleState extends State<LifeStyle> {
     );
   }
 
-  build_living_with(BuildContext context, AppState state) {
+  Column build_living_with(BuildContext context, AppState state) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [

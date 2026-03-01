@@ -13,7 +13,6 @@ import 'package:http/http.dart' as http;
 import 'package:phonepe_payment_sdk/phonepe_payment_sdk.dart';
 
 import '../account/account.dart';
-import 'package:active_matrimonial_flutter_app/redux/store.dart';
 
 class PhonePeScreen extends StatefulWidget {
   final dynamic amount;

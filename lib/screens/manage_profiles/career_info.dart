@@ -254,7 +254,7 @@ class _CareerInfoState extends State<CareerInfo> {
                                   ),
                                 );
                               },
-                              activeColor: Colors.green,
+                              activeThumbColor: Colors.green,
                               activeTrackColor: MyTheme.zircon,
                               inactiveThumbColor: Colors.white,
                               inactiveTrackColor: MyTheme.zircon,
@@ -428,7 +428,7 @@ class _CareerInfoState extends State<CareerInfo> {
     );
   }
 
-  buildTitle(BuildContext context, AppState state) {
+  Column buildTitle(BuildContext context, AppState state) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [

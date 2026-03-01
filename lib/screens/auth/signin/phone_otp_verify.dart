@@ -10,10 +10,10 @@ class PhoneOtpVerify extends StatefulWidget {
   final String phoneNumber;
 
   const PhoneOtpVerify({
-    Key? key,
+    super.key,
     required this.verificationId,
     required this.phoneNumber,
-  }) : super(key: key);
+  });
 
   @override
   State<PhoneOtpVerify> createState() => _PhoneOtpVerifyState();
@@ -212,10 +212,11 @@ class _PhoneOtpVerifyState extends State<PhoneOtpVerify> {
       ),
     );
     Future.delayed(const Duration(seconds: 3), () {
-      if (mounted)
+      if (mounted) {
         setState(() {
           _isLoading = false;
         });
+      }
     });
   }
 }

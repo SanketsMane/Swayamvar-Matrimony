@@ -4,7 +4,6 @@ import '../../../repository/payment_repository.dart';
 import '../../account/account_middleware.dart';
 import '../../core.dart';
 import '../../package/package_history.dart';
-import 'package:active_matrimonial_flutter_app/redux/store.dart';
 
 ThunkAction<AppState> offlinePaymentMiddleware({postBody}) {
   return (Store<AppState> store) async {

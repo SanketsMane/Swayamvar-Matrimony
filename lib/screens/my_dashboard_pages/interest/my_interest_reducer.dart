@@ -32,7 +32,7 @@ MyInterestState? my_interest_reducer(MyInterestState? state, dynamic action) {
   return state;
 }
 
-express_loader_toggler(MyInterestState state, ExpressInterestAction action) {
+MyInterestState express_loader_toggler(MyInterestState state, ExpressInterestAction action) {
   state.isLoading = !state.isLoading!;
   return state;
 }

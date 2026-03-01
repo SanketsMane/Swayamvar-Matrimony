@@ -16,11 +16,11 @@ class PresentAddressState {
   DDown? selected_city;
   DDown? selected_country;
 
-  save_chagnes_toogler() {
+  void save_chagnes_toogler() {
     saveChangesLoader = !saveChangesLoader!;
   }
 
-  page_loader_toogler() {
+  void page_loader_toogler() {
     isLoading = !isLoading!;
   }
 

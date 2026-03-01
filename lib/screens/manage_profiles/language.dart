@@ -1,7 +1,6 @@
 import 'package:active_matrimonial_flutter_app/components/common_app_bar_manageprofile.dart';
 import 'package:active_matrimonial_flutter_app/components/common_widget.dart';
 import 'package:active_matrimonial_flutter_app/components/toast_component.dart';
-import 'package:active_matrimonial_flutter_app/const/const.dart';
 import 'package:active_matrimonial_flutter_app/const/my_theme.dart';
 import 'package:active_matrimonial_flutter_app/const/style.dart';
 import 'package:active_matrimonial_flutter_app/helpers/main_helpers.dart';
@@ -27,7 +26,7 @@ class Language extends StatefulWidget {
 class _LanguageState extends State<Language> {
   final _formKey = GlobalKey<FormState>();
 
-  setInitData(LanguageState data) {
+  void setInitData(LanguageState data) {
     data.saveChangesLoader = false;
     List<DDown> knownLanguage = [];
     if (data.languageGetResponse!.result != null &&
@@ -191,7 +190,7 @@ class _LanguageState extends State<Language> {
               return Row(
                 children: List.generate(
                   list.length,
-                  (index) => Text("${list[index].name} " ?? ""),
+                  (index) => Text("${list[index].name} "),
                 ),
               );
             },
@@ -219,7 +218,7 @@ class _LanguageState extends State<Language> {
     );
   }
 
-  build_body(BuildContext context, LanguageState? state) {
+  Column build_body(BuildContext context, LanguageState? state) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [

@@ -6,7 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:one_context/one_context.dart';
 
 class MakeAlert {
-  static show(String title, String message, AlertType type) {
+  static Future<dynamic> show(String title, String message, AlertType type) {
     return OneContext().showDialog(
       builder:
           (context) => AlertDialog(

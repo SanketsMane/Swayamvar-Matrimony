@@ -32,27 +32,27 @@ CareerState? career_reducer(CareerState? state, dynamic action) {
   return state;
 }
 
-status_toggler(CareerState? state, dynamic action) {
+CareerState? status_toggler(CareerState? state, dynamic action) {
   CareerRepository().postCareerStatus(id: action.id, status: action.status);
   return state;
 }
 
-update_change(CareerState state, dynamic action) {
+CareerState update_change(CareerState state, dynamic action) {
   state.update_changes = !state.update_changes!;
   return state;
 }
 
-save_changes(CareerState state, dynamic action) {
+CareerState save_changes(CareerState state, dynamic action) {
   state.saveChanges = !state.saveChanges!;
   return state;
 }
 
-delete(CareerState state, dynamic action) {
+CareerState delete(CareerState state, dynamic action) {
   state.isDelete = !state.isDelete!;
   return state;
 }
 
-reset_list(CareerState state, dynamic action) {
+CareerState reset_list(CareerState state, dynamic action) {
   state.list.clear();
   return state;
 }

@@ -15,14 +15,13 @@ import '../manage_profile_reducer/education_reducer.dart';
 import '../manage_profile_reducer/hobbies_interest_reducer.dart';
 import '../manage_profile_reducer/language_reducer.dart';
 import '../manage_profile_reducer/life_style_reducer.dart';
-import '../manage_profile_reducer/partner_expectation_reducer.dart';
+import '../manage_profile_reducer/partner_expectation_action.dart';
 import '../manage_profile_reducer/permanent_address_reducer.dart';
 import '../manage_profile_reducer/physical_attr_reducer.dart';
 import '../manage_profile_reducer/present_address_reducer.dart';
 import '../manage_profile_reducer/residency_reducer.dart';
 import '../manage_profile_reducer/spiritual_reducer.dart';
 import 'manage_profile_get_middlewares.dart';
-import 'package:active_matrimonial_flutter_app/redux/store.dart';
 
 ThunkAction<AppState> basicInfoUpdateMiddleware({
   context,

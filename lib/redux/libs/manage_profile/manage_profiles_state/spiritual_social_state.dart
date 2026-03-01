@@ -20,11 +20,11 @@ class SpiritualSocialState {
   DDown? sub_caste_val;
   DDown? family_val;
 
-  set_sloader() {
+  void set_sloader() {
     isloading = !isloading!;
   }
 
-  set_sp_save_change() {
+  void set_sp_save_change() {
     spSaveChanges = !spSaveChanges!;
   }
 

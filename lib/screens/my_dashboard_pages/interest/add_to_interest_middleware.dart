@@ -6,7 +6,6 @@ import 'package:redux/redux.dart';
 import 'package:redux_thunk/redux_thunk.dart';
 
 import '../../../helpers/main_helpers.dart';
-import 'package:active_matrimonial_flutter_app/redux/store.dart';
 
 ThunkAction<AppState> add_to_interest_middleware() {
   return (Store<AppState> store) async {

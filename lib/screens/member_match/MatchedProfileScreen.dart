@@ -10,13 +10,12 @@ import 'package:active_matrimonial_flutter_app/screens/core.dart';
 import 'package:active_matrimonial_flutter_app/screens/my_dashboard_pages/interest/express_interest_middleware.dart';
 import 'package:active_matrimonial_flutter_app/screens/user_pages/user_public_profile.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_redux/flutter_redux.dart';
 
 import '../../components/common_app_bar.dart';
 import '../../l10n/app_localizations.dart';
 
 class MatchedProfileScreen extends StatefulWidget {
-  const MatchedProfileScreen({Key? key}) : super(key: key);
+  const MatchedProfileScreen({super.key});
 
   @override
   State<MatchedProfileScreen> createState() => _MatchedProfileScreenState();

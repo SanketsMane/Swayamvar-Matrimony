@@ -10,9 +10,9 @@ import 'package:flutter/material.dart';
 import 'package:active_matrimonial_flutter_app/l10n/app_localizations.dart';
 
 class PackageHistory extends StatefulWidget {
-  bool from_package;
+  final bool from_package;
 
-  PackageHistory({super.key, this.from_package = false});
+  const PackageHistory({super.key, this.from_package = false});
 
   @override
   State<PackageHistory> createState() => _PackageHistoryState();

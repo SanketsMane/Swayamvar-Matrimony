@@ -1,7 +1,6 @@
 import 'dart:io';
 
 import 'package:active_matrimonial_flutter_app/models_response/manage_profile/get_manage_profile/basic_Info_get_response.dart';
-import 'package:active_matrimonial_flutter_app/redux/libs/auth/auth_middleware.dart';
 import 'package:active_matrimonial_flutter_app/redux/libs/manage_profile/manage_profiles_state/basic_info_state.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -10,7 +9,6 @@ import 'package:image_picker/image_picker.dart';
 import '../../../../models_response/drop_down/profile_dropdown_response.dart';
 import '../../../../screens/core.dart';
 import '../manage_profile_middleware/manage_profile_update_middlewares.dart';
-import 'package:active_matrimonial_flutter_app/redux/store.dart';
 
 BasicInfoState? basic_info_reducer(BasicInfoState? state, dynamic action) {
   if (action == SaveChanges.basicInfo) {

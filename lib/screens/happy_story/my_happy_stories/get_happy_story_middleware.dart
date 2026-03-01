@@ -2,7 +2,6 @@ import 'package:active_matrimonial_flutter_app/screens/happy_story/my_happy_stor
 
 import '../../../repository/happy_story_repository.dart';
 import '../../core.dart';
-import 'package:active_matrimonial_flutter_app/redux/store.dart';
 
 ThunkAction<AppState> happyStoryCheckMiddleware() {
   return (Store<AppState> store) async {

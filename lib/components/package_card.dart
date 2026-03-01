@@ -1,8 +1,6 @@
-import 'package:active_matrimonial_flutter_app/redux/libs/helpers/show_message_state.dart';
 import 'package:flutter/material.dart';
 import 'package:active_matrimonial_flutter_app/l10n/app_localizations.dart';
 
-import '../const/const.dart';
 import '../const/my_theme.dart';
 import '../const/style.dart';
 import '../helpers/device_info.dart';
@@ -12,7 +10,6 @@ import '../screens/core.dart';
 import '../screens/payment_methods/payment.dart';
 import 'common_widget.dart';
 import 'custom_popup.dart';
-import 'package:active_matrimonial_flutter_app/redux/store.dart';
 
 class PackageCard extends StatelessWidget {
   final bool? isFetching;
@@ -211,7 +208,7 @@ class PackageCard extends StatelessWidget {
                                 child: InkWell(
                                   onTap: () {
                                     // First, check if the user is logged in.
-                                    if (SharedPref().isLoggedIn!) {
+                                    if (SharedPref().isLoggedIn) {
                                       // If logged in, check if their account is approved.
                                       if (!store
                                           .state

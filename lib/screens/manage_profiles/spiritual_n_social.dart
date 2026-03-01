@@ -1,7 +1,6 @@
 import 'package:active_matrimonial_flutter_app/components/common_app_bar_manageprofile.dart';
 import 'package:active_matrimonial_flutter_app/components/common_input.dart';
 import 'package:active_matrimonial_flutter_app/components/common_widget.dart';
-import 'package:active_matrimonial_flutter_app/const/const.dart';
 import 'package:active_matrimonial_flutter_app/const/my_theme.dart';
 import 'package:active_matrimonial_flutter_app/const/style.dart';
 import 'package:active_matrimonial_flutter_app/helpers/device_info.dart';
@@ -283,7 +282,7 @@ class _SpiritualSocialState extends State<SpiritualSocial> {
     );
   }
 
-  build_religion(BuildContext context, AppState state) {
+  Column build_religion(BuildContext context, AppState state) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -335,7 +334,7 @@ class _SpiritualSocialState extends State<SpiritualSocial> {
     );
   }
 
-  build_caste(BuildContext context, AppState state) {
+  Column build_caste(BuildContext context, AppState state) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -354,7 +353,7 @@ class _SpiritualSocialState extends State<SpiritualSocial> {
           child: DropdownButtonFormField<DDown>(
             isExpanded: true,
             iconSize: 0.0,
-            value:
+            initialValue:
                 state
                     .manageProfileCombineState!
                     .spiritualSocialState!
@@ -408,7 +407,7 @@ class _SpiritualSocialState extends State<SpiritualSocial> {
     );
   }
 
-  build_sub_caste(BuildContext context, AppState state) {
+  Column build_sub_caste(BuildContext context, AppState state) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -428,7 +427,7 @@ class _SpiritualSocialState extends State<SpiritualSocial> {
           child: DropdownButtonFormField<DDown>(
             isExpanded: true,
             iconSize: 0.0,
-            value:
+            initialValue:
                 state
                     .manageProfileCombineState!
                     .spiritualSocialState!
@@ -472,7 +471,7 @@ class _SpiritualSocialState extends State<SpiritualSocial> {
     );
   }
 
-  build_ethnicity(BuildContext context, AppState state) {
+  Column build_ethnicity(BuildContext context, AppState state) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -495,7 +494,7 @@ class _SpiritualSocialState extends State<SpiritualSocial> {
     );
   }
 
-  build_personal_value(BuildContext context, AppState state) {
+  Column build_personal_value(BuildContext context, AppState state) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -519,7 +518,7 @@ class _SpiritualSocialState extends State<SpiritualSocial> {
     );
   }
 
-  build_family_value(BuildContext context, AppState state) {
+  Column build_family_value(BuildContext context, AppState state) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -538,7 +537,7 @@ class _SpiritualSocialState extends State<SpiritualSocial> {
           child: DropdownButtonFormField<DDown>(
             isExpanded: true,
             iconSize: 0.0,
-            value:
+            initialValue:
                 state
                     .manageProfileCombineState!
                     .spiritualSocialState!
@@ -582,7 +581,7 @@ class _SpiritualSocialState extends State<SpiritualSocial> {
     );
   }
 
-  build_community_value(BuildContext context, AppState state) {
+  Column build_community_value(BuildContext context, AppState state) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -608,7 +607,7 @@ class _SpiritualSocialState extends State<SpiritualSocial> {
   }
 }
 
-build_title(BuildContext context, AppState state) {
+Column build_title(BuildContext context, AppState state) {
   return Column(
     crossAxisAlignment: CrossAxisAlignment.start,
     children: [

@@ -73,7 +73,7 @@ class _MyProfileState extends State<MyProfile> {
   File? _idProof;
 
   // ==== STEP 4: Partner Expectations ====
-  List<String> _preferredCities = [];
+  final List<String> _preferredCities = [];
   bool _partnerManglik = false;
   String? _expectedEducation;
   String? _expectedIncome;
@@ -170,25 +170,31 @@ class _MyProfileState extends State<MyProfile> {
     });
 
     // Step 1
-    if (_firstName.text.isNotEmpty)
+    if (_firstName.text.isNotEmpty) {
       request.fields['first_name'] = _firstName.text;
-    if (_middleName.text.isNotEmpty)
+    }
+    if (_middleName.text.isNotEmpty) {
       request.fields['middle_name'] = _middleName.text;
+    }
     if (_surname.text.isNotEmpty) request.fields['surname'] = _surname.text;
-    if (_dob != null)
+    if (_dob != null) {
       request.fields['dob'] = DateFormat('yyyy-MM-dd').format(_dob!);
+    }
     if (_religion != null) request.fields['religion'] = _religion!;
     if (_caste != null) request.fields['caste'] = _caste!;
-    if (_maritalStatus != null)
+    if (_maritalStatus != null) {
       request.fields['marital_status'] = _maritalStatus!;
-    if (_height != null)
+    }
+    if (_height != null) {
       request.fields['height'] = _height!.replaceAll(" ft", "");
+    }
     if (_weight.text.isNotEmpty) request.fields['weight'] = _weight.text;
     if (_bloodGroup != null) request.fields['blood_group'] = _bloodGroup!;
     if (_complexion != null) request.fields['complexion'] = _complexion!;
     request.fields['physical_disability'] = _physicalDisability ? "1" : "0";
-    if (_disabilityDetails.text.isNotEmpty)
+    if (_disabilityDetails.text.isNotEmpty) {
       request.fields['disability_details'] = _disabilityDetails.text;
+    }
     if (_diet != null) request.fields['diet'] = _diet!;
     request.fields['manglik'] = _manglik ? "1" : "0";
     request.fields['intercaste_accepted'] = _intercasteAccepted ? "1" : "0";
@@ -196,39 +202,50 @@ class _MyProfileState extends State<MyProfile> {
     // Step 2
     request.fields['father_alive'] = _fatherAlive ? "1" : "0";
     request.fields['mother_alive'] = _motherAlive ? "1" : "0";
-    if (_noOfBrothers != null)
+    if (_noOfBrothers != null) {
       request.fields['no_of_brothers'] = _noOfBrothers!;
-    if (_marriedBrothers != null)
+    }
+    if (_marriedBrothers != null) {
       request.fields['married_brothers'] = _marriedBrothers!;
+    }
     if (_noOfSisters != null) request.fields['no_of_sisters'] = _noOfSisters!;
-    if (_marriedSisters != null)
+    if (_marriedSisters != null) {
       request.fields['married_sisters'] = _marriedSisters!;
-    if (_parentsOccupation.text.isNotEmpty)
+    }
+    if (_parentsOccupation.text.isNotEmpty) {
       request.fields['parents_occupation'] = _parentsOccupation.text;
-    if (_propertyDetails.text.isNotEmpty)
+    }
+    if (_propertyDetails.text.isNotEmpty) {
       request.fields['property_details'] = _propertyDetails.text;
-    if (_educationLevel != null)
+    }
+    if (_educationLevel != null) {
       request.fields['education_level'] = _educationLevel!;
-    if (_occupationType != null)
+    }
+    if (_occupationType != null) {
       request.fields['occupation_type'] = _occupationType!;
-    if (_occupationDetails.text.isNotEmpty)
+    }
+    if (_occupationDetails.text.isNotEmpty) {
       request.fields['occupation_details'] = _occupationDetails.text;
+    }
     if (_annualIncome != null) request.fields['annual_income'] = _annualIncome!;
 
     // Step 3
     if (_govIdType != null) request.fields['gov_id_type'] = _govIdType!;
-    if (_govIdNumber.text.isNotEmpty)
+    if (_govIdNumber.text.isNotEmpty) {
       request.fields['gov_id_number'] = _govIdNumber.text;
+    }
     if (_address.text.isNotEmpty) request.fields['address'] = _address.text;
     if (_city != null) request.fields['city'] = _city!;
     if (_mobile1.text.isNotEmpty) request.fields['mobile1'] = _mobile1.text;
     if (_mobile2.text.isNotEmpty) request.fields['mobile2'] = _mobile2.text;
 
     // Step 4
-    if (_expectedEducation != null)
+    if (_expectedEducation != null) {
       request.fields['expected_education'] = _expectedEducation!;
-    if (_expectedIncome != null)
+    }
+    if (_expectedIncome != null) {
       request.fields['expected_income'] = _expectedIncome!;
+    }
     request.fields['partner_manglik'] = _partnerManglik ? "1" : "0";
     request.fields['divorce_accepted'] = _divorceAccepted ? "1" : "0";
     request.fields['partner_intercaste'] = _partnerIntercaste ? "1" : "0";
@@ -1057,8 +1074,9 @@ class _MyProfileState extends State<MyProfile> {
           InkWell(
             onTap: () async {
               final List<XFile> images = await _picker.pickMultiImage();
-              if (images.isNotEmpty)
+              if (images.isNotEmpty) {
                 onPicked(images.map((e) => File(e.path)).toList());
+              }
             },
             child: Container(
               height: 120,

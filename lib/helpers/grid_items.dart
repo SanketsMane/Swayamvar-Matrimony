@@ -22,7 +22,6 @@ import 'package:active_matrimonial_flutter_app/screens/referral/referral_earning
 import 'package:active_matrimonial_flutter_app/screens/referral/referral_earnings_wallet.dart';
 import 'package:active_matrimonial_flutter_app/screens/support_ticket/support_ticket.dart';
 import 'package:flutter/material.dart';
-import 'package:active_matrimonial_flutter_app/redux/store.dart';
 
 class GridItems {
   final List<GridSquareCard> _menuList = [];

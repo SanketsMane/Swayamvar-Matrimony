@@ -7,7 +7,6 @@ import 'package:redux_thunk/redux_thunk.dart';
 
 import '../../../repository/auth_repository.dart';
 import '../helpers/show_message_state.dart';
-import 'package:active_matrimonial_flutter_app/redux/store.dart';
 
 class UpdateDeactivatedStatusAction {
   final int newStatus;

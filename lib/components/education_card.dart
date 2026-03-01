@@ -23,14 +23,13 @@ class EducationCard extends StatelessWidget {
 
   final bool? status;
   final int? listId;
-
-  int? delIndex;
+  final int? delIndex;
   final int? index;
 
   final int? responseId;
 
   final bool? isDelete;
-  int? educationStateIndex;
+  final int? educationStateIndex;
   late final GlobalKey<FormState>? ky;
 
   final String? degreeText;
@@ -39,7 +38,7 @@ class EducationCard extends StatelessWidget {
   final String? endText;
   final bool? updateChanges;
 
-  EducationCard({
+  const EducationCard({
     super.key,
     this.degreeHint,
     this.degreeController,
@@ -187,7 +186,7 @@ class EducationCard extends StatelessWidget {
                           EducationStatusAction(status: value, id: listId),
                         );
                       },
-                      activeColor: Colors.green,
+                      activeThumbColor: Colors.green,
                       activeTrackColor: MyTheme.zircon,
                       inactiveThumbColor: Colors.white,
                       inactiveTrackColor: MyTheme.zircon,
@@ -203,8 +202,6 @@ class EducationCard extends StatelessWidget {
               Expanded(
                 child: GestureDetector(
                   onTap: () {
-                    delIndex = index;
-
                     store.dispatch(eudcationDeleteMiddleware(id: responseId));
                   },
                   child: Container(
@@ -231,7 +228,6 @@ class EducationCard extends StatelessWidget {
               Expanded(
                 child: InkWell(
                   onTap: () {
-                    educationStateIndex = index;
                     FocusManager.instance.primaryFocus?.unfocus();
                     if (!ky!.currentState!.validate()) {
                     } else {

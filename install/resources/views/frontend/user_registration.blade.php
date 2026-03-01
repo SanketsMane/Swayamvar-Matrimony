@@ -126,21 +126,16 @@
 								</div>
 							</div>
 
-							@if(addon_activation('referral_system'))
+							<!-- Agent Coupon Code [Sanket] -->
 							<div class="row">
 								<div class="col-lg-12">
 									<div class="form-group mb-3">
-										<label class="form-label" for="email">{{ translate('Referral Code') }}</label>
-										<input type="text" class="form-control{{ $errors->has('referral_code') ? ' is-invalid' : '' }}" value="{{ old('referral_code') }}" placeholder="{{  translate('Referral Code') }}" name="referral_code">
-										@if ($errors->has('referral_code'))
-											<span class="invalid-feedback" role="alert">
-												<strong>{{ $errors->first('referral_code') }}</strong>
-											</span>
-										@endif
+										<label class="form-label" for="agent_coupon_code">{{ translate('Agent Coupon Code') }}</label>
+										<input type="text" class="form-control" value="{{ old('agent_coupon_code') }}" placeholder="{{  translate('Agent Coupon Code') }}" name="agent_coupon_code">
+										<small class="text-muted">{{ translate('If you were referred by an agent, enter their code here.') }}</small>
 									</div>
 								</div>
 							</div>
-							@endif
 
 							@if(get_setting('google_recaptcha_activation') == 1)
 							<div class="form-group">

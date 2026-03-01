@@ -1,6 +1,3 @@
-import 'dart:ui';
-import 'package:active_matrimonial_flutter_app/const/my_theme.dart';
-import 'package:active_matrimonial_flutter_app/const/style.dart';
 import 'package:active_matrimonial_flutter_app/helpers/connectivity_helper.dart';
 import 'package:active_matrimonial_flutter_app/helpers/get_context.dart';
 import 'package:active_matrimonial_flutter_app/redux/libs/common/common_states_middleware.dart';
@@ -13,7 +10,6 @@ import 'package:active_matrimonial_flutter_app/screens/home_pages/explore/explor
 import 'package:active_matrimonial_flutter_app/screens/home_pages/home/home.dart';
 import 'package:active_matrimonial_flutter_app/screens/home_pages/home_without_login.dart';
 import 'package:flutter/material.dart';
-import 'package:active_matrimonial_flutter_app/l10n/app_localizations.dart';
 
 import '../helpers/push_notification_service.dart';
 import '../helpers/shared_pref.dart';

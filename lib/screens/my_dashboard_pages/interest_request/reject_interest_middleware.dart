@@ -3,7 +3,6 @@ import 'package:active_matrimonial_flutter_app/repository/interest_repository.da
 
 import '../../core.dart';
 import 'interest_request_middleware.dart';
-import 'package:active_matrimonial_flutter_app/redux/store.dart';
 
 ThunkAction<AppState> rejectInterestMiddleware({ctx, userId}) {
   return (Store<AppState> store) async {

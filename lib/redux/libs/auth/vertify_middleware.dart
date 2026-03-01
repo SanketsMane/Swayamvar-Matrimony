@@ -9,7 +9,6 @@ import 'package:redux_thunk/redux_thunk.dart';
 
 import '../../../helpers/navigator_push.dart';
 import '../helpers/show_message_state.dart';
-import 'package:active_matrimonial_flutter_app/redux/store.dart';
 
 ThunkAction<AppState> verifyMiddleware({code, var fromPage}) {
   return (Store<AppState> store) async {

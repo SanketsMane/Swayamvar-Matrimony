@@ -1,5 +1,4 @@
 import 'package:active_matrimonial_flutter_app/app_config.dart';
-import 'package:active_matrimonial_flutter_app/app_config.dart';
 import 'package:active_matrimonial_flutter_app/models_response/others/feature_check_response.dart';
 import 'package:http/http.dart' as http;
 

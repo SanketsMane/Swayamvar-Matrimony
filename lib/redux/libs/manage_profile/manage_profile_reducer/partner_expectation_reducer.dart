@@ -1,12 +1,6 @@
-import 'package:active_matrimonial_flutter_app/enums/enums.dart';
-import 'package:active_matrimonial_flutter_app/redux/store.dart';
-import 'package:active_matrimonial_flutter_app/models_response/common_models/ddown.dart';
 import 'package:active_matrimonial_flutter_app/models_response/drop_down/caste.dart';
 import 'package:active_matrimonial_flutter_app/models_response/drop_down/state.dart';
 import 'package:active_matrimonial_flutter_app/models_response/manage_profile/get_manage_profile/partner_expectation_get_response.dart';
-import 'package:active_matrimonial_flutter_app/redux/libs/drop_down/caste_middleware.dart';
-import 'package:active_matrimonial_flutter_app/redux/libs/drop_down/state_middleware.dart';
-import 'package:active_matrimonial_flutter_app/redux/libs/drop_down/sub_caste_middleware.dart';
 import 'package:active_matrimonial_flutter_app/redux/libs/manage_profile/manage_profiles_state/partner_expectation_state.dart';
 import 'partner_expectation_action.dart';
 
@@ -73,7 +67,7 @@ PartnerExpectationState? partner_expectation_reducer(
   return state;
 }
 
-pex_marital_status_value_add(
+PartnerExpectationState pex_marital_status_value_add(
   PartnerExpectationState state,
   PexMaritalStatusAddValueAction action,
 ) {
@@ -81,7 +75,7 @@ pex_marital_status_value_add(
   return state;
 }
 
-pex_add_residency_country(
+PartnerExpectationState pex_add_residency_country(
   PartnerExpectationState state,
   PexResidencyCountryAddValueAction action,
 ) {
@@ -89,7 +83,7 @@ pex_add_residency_country(
   return state;
 }
 
-pex_add_manglik(
+PartnerExpectationState pex_add_manglik(
   PartnerExpectationState state,
   PexManglikAddValueAction action,
 ) {
@@ -97,7 +91,7 @@ pex_add_manglik(
   return state;
 }
 
-pex_state_state_list_clear(
+PartnerExpectationState pex_state_state_list_clear(
   PartnerExpectationState state,
   PexEmptyPreferredState action,
 ) {
@@ -106,7 +100,7 @@ pex_state_state_list_clear(
   return state;
 }
 
-pex_add_preferred_state(
+PartnerExpectationState pex_add_preferred_state(
   PartnerExpectationState state,
   PexPreferredStateAddValueAction action,
 ) {
@@ -115,7 +109,7 @@ pex_add_preferred_state(
   return state;
 }
 
-pex_add_preferred_country(
+PartnerExpectationState pex_add_preferred_country(
   PartnerExpectationState state,
   PexPreferredCountryAddValueAction action,
 ) {
@@ -123,7 +117,7 @@ pex_add_preferred_country(
   return state;
 }
 
-pex_sub_caste_list_clear(
+PartnerExpectationState pex_sub_caste_list_clear(
   PartnerExpectationState state,
   PexEmptySubCaste action,
 ) {
@@ -132,13 +126,13 @@ pex_sub_caste_list_clear(
   return state;
 }
 
-pex_caste_list_clear(PartnerExpectationState state, PexEmptyCaste action) {
+PartnerExpectationState pex_caste_list_clear(PartnerExpectationState state, PexEmptyCaste action) {
   state.casteResponse!.data!.clear();
   state.caste_val = null;
   return state;
 }
 
-pex_add_religion(
+PartnerExpectationState pex_add_religion(
   PartnerExpectationState state,
   PexReligionAddValueAction action,
 ) {
@@ -146,12 +140,12 @@ pex_add_religion(
   return state;
 }
 
-pex_add_caste(PartnerExpectationState state, PexCasteAddValueAction action) {
+PartnerExpectationState pex_add_caste(PartnerExpectationState state, PexCasteAddValueAction action) {
   state.caste_val = action.value;
   return state;
 }
 
-pex_add_sub_caste(
+PartnerExpectationState pex_add_sub_caste(
   PartnerExpectationState state,
   PexSubCasteAddValueAction action,
 ) {
@@ -159,7 +153,7 @@ pex_add_sub_caste(
   return state;
 }
 
-pex_partnerexpectation_get_response(
+PartnerExpectationState pex_partnerexpectation_get_response(
   PartnerExpectationState state,
   PartnerExpectationGetResponse action,
 ) {
@@ -190,7 +184,7 @@ pex_partnerexpectation_get_response(
   return state;
 }
 
-pex_state_response(
+PartnerExpectationState pex_state_response(
   PartnerExpectationState state,
   StateResponseFromPartnerPref action,
 ) {
@@ -209,7 +203,7 @@ pex_state_response(
   return state;
 }
 
-pex_sub_caste_response(
+PartnerExpectationState pex_sub_caste_response(
   PartnerExpectationState state,
   PartnerPrefSubCasteResponse action,
 ) {
@@ -257,13 +251,13 @@ PartnerExpectationState pex_caste_response(
   return state;
 }
 
-pex_save_toggler(PartnerExpectationState state, bool value) {
+PartnerExpectationState pex_save_toggler(PartnerExpectationState state, bool value) {
   state.partner_expectation_save_changes =
       !state.partner_expectation_save_changes!;
   return state;
 }
 
-pex_loader_toggler(PartnerExpectationState state, Pexloader action) {
+PartnerExpectationState pex_loader_toggler(PartnerExpectationState state, Pexloader action) {
   state.isloading = !state.isloading!;
   return state;
 }

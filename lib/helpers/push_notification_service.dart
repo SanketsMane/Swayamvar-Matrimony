@@ -82,7 +82,7 @@ class PushNotificationService {
       void onDidReceiveNotificationResponse(
         NotificationResponse notificationResponse,
       ) async {
-        await _handleMessage(event);
+        _handleMessage(event);
       }
 
       flutterLocalNotificationsPlugin.initialize(
@@ -113,12 +113,12 @@ class PushNotificationService {
 
     // on message open app
     FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) async {
-      await _handleMessage(message);
+      _handleMessage(message);
     });
   }
 }
 
-_handleMessage(RemoteMessage message) {
+void _handleMessage(RemoteMessage message) {
   // print("in handle message");
   if (SharedPref().isLoggedIn == false) {
     OneContext().showDialog(

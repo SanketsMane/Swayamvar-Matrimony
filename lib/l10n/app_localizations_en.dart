@@ -871,6 +871,45 @@ class AppLocalizationsEn extends AppLocalizations {
   String get manage_profile_city_of_birth => 'City of Birth';
 
   @override
+  String get astro_sign_aries => 'Aries';
+
+  @override
+  String get astro_sign_taurus => 'Taurus';
+
+  @override
+  String get astro_sign_gemini => 'Gemini';
+
+  @override
+  String get astro_sign_cancer => 'Cancer';
+
+  @override
+  String get astro_sign_leo => 'Leo';
+
+  @override
+  String get astro_sign_virgo => 'Virgo';
+
+  @override
+  String get astro_sign_libra => 'Libra';
+
+  @override
+  String get astro_sign_scorpio => 'Scorpio';
+
+  @override
+  String get astro_sign_sagittarius => 'Sagittarius';
+
+  @override
+  String get astro_sign_capricorn => 'Capricorn';
+
+  @override
+  String get astro_sign_aquarius => 'Aquarius';
+
+  @override
+  String get astro_sign_pisces => 'Pisces';
+
+  @override
+  String get astro_pick_time => 'Select Time';
+
+  @override
   String get manage_profile_permanent_address => 'Permanent Address';
 
   @override

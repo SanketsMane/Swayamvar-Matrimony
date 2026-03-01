@@ -5,11 +5,11 @@ class PercentageCalculator {
 
   PercentageCalculator({this.data});
 
-  getPercentage() {
+  dynamic getPercentage() {
     dynamic map = data;
 
     Map jsonData = map.toJson();
-    var percentage;
+    double percentage;
     int completed;
     Map? finalData;
 
@@ -34,8 +34,8 @@ class PercentageCalculator {
     return percentage;
   }
 
-  getBasicPercentage() {
-    var percentage;
+  dynamic getBasicPercentage() {
+    double percentage;
     int completed;
     Map? jsonData;
 
@@ -60,7 +60,7 @@ class PercentageCalculator {
     return percentage;
   }
 
-  getEducationPercentage() {
+  double getEducationPercentage() {
     double percentage;
 
     if (store.state.manageProfileCombineState!.educationState!.list.isEmpty) {
@@ -82,7 +82,7 @@ class PercentageCalculator {
     return percentage;
   }
 
-  getCareerPercentage() {
+  double getCareerPercentage() {
     double percentage;
 
     if (store.state.manageProfileCombineState!.careerState!.list.isEmpty) {

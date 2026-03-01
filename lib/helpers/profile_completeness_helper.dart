@@ -26,22 +26,25 @@ class ProfileCompletenessHelper {
 
       // 6. Partner Expectations (10%)
       if (ps.partnerExpectationState?.partnerExpectationGetResponse?.data !=
-          null)
+          null) {
         completeness += 0.10;
+      }
 
       // 7. Family Details (10%)
       if (ps.familyState?.familyGetResponse?.data != null) completeness += 0.10;
 
       // 8. Spiritual & Social (10%)
-      if (ps.spiritualSocialState?.spiritualSocialGetResponse?.data != null)
+      if (ps.spiritualSocialState?.spiritualSocialGetResponse?.data != null) {
         completeness += 0.10;
+      }
 
       // 9. Physical Attributes (5%)
       if (ps.physicalAttrState?.physicalAttrData != null) completeness += 0.05;
 
       // 10. Hobbies & Interests (5%)
-      if (ps.hobbiesInterestState?.hobbiesInterestData != null)
+      if (ps.hobbiesInterestState?.hobbiesInterestData != null) {
         completeness += 0.05;
+      }
     }
 
     // Ensure we return a value between 0 and 100

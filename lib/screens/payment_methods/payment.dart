@@ -21,13 +21,12 @@ import '../package/package_middlewares.dart';
 import 'paytm_screen.dart';
 
 class Payment extends StatefulWidget {
-  double? amount;
-  @required
-  String payment_type;
-  var package_id;
-  String title;
+  final double? amount;
+  final String payment_type;
+  final dynamic package_id;
+  final String title;
 
-  Payment({
+  const Payment({
     super.key,
     this.amount = 0.00,
     this.title = "",
@@ -44,7 +43,7 @@ class _PaymentState extends State<Payment> {
   final _formKey = GlobalKey<FormState>();
   var textFieldHeight = false;
 
-  onPressPlaceOrderOrProceed(AppState state, {var package_id, var index}) {
+  void onPressPlaceOrderOrProceed(AppState state, {var package_id, var index}) {
     if (store.state.paymentTypesState!.selected_payment_method_key ==
         "paypal") {
       NavigatorPush.push(
@@ -349,7 +348,7 @@ class _PaymentState extends State<Payment> {
     );
   }
 
-  pleaseWaitDialog() {
+  Future<void> pleaseWaitDialog() {
     return OneContext().showDialog<void>(
       builder: (BuildContext context) {
         store.state.packagePaymentWithWalletState!.loadingContext = context;

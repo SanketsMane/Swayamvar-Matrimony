@@ -4,7 +4,6 @@ import 'package:redux/redux.dart';
 import 'package:redux_thunk/redux_thunk.dart';
 
 import '../../../repository/shortlist_repository.dart';
-import 'package:active_matrimonial_flutter_app/redux/store.dart';
 
 ThunkAction<AppState> shortlistMiddleware() {
   return (Store<AppState> store) async {

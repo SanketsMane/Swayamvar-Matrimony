@@ -1,12 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:intl_phone_number_input/intl_phone_number_input.dart';
-import 'package:active_matrimonial_flutter_app/const/my_theme.dart';
 import 'package:active_matrimonial_flutter_app/const/style.dart';
 import 'package:active_matrimonial_flutter_app/redux/store.dart';
 import 'package:active_matrimonial_flutter_app/redux/app/app_state.dart';
 import 'package:active_matrimonial_flutter_app/screens/auth/forgetPassword/forgetpassword_action.dart';
-import 'package:active_matrimonial_flutter_app/l10n/app_localizations.dart';
 
 class ForgetPassword extends StatefulWidget {
   const ForgetPassword({super.key});

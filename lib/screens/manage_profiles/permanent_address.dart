@@ -1,6 +1,5 @@
 import 'package:active_matrimonial_flutter_app/components/common_app_bar_manageprofile.dart';
 import 'package:active_matrimonial_flutter_app/components/common_input.dart';
-import 'package:active_matrimonial_flutter_app/const/const.dart';
 import 'package:active_matrimonial_flutter_app/const/my_theme.dart';
 import 'package:active_matrimonial_flutter_app/const/style.dart';
 import 'package:active_matrimonial_flutter_app/helpers/device_info.dart';
@@ -221,7 +220,7 @@ class _PermanentAddressState extends State<PermanentAddress> {
     );
   }
 
-  build_title(BuildContext context, AppState state) {
+  Column build_title(BuildContext context, AppState state) {
     return Column(
       children: [
         Text(
@@ -233,7 +232,7 @@ class _PermanentAddressState extends State<PermanentAddress> {
     );
   }
 
-  build_country(BuildContext context, AppState state) {
+  Column build_country(BuildContext context, AppState state) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -262,7 +261,7 @@ class _PermanentAddressState extends State<PermanentAddress> {
                 color: MyTheme.gull_grey,
               ),
             ),
-            value:
+            initialValue:
                 state
                     .manageProfileCombineState!
                     .permanentAddressState!
@@ -312,7 +311,7 @@ class _PermanentAddressState extends State<PermanentAddress> {
     );
   }
 
-  build_state(BuildContext context, AppState state) {
+  Column build_state(BuildContext context, AppState state) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -342,7 +341,7 @@ class _PermanentAddressState extends State<PermanentAddress> {
               ),
               // helperText: 'Helper text',
             ),
-            value:
+            initialValue:
                 state
                     .manageProfileCombineState!
                     .permanentAddressState!
@@ -391,7 +390,7 @@ class _PermanentAddressState extends State<PermanentAddress> {
     );
   }
 
-  build_city(BuildContext context, AppState state) {
+  Column build_city(BuildContext context, AppState state) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -410,7 +409,7 @@ class _PermanentAddressState extends State<PermanentAddress> {
           child: DropdownButtonFormField<dynamic>(
             isExpanded: true,
             iconSize: 0.0,
-            value:
+            initialValue:
                 state
                     .manageProfileCombineState!
                     .permanentAddressState!
@@ -452,7 +451,7 @@ class _PermanentAddressState extends State<PermanentAddress> {
     );
   }
 
-  build_postal_code(BuildContext context, AppState state) {
+  Column build_postal_code(BuildContext context, AppState state) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [

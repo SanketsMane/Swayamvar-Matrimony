@@ -10,7 +10,6 @@ import 'package:redux_thunk/redux_thunk.dart';
 import '../../../screens/app_navigation.dart';
 import '../helpers/show_message_state.dart';
 import 'auth_reducer.dart';
-import 'package:active_matrimonial_flutter_app/redux/store.dart';
 
 ThunkAction<AppState> accountDeletionMiddleware() {
   return (Store<AppState> store) async {

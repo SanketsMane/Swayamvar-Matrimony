@@ -3,9 +3,6 @@ import 'package:active_matrimonial_flutter_app/models_response/manage_profile/ge
 import 'package:active_matrimonial_flutter_app/redux/libs/manage_profile/manage_profiles_state/attitude_behavior_state.dart';
 import 'package:flutter/material.dart';
 
-import '../../../../redux/store.dart';
-import '../manage_profile_middleware/manage_profile_update_middlewares.dart';
-import 'package:active_matrimonial_flutter_app/redux/store.dart';
 
 class AttitudeBehaviorLoader {}
 
@@ -32,7 +29,7 @@ AttitudeBehaviorState? attitude_behavior_reducer(
   return state;
 }
 
-setAttitudeBehaviour(AttitudeBehaviorState? state) {
+void setAttitudeBehaviour(AttitudeBehaviorState? state) {
   state!.affectionController!.text = state.attitudeBehaviorData!.affection;
   state.humorController!.text = state.attitudeBehaviorData!.humor;
   state.religiousServiceController!.text =

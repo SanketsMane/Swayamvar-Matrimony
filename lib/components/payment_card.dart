@@ -5,7 +5,6 @@ import '../const/style.dart';
 import '../redux/store.dart';
 import '../screens/payment_methods/payment_types_action.dart';
 import 'common_widget.dart';
-import 'package:active_matrimonial_flutter_app/redux/store.dart';
 
 class PaymentCard extends StatelessWidget {
   final int? index;
@@ -21,7 +20,7 @@ class PaymentCard extends StatelessWidget {
     this.title,
   });
 
-  onPaymentMethodItemTap(index) {
+  void onPaymentMethodItemTap(index) {
     if (store.state.paymentTypesState!.selected_payment_method !=
         store.state.paymentTypesState!.paymentTypes![index].paymentType) {
       store.dispatch(

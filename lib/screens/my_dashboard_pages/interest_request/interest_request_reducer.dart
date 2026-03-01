@@ -42,7 +42,7 @@ InterestRequestState? interest_request_reducer(
   return state;
 }
 
-accept(InterestRequestState state, dynamic action) {
+InterestRequestState accept(InterestRequestState state, dynamic action) {
   state.acceptInterest = !state.acceptInterest!;
   return state;
 }

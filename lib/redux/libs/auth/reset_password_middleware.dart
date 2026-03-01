@@ -5,7 +5,6 @@ import 'package:active_matrimonial_flutter_app/screens/auth/signin/phone_login.d
 import 'package:flutter/material.dart';
 
 import '../../../screens/core.dart';
-import 'package:active_matrimonial_flutter_app/redux/store.dart';
 
 ThunkAction<AppState> resetPasswordMiddleware({
   required String sendBy,

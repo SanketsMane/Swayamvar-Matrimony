@@ -2,9 +2,7 @@
 import 'package:active_matrimonial_flutter_app/helpers/aiz_route.dart';
 import 'package:active_matrimonial_flutter_app/middleware/profile_view_middleware.dart';
 import 'package:flutter/material.dart';
-import 'package:active_matrimonial_flutter_app/l10n/app_localizations.dart';
 
-import '../const/const.dart';
 import '../const/my_theme.dart';
 import '../const/style.dart';
 import '../redux/app/app_state.dart';
