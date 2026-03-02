@@ -9,12 +9,9 @@ use App\Models\PackagePayment;
 use App\Models\User;
 use App\Models\Wallet;
 use App\Notifications\DbStoreNotification;
-use App\Services\FirbaseNotification;
-use App\Utility\EmailUtility;
 use App\Utility\SmsUtility;
 use Auth;
 use Illuminate\Http\Request;
-use Kutia\Larafirebase\Facades\Larafirebase;
 use Notification;
 use Session;
 
@@ -122,17 +119,6 @@ class PackagePaymentController extends Controller
                 $message = $user->first_name . ' ' . $user->last_name . translate('has been purchased a new package. Payment Code: ') . $package_payment->payment_code;
                 $route = route('package-payments.index');
 
-                // fcm
-                if (get_setting('firebase_push_notification') == 1) {
-                    $fcmTokens = User::where('user_type', 'admin')
-                        ->whereNotNull('fcm_token')
-                        ->pluck('fcm_token')
-                        ->toArray();
-                    Larafirebase::withTitle(str_replace("_", " ", $notify_type))
-                        ->withBody($message)
-                        ->sendMessage($fcmTokens);
-                }
-                // end of fcm
 
                 Notification::send(User::where('user_type', 'admin')->first(), new DbStoreNotification($notify_type, $id, $notify_by, $info_id, $message, $route));
             } catch (\Exception $e) {
@@ -210,17 +196,6 @@ class PackagePaymentController extends Controller
                 $route = route('package-payments.index');
 
                 // fcm
-                if (get_setting('firebase_push_notification') == 1) {
-                    $fcmTokens = User::where('user_type', 'admin')
-                        ->whereNotNull('fcm_token')
-                        ->pluck('fcm_token')
-                        ->toArray();
-                    Larafirebase::withTitle(str_replace("_", " ", $notify_type))
-                        ->withBody($message)
-                        ->sendMessage($fcmTokens);
-                }
-                // end of fcm
-
                 Notification::send(User::where('user_type', 'admin')->first(), new DbStoreNotification($notify_type, $id, $notify_by, $info_id, $message, $route));
             } catch (\Exception $e) {
                 // dd($e);
@@ -330,15 +305,7 @@ class PackagePaymentController extends Controller
                 $message = translate('Your payment for package ') . $package_payment->package->name . translate(' has been approved. Payment Id: ') . $package_payment->payment_code;
                 $route = route('package_purchase_history');
 
-                // fcm
-                if (get_setting('firebase_push_notification') == 1) {
-                    $fcmTokens = User::where('id', $user->id)
-                        ->whereNotNull('fcm_token')
-                        ->pluck('fcm_token')
-                        ->toArray();
-                    self::sendFirebaseNotification($fcmTokens, $user, $notify_type, $message, $notify_by);
-                }
-                // end of fcm
+                // Firebase removed
 
                 Notification::send($user, new DbStoreNotification($notify_type, $id, $notify_by, $info_id, $message, $route));
             } catch (\Exception $e) {
@@ -383,21 +350,4 @@ class PackagePaymentController extends Controller
         //
     }
 
-    public static function sendFirebaseNotification($fcmTokens = null, $notify_user, $notify_type, $message, $notify_by = null)
-    {
-        // send firebase notification for mobile app
-        if ($notify_user->fcm_token != null) {
-            $data = (object)[];
-            $data->fcm_token = $notify_user->fcm_token;
-            $data->title = $notify_type;
-            $data->text = $message;
-            $data->notify_by = $notify_by;
-            FirbaseNotification::send($data);
-        }
-        // end of  firebase notification
-
-        Larafirebase::withTitle(str_replace("_", " ", $notify_type))
-            ->withBody($message)
-            ->sendMessage($fcmTokens);
-    }
 }

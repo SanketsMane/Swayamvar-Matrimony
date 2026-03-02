@@ -1,7 +1,8 @@
 // Sanket: Updated Phone OTP Verification with immediate controller initialization
 import 'package:flutter/material.dart';
 import 'package:active_matrimonial_flutter_app/const/style.dart';
-import 'package:active_matrimonial_flutter_app/screens/auth/signin/firebase_phone_middleware.dart';
+import 'package:active_matrimonial_flutter_app/screens/auth/signin/otp_middleware.dart';
+import 'package:active_matrimonial_flutter_app/redux/store.dart';
 import 'package:active_matrimonial_flutter_app/redux/store.dart';
 import 'package:pinput/pinput.dart';
 
@@ -14,6 +15,7 @@ class PhoneOtpVerify extends StatefulWidget {
     required this.verificationId,
     required this.phoneNumber,
   });
+
 
   @override
   State<PhoneOtpVerify> createState() => _PhoneOtpVerifyState();
@@ -175,7 +177,7 @@ class _PhoneOtpVerifyState extends State<PhoneOtpVerify> {
                   GestureDetector(
                     onTap: () {
                       store.dispatch(
-                        requestFirebaseOtpAction(
+                        requestOtpAction(
                           context: context,
                           phoneNumber: widget.phoneNumber,
                         ),
@@ -204,13 +206,14 @@ class _PhoneOtpVerifyState extends State<PhoneOtpVerify> {
       _isLoading = true;
     });
     store.dispatch(
-      verifyFirebaseOtpAction(
+      verifyOtpAction(
         context: context,
         verificationId: widget.verificationId,
         smsCode: smsCode,
         phoneNumber: widget.phoneNumber,
       ),
     );
+
     Future.delayed(const Duration(seconds: 3), () {
       if (mounted) {
         setState(() {

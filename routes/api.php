@@ -30,6 +30,11 @@ Route::group(['namespace' => 'Api', 'middleware' => ['app_language']], function 
     Route::post('/reset/password', 'AuthController@resetPassword');
     Route::post('social-login', 'AuthController@socialLogin');
     Route::get('user-by-token', 'AuthController@getUserByToken');
+    
+    // OTP Routes
+    Route::post('/otp/send', 'OtpController@sendOtp');
+    Route::post('/otp/verify', 'OtpController@verifyOtp');
+
 
     Route::get('/home/slider', 'HomeController@home_slider');
     Route::get('/home/banner', 'HomeController@home_banner');

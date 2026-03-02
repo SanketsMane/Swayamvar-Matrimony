@@ -240,11 +240,30 @@ class AuthRepository {
     return data;
   }
 
-  Future<SignInResponse> firebasePhoneLogin({required String phone}) async {
-    var baseUrl = "${AppConfig.BASE_URL}/firebase-phone-login";
+
+  Future<CommonResponse> sendOtp({required String phone}) async {
+    var baseUrl = "${AppConfig.BASE_URL}/otp/send";
     var postBody = jsonEncode({
       "phone": phone,
-      "identity_matrix": AppConfig.purshase_code,
+    });
+
+    var response = await http.post(
+      Uri.parse(baseUrl),
+      headers: {
+        "Accept": "application/json",
+        "Content-Type": "application/json",
+      },
+      body: postBody,
+    );
+
+    return commonResponseFromJson(response.body);
+  }
+
+  Future<SignInResponse> verifyOtp({required String phone, required String otp}) async {
+    var baseUrl = "${AppConfig.BASE_URL}/otp/verify";
+    var postBody = jsonEncode({
+      "phone": phone,
+      "otp": otp,
     });
 
     var response = await http.post(

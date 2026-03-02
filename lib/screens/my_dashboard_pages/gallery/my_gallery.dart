@@ -294,7 +294,7 @@ class _MyGalleryState extends State<MyGallery> {
                 .packageExpiry !=
             "Expired" &&
         (store.state.accountState!.profileData!.remainingPhotoGallery != 0)) {
-      return browseImageDialog();
+      browseImageDialog();
     } else {
       store.dispatch(
         ShowMessageAction(

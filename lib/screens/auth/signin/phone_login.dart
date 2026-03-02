@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:intl_phone_number_input/intl_phone_number_input.dart';
 import 'package:active_matrimonial_flutter_app/const/style.dart';
 import 'package:active_matrimonial_flutter_app/components/social_login_widget.dart';
-import 'package:active_matrimonial_flutter_app/screens/auth/signin/firebase_phone_middleware.dart';
+import 'package:active_matrimonial_flutter_app/screens/auth/signin/otp_middleware.dart';
 import 'package:active_matrimonial_flutter_app/screens/auth/signin/email_login.dart';
 import 'package:active_matrimonial_flutter_app/screens/auth/signup/signup.dart';
 import 'package:active_matrimonial_flutter_app/redux/store.dart';
@@ -154,7 +154,7 @@ class _PhoneLoginState extends State<PhoneLogin> {
                           _isLoading = true;
                         });
                         store.dispatch(
-                          requestFirebaseOtpAction(
+                          requestOtpAction(
                             context: context,
                             phoneNumber: _selectedPhoneNumber.phoneNumber ?? '',
                           ),

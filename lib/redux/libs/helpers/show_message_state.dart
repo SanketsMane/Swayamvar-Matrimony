@@ -23,7 +23,8 @@ ShowMessageState? show_message_reducer(
   dynamic action,
 ) {
   if (action is ShowMessageAction) {
-    return show_message(state, action);
+    show_message(state, action);
+    return state;
   }
   return state;
 }

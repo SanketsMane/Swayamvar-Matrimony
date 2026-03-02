@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:active_matrimonial_flutter_app/l10n/app_localizations.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
@@ -11,10 +10,12 @@ import 'package:active_matrimonial_flutter_app/redux/store.dart';
 import 'package:active_matrimonial_flutter_app/redux/store_init.dart';
 import 'helpers/shared_pref.dart';
 
-import 'screens/user_pages/firebase_options.dart';
+import 'helpers/shared_pref.dart';
 
 import 'package:active_matrimonial_flutter_app/providers/language_provider.dart';
 import 'package:provider/provider.dart';
+import 'package:flutter/foundation.dart';
+import 'package:screen_protector/screen_protector.dart';
 
 void main() async {
   runZonedGuarded(
@@ -29,9 +30,7 @@ void main() async {
         debugPrint("Flutter Error: ${details.exception}");
       };
 
-      await Firebase.initializeApp(
-        options: DefaultFirebaseOptions.currentPlatform,
-      );
+      // Firebase removed and replaced by Twilio backend flow
       await SharedPref().init();
 
       runApp(
@@ -52,8 +51,6 @@ void main() async {
 
 // redux store moved to lib/redux/store.dart
 
-import 'package:screen_protector/screen_protector.dart';
-
 class MyApp extends StatefulWidget {
   const MyApp({super.key});
 
@@ -69,18 +66,31 @@ class _MyAppState extends State<MyApp> {
   }
 
   void _initScreenProtection() async {
+    if (kIsWeb ||
+        (defaultTargetPlatform != TargetPlatform.android &&
+            defaultTargetPlatform != TargetPlatform.iOS)) {
+      return;
+    }
     // Android: Protects against screenshots and screen recording (black screen)
     // iOS: Protects against screen recording and task switcher leaking
-    await ScreenProtector.protectDataLeakageWithBlur();
-    await ScreenProtector.protectDataLeakageOn();
-    // iOS: Prevent screenshot (shows warning toast natively if possible)
-    await ScreenProtector.preventScreenshotOn();
+    try {
+      await ScreenProtector.protectDataLeakageWithBlur();
+      await ScreenProtector.protectDataLeakageOn();
+      // iOS: Prevent screenshot (shows warning toast natively if possible)
+      await ScreenProtector.preventScreenshotOn();
+    } catch (e) {
+      debugPrint("Sanket: ScreenProtector Init Error (Safe to ignore if non-mobile) -> $e");
+    }
   }
 
   @override
   void dispose() {
-    ScreenProtector.protectDataLeakageOff();
-    ScreenProtector.preventScreenshotOff();
+    if (!kIsWeb &&
+        (defaultTargetPlatform == TargetPlatform.android ||
+            defaultTargetPlatform == TargetPlatform.iOS)) {
+      ScreenProtector.protectDataLeakageOff();
+      ScreenProtector.preventScreenshotOff();
+    }
     super.dispose();
   }
 

@@ -7,13 +7,9 @@ use App\Models\ChatThread;
 use App\Models\ExpressInterest;
 use App\Models\User;
 use App\Notifications\DbStoreNotification;
-use App\Services\FirbaseNotification;
-use App\Utility\EmailUtility;
-use App\Utility\SmsUtility;
 use Auth;
 use DB;
 use Illuminate\Http\Request;
-use Kutia\Larafirebase\Facades\Larafirebase;
 use Notification;
 
 class ExpressInterestController extends Controller
@@ -85,12 +81,7 @@ class ExpressInterestController extends Controller
                         $message = $interested_by_user->first_name . ' ' . $interested_by_user->last_name . ' ' . translate(' has Expressed Interest On You.');
                         $route = route('interest_requests');
 
-                        // fcm 
-                        if (get_setting('firebase_push_notification') == 1) {
-                            $fcmTokens = User::where('id', $request->id)->whereNotNull('fcm_token')->pluck('fcm_token')->toArray();
-                            self::sendFirebaseNotification($fcmTokens, $notify_user, $notify_type, $message, $notify_by);
-                        }
-                        // end of fcm
+                        // Firebase removed
 
                         Notification::send($notify_user, new DbStoreNotification($notify_type, $id, $notify_by, $info_id, $message, $route));
                     } catch (\Exception $e) {
@@ -151,12 +142,7 @@ class ExpressInterestController extends Controller
                 $message = Auth::user()->first_name . ' ' . Auth::user()->last_name . ' ' . translate(' has accepted your interest.');
                 $route = route('my_interests.index');
 
-                // fcm 
-                if (get_setting('firebase_push_notification') == 1) {
-                    $fcmTokens = User::where('id', $interest->interested_by)->whereNotNull('fcm_token')->pluck('fcm_token')->toArray();
-                    self::sendFirebaseNotification($fcmTokens, $notify_user, $notify_type, $message, $notify_by);
-                }
-                // end of fcm
+                // Firebase removed
 
                 Notification::send($notify_user, new DbStoreNotification($notify_type, $id, $notify_by, $info_id, $message, $route));
             } catch (\Exception $e) {
@@ -195,12 +181,7 @@ class ExpressInterestController extends Controller
                 $message = Auth::user()->first_name . ' ' . Auth::user()->last_name . ' ' . translate(' has rejected your interest.');
                 $route = route('my_interests.index');
 
-                // fcm 
-                if (get_setting('firebase_push_notification') == 1) {
-                    $fcmTokens = User::where('id', $interest->interested_by)->whereNotNull('fcm_token')->pluck('fcm_token')->toArray();
-                    self::sendFirebaseNotification($fcmTokens, $notify_user, $notify_type, $message, $notify_by);
-                }
-                // end of fcm
+                // Firebase removed
 
                 Notification::send($notify_user, new DbStoreNotification($notify_type, $id, $notify_by, $info_id, $message, $route));
             } catch (\Exception $e) {
@@ -260,21 +241,4 @@ class ExpressInterestController extends Controller
         //
     }
 
-    public static function sendFirebaseNotification($fcmTokens = null, $notify_user, $notify_type, $message, $notify_by = null)
-    {
-        // send firebase notification for mobile app
-        if ($notify_user->fcm_token != null) {
-            $data = (object)[];
-            $data->fcm_token = $notify_user->fcm_token;
-            $data->title = $notify_type;
-            $data->text = $message;
-            $data->notify_by = $notify_by;
-            FirbaseNotification::send($data);
-        }
-        // end of  firebase notification
-
-        Larafirebase::withTitle(str_replace("_", " ", $notify_type))
-            ->withBody($message)
-            ->sendMessage($fcmTokens);
-    }
 }

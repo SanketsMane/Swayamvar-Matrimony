@@ -1,10 +1,15 @@
 #!/usr/bin/expect -f
-set timeout 20
-spawn ssh -o StrictHostKeyChecking=no -p 22 root@91.99.127.245 "tail -n 100 /var/www/swayamvar/storage/logs/laravel.log && cd /var/www/swayamvar && php artisan config:clear && php artisan cache:clear"
-expect {
-  "password:" {
-    send "!Jn\$J!@0SA87Q5z8AAts\r"
-    exp_continue
-  }
-  eof
-}
+set timeout 30
+spawn ssh -o StrictHostKeyChecking=no -p 22 root@91.99.127.245
+expect "password:"
+send {!Jn$J!@0SA87Q5z8AAts}
+send "\r"
+expect "#"
+# Replace mobile_number with mobile in TelecallerLeadsApiController
+send "sed -i 's/mobile_number/mobile/g' /var/www/swayamvar/app/Http/Controllers/Api/Telecalling/TelecallerLeadsApiController.php\r"
+expect "#"
+# Clear Laravel caches again
+send "cd /var/www/swayamvar && php artisan config:clear && php artisan cache:clear && php artisan route:clear && php artisan view:clear\r"
+expect "#"
+send "exit\r"
+expect eof

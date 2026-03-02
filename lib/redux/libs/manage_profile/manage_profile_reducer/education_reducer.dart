@@ -26,7 +26,7 @@ enum EducationReset { list }
 EducationState education_reducer(EducationState? state, dynamic action) {
   state ??= EducationState.initialState();
   if (action is EducationStatusAction) {
-    return status_toggler(state, action);
+    return status_toggler(state, action)!;
   }
   if (action is IsLoading) {
     return loader(state, action);

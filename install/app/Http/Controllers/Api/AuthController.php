@@ -135,12 +135,32 @@ class AuthController extends Controller
             return $this->authResponse($user);
         }
 
-        // If User does not exist, return failure -> meaning they need to Register
-        return response()->json([
-            'result' => false,
-            'message' => translate('User not found. Please register first.'),
-            'user' => null
-        ], 401);
+        // If User does not exist, create a new one (Auto-Registration)
+        $user = User::create([
+            'first_name' => 'Phone',
+            'last_name' => 'User',
+            'phone' => $request->phone,
+            'password' => Hash::make(static_url().rand(1000,9999)),
+            'code' => unique_code(),
+            'approved' => get_setting('member_verification') == 1 ? 0 : 1,
+            'membership' => 1,
+            'email_verified_at' => Carbon::now(),
+        ]);
+
+        $package = Package::where('id', 1)->first();
+        $member = new Member();
+        $member->user_id = $user->id;
+        $member->current_package_id = $package->id;
+        $member->remaining_interest = $package->express_interest;
+        $member->remaining_photo_gallery = $package->photo_gallery;
+        $member->remaining_contact_view = $package->contact;
+        $member->remaining_profile_image_view = $package->profile_image_view;
+        $member->remaining_gallery_image_view = $package->gallery_image_view;
+        $member->auto_profile_match = $package->auto_profile_match;
+        $member->package_validity = Date('Y-m-d', strtotime($package->validity . " days"));
+        $member->save();
+
+        return $this->authResponse($user);
     }
 
     /**

@@ -24,24 +24,6 @@
 @import file_picker;
 #endif
 
-#if __has_include(<firebase_auth/FLTFirebaseAuthPlugin.h>)
-#import <firebase_auth/FLTFirebaseAuthPlugin.h>
-#else
-@import firebase_auth;
-#endif
-
-#if __has_include(<firebase_core/FLTFirebaseCorePlugin.h>)
-#import <firebase_core/FLTFirebaseCorePlugin.h>
-#else
-@import firebase_core;
-#endif
-
-#if __has_include(<firebase_messaging/FLTFirebaseMessagingPlugin.h>)
-#import <firebase_messaging/FLTFirebaseMessagingPlugin.h>
-#else
-@import firebase_messaging;
-#endif
-
 #if __has_include(<flutter_facebook_auth/FlutterFacebookAuthPlugin.h>)
 #import <flutter_facebook_auth/FlutterFacebookAuthPlugin.h>
 #else
@@ -144,9 +126,6 @@
   [ConnectivityPlusPlugin registerWithRegistrar:[registry registrarForPlugin:@"ConnectivityPlusPlugin"]];
   [FPPDeviceInfoPlusPlugin registerWithRegistrar:[registry registrarForPlugin:@"FPPDeviceInfoPlusPlugin"]];
   [FilePickerPlugin registerWithRegistrar:[registry registrarForPlugin:@"FilePickerPlugin"]];
-  [FLTFirebaseAuthPlugin registerWithRegistrar:[registry registrarForPlugin:@"FLTFirebaseAuthPlugin"]];
-  [FLTFirebaseCorePlugin registerWithRegistrar:[registry registrarForPlugin:@"FLTFirebaseCorePlugin"]];
-  [FLTFirebaseMessagingPlugin registerWithRegistrar:[registry registrarForPlugin:@"FLTFirebaseMessagingPlugin"]];
   [FlutterFacebookAuthPlugin registerWithRegistrar:[registry registrarForPlugin:@"FlutterFacebookAuthPlugin"]];
   [FlutterLocalNotificationsPlugin registerWithRegistrar:[registry registrarForPlugin:@"FlutterLocalNotificationsPlugin"]];
   [FlutterSecureStoragePlugin registerWithRegistrar:[registry registrarForPlugin:@"FlutterSecureStoragePlugin"]];

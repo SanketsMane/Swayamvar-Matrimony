@@ -225,20 +225,22 @@ if (!function_exists('sendSMS')) {
             curl_close($ch);
 
             return $response;
-        } elseif (get_setting('twillo_activation') == 1) {
-            $sid = env("TWILIO_SID"); // Your Account SID from www.twilio.com/console
-            $token = env("TWILIO_AUTH_TOKEN"); // Your Auth Token from www.twilio.com/console
 
-            $client = new Client($sid, $token);
+        } elseif (get_setting('twillo_activation') == 1) {
+            $sid = env("TWILIO_SID"); 
+            $token = env("TWILIO_AUTH_TOKEN"); 
+
+            $client = new \Twilio\Rest\Client($sid, $token);
             try {
                 $message = $client->messages->create(
-                    $to, // Text this number
+                    $to, 
                     array(
-                        'from' => env('VALID_TWILLO_NUMBER'), // From a valid Twilio number
+                        'from' => env('VALID_TWILLO_NUMBER'), 
                         'body' => $text
                     )
                 );
             } catch (\Exception $e) {
+                \Log::error("Twilio Error: " . $e->getMessage());
             }
         } elseif (get_setting('ssl_wireless_activation') == 1) {
             $token = env("SSL_SMS_API_TOKEN"); //put ssl provided api_token here

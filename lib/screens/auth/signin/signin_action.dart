@@ -29,25 +29,25 @@ class IsObscureAction {
   }
 }
 
-class RequestFirebaseOtpAction {
+class RequestOtpAction {
   final BuildContext context;
   final String phoneNumber;
 
-  RequestFirebaseOtpAction({required this.context, required this.phoneNumber});
+  RequestOtpAction({required this.context, required this.phoneNumber});
 
   @override
   String toString() {
-    return 'RequestFirebaseOtpAction{phoneNumber: $phoneNumber}';
+    return 'RequestOtpAction{phoneNumber: $phoneNumber}';
   }
 }
 
-class VerifyFirebaseOtpAction {
+class VerifyOtpAction {
   final BuildContext context;
   final String verificationId;
   final String smsCode;
   final String phoneNumber;
 
-  VerifyFirebaseOtpAction({
+  VerifyOtpAction({
     required this.context,
     required this.verificationId,
     required this.smsCode,
@@ -56,6 +56,6 @@ class VerifyFirebaseOtpAction {
 
   @override
   String toString() {
-    return 'VerifyFirebaseOtpAction{verificationId: $verificationId, smsCode: $smsCode, phoneNumber: $phoneNumber}';
+    return 'VerifyOtpAction{verificationId: $verificationId, smsCode: $smsCode, phoneNumber: $phoneNumber}';
   }
 }

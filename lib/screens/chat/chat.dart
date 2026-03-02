@@ -38,6 +38,11 @@ class Chat extends StatefulWidget {
 class _ChatState extends State<Chat> {
   final ImagePicker _picker = ImagePicker();
   File? _selectedImage;
+  final TextEditingController _msgController = TextEditingController();
+  final ScrollController _scrollController = ScrollController();
+  late Timer _timer;
+  int? _myId;
+
 
   Future<void> _pickImage() async {
     try {

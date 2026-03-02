@@ -42,7 +42,7 @@ OfflinePaymentState offLineWalletRecharge(
   OfflineRechargeWalletAction action,
 ) {
   if (!requiredFieldVerification(state)) {
-    return;
+    return state!;
   }
   Map postValue = {};
   postValue.addAll({
@@ -77,7 +77,7 @@ Future<OfflinePaymentState> offlineBuyPackage(
   OfflineBuyPackageAction action,
 ) async {
   if (!requiredFieldVerification(state)) {
-    return;
+    return state!;
   }
 
   Map postValue = {};

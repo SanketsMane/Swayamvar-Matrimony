@@ -19,6 +19,41 @@ use Illuminate\Support\Facades\Route;
 //     return $request->user();
 // });
 
+// Telecaller App APIs [Sanket]
+Route::group(['prefix' => 'telecaller', 'namespace' => 'Api\Telecalling', 'middleware' => ['app_language']], function () {
+    Route::post('/login', 'TelecallerAuthController@login');
+    Route::post('/send-otp', 'TelecallerAuthController@sendOtp');
+    Route::post('/verify-otp', 'TelecallerAuthController@verifyOtp');
+
+    Route::group(['middleware' => ['auth:sanctum']], function () {
+        Route::get('/dashboard', 'TelecallerDashboardApiController@getDashboardStats');
+        
+        // Leads
+        Route::get('/leads', 'TelecallerLeadsApiController@getAssignedLeads');
+        Route::get('/leads/active', 'TelecallerLeadsApiController@getActiveCustomers');
+        Route::get('/leads/inactive', 'TelecallerLeadsApiController@getInactiveCustomers');
+        Route::post('/leads/store', 'TelecallerLeadsApiController@store'); // New: Manual Entry
+        Route::get('/campaigns', 'TelecallerLeadsApiController@getCampaigns'); // New: Campaigns for Entry
+        Route::post('/leads/{id}/update-status', 'TelecallerLeadsApiController@updateStatus');
+        
+        // Followups
+        Route::get('/followups', 'TelecallerFollowupApiController@getFollowups');
+        
+        // Profile & Commissions
+        Route::get('/profile', 'TelecallerProfileApiController@getProfile');
+        Route::get('/commissions', 'TelecallerCommissionApiController@getCommissionStats'); // New: Commissions
+        Route::post('/logout', 'TelecallerProfileApiController@logout');
+        
+        // Call History
+        Route::get('/call-history', 'TelecallerCallHistoryApiController@getCallHistory');
+        Route::get('/call-history/lead/{id}', 'TelecallerCallHistoryApiController@getLeadCallHistory');
+
+        // Support Tickets (New)
+        Route::get('/support-tickets', 'TelecallerSupportApiController@getTickets');
+        Route::post('/support-tickets/{id}/reply', 'TelecallerSupportApiController@reply');
+    });
+});
+
 Route::group(['namespace' => 'Api', 'middleware' => ['app_language']], function () {
     // Authentication
     Route::post('/signup', 'AuthController@signup');
@@ -256,5 +291,7 @@ Route::group(['namespace' => 'Api', 'middleware' => ['app_language']], function 
     });
 
     // Meta Webhook [Sanket]
-    Route::post('/meta-webhook', 'Api\MetaLeadController@webhook');
+    Route::post('/meta-webhook', 'MetaLeadController@webhook');
+
+    // Telecaller App APIs [Sanket] removed from here
 });

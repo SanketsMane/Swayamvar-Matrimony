@@ -9,7 +9,6 @@ use App\Notifications\DbStoreNotification;
 use App\Utility\EmailUtility;
 use App\Utility\SmsUtility;
 use Illuminate\Support\Facades\Notification;
-use Kutia\Larafirebase\Facades\Larafirebase;
 
 class InterestService
 {
@@ -126,24 +125,7 @@ class InterestService
             try {
                   $id = unique_notify_id();
 
-                  // fcm 
-                  if (get_setting('firebase_push_notification') == 1) {
-                        $fcmTokens = User::where('id', $user_id)->whereNotNull('fcm_token')->pluck('fcm_token')->toArray();
-                        Larafirebase::withTitle($notify_type)
-                              ->withBody($message)
-                              ->sendMessage($fcmTokens);
-                  }
-                  // end of fcm
-                  // send firebase notification for mobile app
-                  if ($notify_user->fcm_token != null) {
-                        $data = (object)[];
-                        $data->fcm_token = $notify_user->fcm_token;
-                        $data->title = $notify_type;
-                        $data->text = $message;
-                        $data->notify_by = $notify_by;
-                        FirbaseNotification::send($data);
-                  }
-                  // end of  firebase notification
+                  // Firebase/FCM removed as per request to remove complete firebase integration
 
                   Notification::send($notify_user, new DbStoreNotification($notify_type, $id, $notify_by, $info_id, $message, $route));
                   return true;
