@@ -190,7 +190,7 @@
                                             $shortlist_text = translate('Shortlisted');
                                         }
                                     @endphp
-                                    <a href="avascript:void(0);" id="shortlist_a_id_{{ $user->id }}" 
+                                    <a href="javascript:void(0);" id="shortlist_a_id_{{ $user->id }}" 
                                         @if ($shortlist_onclick == 1)
                                             onclick="do_shortlist({{ $user->id }})"
                                         @else
@@ -203,32 +203,30 @@
                                 </div>
                                 <div class="row gutters-5">
                                     <div class="col">
-                                        <a href="avascript:void(0);" onclick="ignore_member({{ $user->id }})"
+                                        <a href="javascript:void(0);" onclick="ignore_member({{ $user->id }})"
                                             class="btn btn-block btn-primary text-left">
                                             <i class="las la-ban d-block la-2x"></i>
                                             {{ translate('Ignore') }}
                                         </a>
                                     </div>
                                     <div class="col">
-                                        @php
-                                            $profile_reported = \App\Models\ReportedUser::where('user_id', $user->id)
-                                                ->where('reported_by', Auth::user()->id)
-                                                ->first();
-                                            if (empty($profile_reported)) {
-                                                $report_onclick = 1;
-                                                $report_text = translate('Report');
-                                            } else {
-                                                $report_onclick = 0;
-                                                $report_text = translate('Reported');
-                                            }
-                                        @endphp
-                                        <a href="avascript:void(0);" id="report_a_id_{{ $user->id }}" @if ($report_onclick == 1)
-                                            onclick="report_member({{ $user->id }})"
-                                            @endif
-                                            class="btn btn-block btn-primary text-left">
-                                            <i class="las la-info-circle d-block la-2x"></i>
-                                            <span id="report_id_{{ $user->id }}">{{ $report_text }}
-                                        </a>
+                                        @if(empty($profile_reported))
+                                            <div class="dropdown">
+                                                <button class="btn btn-block btn-primary text-left dropdown-toggle no-arrow" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                    <i class="las la-ellipsis-v d-block la-2x"></i>
+                                                    <span>{{ translate('Report') }}</span>
+                                                </button>
+                                                <div class="dropdown-menu dropdown-menu-right">
+                                                    <button class="dropdown-item" type="button" onclick="report_member({{ $user->id }}, 'Spam')">{{ translate('Report Spam') }}</button>
+                                                    <button class="dropdown-item" type="button" onclick="report_member({{ $user->id }}, 'Married')">{{ translate('Report as Married') }}</button>
+                                                </div>
+                                            </div>
+                                        @else
+                                            <div class="btn btn-block btn-soft-primary text-left disabled">
+                                                <i class="las la-check-circle d-block la-2x"></i>
+                                                <span>{{ translate('Reported') }}</span>
+                                            </div>
+                                        @endif
                                     </div>
                                 </div>
                             @endif
@@ -364,7 +362,7 @@
                                         $shortlist_text = translate('Shortlisted');
                                     }
                                 @endphp
-                                <a href="avascript:void(0);" id="shortlist_a_id_{{ $user->id }}" @if ($shortlist_onclick == 1)
+                                <a href="javascript:void(0);" id="shortlist_a_id_{{ $user->id }}" @if ($shortlist_onclick == 1)
                                     onclick="do_shortlist({{ $user->id }})"
                                 @else
                                     onclick="remove_shortlist({{ $user->id }})"
@@ -376,32 +374,30 @@
                             </div>
                             <div class="row gutters-5">
                                 <div class="col">
-                                    <a href="avascript:void(0);" onclick="ignore_member({{ $user->id }})"
+                                    <a href="javascript:void(0);" onclick="ignore_member({{ $user->id }})"
                                         class="btn btn-block btn-primary text-left">
                                         <i class="las la-ban d-block la-2x"></i>
                                         {{ translate('Ignore') }}
                                     </a>
                                 </div>
                                 <div class="col">
-                                    @php
-                                        $profile_reported = \App\Models\ReportedUser::where('user_id', $user->id)
-                                            ->where('reported_by', Auth::user()->id)
-                                            ->first();
-                                        if (empty($profile_reported)) {
-                                            $report_onclick = 1;
-                                            $report_text = translate('Report');
-                                        } else {
-                                            $report_onclick = 0;
-                                            $report_text = translate('Reported');
-                                        }
-                                    @endphp
-                                    <a href="avascript:void(0);" id="report_a_id_{{ $user->id }}" @if ($report_onclick == 1)
-                                        onclick="report_member({{ $user->id }})"
-                                        @endif
-                                        class="btn btn-block btn-primary text-left">
-                                        <i class="las la-info-circle d-block la-2x"></i>
-                                        <span id="report_id_{{ $user->id }}">{{ $report_text }}
-                                    </a>
+                                    @if(empty($profile_reported))
+                                        <div class="dropdown">
+                                            <button class="btn btn-block btn-primary text-left dropdown-toggle no-arrow" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                <i class="las la-ellipsis-v d-block la-2x"></i>
+                                                <span>{{ translate('Report') }}</span>
+                                            </button>
+                                            <div class="dropdown-menu dropdown-menu-right">
+                                                <button class="dropdown-item" type="button" onclick="report_member({{ $user->id }}, 'Spam')">{{ translate('Report Spam') }}</button>
+                                                <button class="dropdown-item" type="button" onclick="report_member({{ $user->id }}, 'Married')">{{ translate('Report as Married') }}</button>
+                                            </div>
+                                        </div>
+                                    @else
+                                        <div class="btn btn-block btn-soft-primary text-left disabled">
+                                            <i class="las la-check-circle d-block la-2x"></i>
+                                            <span>{{ translate('Reported') }}</span>
+                                        </div>
+                                    @endif
                                 </div>
                             </div>
                         @endif
@@ -1958,19 +1954,19 @@
                     <form action="{{ route('reportusers.store') }}" id="report-modal-form" method="POST">
                         @csrf
                         <input type="hidden" name="member_id" id="member_id" value="">
-                        <div class="form-group row">
-                            <label class="col-md-3 col-form-label">{{ translate('Report Reason') }}<span
+                        <input type="hidden" name="report_type" id="report_type" value="">
+                        <div class="form-group row" id="reason_div">
+                            <label class="col-md-3 col-form-label">{{ translate('Reason') }}<span
                                     class="text-danger">*</span></label>
                             <div class="col-md-9">
-                                <textarea name="reason" rows="4" class="form-control"
-                                    placeholder="{{ translate('Report Reason') }}" required></textarea>
+                                <textarea name="reason" id="report_reason" rows="4" class="form-control" placeholder="{{ translate('Report Reason') }}"
+                                    required></textarea>
                             </div>
                         </div>
                     </form>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-light"
-                        data-dismiss="modal">{{ translate('Cancel') }}</button>
+                    <button type="button" class="btn btn-light" data-dismiss="modal">{{ translate('Cancel') }}</button>
                     <button type="button" class="btn btn-primary"
                         onclick="submitReport()">{{ translate('Report') }}</button>
                 </div>
@@ -2141,9 +2137,20 @@
             );
         }
 
-        function report_member(id) {
+        function report_member(id, type) {
             $('.report_modal').modal('show');
             $('#member_id').val(id);
+            $('#report_type').val(type);
+            if(type == 'Married'){
+                $('#reason_div').hide();
+                $('#report_reason').removeAttr('required');
+                $('#report_reason').val('Reported as Married');
+            } else {
+                $('#reason_div').show();
+                $('#report_reason').attr('required', 'required');
+                $('#report_reason').val('');
+                $('#report_reason').attr('placeholder', '{{ translate('Specify spam reason') }}');
+            }
         }
 
         function submitReport() {

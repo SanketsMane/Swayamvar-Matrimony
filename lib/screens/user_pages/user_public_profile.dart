@@ -11,6 +11,7 @@ import 'package:active_matrimonial_flutter_app/screens/user_pages/public_profile
 import 'package:flutter/material.dart';
 import 'package:active_matrimonial_flutter_app/l10n/app_localizations.dart';
 import 'package:active_matrimonial_flutter_app/models_response/public_profile_response.dart';
+import '../others/report_dialog.dart';
 
 class UserPublicProfile extends StatefulWidget {
   final int userId;
@@ -250,15 +251,29 @@ class _UserPublicProfileState extends State<UserPublicProfile> {
         Positioned(
           top: MediaQuery.of(context).padding.top + 10,
           right: 16,
-          child: _circleActionBtn(
-            (state.memberInfoState?.memberInfo?.shortlistStatus ?? 0) == 1
-                ? Icons.favorite_rounded
-                : Icons.favorite_border_rounded,
-            () => store.dispatch(addShortlistMiddleware(userId: widget.userId)),
-            iconColor:
+          child: Row(
+            children: [
+              _circleActionBtn(
                 (state.memberInfoState?.memberInfo?.shortlistStatus ?? 0) == 1
-                    ? MyTheme.primary
-                    : MyTheme.text_primary,
+                    ? Icons.favorite_rounded
+                    : Icons.favorite_border_rounded,
+                () => store.dispatch(addShortlistMiddleware(userId: widget.userId)),
+                iconColor:
+                    (state.memberInfoState?.memberInfo?.shortlistStatus ?? 0) == 1
+                        ? MyTheme.primary
+                        : MyTheme.text_primary,
+              ),
+              const SizedBox(width: 10),
+              _circleActionBtn(
+                Icons.more_vert_rounded,
+                () {
+                  showDialog(
+                    context: context,
+                    builder: (context) => ReportDialog(userId: widget.userId),
+                  );
+                },
+              ),
+            ],
           ),
         ),
 

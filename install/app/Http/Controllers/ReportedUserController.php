@@ -2,16 +2,16 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\ReportedUser;
+use App\Models\User;
 use Auth;
 
 class ReportedUserController extends Controller
 {
     public function __construct()
     {
-        $this->middleware(['permission:view_reported_profile'])->only('reported_members');
+        $this->middleware(['permission:view_reported_profile'])->only('index', 'reported_members');
         $this->middleware(['permission:delete_profile_report'])->only('destroy');
     }
 
@@ -22,7 +22,26 @@ class ReportedUserController extends Controller
      */
     public function index()
     {
-        //
+        $reports = ReportedUser::latest()->paginate(10);
+        return view('admin.members.reported_members', compact('reports'));
+    }
+
+    public function reported_members($id)
+    {
+        $reports = ReportedUser::latest()->paginate(10);
+        return view('admin.members.reported_members', compact('reports'));
+    }
+
+    public function ban_user(Request $request)
+    {
+        $user = User::findOrFail($request->user_id);
+        $user->blocked = 1;
+        if($user->save()){
+            flash(translate('Member Banned successfully'))->success();
+            return back();
+        }
+        flash(translate('Something went wrong'))->error();
+        return back();
     }
 
     /**
@@ -43,29 +62,17 @@ class ReportedUserController extends Controller
      */
     public function store(Request $request)
     {
-        $report_member             = new ReportedUser;
-        $report_member->user_id    = $request->member_id;
-        $report_member->reported_by= Auth::user()->id;
-        $report_member->reason     = $request->reason;
-        if($report_member->save()){
-          flash('Reported to this member successfully.')->success();
-          return back();
+        $reported_user = new ReportedUser;
+        $reported_user->user_id = $request->member_id;
+        $reported_user->report_type = $request->report_type;
+        $reported_user->reason = $request->reason;
+        $reported_user->reported_by = Auth::user()->id;
+        if($reported_user->save()){
+            flash(translate('Reported successfully'))->success();
+            return back();
         }
-        else {
-          flash('Sorry! Something went wrong.')->error();
-          return back();
-        }
-    }
-
-    public function reported_members($id)
-    {
-      $reports       = ReportedUser::latest();
-      if($id != 'all')
-      {
-        $reports  = $reports->where('user_id',$id);
-      }
-      $reports       = $reports->paginate(10);
-      return view('admin.members.reported_members', compact('reports'));
+        flash(translate('Something went wrong'))->error();
+        return back();
     }
 
     /**

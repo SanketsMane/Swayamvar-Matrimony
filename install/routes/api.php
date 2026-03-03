@@ -60,6 +60,10 @@ Route::group(['namespace' => 'Api', 'middleware' => ['app_language']], function 
     Route::post('/signin', 'AuthController@signin');
     Route::post('/firebase-phone-login', 'AuthController@firebasePhoneLogin');
     
+    // OTP Login Flow
+    Route::post('/otp/send', 'OtpController@sendOtp');
+    Route::post('/otp/verify', 'OtpController@verifyOtp');
+    
     Route::post('/forgot/password', 'AuthController@forgotPassword');
     Route::post('/verify/code', 'AuthController@verifyCode')->middleware("auth:sanctum");
     Route::get('/resend-verify/code', 'AuthController@resendVerifyCode')->middleware("auth:sanctum");

@@ -83,6 +83,7 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth', 'admin']], function 
 
     Route::controller(ReportedUserController::class)->group(function () {
         Route::get('/reported-members/{id}', 'reported_members')->name('reported_members');
+        Route::post('/reported-members/ban', 'ban_user')->name('reported_members.ban');
         Route::get('/reported/destroy/{id}', 'destroy')->name('report_destrot.destroy_get');
     });
 

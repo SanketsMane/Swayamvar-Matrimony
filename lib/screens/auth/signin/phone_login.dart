@@ -156,7 +156,7 @@ class _PhoneLoginState extends State<PhoneLogin> {
                         store.dispatch(
                           requestOtpAction(
                             context: context,
-                            phoneNumber: _selectedPhoneNumber.phoneNumber ?? '',
+                            phoneNumber: _phoneController.text.replaceAll(RegExp(r'[^0-9]'), ''),
                           ),
                         );
                         Future.delayed(const Duration(seconds: 2), () {

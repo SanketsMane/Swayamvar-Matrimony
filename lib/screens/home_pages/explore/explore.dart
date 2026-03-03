@@ -20,6 +20,7 @@ import '../../../components/main_drawer.dart';
 import '../../my_dashboard_pages/shortlist/add_shortlist_middleware.dart';
 import '../../my_dashboard_pages/interest/express_interest_middleware.dart';
 import '../home/home_action.dart';
+import '../../others/report_dialog.dart';
 // For MyProfile import if needed, but it's used in home.dart
 
 class Explore extends StatefulWidget {
@@ -513,6 +514,18 @@ class _ExploreState extends State<Explore> {
                         ),
                       ),
                     ),
+                    const SizedBox(width: 8),
+                    _actionBtn(
+                      "",
+                      Icons.more_vert_rounded,
+                      MyTheme.text_secondary,
+                      () {
+                        showDialog(
+                          context: context,
+                          builder: (context) => ReportDialog(userId: m.userId!),
+                        );
+                      },
+                    ),
                   ],
                 ),
               ],
@@ -846,6 +859,20 @@ class _ExploreState extends State<Explore> {
                     _showFullProfileSheet(context, member, vm);
                   },
                 ),
+                const SizedBox(height: 20),
+                _buildActionBtn(
+                  icon: Icons.more_vert_rounded,
+                  color: Colors.white.withOpacity(0.2),
+                  iconColor: Colors.white,
+                  onTap: () {
+                    if (member.userId != null) {
+                      showDialog(
+                        context: context,
+                        builder: (context) => ReportDialog(userId: member.userId!),
+                      );
+                    }
+                  },
+                ),
               ],
             ),
           ),
@@ -970,17 +997,40 @@ class _ExploreState extends State<Explore> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Expanded(
-              child: ClipRRect(
-                borderRadius: const BorderRadius.vertical(
-                  top: Radius.circular(16),
-                ),
-                child: SizedBox(
-                  width: double.infinity,
-                  child: MyImages.normalImage(
-                    m.photo,
-                    alignment: Alignment.topCenter,
+              child: Stack(
+                children: [
+                  SizedBox(
+                    width: double.infinity,
+                    child: MyImages.normalImage(
+                      m.photo,
+                      alignment: Alignment.topCenter,
+                    ),
                   ),
-                ),
+                  Positioned(
+                    top: 8,
+                    right: 8,
+                    child: GestureDetector(
+                      onTap: () {
+                        showDialog(
+                          context: context,
+                          builder: (context) => ReportDialog(userId: m.userId!),
+                        );
+                      },
+                      child: Container(
+                        padding: const EdgeInsets.all(4),
+                        decoration: BoxDecoration(
+                          color: Colors.black.withOpacity(0.3),
+                          shape: BoxShape.circle,
+                        ),
+                        child: const Icon(
+                          Icons.more_vert_rounded,
+                          color: Colors.white,
+                          size: 18,
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
               ),
             ),
             Padding(

@@ -273,6 +273,22 @@ if (!function_exists('sendSMS')) {
             curl_close($ch);
 
             return $response;
+        } elseif (env('RENFLAIR_API_KEY') != null) {
+            $api = env('RENFLAIR_API_KEY');
+            if (strpos($to, '+91') !== false) {
+                $to = substr($to, 3); // Strip +91 for Renflair
+            }
+
+            $url = "https://sms.renflair.in/V1.php?API=" . urlencode($api) . "&PHONE=" . urlencode($to) . "&OTP=" . urlencode($template_id);
+            $ch = curl_init();
+            curl_setopt($ch, CURLOPT_URL, $url);
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+            curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+            
+            $response = curl_exec($ch);
+            curl_close($ch);
+            
+            return $response;
         } elseif (get_setting('fast2sms_activation') == 1) {
 
             if (strpos($to, '+91') !== false) {
@@ -287,6 +303,12 @@ if (!function_exists('sendSMS')) {
                     "entity_id" => env("ENTITY_ID"),
                     "language" => env("LANGUAGE"),
                     "route" => env("ROUTE"),
+                    "numbers" => $to,
+                );
+            } elseif (env("ROUTE") == 'otp') {
+                $fields = array(
+                    "variables_values" => (string)$template_id,
+                    "route" => "otp",
                     "numbers" => $to,
                 );
             } else {

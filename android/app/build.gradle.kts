@@ -3,7 +3,6 @@ plugins {
     id("com.android.application")
     id("kotlin-android")
     id("dev.flutter.flutter-gradle-plugin")
-    id("com.google.gms.google-services")
 
 }
 
@@ -66,12 +65,7 @@ flutter {
 dependencies {
 
 
-    // Updated Firebase dependencies
-    implementation(platform("com.google.firebase:firebase-bom:32.7.0"))
-    implementation("com.google.firebase:firebase-messaging-ktx")
-    implementation("com.google.firebase:firebase-auth-ktx")
-    implementation("com.google.firebase:firebase-analytics-ktx")
-    implementation("com.google.firebase:firebase-firestore-ktx")
+
 
     // Updated Google Play services auth
     implementation("com.google.android.gms:play-services-auth:20.7.0")

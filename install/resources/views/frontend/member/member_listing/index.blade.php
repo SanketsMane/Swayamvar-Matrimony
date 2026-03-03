@@ -198,26 +198,24 @@
                                                             $profile_reported = \App\Models\ReportedUser::where('user_id', $user->id)
                                                                 ->where('reported_by', Auth::user()->id)
                                                                 ->first();
-                                                            if (empty($profile_reported)) {
-                                                                $report_onclick = 1;
-                                                                $report_text = translate('Report');
-                                                                $report_class = 'text-dark';
-                                                            } else {
-                                                                $report_onclick = 0;
-                                                                $report_text = translate('Reported');
-                                                                $report_class = 'text-primary';
-                                                            }
                                                         @endphp
-                                                        <a id="report_a_id_{{ $user->id }}"
-                                                            @if ($report_onclick == 1) onclick="report_member({{ $user->id }})" @endif
-                                                            class="text-reset c-pointer">
-                                                            <span id="report_id_{{ $user->id }}"
-                                                                class="{{ $report_class }}">
-                                                                <i class="las la-info-circle fs-20 text-primary"></i>
-                                                                <span
-                                                                    class="d-block fs-10 opacity-60">{{ $report_text }}</span>
-                                                            </span>
-                                                        </a>
+                                                        @if(empty($profile_reported))
+                                                            <div class="dropdown">
+                                                                <button class="btn btn-sm btn-icon text-reset dropdown-toggle no-arrow" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                                    <i class="las la-ellipsis-v fs-20 text-primary"></i>
+                                                                    <span class="d-block fs-10 opacity-60 text-dark">{{ translate('Report') }}</span>
+                                                                </button>
+                                                                <div class="dropdown-menu dropdown-menu-right">
+                                                                    <button class="dropdown-item" type="button" onclick="report_member({{ $user->id }}, 'Spam')">{{ translate('Report Spam') }}</button>
+                                                                    <button class="dropdown-item" type="button" onclick="report_member({{ $user->id }}, 'Married')">{{ translate('Report as Married') }}</button>
+                                                                </div>
+                                                            </div>
+                                                        @else
+                                                            <div class="text-primary">
+                                                                <i class="las la-check-circle fs-20"></i>
+                                                                <span class="d-block fs-10 opacity-60 text-primary">{{ translate('Reported') }}</span>
+                                                            </div>
+                                                        @endif
                                                     </div>
                                                 </div>
                                             </div>
@@ -272,11 +270,12 @@
                     <form action="{{ route('reportusers.store') }}" id="report-modal-form" method="POST">
                         @csrf
                         <input type="hidden" name="member_id" id="member_id" value="">
-                        <div class="form-group row">
-                            <label class="col-md-3 col-form-label">{{ translate('Report Reason') }}<span
+                        <input type="hidden" name="report_type" id="report_type" value="">
+                        <div class="form-group row" id="reason_div">
+                            <label class="col-md-3 col-form-label">{{ translate('Reason') }}<span
                                     class="text-danger">*</span></label>
                             <div class="col-md-9">
-                                <textarea name="reason" rows="4" class="form-control" placeholder="{{ translate('Report Reason') }}"
+                                <textarea name="reason" id="report_reason" rows="4" class="form-control" placeholder="{{ translate('Report Reason') }}"
                                     required></textarea>
                             </div>
                         </div>
@@ -556,9 +555,20 @@
 
         }
 
-        function report_member(id) {
+        function report_member(id, type) {
             $('.report_modal').modal('show');
             $('#member_id').val(id);
+            $('#report_type').val(type);
+            if(type == 'Married'){
+                $('#reason_div').hide();
+                $('#report_reason').removeAttr('required');
+                $('#report_reason').val('Reported as Married');
+            } else {
+                $('#reason_div').show();
+                $('#report_reason').attr('required', 'required');
+                $('#report_reason').val('');
+                $('#report_reason').attr('placeholder', '{{ translate('Specify spam reason') }}');
+            }
         }
 
         function submitReport() {

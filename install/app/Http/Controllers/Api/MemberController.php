@@ -274,7 +274,9 @@ class MemberController extends Controller
         }
 
         if (User::find($request->user_id)) {
-            ReportedUser::create($request->only('reason') + [
+            // reason will contain "Spam: [reason]" or "Married"
+            ReportedUser::create([
+                'reason' => $request->reason,
                 'user_id' => $request->user_id,
                 'reported_by' => auth()->user()->id
             ]);
