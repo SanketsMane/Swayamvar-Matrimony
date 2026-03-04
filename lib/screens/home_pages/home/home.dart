@@ -429,7 +429,7 @@ class _HomeState extends State<Home> {
         label: AppLocalizations.of(context)!.home_action_search,
         sub: AppLocalizations.of(context)!.home_new_partner,
         gradient: const [Color(0xFFFF6B9D), Color(0xFFFF8E53)],
-        onTap: () => AIZRoute.push(context, const Search()),
+        onTap: () => AIZRoute.push(context, const AdvancedSearch()),
       ),
       _ActionItem(
         icon: Icons.favorite_rounded,

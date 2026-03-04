@@ -27,7 +27,6 @@ class _AdvancedSearchState extends State<AdvancedSearch> {
   List<String> _selectedQuickFilters = [];
   dynamic _religion_id;
   dynamic _marital_status_value;
-  dynamic _country_value;
   dynamic _state_value;
   dynamic _city_value;
   dynamic _caste_value;
@@ -56,7 +55,6 @@ class _AdvancedSearchState extends State<AdvancedSearch> {
     _caste_value = searchState.caste_value ?? SharedPref().advCasteId;
     _marital_status_value =
         searchState.marital_status_value ?? SharedPref().advMaritalStatus;
-    _country_value = searchState.country_value ?? SharedPref().advCountryId;
     _state_value = searchState.state_value ?? SharedPref().advStateId;
     _city_value = searchState.city_value ?? SharedPref().advCityId;
     _education_value = searchState.education;
@@ -71,11 +69,7 @@ class _AdvancedSearchState extends State<AdvancedSearch> {
     if (_religion_id != null && _religion_id is int) {
       store.dispatch(casteMiddleware(_religion_id));
     }
-    if (_country_value != null && _country_value is int) {
-      store.dispatch(
-        stateMiddleware(_country_value, state: AppStates.advancedSearch),
-      );
-    }
+    // Sanket: Auto-fetch states if none selected (assuming India/Maharashtra context)
     if (_state_value != null && _state_value is int) {
       store.dispatch(cityMiddleware(_state_value, AppStates.advancedSearch));
     }
@@ -94,7 +88,6 @@ class _AdvancedSearchState extends State<AdvancedSearch> {
       _selectedQuickFilters = [];
       _religion_id = null;
       _marital_status_value = null;
-      _country_value = null;
       _state_value = null;
       _city_value = null;
       _caste_value = null;
@@ -112,7 +105,6 @@ class _AdvancedSearchState extends State<AdvancedSearch> {
     SharedPref().advReligionId = null;
     SharedPref().advCasteId = null;
     SharedPref().advMaritalStatus = null;
-    SharedPref().advCountryId = null;
     SharedPref().advStateId = null;
     SharedPref().advCityId = null;
   }
@@ -125,7 +117,6 @@ class _AdvancedSearchState extends State<AdvancedSearch> {
         religion: _religion_id,
         caste: _caste_value,
         maritalStatus: _marital_status_value,
-        country: _country_value,
         state: _state_value,
         city: _city_value,
         quickFilters: _selectedQuickFilters,
@@ -143,7 +134,6 @@ class _AdvancedSearchState extends State<AdvancedSearch> {
     SharedPref().advReligionId = _religion_id;
     SharedPref().advCasteId = _caste_value;
     SharedPref().advMaritalStatus = _marital_status_value;
-    SharedPref().advCountryId = _country_value;
     SharedPref().advStateId = _state_value;
     SharedPref().advCityId = _city_value;
 
@@ -155,7 +145,6 @@ class _AdvancedSearchState extends State<AdvancedSearch> {
         religion: _religion_id,
         maritalStatus: _marital_status_value,
         caste: _caste_value,
-        country: _country_value,
         state: _state_value,
         city: _city_value,
         minHeight: _heightRange.start.toString(),
@@ -308,7 +297,8 @@ class _AdvancedSearchState extends State<AdvancedSearch> {
                 _religion_id = id;
                 _caste_value = null;
               });
-              store.dispatch(casteMiddleware(id));
+              // Sanket: Explicitly use advancedSearch state to ensure basicSearchState is updated
+              store.dispatch(casteMiddleware(id, state: AppStates.advancedSearch));
             },
           ),
           const SizedBox(height: 12),
@@ -320,25 +310,6 @@ class _AdvancedSearchState extends State<AdvancedSearch> {
             _caste_value,
             state.basicSearchState?.casteResponse?.data ?? [],
             (id) => setState(() => _caste_value = id),
-          ),
-          const SizedBox(height: 12),
-
-          // Country (added for flow)
-          _dropdownWithId(
-            context,
-            AppLocalizations.of(context)!.advanced_search_screen_country,
-            _country_value,
-            state.commonState?.countries ?? [],
-            (id) {
-              setState(() {
-                _country_value = id;
-                _state_value = null;
-                _city_value = null;
-              });
-              store.dispatch(
-                stateMiddleware(id, state: AppStates.advancedSearch),
-              );
-            },
           ),
           const SizedBox(height: 12),
 
