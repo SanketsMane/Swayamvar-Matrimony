@@ -128,10 +128,13 @@ class _MyProfileState extends State<MyProfile> {
     '०–२ लाख': '0-2 Lakh',
     '२–५ लाख': '2-5 Lakh',
     '५–१० लाख': '5-10 Lakh',
-    '१०+ लाख': '10+ Lakh',
+    '१० ते २० लाख': '10-20 Lakh',
+    '२० ते ५० लाख': '20-50 Lakh',
+    '५० लाख+': '50 Lakh+',
   };
 
   String? _educationDisplay;
+  final TextEditingController _educationDetails = TextEditingController();
   String? _occupationDisplay;
   final TextEditingController _occupationDetails = TextEditingController();
   String? _annualIncomeDisplay;
@@ -146,18 +149,48 @@ class _MyProfileState extends State<MyProfile> {
     'पासपोर्ट': 'passport',
     'मतदान कार्ड': 'voter_id',
   };
-  static const Map<String, String> _cityOptions = {
-    'पुणे': 'Pune',
-    'मुंबई': 'Mumbai',
+  static const Map<String, String> _districtOptions = {
+    'अहमदनगर': 'Ahilyanagar',
+    'अकोला': 'Akola',
+    'अमरावती': 'Amravati',
+    'छत्रपती संभाजीनगर': 'Chhatrapati Sambhajinagar',
+    'बीड': 'Beed',
+    'भंडारा': 'Bhandara',
+    'बुलढाणा': 'Buldhana',
+    'चंद्रपूर': 'Chandrapur',
+    'धुळे': 'Dhule',
+    'गडचिरोली': 'Gadchiroli',
+    'गोंदिया': 'Gondia',
+    'हिंगोली': 'Hingoli',
+    'जळगाव': 'Jalgaon',
+    'जालना': 'Jalna',
+    'कोल्हापूर': 'Kolhapur',
+    'लातूर': 'Latur',
+    'मुंबई शहर': 'Mumbai City',
+    'मुंबई उपनगर': 'Mumbai Suburban',
     'नागपूर': 'Nagpur',
+    'नांदेड': 'Nanded',
+    'नंदुरबार': 'Nandurbar',
     'नाशिक': 'Nashik',
-    'छत्रपती संभाजीनगर': 'Aurangabad',
+    'धाराशिव': 'Dharashiv',
+    'पालघर': 'Palghar',
+    'परभणी': 'Parbhani',
+    'पुणे': 'Pune',
+    'रायगड': 'Raigad',
+    'रत्नागिरी': 'Ratnagiri',
+    'सांगली': 'Sangli',
+    'सातारा': 'Satara',
+    'सिंधुदुर्ग': 'Sindhudurg',
     'सोलापूर': 'Solapur',
+    'ठाणे': 'Thane',
+    'वर्धा': 'Wardha',
+    'वाशीम': 'Washim',
+    'यवतमाळ': 'Yavatmal',
   };
   String? _govIdTypeDisplay;
   final TextEditingController _govIdNumber = TextEditingController();
   final TextEditingController _address = TextEditingController();
-  String? _cityDisplay;
+  String? _districtDisplay;
   final TextEditingController _mobile1 = TextEditingController();
   final TextEditingController _mobile2 = TextEditingController();
 
@@ -346,16 +379,28 @@ class _MyProfileState extends State<MyProfile> {
     final loc = AppLocalizations.of(context)!;
     switch (_currentStep) {
       case 0:
-        if (_firstName.text.trim().isEmpty) {
-          return loc.profile_error_first_name;
+        if (_firstName.text.trim().isEmpty || _middleName.text.trim().isEmpty || _surname.text.trim().isEmpty) {
+          return "Please fill all name fields.";
         }
-        if (_dob == null) {
-          return loc.profile_error_dob;
+        if (_dob == null) return loc.profile_error_dob;
+        if (_religionDisplay == null || _casteDisplay == null || _maritalStatusDisplay == null) {
+          return "Please select religion, caste, and marital status.";
+        }
+        if (_heightDisplay == null || _weight.text.trim().isEmpty || _bloodGroupDisplay == null || _complexionDisplay == null || _dietDisplay == null) {
+          return "Please fill all physical attributes.";
+        }
+        if (_physicalDisability == null || _manglik == null || _intercasteAccepted == null) {
+          return "Please answer all Yes/No questions.";
         }
         return null;
 
       case 1:
-        // Bug #11: married count must not exceed total
+        if (_fatherAlive == null || _motherAlive == null) {
+          return "Please select Parents status.";
+        }
+        if (_noOfBrothers == null || _noOfSisters == null) {
+          return "Please enter number of brothers and sisters.";
+        }
         final brothers = int.tryParse(_noOfBrothers ?? '0') ?? 0;
         final marriedBrothers = int.tryParse(_marriedBrothers ?? '0') ?? 0;
         if (marriedBrothers > brothers) {
@@ -366,9 +411,24 @@ class _MyProfileState extends State<MyProfile> {
         if (marriedSisters > sisters) {
           return loc.profile_error_married_sisters;
         }
+        if (_parentsOccupation.text.trim().isEmpty) {
+          return "Please enter Parents Occupation.";
+        }
+        if (_educationDisplay == null || _educationDetails.text.trim().isEmpty) {
+          return "Please completely fill your Education details.";
+        }
+        if (_occupationDisplay == null || _occupationDetails.text.trim().isEmpty || _annualIncomeDisplay == null) {
+          return "Please fill your Career and Income details.";
+        }
         return null;
 
       case 2:
+        if (_govIdTypeDisplay == null || _govIdNumber.text.trim().isEmpty) {
+          return "Please provide Government ID details.";
+        }
+        if (_address.text.trim().isEmpty || _districtDisplay == null) {
+          return "Please fill complete address including district.";
+        }
         if (_mobile1.text.trim().isEmpty) {
           return loc.profile_error_mobile;
         }
@@ -448,19 +508,53 @@ class _MyProfileState extends State<MyProfile> {
           complexion: null,
       );
 
+      // Missing API Calls (Bug #6 & #7 Fix): Submit Family, Education, Career
+      final f4 = repo.updateFamily(
+        father: _fatherAlive == true ? 'Alive' : 'Deceased',
+        mother: _motherAlive == true ? 'Alive' : 'Deceased',
+        sibling:
+            '${_noOfBrothers ?? 0} Brothers, ${_noOfSisters ?? 0} Sisters',
+      );
+      final f5 = _educationDisplay != null
+          ? repo.educationCreate(
+              degree: _educationDisplay,
+              institution: _educationDetails.text.isNotEmpty
+                  ? _educationDetails.text
+                  : "N/A",
+              start: "N/A",
+              end: "N/A",
+            )
+          : Future.value(CommonResponse(result: true));
+      final f6 = _occupationDisplay != null
+          ? repo.careerCreate(
+              designation: _occupationDisplay,
+              company: _occupationDetails.text.isNotEmpty
+                  ? _occupationDetails.text
+                  : "N/A",
+              start: "N/A",
+              end: "N/A",
+            )
+          : Future.value(CommonResponse(result: true));
+
       // Bug #6 fix: await all, then check mounted before touching context
-      await Future.wait([f1, f2, f3]);
+      await Future.wait([f1, f2, f3, f4, f5, f6]);
 
       if (!mounted) return;
 
       final res1 = await f1;
       final res2 = await f2;
       final res3 = await f3;
+      final res4 = await f4;
+      final res5 = await f5;
+      final res6 = await f6;
 
       // Bug #5 fix: check result field from each response, not just HTTP status
       final allSuccess = (res1.result == true) &&
-                         (res2.result == true) &&
-                         (res3.result == true);
+          (res2.result == true) &&
+          (res3.result == true) &&
+          (res4.result == true) &&
+          (res5.result == true) &&
+          (res6.result == true);
 
       setState(() => _isSubmitting = false);
 
@@ -684,6 +778,7 @@ class _MyProfileState extends State<MyProfile> {
   // STEP 1: Basic & Physical
   // =========================================================================
   Widget _buildStep1BasicPhysical() {
+    final loc = AppLocalizations.of(context)!;
     return _pageWrapper([
       _sectionTitle(AppLocalizations.of(context)!.profile_section_basic),
       _buildTextField(
@@ -766,15 +861,32 @@ class _MyProfileState extends State<MyProfile> {
         (v) => setState(() => _complexionDisplay = v),
       ),
 
-      _buildNullableRadioOption(
-        AppLocalizations.of(context)!.profile_label_disability,
-        _physicalDisability,
-        (v) => setState(() => _physicalDisability = v),
+      const SizedBox(height: 16),
+      // Bug #12: Convert Physical Disability into Yes/No dropdown matching API
+      _buildDropdown(
+        label: loc.profile_physical_disability,
+        value: _physicalDisability == null
+            ? null
+            : (_physicalDisability! ? loc.common_yes : loc.common_no),
+        items: [loc.common_yes, loc.common_no],
+        onChanged: (val) {
+          setState(() {
+            _physicalDisability = val == loc.common_yes;
+            if (_physicalDisability == false) {
+              _disabilityDetails.clear();
+            }
+          });
+        },
       ),
       if (_physicalDisability == true)
-        _buildTextField(
-          AppLocalizations.of(context)!.profile_label_disability_details,
-          _disabilityDetails,
+        Column(
+          children: [
+            const SizedBox(height: 16),
+            _buildTextField(
+              label: loc.profile_disability_details,
+              controller: _disabilityDetails,
+            ),
+          ],
         ),
 
       _buildMappedDropdown(
@@ -857,7 +969,13 @@ class _MyProfileState extends State<MyProfile> {
         _educationDisplay,
         (v) => setState(() => _educationDisplay = v),
       ),
-
+      if (_educationDisplay != null) ...[
+        const SizedBox(height: 16),
+        _buildTextField(
+          "Degree / Specialization (उदा. B.E. Computer)",
+          _educationDetails,
+        ),
+      ],
       const SizedBox(height: 16),
       _sectionTitle(AppLocalizations.of(context)!.profile_section_career),
       _buildMappedDropdown(
