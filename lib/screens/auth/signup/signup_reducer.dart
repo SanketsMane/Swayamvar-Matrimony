@@ -32,13 +32,15 @@ SignUpState sign_up_reducer(SignUpState state, dynamic action) {
       return state;
     }
 
-    if (state.currentGender == "Male") {
-      state.genderController!.text = "1";
-    } else {
+    // Sanket: Explicit guard — only set Male(1) or Female(2), never a wrong value
+    if (state.currentGender == "Female") {
       state.genderController!.text = "2";
+    } else {
+      state.genderController!.text = "1"; // Default to Male for null/any other value
     }
 
-    String phoneValue = action.phoneNumber?.phoneNumber ?? "";
+    // Preserve the '+' sign for E.164 formatting (fix for "invalid mobile number" error)
+    String phoneValue = (action.phoneNumber?.phoneNumber ?? "");
     String emailValue = state.emailController!.text.trim();
 
     if (emailValue.isEmpty || phoneValue.isEmpty) {
@@ -48,15 +50,9 @@ SignUpState sign_up_reducer(SignUpState state, dynamic action) {
       return state;
     }
 
-    // Extract First and Last Name from the single Full Name input
-    String fullName = state.firstNameController!.text.trim();
-    String extractedFirstName = fullName;
-    String extractedLastName = "";
-    int spaceIndex = fullName.indexOf(" ");
-    if (spaceIndex != -1) {
-      extractedFirstName = fullName.substring(0, spaceIndex).trim();
-      extractedLastName = fullName.substring(spaceIndex + 1).trim();
-    }
+    // Use separate first and last name controllers directly
+    String extractedFirstName = state.firstNameController!.text.trim();
+    String extractedLastName = state.lastNameController!.text.trim();
 
     // Default "Profile Created For" to "Myself" (ID = 1) if omitted in the new UI
     String onBehalfValue = state.on_behalves_value?.toString() ?? "1";
@@ -70,7 +66,8 @@ SignUpState sign_up_reducer(SignUpState state, dynamic action) {
         phone: phoneValue,
         onBehalf: onBehalfValue,
         gender: state.genderController!.text,
-        dateOfBirth: yearMonthDay(state.date!),
+        // Sanket: Guard DOB null — fallback to today if state.date is unexpectedly null
+        dateOfBirth: yearMonthDay(state.date ?? DateTime.now()),
         password: state.passwordController!.text,
         passwordConfirmation: state.confirmPasswordController!.text,
         referral: state.referController!.text,
@@ -94,7 +91,8 @@ SignUpState sign_up_reducer(SignUpState state, dynamic action) {
     return state.copyWith(currentGender: action.payload);
   }
   if (action is SignupCheckBoxAction) {
-    return state.copyWith(checkBox: !state.checkBox!);
+    // Sanket: Use action.payload directly — avoids null crash from !state.checkBox!
+    return state.copyWith(checkBox: action.payload ?? !(state.checkBox ?? false));
   }
   if (action is SignupSetEmailOrPhoneAction) {
     return state.copyWith(emailOrPhone: !state.emailOrPhone!);

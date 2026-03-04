@@ -10,6 +10,7 @@ import '../screens/core.dart';
 import '../screens/payment_methods/payment.dart';
 import 'common_widget.dart';
 import 'custom_popup.dart';
+import 'my_images.dart';
 
 class PackageCard extends StatelessWidget {
   final bool? isFetching;
@@ -81,10 +82,13 @@ class PackageCard extends StatelessWidget {
                             children: [
                               packageList![index].image == null
                                   ? const SizedBox(height: 40, width: 40)
-                                  : Image.network(
-                                    packageList![index].image,
+                                  : SizedBox(
                                     height: 40,
                                     width: 40,
+                                    child: MyImages.normalImage(
+                                      packageList![index].image,
+                                      fit: BoxFit.contain,
+                                    ),
                                   ),
                               const SizedBox(height: 7.3),
                               Text(

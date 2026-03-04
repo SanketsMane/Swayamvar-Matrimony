@@ -9,6 +9,7 @@ import 'package:flutter/material.dart';
 import 'package:active_matrimonial_flutter_app/l10n/app_localizations.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 
+import 'package:active_matrimonial_flutter_app/components/my_images.dart';
 import '../../../components/full_screen_image_viewer.dart';
 import 'gallery_image_reducer.dart';
 
@@ -119,7 +120,7 @@ class _MyGalleryState extends State<MyGallery> {
                 // image
                 ClipRRect(
                   borderRadius: const BorderRadius.all(Radius.circular(16.0)),
-                  child: Image.network(
+                  child: MyImages.normalImage(
                     state.galleryImageState!.galleryImageList![index].imagePath,
                     fit: BoxFit.fill,
                   ),
@@ -440,8 +441,8 @@ class _MyGalleryState extends State<MyGallery> {
             else
               CircleAvatar(
                 radius: 25,
-                foregroundImage: NetworkImage(
-                  state.accountState!.profileData!.memberPhoto!,
+                foregroundImage: MyImage.imageProvider(
+                  state.accountState!.profileData!.memberPhoto,
                 ),
               ),
             const SizedBox(width: 10),

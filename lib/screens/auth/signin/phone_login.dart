@@ -7,6 +7,7 @@ import 'package:active_matrimonial_flutter_app/screens/auth/signin/otp_middlewar
 import 'package:active_matrimonial_flutter_app/screens/auth/signin/email_login.dart';
 import 'package:active_matrimonial_flutter_app/screens/auth/signup/signup.dart';
 import 'package:active_matrimonial_flutter_app/redux/store.dart';
+import 'package:active_matrimonial_flutter_app/l10n/app_localizations.dart';
 
 class PhoneLogin extends StatefulWidget {
   const PhoneLogin({super.key});
@@ -46,11 +47,10 @@ class _PhoneLoginState extends State<PhoneLogin> {
               Image.asset(
                 'assets/logo/app_logo.png',
                 height: 80,
-                color: primaryColor,
               ),
               const SizedBox(height: 16),
               Text(
-                'तुमचा योग्य जीवनसाथी शोधा ❤️',
+                AppLocalizations.of(context)!.login_screen_phone_subtitle,
                 style: Styles.body.copyWith(color: textSecondary),
               ),
               const SizedBox(height: 40),
@@ -90,13 +90,13 @@ class _PhoneLoginState extends State<PhoneLogin> {
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           Text(
-            'लॉगिन करा', // Sign In
+            AppLocalizations.of(context)!.login_button_text,
             textAlign: TextAlign.center,
             style: Styles.h2.copyWith(fontSize: 20, color: textPrimary),
           ),
           const SizedBox(height: 8),
           Text(
-            'सुरू करण्यासाठी तुमचा मोबाईल नंबर टाका', // Enter mobile number to continue
+            AppLocalizations.of(context)!.login_screen_enter_phone,
             textAlign: TextAlign.center,
             style: Styles.body.copyWith(color: textSecondary, fontSize: 13),
           ),
@@ -135,7 +135,7 @@ class _PhoneLoginState extends State<PhoneLogin> {
                 decimal: true,
               ),
               inputDecoration: InputDecoration(
-                hintText: 'मोबाईल नंबर',
+                hintText: AppLocalizations.of(context)!.profile_label_mobile1,
                 hintStyle: TextStyle(color: textSecondary.withOpacity(0.5)),
                 border: InputBorder.none,
                 isDense: false,
@@ -188,7 +188,7 @@ class _PhoneLoginState extends State<PhoneLogin> {
                         ),
                       )
                       : Text(
-                        'ओटीपी मिळवा', // Get OTP
+                        AppLocalizations.of(context)!.login_screen_get_otp,
                         style: Styles.buttonText.copyWith(
                           fontSize: 16,
                           fontWeight: FontWeight.w700,
@@ -203,7 +203,7 @@ class _PhoneLoginState extends State<PhoneLogin> {
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 12.0),
                 child: Text(
-                  'किंवा', // OR
+                  AppLocalizations.of(context)!.login_screen_or,
                   style: Styles.body.copyWith(
                     color: textSecondary,
                     fontSize: 12,
@@ -225,7 +225,7 @@ class _PhoneLoginState extends State<PhoneLogin> {
               },
               icon: Icon(Icons.email_outlined, color: textSecondary, size: 20),
               label: Text(
-                'ईमेल द्वारे सुरू ठेवा', // Continue with Email
+                AppLocalizations.of(context)!.login_screen_continue_email,
                 style: Styles.buttonText.copyWith(
                   color: textPrimary,
                   fontSize: 14,
@@ -244,7 +244,7 @@ class _PhoneLoginState extends State<PhoneLogin> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Text(
-                "खाते नाही का? ", // Don't have an account?
+                AppLocalizations.of(context)!.login_screen_if_have_account,
                 style: Styles.body.copyWith(color: textSecondary, fontSize: 13),
               ),
               GestureDetector(
@@ -254,7 +254,7 @@ class _PhoneLoginState extends State<PhoneLogin> {
                       MaterialPageRoute(builder: (context) => SignUp()),
                     ),
                 child: Text(
-                  'नोंदणी करा', // Register/Sign Up
+                  AppLocalizations.of(context)!.login_screen_signup,
                   style: Styles.buttonText.copyWith(
                     color: primaryColor,
                     fontWeight: FontWeight.w700,

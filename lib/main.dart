@@ -113,7 +113,7 @@ class _MyAppState extends State<MyApp> {
               appBarTheme: const AppBarTheme(backgroundColor: Colors.white),
             ),
             debugShowCheckedModeBanner: false,
-            title: 'Active Matrimonial',
+            title: 'Swayamvar Matrimoney',
             locale: languageProvider.appLocale,
             localizationsDelegates: const [
               AppLocalizations.delegate,

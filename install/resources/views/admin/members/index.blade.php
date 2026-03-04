@@ -115,6 +115,13 @@
                                                     @endif
                                                 @endcan
                                                 @can ('approve_member')
+                                                    @if($member->approved == 0)
+                                                        <a class="dropdown-item" href="{{ route('members.approve', $member->id) }}" >{{translate('Verify')}}</a>
+                                                    @else
+                                                        <a class="dropdown-item" href="{{ route('members.approve', $member->id) }}" >{{translate('Unverify')}}</a>
+                                                    @endif
+                                                @endcan
+                                                @can ('approve_member')
                                                     @if(get_setting('member_verification') == 1 && $member->verification_info != null)
                                                         <a class="dropdown-item" href="{{ route('member.show_verification_info', encrypt($member->id)) }}" >{{translate('View Verification Info')}}</a>
                                                     @endif

@@ -3,6 +3,7 @@ import 'package:active_matrimonial_flutter_app/const/style.dart';
 import 'package:active_matrimonial_flutter_app/helpers/device_info.dart';
 import 'package:active_matrimonial_flutter_app/helpers/navigator_push.dart';
 import 'package:active_matrimonial_flutter_app/screens/app_navigation.dart';
+import 'package:active_matrimonial_flutter_app/screens/auth/signin/phone_login.dart';
 import 'package:active_matrimonial_flutter_app/screens/core.dart';
 import 'package:active_matrimonial_flutter_app/screens/startup_pages/landing_page/landing.dart';
 import 'package:active_matrimonial_flutter_app/screens/startup_pages/on_boarding_pages.dart';
@@ -93,7 +94,7 @@ class _LandingPageState extends State<LandingPage> {
                                         SharedPref().isView = true;
                                         NavigatorPush.push(
                                           context,
-                                          const AppNavigation(),
+                                          const PhoneLogin(),
                                         );
                                       },
                                       child: Container(

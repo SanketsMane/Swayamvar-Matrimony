@@ -7,6 +7,7 @@ import 'package:active_matrimonial_flutter_app/const/my_theme.dart';
 import 'package:active_matrimonial_flutter_app/const/style.dart';
 import 'package:active_matrimonial_flutter_app/models_response/common_models/member_data.dart';
 import 'package:active_matrimonial_flutter_app/screens/core.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 import '../../../components/my_images.dart';
@@ -762,7 +763,12 @@ class _ExploreState extends State<Explore> {
       child: Stack(
         fit: StackFit.expand,
         children: [
-          MyImages.normalImage(member.photo, alignment: Alignment.topCenter),
+          Positioned.fill(
+            child: MyImages.normalImage(
+              member.photo,
+              alignment: Alignment.topCenter,
+            ),
+          ),
           Container(
             decoration: BoxDecoration(
               gradient: LinearGradient(
@@ -1120,7 +1126,11 @@ class _ExploreState extends State<Explore> {
       actions: [
         TextButton(
           onPressed: () {
-            Platform.isAndroid ? SystemNavigator.pop() : exit(0);
+            if (kIsWeb) {
+              Navigator.pop(context, false);
+            } else {
+              Platform.isAndroid ? SystemNavigator.pop() : exit(0);
+            }
           },
           child: Text(
             AppLocalizations.of(context)!.common_yes,

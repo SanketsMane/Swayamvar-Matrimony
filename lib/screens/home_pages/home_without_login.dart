@@ -9,9 +9,11 @@ import 'package:active_matrimonial_flutter_app/const/style.dart';
 import 'package:active_matrimonial_flutter_app/helpers/shared_pref.dart';
 import 'package:active_matrimonial_flutter_app/screens/core.dart';
 import 'package:active_matrimonial_flutter_app/screens/home_pages/explore/explore_middleware.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:active_matrimonial_flutter_app/l10n/app_localizations.dart';
+import 'package:active_matrimonial_flutter_app/components/my_images.dart';
 
 class HomeWithoutLogin extends StatefulWidget {
   const HomeWithoutLogin({super.key});
@@ -192,7 +194,13 @@ class _HomeWithoutLoginState extends State<HomeWithoutLogin> {
           ),
         ),
         TextButton(
-          onPressed: () => Platform.isAndroid ? SystemNavigator.pop() : exit(0),
+          onPressed: () {
+            if (kIsWeb) {
+              Navigator.pop(context, false);
+            } else {
+              Platform.isAndroid ? SystemNavigator.pop() : exit(0);
+            }
+          },
           child: Text(
             'Yes',
             style: Styles.regular_arsenic_14.copyWith(
@@ -337,15 +345,17 @@ class _HomeWithoutLoginState extends State<HomeWithoutLogin> {
 
   Widget image_container(var members, int index) {
     return Container(
-      decoration: BoxDecoration(
-        image: DecorationImage(
-          image: NetworkImage(members[index].photo ?? ''),
-          fit: BoxFit.cover,
-          onError:
-              (exception, stackTrace) =>
-                  AssetImage('assets/images/220x320.png'),
-        ),
+      decoration: const BoxDecoration(
+        borderRadius: BorderRadius.all(Radius.circular(16.0)),
+      ),
+      child: ClipRRect(
         borderRadius: const BorderRadius.all(Radius.circular(16.0)),
+        child: SizedBox.expand(
+          child: MyImages.normalImage(
+            members[index].photo,
+            fit: BoxFit.cover,
+          ),
+        ),
       ),
     );
   }

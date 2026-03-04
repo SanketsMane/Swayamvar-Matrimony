@@ -64,7 +64,7 @@ class MemberController extends Controller
         $this->middleware(['permission:deleted_member_show'])->only('deleted_members');
         $this->middleware(['permission:show_unapproved_profile_picrures'])->only('unapproved_profile_pictures');
         $this->middleware(['permission:approve_profile_picrures'])->only('approve_profile_image');
-        $this->middleware(['permission:approve_member'])->only('show_verification_info');
+        $this->middleware(['permission:approve_member'])->only('show_verification_info', 'approve_member');
         
 
         $this->rules = [

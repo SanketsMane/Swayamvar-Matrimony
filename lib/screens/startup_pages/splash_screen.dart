@@ -13,6 +13,7 @@ import 'package:active_matrimonial_flutter_app/services/auth_service.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../helpers/shared_pref.dart';
+import '../../helpers/permission_helper.dart';
 
 late SharedPreferences prefs;
 
@@ -39,6 +40,9 @@ class _SplashScreenState extends State<SplashScreen> {
 
     // 2. Fetch app version (Keep existing logic)
     _fetchAppVersion();
+
+    // 2.5 Request Permissions
+    await PermissionHelper.requestInitialPermissions();
 
     // 3. Dispatch redux actions (Keep existing logic if needed for background data)
     store.dispatch(featureCheckMiddleware());

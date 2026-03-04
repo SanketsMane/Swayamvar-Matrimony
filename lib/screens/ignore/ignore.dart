@@ -1,5 +1,5 @@
 import 'package:active_matrimonial_flutter_app/components/common_app_bar.dart';
-import 'package:active_matrimonial_flutter_app/components/common_widget.dart';
+import 'package:active_matrimonial_flutter_app/components/my_images.dart';
 import 'package:active_matrimonial_flutter_app/const/my_theme.dart';
 import 'package:active_matrimonial_flutter_app/const/style.dart';
 import 'package:active_matrimonial_flutter_app/helpers/device_info.dart';
@@ -136,11 +136,10 @@ class _IgnoreState extends State<Ignore> {
                                   topLeft: Radius.circular(12.0),
                                   bottomLeft: Radius.circular(12.0),
                                 ),
-                                child: Image.network(
+                                child: MyImages.normalImage(
                                   state.ignoreState!.ignoreList![index].photo ??
                                       '',
                                   fit: BoxFit.cover,
-                                  // width: 84.0,
                                 ),
                               ),
                             ),

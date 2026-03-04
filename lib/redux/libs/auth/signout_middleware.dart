@@ -4,6 +4,8 @@ import 'package:active_matrimonial_flutter_app/helpers/navigator_push.dart';
 import 'package:active_matrimonial_flutter_app/redux/app/app_state.dart';
 import 'package:active_matrimonial_flutter_app/repository/auth_repository.dart';
 import 'package:active_matrimonial_flutter_app/screens/app_navigation.dart';
+import 'package:active_matrimonial_flutter_app/screens/auth/signin/phone_login.dart';
+import 'package:active_matrimonial_flutter_app/screens/startup_pages/landing_page/landing_page.dart';
 import 'package:flutter/material.dart';
 import 'package:redux/redux.dart';
 import 'package:redux_thunk/redux_thunk.dart';
@@ -24,7 +26,7 @@ ThunkAction<AppState> signOutMiddleware(ctx) {
         /// cleaning auth data after logout
         clearUserData();
 
-        NavigatorPush.push_remove_untill(page: const AppNavigation());
+        NavigatorPush.push_remove_untill(page: const LandingPage());
         SystemHelper.isBlockScreenShown = false;
       } else {
         store.dispatch(

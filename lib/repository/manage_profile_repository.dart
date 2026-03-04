@@ -92,6 +92,33 @@ class ManageProfileRepository {
     return data;
   }
 
+  Future<CommonResponse> profilePictureUpdate({
+    required dynamic photo,
+  }) async {
+    var baseUrl = "${AppConfig.BASE_URL}/member/profile-picture/update";
+    var accessToken = getToken;
+
+    final uri = Uri.parse(baseUrl);
+    var request = http.MultipartRequest('POST', uri);
+
+    if (photo?.path != null) {
+      var pic = await http.MultipartFile.fromPath("photo", (photo.path));
+      request.files.add(pic);
+    }
+
+    request.headers.addAll({
+      "Accept": "application/json",
+      "Content-Type": "application/json",
+      "Authorization": "Bearer $accessToken",
+    });
+
+    var response = await request.send();
+    var responseString = await response.stream.bytesToString();
+
+    var data = commonResponseFromJson(responseString);
+    return data;
+  }
+
   // introduction
 
   Future<IntroductionGetResponse> fetchIntroduction() async {

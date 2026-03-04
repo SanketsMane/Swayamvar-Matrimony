@@ -16,6 +16,8 @@ import 'package:webview_flutter/webview_flutter.dart';
 import 'package:active_matrimonial_flutter_app/helpers/main_helpers.dart';
 import 'package:active_matrimonial_flutter_app/helpers/navigator_push.dart';
 import 'package:active_matrimonial_flutter_app/components/common_privacy_and_terms_page.dart';
+import 'package:active_matrimonial_flutter_app/redux/libs/helpers/show_message_state.dart';
+import 'package:active_matrimonial_flutter_app/l10n/app_localizations.dart';
 
 class SignUp extends StatefulWidget {
   const SignUp({super.key});
@@ -28,15 +30,11 @@ class _SignUpState extends State<SignUp> {
   bool _isRecaptchaActive = false;
   late final WebViewController _controller;
   final String _recaptchaUrl = "${AppConfig.BASE_URL}/google-recaptcha";
-  bool _isObscure = true;
+  bool _isObscure = true; // Controls password field visibility toggle
+  // Sanket: Removed 5 dead OTP final booleans — they were never used (bugs 10, 11)
+  bool _isPhoneValid = false;
   PhoneNumber _selectedPhoneNumber = PhoneNumber(isoCode: 'IN');
-  final TextEditingController _otpController = TextEditingController();
   final TextEditingController _phoneController = TextEditingController();
-  final bool _isCodeSent = false;
-  final bool _isSendingCode = false;
-  final bool _isVerified = false;
-  final bool _verificationFailed = false;
-  final bool _isVerifyingCode = false;
 
   bool? isGoogle;
   bool? isFacebook;
@@ -108,12 +106,11 @@ class _SignUpState extends State<SignUp> {
                     child: Image.asset(
                       'assets/logo/app_logo.png',
                       height: 72,
-                      color: primaryColor,
                     ),
                   ),
                   const SizedBox(height: 24),
                   Text(
-                    "तुमचे प्रोफाइल तयार करा",
+                    AppLocalizations.of(context)!.signup_screen_title,
                     style: Styles.h1.copyWith(color: textPrimary),
                   ),
                   const SizedBox(height: 8),
@@ -181,15 +178,22 @@ class _SignUpState extends State<SignUp> {
                             children: [
                               Expanded(
                                 child: _buildInputField(
-                                  title: "पहिले नाव",
+                                  title: AppLocalizations.of(context)!.signup_screen_first_name,
                                   child: TextFormField(
                                     controller:
                                         state.signUpState?.firstNameController,
                                     style: Styles.body.copyWith(
                                       color: textPrimary,
                                     ),
+                                    // Sanket: Bug 6 — first name must not be empty
+                                    validator: (val) {
+                                      if (val == null || val.trim().isEmpty) {
+                                        return AppLocalizations.of(context)!.signup_screen_first_name;
+                                      }
+                                      return null;
+                                    },
                                     decoration: InputDecoration(
-                                      hintText: "पहिले नाव",
+                                      hintText: AppLocalizations.of(context)!.signup_screen_first_name,
                                       hintStyle: Styles.body.copyWith(
                                         color: textSecondary.withOpacity(0.5),
                                       ),
@@ -201,15 +205,22 @@ class _SignUpState extends State<SignUp> {
                               const SizedBox(width: 12),
                               Expanded(
                                 child: _buildInputField(
-                                  title: "आडनाव",
+                                  title: AppLocalizations.of(context)!.manage_profile_l_name,
                                   child: TextFormField(
                                     controller:
                                         state.signUpState?.lastNameController,
                                     style: Styles.body.copyWith(
                                       color: textPrimary,
                                     ),
+                                    // Sanket: Bug 6 — last name must not be empty
+                                    validator: (val) {
+                                      if (val == null || val.trim().isEmpty) {
+                                        return AppLocalizations.of(context)!.manage_profile_l_name;
+                                      }
+                                      return null;
+                                    },
                                     decoration: InputDecoration(
-                                      hintText: "आडनाव",
+                                      hintText: AppLocalizations.of(context)!.signup_screen_last_name,
                                       hintStyle: Styles.body.copyWith(
                                         color: textSecondary.withOpacity(0.5),
                                       ),
@@ -222,7 +233,7 @@ class _SignUpState extends State<SignUp> {
                           ),
                           const SizedBox(height: 16),
                           _buildInputField(
-                            title: "लिंग",
+                            title: AppLocalizations.of(context)!.signup_screen_gender,
                             child: DropdownButtonFormField(
                               dropdownColor: cardColor,
                               icon: Icon(
@@ -262,7 +273,7 @@ class _SignUpState extends State<SignUp> {
                           ),
                           const SizedBox(height: 16),
                           _buildInputField(
-                            title: "जन्म तारीख",
+                            title: AppLocalizations.of(context)!.signup_screen_dob,
                             child: InkWell(
                               onTap: () async {
                                 DateTime? picked = await showDatePicker(
@@ -303,10 +314,22 @@ class _SignUpState extends State<SignUp> {
                           ),
                           const SizedBox(height: 16),
                           _buildInputField(
-                            title: "ईमेल आयडी",
+                            title: AppLocalizations.of(context)!.manage_profile_your_email_id,
                             child: TextFormField(
                               controller: state.signUpState?.emailController,
                               style: Styles.body.copyWith(color: textPrimary),
+                              keyboardType: TextInputType.emailAddress,
+                              // Sanket: Bug 7 — validate email format and non-empty
+                              validator: (val) {
+                                if (val == null || val.trim().isEmpty) {
+                                  return 'ईमेल आवश्यक आहे';
+                                }
+                                final emailRegex = RegExp(r'^[\w.+-]+@[\w-]+\.[\w.]+$');
+                                if (!emailRegex.hasMatch(val.trim())) {
+                                  return 'वैध ईमेल पत्ता प्रविष्ट करा';
+                                }
+                                return null;
+                              },
                               decoration: const InputDecoration(
                                 hintText: "ईमेल प्रविष्ट करा",
                                 border: InputBorder.none,
@@ -315,11 +338,22 @@ class _SignUpState extends State<SignUp> {
                           ),
                           const SizedBox(height: 16),
                           _buildInputField(
-                            title: "मोबाईल नंबर",
+                            title: AppLocalizations.of(context)!.profile_label_mobile1,
                             child: InternationalPhoneNumberInput(
-                              onInputChanged:
-                                  (n) =>
-                                      setState(() => _selectedPhoneNumber = n),
+                              onInputChanged: (PhoneNumber n) {
+                                setState(() => _selectedPhoneNumber = n);
+                                // Sanket: Manual 10-digit Indian number validation
+                                // The package's libphonenumber is unreliable on Flutter web
+                                // and incorrectly flags valid Indian numbers as invalid.
+                                final nationalNumber = n.phoneNumber
+                                    ?.replaceFirst('+91', '')
+                                    .replaceAll(RegExp(r'\s+'), '') ?? '';
+                                final isValid = RegExp(r'^[6-9]\d{9}$').hasMatch(nationalNumber);
+                                setState(() => _isPhoneValid = isValid);
+                              },
+                              // Sanket: Disable the package's built-in error display —
+                              // we show our own error hint below the field instead.
+                              onInputValidated: (_) {},
                               selectorConfig: const SelectorConfig(
                                 selectorType:
                                     PhoneInputSelectorType.BOTTOM_SHEET,
@@ -332,13 +366,25 @@ class _SignUpState extends State<SignUp> {
                               inputDecoration: const InputDecoration(
                                 hintText: "8XXXXXXXXX",
                                 border: InputBorder.none,
+                                // Suppress the package's own "Invalid phone number" English error
+                                errorText: null,
                               ),
                               textFieldController: _phoneController,
+                              errorMessage: '',
                             ),
                           ),
+                          // Sanket: Bug 3 — show helpful hint when phone field has value but is invalid
+                          if (!_isPhoneValid && _phoneController.text.isNotEmpty)
+                            Padding(
+                              padding: const EdgeInsets.only(top: 4, left: 4),
+                              child: Text(
+                                'वैध 10-अंकी मोबाइल नंबर प्रविष्ट करा',
+                                style: Styles.caption.copyWith(color: Colors.red),
+                              ),
+                            ),
                           const SizedBox(height: 16),
                           _buildInputField(
-                            title: "पासवर्ड",
+                            title: AppLocalizations.of(context)!.common_password_text,
                             child: TextFormField(
                               controller: state.signUpState?.passwordController,
                               obscureText: _isObscure,
@@ -367,7 +413,7 @@ class _SignUpState extends State<SignUp> {
                           ),
                           const SizedBox(height: 16),
                           _buildInputField(
-                            title: "पासवर्डची पुष्टी करा",
+                            title: AppLocalizations.of(context)!.common_screen_confim_password,
                             child: TextFormField(
                               controller:
                                   state.signUpState?.confirmPasswordController,
@@ -376,6 +422,16 @@ class _SignUpState extends State<SignUp> {
                                 color: textPrimary,
                                 fontSize: 14,
                               ),
+                              // Sanket: Bug 5 — validate confirm password matches password
+                              validator: (val) {
+                                if (val == null || val.isEmpty) {
+                                  return 'कृपया पासवर्ड पुन्हा प्रविष्ट करा';
+                                }
+                                if (val != state.signUpState?.passwordController?.text) {
+                                  return 'पासवर्ड जुळत नाही';
+                                }
+                                return null;
+                              },
                               decoration: InputDecoration(
                                 hintText: "••••••••",
                                 border: InputBorder.none,
@@ -397,13 +453,13 @@ class _SignUpState extends State<SignUp> {
                               Expanded(
                                 child: RichText(
                                   text: TextSpan(
-                                    text: "मी ",
+                                    text: AppLocalizations.of(context)!.signup_screen_terms_part1,
                                     style: Styles.caption.copyWith(
                                       color: textSecondary,
                                     ),
                                     children: [
                                       TextSpan(
-                                        text: "अटी आणि शर्ती",
+                                        text: AppLocalizations.of(context)!.signup_screen_terms_part2,
                                         style: Styles.caption.copyWith(
                                           color: primaryColor,
                                           fontWeight: FontWeight.w600,
@@ -413,15 +469,16 @@ class _SignUpState extends State<SignUp> {
                                               ..onTap =
                                                   () => NavigatorPush.push(
                                                     context,
-                                                    const CommonPrivacyAndTerms(
-                                                      title: "अटी आणि शर्ती",
-                                                      content: "",
+                                                    CommonPrivacyAndTerms(
+                                                      title: AppLocalizations.of(context)!.signup_screen_terms_part2,
+                                                      // Sanket: Bug 9 — use real content from Redux static page state
+                                                      content: state.staticPageState?.termsAndCondition ?? "",
                                                     ),
                                                   ),
                                       ),
-                                      const TextSpan(text: " आणि "),
+                                      TextSpan(text: " ${AppLocalizations.of(context)!.signup_screen_terms_part3} "),
                                       TextSpan(
-                                        text: "गोपनीयता धोरणाशी",
+                                        text: AppLocalizations.of(context)!.signup_screen_terms_part4,
                                         style: Styles.caption.copyWith(
                                           color: primaryColor,
                                           fontWeight: FontWeight.w600,
@@ -431,13 +488,13 @@ class _SignUpState extends State<SignUp> {
                                               ..onTap =
                                                   () => NavigatorPush.push(
                                                     context,
-                                                    const CommonPrivacyAndTerms(
-                                                      title: "गोपनीयता धोरण",
-                                                      content: "",
+                                                    CommonPrivacyAndTerms(
+                                                      title: AppLocalizations.of(context)!.signup_screen_terms_part4,
+                                                      // Sanket: Bug 9 — use real content from Redux static page state
+                                                      content: state.staticPageState?.privacyPolicy ?? "",
                                                     ),
                                                   ),
                                       ),
-                                      const TextSpan(text: " सहमत आहे."),
                                     ],
                                   ),
                                 ),
@@ -447,14 +504,21 @@ class _SignUpState extends State<SignUp> {
                           const SizedBox(height: 32),
                           ElevatedButton(
                             onPressed:
-                                (state.signUpState!.isLoading ?? false) || _phoneController.text.length < 10
-                                    ? null
-                                    : () => store.dispatch(
-                                      SignUpRequestAction(
-                                        payloadContext: context,
-                                        phoneNumber: _selectedPhoneNumber,
-                                      ),
-                                    ),
+                                 // Sanket: Always tappable — phone checked inside callback
+                                 (state.signUpState!.isLoading ?? false)
+                                     ? null
+                                     : () {
+                                         if (!_isPhoneValid) {
+                                           store.dispatch(ShowMessageAction(
+                                             msg: 'कृपया वैध 10-अंकी मोबाइल नंबर प्रविष्ट करा',
+                                           ));
+                                           return;
+                                         }
+                                         store.dispatch(SignUpRequestAction(
+                                           payloadContext: context,
+                                           phoneNumber: _selectedPhoneNumber,
+                                         ));
+                                       },
                             style: ElevatedButton.styleFrom(
                               backgroundColor: primaryColor,
                               foregroundColor: Colors.white,
@@ -469,7 +533,7 @@ class _SignUpState extends State<SignUp> {
                                       color: Colors.white,
                                     )
                                     : Text(
-                                      "प्रोफाईल तयार करा",
+                                      AppLocalizations.of(context)!.signup_screen_button_text_signup,
                                       style: Styles.buttonText.copyWith(
                                         fontSize: 16,
                                         fontWeight: FontWeight.w700,
@@ -543,8 +607,9 @@ class _SignUpState extends State<SignUp> {
           ),
         ),
         const SizedBox(height: 8),
+        // Sanket: Removed fixed height:48 — container must grow to show validator errors
         Container(
-          height: 48,
+          constraints: const BoxConstraints(minHeight: 48),
           padding: const EdgeInsets.symmetric(horizontal: 16),
           alignment: Alignment.centerLeft,
           decoration: BoxDecoration(
@@ -560,7 +625,6 @@ class _SignUpState extends State<SignUp> {
   @override
   void dispose() {
     _phoneController.dispose();
-    _otpController.dispose();
     super.dispose();
   }
 }

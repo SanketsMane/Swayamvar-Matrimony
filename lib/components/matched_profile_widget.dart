@@ -1,6 +1,7 @@
 // Sanket: Matched profiles horizontal row for Inbox screen
 import 'package:active_matrimonial_flutter_app/helpers/aiz_route.dart';
 import 'package:active_matrimonial_flutter_app/middleware/profile_view_middleware.dart';
+import 'package:active_matrimonial_flutter_app/components/my_images.dart';
 import 'package:flutter/material.dart';
 
 import '../const/my_theme.dart';
@@ -94,12 +95,9 @@ class MatchedProfileWidget extends StatelessWidget {
                 ),
                 child: ClipRRect(
                   borderRadius: BorderRadius.circular(30),
-                  child: Image.network(
+                  child: MyImages.normalImage(
                     user.photo ?? "",
                     fit: BoxFit.cover,
-                    errorBuilder:
-                        (context, error, stackTrace) =>
-                            Container(color: MyTheme.background),
                   ),
                 ),
               ),

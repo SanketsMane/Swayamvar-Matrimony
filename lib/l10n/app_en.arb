@@ -51,6 +51,11 @@
   "login_screen_email_helper_text": "Use country code before number",
   "login_text_sub_title": "Enter your login credentials",
   "login_screen_if_have_account": "Do not have an account?",
+  "login_screen_get_otp": "Get OTP",
+  "login_screen_phone_subtitle": "Find your perfect life partner ❤️",
+  "login_screen_enter_phone": "Enter your mobile number to continue",
+  "login_screen_continue_email": "Continue with Email",
+  "login_screen_or": "OR",
   "login_text_title": "Login to your account",
   "login_screen_forget_password": "Forget Password ?",
   "login_screen_or_signup": "or, Login with",
@@ -753,5 +758,12 @@
   "verify_error_id_number": "Please enter your ID number",
   "verify_error_id_front": "Please upload ID front side",
   "verify_error_selfie": "Please upload a selfie",
-  "verify_error_failed": "Submission failed"
+  "verify_error_failed": "Submission failed",
+  "profile_error_first_name": "First name is required.",
+  "profile_error_dob": "Please select your date of birth.",
+  "profile_error_mobile": "Mobile number is required.",
+  "profile_error_mobile_invalid": "Please enter a valid 10-digit mobile number.",
+  "profile_error_married_brothers": "Married brothers cannot exceed total brothers.",
+  "profile_error_married_sisters": "Married sisters cannot exceed total sisters.",
+  "profile_web_photo_note": "Photo uploads are only supported on the mobile app. Please use the Android or iOS app to upload your photos."
 }

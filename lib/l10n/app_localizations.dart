@@ -62,8 +62,7 @@ import 'app_localizations_mr.dart';
 /// be consistent with the languages listed in the AppLocalizations.supportedLocales
 /// property.
 abstract class AppLocalizations {
-  AppLocalizations(String locale)
-    : localeName = intl.Intl.canonicalizedLocale(locale.toString());
+  AppLocalizations(String locale) : localeName = intl.Intl.canonicalizedLocale(locale.toString());
 
   final String localeName;
 
@@ -71,8 +70,7 @@ abstract class AppLocalizations {
     return Localizations.of<AppLocalizations>(context, AppLocalizations);
   }
 
-  static const LocalizationsDelegate<AppLocalizations> delegate =
-      _AppLocalizationsDelegate();
+  static const LocalizationsDelegate<AppLocalizations> delegate = _AppLocalizationsDelegate();
 
   /// A list of this localizations delegate along with the default localizations
   /// delegates.
@@ -84,18 +82,17 @@ abstract class AppLocalizations {
   /// Additional delegates can be added by appending to this list in
   /// MaterialApp. This list does not have to be used at all if a custom list
   /// of delegates is preferred or required.
-  static const List<LocalizationsDelegate<dynamic>> localizationsDelegates =
-      <LocalizationsDelegate<dynamic>>[
-        delegate,
-        GlobalMaterialLocalizations.delegate,
-        GlobalCupertinoLocalizations.delegate,
-        GlobalWidgetsLocalizations.delegate,
-      ];
+  static const List<LocalizationsDelegate<dynamic>> localizationsDelegates = <LocalizationsDelegate<dynamic>>[
+    delegate,
+    GlobalMaterialLocalizations.delegate,
+    GlobalCupertinoLocalizations.delegate,
+    GlobalWidgetsLocalizations.delegate,
+  ];
 
   /// A list of this localizations delegate's supported locales.
   static const List<Locale> supportedLocales = <Locale>[
     Locale('en'),
-    Locale('mr'),
+    Locale('mr')
   ];
 
   /// No description provided for @common_enter_email.
@@ -409,6 +406,36 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Do not have an account?'**
   String get login_screen_if_have_account;
+
+  /// No description provided for @login_screen_get_otp.
+  ///
+  /// In en, this message translates to:
+  /// **'Get OTP'**
+  String get login_screen_get_otp;
+
+  /// No description provided for @login_screen_phone_subtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Find your perfect life partner ❤️'**
+  String get login_screen_phone_subtitle;
+
+  /// No description provided for @login_screen_enter_phone.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter your mobile number to continue'**
+  String get login_screen_enter_phone;
+
+  /// No description provided for @login_screen_continue_email.
+  ///
+  /// In en, this message translates to:
+  /// **'Continue with Email'**
+  String get login_screen_continue_email;
+
+  /// No description provided for @login_screen_or.
+  ///
+  /// In en, this message translates to:
+  /// **'OR'**
+  String get login_screen_or;
 
   /// No description provided for @login_text_title.
   ///
@@ -4561,10 +4588,51 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Submission failed'**
   String get verify_error_failed;
+
+  /// No description provided for @profile_error_first_name.
+  ///
+  /// In en, this message translates to:
+  /// **'First name is required.'**
+  String get profile_error_first_name;
+
+  /// No description provided for @profile_error_dob.
+  ///
+  /// In en, this message translates to:
+  /// **'Please select your date of birth.'**
+  String get profile_error_dob;
+
+  /// No description provided for @profile_error_mobile.
+  ///
+  /// In en, this message translates to:
+  /// **'Mobile number is required.'**
+  String get profile_error_mobile;
+
+  /// No description provided for @profile_error_mobile_invalid.
+  ///
+  /// In en, this message translates to:
+  /// **'Please enter a valid 10-digit mobile number.'**
+  String get profile_error_mobile_invalid;
+
+  /// No description provided for @profile_error_married_brothers.
+  ///
+  /// In en, this message translates to:
+  /// **'Married brothers cannot exceed total brothers.'**
+  String get profile_error_married_brothers;
+
+  /// No description provided for @profile_error_married_sisters.
+  ///
+  /// In en, this message translates to:
+  /// **'Married sisters cannot exceed total sisters.'**
+  String get profile_error_married_sisters;
+
+  /// No description provided for @profile_web_photo_note.
+  ///
+  /// In en, this message translates to:
+  /// **'Photo uploads are only supported on the mobile app. Please use the Android or iOS app to upload your photos.'**
+  String get profile_web_photo_note;
 }
 
-class _AppLocalizationsDelegate
-    extends LocalizationsDelegate<AppLocalizations> {
+class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {
   const _AppLocalizationsDelegate();
 
   @override
@@ -4573,26 +4641,33 @@ class _AppLocalizationsDelegate
   }
 
   @override
-  bool isSupported(Locale locale) =>
-      <String>['en', 'mr'].contains(locale.languageCode);
+  bool isSupported(Locale locale) => <String>['en', 'mr'].contains(locale.languageCode);
 
   @override
   bool shouldReload(_AppLocalizationsDelegate old) => false;
+
+  String get profile_error_first_name;
+  String get profile_error_dob;
+  String get profile_error_mobile;
+  String get profile_error_mobile_invalid;
+  String get profile_error_married_brothers;
+  String get profile_error_married_sisters;
+  String get profile_web_photo_note;
 }
 
 AppLocalizations lookupAppLocalizations(Locale locale) {
+
+
   // Lookup logic when only language code is specified.
   switch (locale.languageCode) {
-    case 'en':
-      return AppLocalizationsEn();
-    case 'mr':
-      return AppLocalizationsMr();
+    case 'en': return AppLocalizationsEn();
+    case 'mr': return AppLocalizationsMr();
   }
 
   throw FlutterError(
     'AppLocalizations.delegate failed to load unsupported locale "$locale". This is likely '
     'an issue with the localizations generation tool. Please file an issue '
     'on GitHub with a reproducible sample app and the gen-l10n configuration '
-    'that was used.',
+    'that was used.'
   );
 }

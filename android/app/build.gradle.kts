@@ -9,7 +9,7 @@ plugins {
 android {
     namespace = "com.activeitzone.active_matrimonial_flutter_app.active_matrimonial_flutter_app"
     compileSdk = 36
-    // ndkVersion = "29.0.14206865"
+    ndkVersion = "27.0.12077973"
 
     compileOptions {
         // Enable core library desugaring and use Java 21
@@ -23,7 +23,7 @@ android {
     }
 
     defaultConfig {
-        applicationId = "com.activeitzone.active_matrimonial_flutter_app.active_matrimonial_flutter_app"
+        applicationId = "com.swayamvar.matrimoney"
         minSdk = flutter.minSdkVersion
         targetSdk = 35
         versionCode = flutter.versionCode

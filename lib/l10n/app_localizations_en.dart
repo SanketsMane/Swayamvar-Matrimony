@@ -165,6 +165,21 @@ class AppLocalizationsEn extends AppLocalizations {
   String get login_screen_if_have_account => 'Do not have an account?';
 
   @override
+  String get login_screen_get_otp => 'Get OTP';
+
+  @override
+  String get login_screen_phone_subtitle => 'Find your perfect life partner ❤️';
+
+  @override
+  String get login_screen_enter_phone => 'Enter your mobile number to continue';
+
+  @override
+  String get login_screen_continue_email => 'Continue with Email';
+
+  @override
+  String get login_screen_or => 'OR';
+
+  @override
   String get login_text_title => 'Login to your account';
 
   @override
@@ -180,8 +195,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get login_button_text => 'Login';
 
   @override
-  String get forget_screen_subtitle =>
-      'Enter your email address or phone number\n to recover your password';
+  String get forget_screen_subtitle => 'Enter your email address or phone number\n to recover your password';
 
   @override
   String get forget_screen_use_email_instead => 'Use Email instead';
@@ -361,12 +375,10 @@ class AppLocalizationsEn extends AppLocalizations {
   String get profile_screen_r_gallery_image_upload => 'Remaining Gallery Image';
 
   @override
-  String get profile_screen_r_profile_image_view =>
-      'Remaining Profile \nImage View';
+  String get profile_screen_r_profile_image_view => 'Remaining Profile \nImage View';
 
   @override
-  String get profile_screen_r_gallery_image_view =>
-      'Remaining Gallery \nImage View';
+  String get profile_screen_r_gallery_image_view => 'Remaining Gallery \nImage View';
 
   @override
   String get profile_screen_my_wallet => 'My Wallet';
@@ -432,8 +444,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get howitworks_screen_1_signup => 'Sign Up';
 
   @override
-  String get howitworks_screen_1_reg_for_free =>
-      'Register for free & put up\n your Profile';
+  String get howitworks_screen_1_reg_for_free => 'Register for free & put up\n your Profile';
 
   @override
   String get howitworks_screen_2 => '2';
@@ -442,8 +453,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get howitworks_screen_2_connect => 'Connect';
 
   @override
-  String get howitworks_screen_2_select_and_connect =>
-      'Select & Connect with\n Matches you like';
+  String get howitworks_screen_2_select_and_connect => 'Select & Connect with\n Matches you like';
 
   @override
   String get howitworks_screen_3 => '3';
@@ -452,19 +462,16 @@ class AppLocalizationsEn extends AppLocalizations {
   String get howitworks_screen_3_interact => 'Interact';
 
   @override
-  String get howitworks_screen_3_become_premium =>
-      'Become a Premium Member &\n Start a Conversation';
+  String get howitworks_screen_3_become_premium => 'Become a Premium Member &\n Start a Conversation';
 
   @override
-  String get howitworks_screen_3_or_continue_as_guest =>
-      'or, Continue as guest ?';
+  String get howitworks_screen_3_or_continue_as_guest => 'or, Continue as guest ?';
 
   @override
   String get landing_page_title => 'Find Your\nLife Partner With Us';
 
   @override
-  String get landing_page_sub_title =>
-      'Trusted Matrimony Services\nto happy marriages.';
+  String get landing_page_sub_title => 'Trusted Matrimony Services\nto happy marriages.';
 
   @override
   String get landing_page_how_it_works => 'How it works ?';
@@ -548,8 +555,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get manage_profile_Residency_Info => 'Residency Information';
 
   @override
-  String get manage_profile_spiritual_n_social_back =>
-      'Spiritiual & Social Background';
+  String get manage_profile_spiritual_n_social_back => 'Spiritiual & Social Background';
 
   @override
   String get manage_profile_f_name => 'First Name';
@@ -711,8 +717,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get public_profile_hobbies_n_interest => 'Hobbies & Interest';
 
   @override
-  String get public_profile_your_hobbies_n_interest =>
-      'Your Hobbies & Interest';
+  String get public_profile_your_hobbies_n_interest => 'Your Hobbies & Interest';
 
   @override
   String get manage_profile_hobbies => 'Hobbies';
@@ -745,12 +750,10 @@ class AppLocalizationsEn extends AppLocalizations {
   String get manage_profile_dress_styles => 'Dress Styles';
 
   @override
-  String get public_profile_personal_attri_behavior =>
-      'Personal Attitude & Behaviour';
+  String get public_profile_personal_attri_behavior => 'Personal Attitude & Behaviour';
 
   @override
-  String get public_profile_your_personal_attri_behavior =>
-      'Your Personal Attitude & Behaviour';
+  String get public_profile_your_personal_attri_behavior => 'Your Personal Attitude & Behaviour';
 
   @override
   String get public_profile_residency_info => 'Residency Information';
@@ -774,12 +777,10 @@ class AppLocalizationsEn extends AppLocalizations {
   String get public_profile_immigration_status => 'Immigration Status';
 
   @override
-  String get public_profile_spiritual_n_social =>
-      'Spritual & Social Background';
+  String get public_profile_spiritual_n_social => 'Spritual & Social Background';
 
   @override
-  String get public_profile_your_spiritual_n_social =>
-      'Your Spritual & Social Background';
+  String get public_profile_your_spiritual_n_social => 'Your Spritual & Social Background';
 
   @override
   String get manage_profile_religion => 'Religion';
@@ -824,8 +825,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get public_profile_Partner_expectation => 'Partner Expectation';
 
   @override
-  String get public_profile_your_Partner_expectation =>
-      'Your Partner Expectation';
+  String get public_profile_your_Partner_expectation => 'Your Partner Expectation';
 
   @override
   String get public_profile_Education_info => 'Education Info';
@@ -855,8 +855,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get manage_profile_astronomic_info => 'Astronomic Information';
 
   @override
-  String get manage_profile_your_astronomic_info =>
-      'Your Astronomic Information';
+  String get manage_profile_your_astronomic_info => 'Your Astronomic Information';
 
   @override
   String get manage_profile_sun_sign => 'Sun Sign';
@@ -1171,12 +1170,10 @@ class AppLocalizationsEn extends AppLocalizations {
   String get interest_request_screen_appbar_title => 'Interest Requests';
 
   @override
-  String get profile_picture_screen_appbar_title =>
-      'Profile Picture View Requests';
+  String get profile_picture_screen_appbar_title => 'Profile Picture View Requests';
 
   @override
-  String get gallery_picture_screen_appbar_title =>
-      'Gallery Picture View Requests';
+  String get gallery_picture_screen_appbar_title => 'Gallery Picture View Requests';
 
   @override
   String get active_members_screen_appbar_title => 'ACTIVE MEMBERS';
@@ -1188,8 +1185,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get premium_plans_choose_plan => 'Choose your plan';
 
   @override
-  String get premium_plans_choose_plan_sub =>
-      'Choose any of our packages as per your need.';
+  String get premium_plans_choose_plan_sub => 'Choose any of our packages as per your need.';
 
   @override
   String get premium_plans_express_interest => 'Express Interest';
@@ -1228,8 +1224,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get change_email_screen_appbar_title => 'Change your email';
 
   @override
-  String get deactivate =>
-      'Deactivating your account will prevent you from performing any actions. Are you sure you want to deactivate your account?';
+  String get deactivate => 'Deactivating your account will prevent you from performing any actions. Are you sure you want to deactivate your account?';
 
   @override
   String get reactivate => 'Do You Really Want To Reactivate Your Account';
@@ -1277,8 +1272,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get happy_stories_form_video_link => 'Video Link';
 
   @override
-  String get happy_stories_form_warning_text =>
-      'Use proper link without extra parameter. Don\'t use short share link/embedded iframe code.';
+  String get happy_stories_form_warning_text => 'Use proper link without extra parameter. Don\'t use short share link/embedded iframe code.';
 
   @override
   String get save_change_btn_text => 'Save Changes';
@@ -1311,8 +1305,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get package_purchase => 'Package Purchase';
 
   @override
-  String get please_update_your_package_des =>
-      'Your are using free package please upgrade your package.';
+  String get please_update_your_package_des => 'Your are using free package please upgrade your package.';
 
   @override
   String get please_update_your_package => 'Please Update Your Package.';
@@ -1345,22 +1338,19 @@ class AppLocalizationsEn extends AppLocalizations {
   String get onboarding_1_title => 'Create Your Profile';
 
   @override
-  String get onboarding_1_subtitle =>
-      'Sign up for free and set up your profile to let the world know who you are.';
+  String get onboarding_1_subtitle => 'Sign up for free and set up your profile to let the world know who you are.';
 
   @override
   String get onboarding_2_title => 'Find Your Match';
 
   @override
-  String get onboarding_2_subtitle =>
-      'Connect with thousands of verified profiles and find the one made for you.';
+  String get onboarding_2_subtitle => 'Connect with thousands of verified profiles and find the one made for you.';
 
   @override
   String get onboarding_3_title => 'Start Conversation';
 
   @override
-  String get onboarding_3_subtitle =>
-      'Interact with your matches securely and take the first step towards your forever.';
+  String get onboarding_3_subtitle => 'Interact with your matches securely and take the first step towards your forever.';
 
   @override
   String get home_greeting_morning => 'Good Morning';
@@ -1386,8 +1376,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get explore_no_matches => 'No matches found.';
 
   @override
-  String get explore_adjust_prefs =>
-      'Adjust your preferences to see more profiles.';
+  String get explore_adjust_prefs => 'Adjust your preferences to see more profiles.';
 
   @override
   String get explore_edit_prefs => 'Edit Preferences';
@@ -1854,8 +1843,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get settings_language_dialog_title => 'Select Language';
 
   @override
-  String get settings_deactivate_confirm =>
-      'Are you sure you want to deactivate your account?';
+  String get settings_deactivate_confirm => 'Are you sure you want to deactivate your account?';
 
   @override
   String get settings_personalization_desc => 'Customize your app experience';
@@ -1942,8 +1930,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get home_same_education => 'Same Education';
 
   @override
-  String get home_matches_preferences =>
-      'This profile matches your partner preferences.';
+  String get home_matches_preferences => 'This profile matches your partner preferences.';
 
   @override
   String get home_quick_actions => 'Quick Actions';
@@ -1997,15 +1984,13 @@ class AppLocalizationsEn extends AppLocalizations {
   String get home_upgrade_to_platinum => 'Upgrade to Platinum';
 
   @override
-  String get home_prioritize_profile =>
-      'Prioritize your profile and get more matches.';
+  String get home_prioritize_profile => 'Prioritize your profile and get more matches.';
 
   @override
   String get home_complete_profile_now => 'Complete your profile';
 
   @override
-  String get home_increase_matches_3x =>
-      'Get 3x more matches by adding your details.';
+  String get home_increase_matches_3x => 'Get 3x more matches by adding your details.';
 
   @override
   String get home_add_education => 'Add Education Details';
@@ -2059,12 +2044,10 @@ class AppLocalizationsEn extends AppLocalizations {
   String get home_filter_online => 'Online';
 
   @override
-  String get gallery_delete_confirm_title =>
-      'Are You Sure That You Want To Delete This Image?';
+  String get gallery_delete_confirm_title => 'Are You Sure That You Want To Delete This Image?';
 
   @override
-  String get gallery_delete_confirm_nb =>
-      '**N.B. Deleting An Image Will Not Refund Your Remaining Gallery Capacity**';
+  String get gallery_delete_confirm_nb => '**N.B. Deleting An Image Will Not Refund Your Remaining Gallery Capacity**';
 
   @override
   String get gallery_add_new_image => 'Add new image';
@@ -2091,22 +2074,19 @@ class AppLocalizationsEn extends AppLocalizations {
   String get gallery_image_view_title => 'Gallery Image View';
 
   @override
-  String get gallery_remaining_view_prefix =>
-      'Remaining Gallery Picture View: ';
+  String get gallery_remaining_view_prefix => 'Remaining Gallery Picture View: ';
 
   @override
   String get gallery_remaining_view_suffix => ' times';
 
   @override
-  String get gallery_request_note =>
-      'N.B. Requesting to See This Member Gallery Picture Will Cost 1 From Remaining Gallery Picture View.';
+  String get gallery_request_note => 'N.B. Requesting to See This Member Gallery Picture Will Cost 1 From Remaining Gallery Picture View.';
 
   @override
   String get gallery_send_request_btn => 'Send Gallery Photo View Request';
 
   @override
-  String get referral_screen_rewards_msg =>
-      'Share this code with your friends and earn rewards!';
+  String get referral_screen_rewards_msg => 'Share this code with your friends and earn rewards!';
 
   @override
   String get referral_stat_wallet => 'Wallet Balance';
@@ -2150,8 +2130,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get verify_trust_header => 'Get Verified ✔';
 
   @override
-  String get verify_trust_desc =>
-      'Verified profiles receive more matches and build higher trust with potential partners.';
+  String get verify_trust_desc => 'Verified profiles receive more matches and build higher trust with potential partners.';
 
   @override
   String get verify_benefit_visibility => 'Higher search visibility';
@@ -2175,8 +2154,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get verify_step_review => 'Review';
 
   @override
-  String get verify_upload_desc =>
-      'Upload a clear document for faster approval.';
+  String get verify_upload_desc => 'Upload a clear document for faster approval.';
 
   @override
   String get verify_tap_to_upload => 'Tap to upload photo';
@@ -2233,19 +2211,16 @@ class AppLocalizationsEn extends AppLocalizations {
   String get verify_step_2_title => 'Live Selfie';
 
   @override
-  String get verify_selfie_desc =>
-      'Take a clear selfie to verify your identity';
+  String get verify_selfie_desc => 'Take a clear selfie to verify your identity';
 
   @override
-  String get verify_selfie_instruction =>
-      'Ensure your face is well-lit and clearly visible';
+  String get verify_selfie_instruction => 'Ensure your face is well-lit and clearly visible';
 
   @override
   String get verify_step_3_title => 'Review Details';
 
   @override
-  String get verify_review_desc =>
-      'By submitting, you agree that the provided information is accurate and belongs to you.';
+  String get verify_review_desc => 'By submitting, you agree that the provided information is accurate and belongs to you.';
 
   @override
   String get verify_submit_for_review => 'Submit for Verification';
@@ -2285,4 +2260,40 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get verify_error_failed => 'Submission failed';
+
+  @override
+  String get profile_error_first_name => 'First name is required.';
+
+  @override
+  String get profile_error_dob => 'Please select your date of birth.';
+
+  @override
+  String get profile_error_mobile => 'Mobile number is required.';
+
+  @override
+  String get profile_error_mobile_invalid => 'Please enter a valid 10-digit mobile number.';
+
+  @override
+  String get profile_error_married_brothers => 'Married brothers cannot exceed total brothers.';
+
+  @override
+  String get profile_error_married_sisters => 'Married sisters cannot exceed total sisters.';
+
+  @override
+  String get profile_web_photo_note => 'Photo uploads are only supported on the mobile app. Please use the Android or iOS app to upload your photos.';
+
+  @override
+  String get profile_error_first_name => 'First name is required.';
+  @override
+  String get profile_error_dob => 'Please select your date of birth.';
+  @override
+  String get profile_error_mobile => 'Mobile number is required.';
+  @override
+  String get profile_error_mobile_invalid => 'Please enter a valid 10-digit mobile number.';
+  @override
+  String get profile_error_married_brothers => 'Married brothers cannot exceed total brothers.';
+  @override
+  String get profile_error_married_sisters => 'Married sisters cannot exceed total sisters.';
+  @override
+  String get profile_web_photo_note => 'Photo uploads are only supported on the mobile app. Please use the Android or iOS app to upload your photos.';
 }

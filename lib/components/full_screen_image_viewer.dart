@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:active_matrimonial_flutter_app/components/my_images.dart';
 
 class FullScreenImageViewer extends StatelessWidget {
   const FullScreenImageViewer(this.url, {super.key});
@@ -25,7 +26,10 @@ class FullScreenImageViewer extends StatelessWidget {
         child: SizedBox(
           width: MediaQuery.of(context).size.width,
           height: MediaQuery.of(context).size.height,
-          child: Hero(tag: 'imageHero', child: Image.network(url!)),
+          child: Hero(
+            tag: 'imageHero',
+            child: MyImages.normalImage(url, fit: BoxFit.contain),
+          ),
         ),
       ),
     );

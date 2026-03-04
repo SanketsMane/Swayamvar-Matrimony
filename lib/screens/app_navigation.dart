@@ -8,11 +8,10 @@ import 'package:active_matrimonial_flutter_app/screens/chat/chat_list.dart';
 import 'package:active_matrimonial_flutter_app/screens/core.dart';
 import 'package:active_matrimonial_flutter_app/screens/home_pages/explore/explore.dart';
 import 'package:active_matrimonial_flutter_app/screens/home_pages/home/home.dart';
-import 'package:active_matrimonial_flutter_app/screens/home_pages/home_without_login.dart';
 import 'package:flutter/material.dart';
 
 import '../helpers/push_notification_service.dart';
-import '../helpers/shared_pref.dart';
+import '../helpers/push_notification_service.dart';
 import '../redux/store.dart';
 import '../widgets/custom_bottom_navbar.dart';
 
@@ -100,15 +99,13 @@ class _AppNavigationState extends State<AppNavigation> {
 
   Widget _buildBody() {
     if (_currentIndex == 0) {
-      return SharedPref().isLoggedIn ? Home() : const HomeWithoutLogin();
+      return Home();
     } else if (_currentIndex == 1) {
       return Explore();
     } else if (_currentIndex == 2) {
-      return SharedPref().isLoggedIn
-          ? ChatList(backButtonAppearance: false)
-          : const PhoneLogin();
+      return ChatList(backButtonAppearance: false);
     } else if (_currentIndex == 3) {
-      return SharedPref().isLoggedIn ? const Account() : const PhoneLogin();
+      return const Account();
     }
     return const SizedBox.shrink();
   }

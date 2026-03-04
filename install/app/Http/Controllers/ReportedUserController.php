@@ -13,6 +13,7 @@ class ReportedUserController extends Controller
     {
         $this->middleware(['permission:view_reported_profile'])->only('index', 'reported_members');
         $this->middleware(['permission:delete_profile_report'])->only('destroy');
+        $this->middleware(['permission:block_member'])->only('ban_user');
     }
 
     /**

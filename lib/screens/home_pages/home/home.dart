@@ -22,6 +22,7 @@ import 'package:active_matrimonial_flutter_app/helpers/main_helpers.dart';
 import 'package:active_matrimonial_flutter_app/screens/auth/verify/verify_action.dart';
 import 'package:active_matrimonial_flutter_app/screens/manage_profiles/manage_profile.dart';
 import 'package:active_matrimonial_flutter_app/screens/account/account_middleware.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:active_matrimonial_flutter_app/components/main_drawer.dart';
@@ -1371,7 +1372,11 @@ class _HomeState extends State<Home> {
       actions: [
         TextButton(
           onPressed: () {
-            Platform.isAndroid ? SystemNavigator.pop() : exit(0);
+            if (kIsWeb) {
+              Navigator.pop(context, false);
+            } else {
+              Platform.isAndroid ? SystemNavigator.pop() : exit(0);
+            }
           },
           child: Text('Yes', style: Styles.body),
         ),

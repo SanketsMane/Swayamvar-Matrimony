@@ -5,7 +5,7 @@
 	<key>CFBundleDevelopmentRegion</key>
 	<string>$(DEVELOPMENT_LANGUAGE)</string>
 	<key>CFBundleDisplayName</key>
-	<string>Active Matrimonial</string>
+	<string>Swayamvar Matrimoney</string>
 	<key>CFBundleExecutable</key>
 	<string>$(EXECUTABLE_NAME)</string>
 	<key>CFBundleIdentifier</key>
@@ -13,7 +13,7 @@
 	<key>CFBundleInfoDictionaryVersion</key>
 	<string>6.0</string>
 	<key>CFBundleName</key>
-	<string>Active Matrimonial</string>
+	<string>Swayamvar Matrimoney</string>
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
 	<key>CFBundleShortVersionString</key>
@@ -79,7 +79,11 @@
         <string>ppemerchantsdkv3</string>
         <string>paytmmp</string>
         <string>gpay</string>
-    </array>
-
+    <key>NSCameraUsageDescription</key>
+    <string>We need access to your camera to let you take and upload profile pictures.</string>
+    <key>NSPhotoLibraryUsageDescription</key>
+    <string>We need access to your photo library to let you select and upload profile pictures.</string>
+    <key>NSPhotoLibraryAddUsageDescription</key>
+    <string>We need access to save photos to your library.</string>
 </dict>
 </plist>

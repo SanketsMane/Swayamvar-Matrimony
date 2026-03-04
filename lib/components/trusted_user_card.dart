@@ -4,6 +4,7 @@ import '../const/const.dart';
 import '../const/my_theme.dart';
 import '../const/style.dart';
 import 'common_widget.dart';
+import 'my_images.dart';
 
 class TrustedUserCard extends StatelessWidget {
   final bool isFetching;
@@ -48,7 +49,10 @@ class TrustedUserCard extends StatelessWidget {
                             height: 38,
                             child:
                                 cardList[index].icon != null
-                                    ? Image.network(cardList[index].icon)
+                                    ? MyImages.normalImage(
+                                      cardList[index].icon,
+                                      fit: BoxFit.contain,
+                                    )
                                     : const Icon(
                                       Icons.error,
                                       color: Colors.white,

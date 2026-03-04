@@ -1,5 +1,4 @@
-import 'package:flutter/material.dart';
-
+import 'package:active_matrimonial_flutter_app/components/my_images.dart';
 import 'full_screen_image_viewer.dart';
 
 class GalleryViewCard extends StatelessWidget {
@@ -21,7 +20,7 @@ class GalleryViewCard extends StatelessWidget {
       },
       child: ClipRRect(
         borderRadius: const BorderRadius.all(Radius.circular(16.0)),
-        child: Image.network(imagePath!, fit: BoxFit.fill),
+        child: MyImages.normalImage(imagePath, fit: BoxFit.fill),
       ),
     );
   }

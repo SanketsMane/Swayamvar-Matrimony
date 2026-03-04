@@ -51,6 +51,11 @@
   "login_screen_email_helper_text": "नंबरच्या आधी कंट्री कोड वापरा",
   "login_text_sub_title": "तुमची लॉगिन माहिती प्रविष्ट करा",
   "login_screen_if_have_account": "खाते नाही का?",
+  "login_screen_get_otp": "ओटीपी मिळवा",
+  "login_screen_phone_subtitle": "तुमचा योग्य जीवनसाथी शोधा ❤️",
+  "login_screen_enter_phone": "सुरू करण्यासाठी तुमचा मोबाईल नंबर टाका",
+  "login_screen_continue_email": "ईमेल द्वारे सुरू ठेवा",
+  "login_screen_or": "किंवा",
   "login_text_title": "तुमच्या खात्यात लॉगिन करा",
   "login_screen_forget_password": "पासवर्ड विसरलात?",
   "login_screen_or_signup": "किंवा, यासह लॉगिन करा",
@@ -455,6 +460,13 @@
   "verify_error_id_number": "कृपया तुमचा आयडी क्रमांक प्रविष्ट करा",
   "verify_error_id_front": "कृपया आयडीची पुढची बाजू अपलोड करा",
   "verify_error_selfie": "कृपया सेल्फी अपलोड करा",
-  "verify_error_failed": "सबमिशन अयशस्वी झाले"
+  "verify_error_failed": "सबमिशन अयशस्वी झाले",
+  "profile_error_first_name": "पहिले नाव आवश्यक आहे.",
+  "profile_error_dob": "कृपया तुमची जन्मतारीख निवडा.",
+  "profile_error_mobile": "मोबाईल नंबर आवश्यक आहे.",
+  "profile_error_mobile_invalid": "कृपया वैध १०-अंकी मोबाईल नंबर प्रविष्ट करा.",
+  "profile_error_married_brothers": "विवाहित भाऊ एकूण भावांपेक्षा जास्त असू शकत नाहीत.",
+  "profile_error_married_sisters": "विवाहित बहिणी एकूण बहिणींपेक्षा जास्त असू शकत नाहीत.",
+  "profile_web_photo_note": "फोटो अपलोड केवळ मोबाईल अॅपवर समर्थित आहे. कृपया Android किंवा iOS अॅप वापरा."
 }
 

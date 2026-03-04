@@ -13,9 +13,14 @@ import 'package:active_matrimonial_flutter_app/screens/my_dashboard_pages/shortl
 import 'package:active_matrimonial_flutter_app/screens/package/premium_plans.dart';
 import 'package:active_matrimonial_flutter_app/screens/referral/referral.dart';
 import 'package:active_matrimonial_flutter_app/screens/settings/settings.dart';
+import 'dart:io';
+import 'package:active_matrimonial_flutter_app/custom/my_images_dialog.dart';
+import 'package:active_matrimonial_flutter_app/repository/manage_profile_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:active_matrimonial_flutter_app/l10n/app_localizations.dart';
 import 'package:active_matrimonial_flutter_app/helpers/profile_completeness_helper.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:active_matrimonial_flutter_app/custom/my_scaffold_messenger.dart';
 
 class Account extends StatefulWidget {
   const Account({super.key});
@@ -25,6 +30,56 @@ class Account extends StatefulWidget {
 }
 
 class _AccountState extends State<Account> {
+  final ImagePicker _picker = ImagePicker();
+  bool _isUploadingPhoto = false;
+
+  Future<void> _pickAndUploadImage() async {
+    try {
+      final XFile? image = await _picker.pickImage(source: ImageSource.gallery);
+      if (image == null) return;
+
+      setState(() {
+        _isUploadingPhoto = true;
+      });
+
+      File photoFile = File(image.path);
+      var response = await ManageProfileRepository().profilePictureUpdate(
+        photo: photoFile,
+      );
+
+      setState(() {
+        _isUploadingPhoto = false;
+      });
+
+      if (response.result!) {
+        // Refresh account and auth states to get new photo
+        store.dispatch(accountMiddleware());
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Profile picture updated successfully!'),
+            backgroundColor: Colors.green,
+          ),
+        );
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(response.message ?? 'Failed to update photo.'),
+            backgroundColor: Colors.red,
+          ),
+        );
+      }
+    } catch (e) {
+      if (mounted) {
+        setState(() {
+          _isUploadingPhoto = false;
+        });
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Error: $e'), backgroundColor: Colors.red),
+        );
+      }
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return StoreConnector<AppState, AppState>(
@@ -168,19 +223,52 @@ class _AccountState extends State<Account> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               // 80px Profile Image
-              Container(
-                height: 80,
-                width: 80,
-                decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  border: Border.all(
-                    color: MyTheme.primary.withOpacity(0.2),
-                    width: 2,
+              GestureDetector(
+                onTap: _pickAndUploadImage,
+                child: Container(
+                  height: 80,
+                  width: 80,
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    border: Border.all(
+                      color: MyTheme.primary.withOpacity(0.2),
+                      width: 2,
+                    ),
                   ),
-                ),
-                child: ClipRRect(
-                  borderRadius: BorderRadius.circular(40),
-                  child: MyImages.normalImage(profileData?.memberPhoto),
+                  child: Stack(
+                    children: [
+                      Positioned.fill(
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(40),
+                          child: MyImages.normalImage(profileData?.memberPhoto),
+                        ),
+                      ),
+                      if (_isUploadingPhoto)
+                        Center(
+                          child: const CircularProgressIndicator(
+                            color: MyTheme.primary,
+                          ),
+                        ),
+                      if (!_isUploadingPhoto)
+                        Positioned(
+                          right: 0,
+                          bottom: 0,
+                          child: Container(
+                            padding: const EdgeInsets.all(4),
+                            decoration: BoxDecoration(
+                              color: MyTheme.primary,
+                              shape: BoxShape.circle,
+                              border: Border.all(color: MyTheme.white, width: 2),
+                            ),
+                            child: const Icon(
+                              Icons.camera_alt,
+                              color: MyTheme.white,
+                              size: 14,
+                            ),
+                          ),
+                        ),
+                    ],
+                  ),
                 ),
               ),
               const SizedBox(width: 16),

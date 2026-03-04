@@ -5,7 +5,9 @@ class SignUpState {
   List? onBehalfList = [];
   bool? isCaptchaShowing;
   String? googleRecaptchaKey;
-  GlobalKey<FormState> signUpFormKey = GlobalKey<FormState>();
+  // Sanket: Critical — must be a single stable instance, never recreated.
+  // Recreating GlobalKey on every copyWith disconnects it from the mounted Form.
+  GlobalKey<FormState> signUpFormKey;
   TextEditingController? verificationCodeController;
   bool? isCodeSent;
   bool? isVerified;
@@ -14,6 +16,7 @@ class SignUpState {
   SignUpState({
     this.isLoading,
     this.onBehalfList,
+    required this.signUpFormKey,
     this.firstNameController,
     this.lastNameController,
     this.emailController,
@@ -82,33 +85,30 @@ class SignUpState {
     bool? isSendingCode,
     bool? isVerifyingCode,
   }) {
+    // Sanket: Reuse existing controllers if no new text is provided
+    // This prevents cursor-jumping and focus loss on every Redux state update
+    if (firstNameController != null) this.firstNameController?.text = firstNameController;
+    if (lastNameController != null) this.lastNameController?.text = lastNameController;
+    if (emailController != null) this.emailController?.text = emailController;
+    if (passwordController != null) this.passwordController?.text = passwordController;
+    if (confirmPasswordController != null) this.confirmPasswordController?.text = confirmPasswordController;
+    if (dobController != null) this.dobController?.text = dobController;
+    if (referController != null) this.referController?.text = referController;
+    if (genderController != null) this.genderController?.text = genderController;
+
     return SignUpState(
+      // Sanket: Preserve the same key instance — never create a new one
+      signUpFormKey: this.signUpFormKey,
       isLoading: isLoading ?? this.isLoading,
       onBehalfList: onBehalfList ?? this.onBehalfList,
-      firstNameController: TextEditingController(
-        text: firstNameController ?? this.firstNameController?.text,
-      ),
-      lastNameController: TextEditingController(
-        text: lastNameController ?? this.lastNameController?.text,
-      ),
-      emailController: TextEditingController(
-        text: emailController ?? this.emailController?.text,
-      ),
-      passwordController: TextEditingController(
-        text: passwordController ?? this.passwordController?.text,
-      ),
-      confirmPasswordController: TextEditingController(
-        text: confirmPasswordController ?? this.confirmPasswordController?.text,
-      ),
-      dobController: TextEditingController(
-        text: dobController ?? this.dobController?.text,
-      ),
-      referController: TextEditingController(
-        text: referController ?? this.referController?.text,
-      ),
-      genderController: TextEditingController(
-        text: genderController ?? this.genderController?.text,
-      ),
+      firstNameController: this.firstNameController,
+      lastNameController: this.lastNameController,
+      emailController: this.emailController,
+      passwordController: this.passwordController,
+      confirmPasswordController: this.confirmPasswordController,
+      dobController: this.dobController,
+      referController: this.referController,
+      genderController: this.genderController,
       phoneNumber: phoneNumber ?? this.phoneNumber,
       date: date ?? this.date,
       on_behalves_value: on_behalves_value ?? this.on_behalves_value,
@@ -132,6 +132,8 @@ class SignUpState {
       emailOrPhone = true,
       isCaptchaShowing = false,
       googleRecaptchaKey = "",
+      // Sanket: Create the key once here — never recreated after this
+      signUpFormKey = GlobalKey<FormState>(),
       onBehalfList = [],
       isLoading = false,
       verificationCodeController = TextEditingController(),

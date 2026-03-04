@@ -5,6 +5,7 @@ import '../const/style.dart';
 import '../redux/store.dart';
 import '../screens/payment_methods/payment_types_action.dart';
 import 'common_widget.dart';
+import 'my_images.dart';
 
 class PaymentCard extends StatelessWidget {
   final int? index;
@@ -83,7 +84,10 @@ class PaymentCard extends StatelessWidget {
                     height: 100,
                     child: Padding(
                       padding: const EdgeInsets.all(16.0),
-                      child: Image.network(image ?? "", fit: BoxFit.contain),
+                      child: MyImages.normalImage(
+                        image,
+                        fit: BoxFit.contain,
+                      ),
                     ),
                   ),
                   SizedBox(

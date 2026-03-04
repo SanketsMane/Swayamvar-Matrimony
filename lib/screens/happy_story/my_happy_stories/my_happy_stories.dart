@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:active_matrimonial_flutter_app/components/common_input.dart';
 import 'package:active_matrimonial_flutter_app/components/common_widget.dart';
+import 'package:active_matrimonial_flutter_app/components/my_images.dart';
 import 'package:active_matrimonial_flutter_app/const/my_theme.dart';
 import 'package:active_matrimonial_flutter_app/const/style.dart';
 import 'package:active_matrimonial_flutter_app/helpers/device_info.dart';
@@ -204,7 +205,7 @@ class _MyHappyStoriesState extends State<MyHappyStories> {
                 /// image
                 child: ClipRRect(
                   borderRadius: const BorderRadius.all(Radius.circular(16.0)),
-                  child: Image.network(
+                  child: MyImages.normalImage(
                     state.myHappyStoryState!.myHappyStory!.photos!.first,
                     fit: BoxFit.cover,
                   ),

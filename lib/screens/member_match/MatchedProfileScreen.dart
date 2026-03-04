@@ -12,7 +12,8 @@ import 'package:active_matrimonial_flutter_app/screens/user_pages/user_public_pr
 import 'package:flutter/material.dart';
 
 import '../../components/common_app_bar.dart';
-import '../../l10n/app_localizations.dart';
+import '../../components/my_images.dart';
+import 'package:active_matrimonial_flutter_app/l10n/app_localizations.dart';
 
 class MatchedProfileScreen extends StatefulWidget {
   const MatchedProfileScreen({super.key});
@@ -102,7 +103,7 @@ class _MatchedProfileScreenState extends State<MatchedProfileScreen> {
                 decoration: BoxDecoration(
                   borderRadius: const BorderRadius.all(Radius.circular(12)),
                   image: DecorationImage(
-                    image: NetworkImage(profile.photo ?? ""),
+                    image: MyImage.imageProvider(profile.photo),
                     fit: BoxFit.cover,
                   ),
                 ),

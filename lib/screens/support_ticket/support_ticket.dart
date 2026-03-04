@@ -489,13 +489,12 @@ class _SupportTicketState extends State<SupportTicket> {
                                             ? const AssetImage(
                                               'assets/images/default_avater.png',
                                             )
-                                            : NetworkImage(
-                                                  state
-                                                      .accountState!
-                                                      .profileData!
-                                                      .memberPhoto!,
-                                                )
-                                                as ImageProvider,
+                                            : MyImage.imageProvider(
+                                              state
+                                                  .accountState!
+                                                  .profileData!
+                                                  .memberPhoto,
+                                            ),
                                   ),
                                   const SizedBox(width: 10),
                                   Expanded(
