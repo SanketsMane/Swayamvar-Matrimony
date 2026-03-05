@@ -1,8 +1,8 @@
-import 'dart:io';
 import 'package:active_matrimonial_flutter_app/app_config.dart';
 import 'package:active_matrimonial_flutter_app/helpers/main_helpers.dart';
 import 'package:active_matrimonial_flutter_app/models_response/others/common_response.dart';
 import 'package:active_matrimonial_flutter_app/models_response/verification_form/verification_form_response.dart';
+import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
 
 class VerifyRepository {
@@ -26,9 +26,9 @@ class VerifyRepository {
   Future<CommonResponse> submitVerifyForm({
     required String idType,
     required String idNumber,
-    File? idFront,
-    File? idBack,
-    File? selfie,
+    dynamic idFront,
+    dynamic idBack,
+    dynamic selfie,
   }) async {
     try {
       var url = Uri.parse(
@@ -45,19 +45,43 @@ class VerifyRepository {
       request.fields['id_number'] = idNumber;
 
       if (idFront != null) {
-        request.files.add(
-          await http.MultipartFile.fromPath('id_front', idFront.path),
-        );
+        if (kIsWeb) {
+          request.files.add(http.MultipartFile.fromBytes(
+            'id_front',
+            await idFront.readAsBytes(),
+            filename: idFront.name,
+          ));
+        } else {
+          request.files.add(
+            await http.MultipartFile.fromPath('id_front', idFront.path),
+          );
+        }
       }
       if (idBack != null) {
-        request.files.add(
-          await http.MultipartFile.fromPath('id_back', idBack.path),
-        );
+        if (kIsWeb) {
+          request.files.add(http.MultipartFile.fromBytes(
+            'id_back',
+            await idBack.readAsBytes(),
+            filename: idBack.name,
+          ));
+        } else {
+          request.files.add(
+            await http.MultipartFile.fromPath('id_back', idBack.path),
+          );
+        }
       }
       if (selfie != null) {
-        request.files.add(
-          await http.MultipartFile.fromPath('selfie', selfie.path),
-        );
+        if (kIsWeb) {
+          request.files.add(http.MultipartFile.fromBytes(
+            'selfie',
+            await selfie.readAsBytes(),
+            filename: selfie.name,
+          ));
+        } else {
+          request.files.add(
+            await http.MultipartFile.fromPath('selfie', selfie.path),
+          );
+        }
       }
 
       var streamedResponse = await request.send();

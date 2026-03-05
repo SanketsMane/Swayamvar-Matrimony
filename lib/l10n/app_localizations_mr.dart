@@ -1534,7 +1534,13 @@ class AppLocalizationsMr extends AppLocalizations {
   String get profile_label_disability => 'शारीरिक अपंगत्व';
 
   @override
+  String get profile_physical_disability => 'शारीरिक अपंगत्व';
+
+  @override
   String get profile_label_disability_details => 'अपंगत्वाचा तपशील';
+
+  @override
+  String get profile_disability_details => 'अपंगत्वाचा तपशील';
 
   @override
   String get profile_label_diet => 'आहार';
@@ -2279,21 +2285,6 @@ class AppLocalizationsMr extends AppLocalizations {
   @override
   String get profile_error_married_sisters => 'विवाहित बहिणी एकूण बहिणींपेक्षा जास्त असू शकत नाहीत.';
 
-  @override
-  String get profile_web_photo_note => 'फोटो अपलोड केवळ मोबाईल अॅपवर समर्थित आहे. कृपया Android किंवा iOS अॅप वापरा.';
-
-  @override
-  String get profile_error_first_name => 'पहिले नाव आवश्यक आहे.';
-  @override
-  String get profile_error_dob => 'कृपया तुमची जन्मतारीख निवडा.';
-  @override
-  String get profile_error_mobile => 'मोबाईल नंबर आवश्यक आहे.';
-  @override
-  String get profile_error_mobile_invalid => 'कृपया वैध १०-अंकी मोबाईल नंबर प्रविष्ट करा.';
-  @override
-  String get profile_error_married_brothers => 'विवाहित भाऊ एकूण भावांपेक्षा जास्त असू शकत नाहीत.';
-  @override
-  String get profile_error_married_sisters => 'विवाहित बहिणी एकूण बहिणींपेक्षा जास्त असू शकत नाहीत.';
   @override
   String get profile_web_photo_note => 'फोटो अपलोड केवळ मोबाईल अॅपवर समर्थित आहे. कृपया Android किंवा iOS अॅप वापरा.';
 }

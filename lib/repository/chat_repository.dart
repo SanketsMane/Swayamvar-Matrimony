@@ -1,8 +1,8 @@
-
 import 'package:active_matrimonial_flutter_app/app_config.dart';
 import 'package:active_matrimonial_flutter_app/models_response/chat/chat_details_response.dart';
 import 'package:active_matrimonial_flutter_app/models_response/chat/chat_response.dart';
 import 'package:active_matrimonial_flutter_app/models_response/others/common_response.dart';
+import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
 
 import '../helpers/shared_pref.dart';
@@ -16,7 +16,6 @@ class ChatRepository {
       Uri.parse(baseUrl),
       headers: {
         "Accept": "application/json",
-        "Content-Type": "application/json",
         "Authorization": "Bearer $accessToken",
       },
     );
@@ -35,7 +34,6 @@ class ChatRepository {
       Uri.parse(baseUrl),
       headers: {
         "Accept": "application/json",
-        "Content-Type": "application/json",
         "Authorization": "Bearer $accessToken",
       },
     );
@@ -60,12 +58,30 @@ class ChatRepository {
     if (attachment != null) {
       if (attachment is List) {
         for (var file in attachment) {
-          var pic = await http.MultipartFile.fromPath("attachment[]", file.path);
-          request.files.add(pic);
+          if (kIsWeb) {
+            request.files.add(http.MultipartFile.fromBytes(
+              "attachment[]",
+              await file.readAsBytes(),
+              filename: file.name,
+            ));
+          } else {
+            var pic =
+                await http.MultipartFile.fromPath("attachment[]", file.path);
+            request.files.add(pic);
+          }
         }
       } else {
-        var pic = await http.MultipartFile.fromPath("attachment[]", attachment.path);
-        request.files.add(pic);
+        if (kIsWeb) {
+          request.files.add(http.MultipartFile.fromBytes(
+            "attachment[]",
+            await attachment.readAsBytes(),
+            filename: attachment.name,
+          ));
+        } else {
+          var pic = await http.MultipartFile.fromPath(
+              "attachment[]", attachment.path);
+          request.files.add(pic);
+        }
       }
     }
 

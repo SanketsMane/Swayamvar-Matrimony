@@ -26,8 +26,8 @@ class BasicSearchState {
   // Sanket: Extended filter persistence
   double? minAge;
   double? maxAge;
-  double? minHeight;
-  double? maxHeight;
+  String? minHeight;
+  String? maxHeight;
   List<String>? quickFilters;
   String? searchText;
   String? diet;
@@ -49,8 +49,8 @@ class BasicSearchState {
   bool get isFilterActive {
     return (minAge != null && minAge != 21) ||
         (maxAge != null && maxAge != 40) ||
-        (minHeight != null && minHeight != 5.0) ||
-        (maxHeight != null && maxHeight != 6.2) ||
+        (minHeight != null && minHeight != "5.0") ||
+        (maxHeight != null && maxHeight != "6.2") ||
         (religion_value != null) ||
         (marital_status_value != null) ||
         (country_value != null) ||
@@ -70,6 +70,74 @@ class BasicSearchState {
         (isDisabled == true) ||
         (hasPhoto == true) ||
         (recentlyJoined == true);
+  }
+
+  BasicSearchState copyWith({
+    bool? isFetching,
+    List? searchList,
+    String? error,
+    CasteResponse? casteResponse,
+    SubcasteResponse? subcasteResponse,
+    StateResponse? stateResponse,
+    CityResponse? cityResponse,
+    dynamic religion_value,
+    dynamic caste_value,
+    dynamic sub_caste_value,
+    dynamic country_value,
+    dynamic state_value,
+    dynamic city_value,
+    dynamic mother_tongue,
+    dynamic marital_status_value,
+    double? minAge,
+    double? maxAge,
+    String? minHeight,
+    String? maxHeight,
+    List<String>? quickFilters,
+    String? searchText,
+    String? diet,
+    String? smoking,
+    String? drinking,
+    dynamic education,
+    dynamic income,
+    bool? isManglik,
+    bool? isIntercaste,
+    bool? isDisabled,
+    bool? hasPhoto,
+    bool? recentlyJoined,
+    bool? search_loader,
+  }) {
+    return BasicSearchState(
+      isFetching: isFetching ?? this.isFetching,
+      searchList: searchList ?? this.searchList,
+      error: error ?? this.error,
+      casteResponse: casteResponse ?? this.casteResponse,
+      subcasteResponse: subcasteResponse ?? this.subcasteResponse,
+      stateResponse: stateResponse ?? this.stateResponse,
+      cityResponse: cityResponse ?? this.cityResponse,
+      minAge: minAge ?? this.minAge,
+      maxAge: maxAge ?? this.maxAge,
+      quickFilters: quickFilters ?? this.quickFilters,
+      diet: diet ?? this.diet,
+      smoking: smoking ?? this.smoking,
+      drinking: drinking ?? this.drinking,
+      searchText: searchText ?? this.searchText,
+      education: education ?? this.education,
+      income: income ?? this.income,
+      isManglik: isManglik ?? this.isManglik,
+      isIntercaste: isIntercaste ?? this.isIntercaste,
+      isDisabled: isDisabled ?? this.isDisabled,
+      hasPhoto: hasPhoto ?? this.hasPhoto,
+      recentlyJoined: recentlyJoined ?? this.recentlyJoined,
+    )
+      ..religion_value = religion_value ?? this.religion_value
+      ..caste_value = caste_value ?? this.caste_value
+      ..sub_caste_value = sub_caste_value ?? this.sub_caste_value
+      ..country_value = country_value ?? this.country_value
+      ..state_value = state_value ?? this.state_value
+      ..city_value = city_value ?? this.city_value
+      ..mother_tongue = mother_tongue ?? this.mother_tongue
+      ..marital_status_value = marital_status_value ?? this.marital_status_value
+      ..search_loader = search_loader ?? this.search_loader;
   }
 
   BasicSearchState({

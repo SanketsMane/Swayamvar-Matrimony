@@ -150,9 +150,11 @@ class _ExploreState extends State<Explore> {
             vm.isFilterActive || _searchController.text.isNotEmpty;
         final searchResults = vm.searchList ?? [];
 
+        // Sanket: Use filtered results in the Reels PageView if searching
+        final displayMembers = isSearching ? searchResults : uniqueMembers;
+
         double headerOffset = 0.0;
         if (_pageController.hasClients) {
-          // Increased offset to 300.0 to ensure App Bar + Active Now are fully hidden
           headerOffset = -(_pageController.offset).clamp(0.0, 300.0);
         }
 
@@ -180,62 +182,40 @@ class _ExploreState extends State<Explore> {
               child: Stack(
                 children: [
                   // Layer 1: The Reels (PageView)
-                  if (uniqueMembers.isEmpty)
+                  if (displayMembers.isEmpty)
                     _buildEmptyState(context)
                   else
                     PageView.builder(
                       controller: _pageController,
                       scrollDirection: Axis.vertical,
-                      itemCount: uniqueMembers.length,
+                      itemCount: displayMembers.length,
                       itemBuilder: (context, index) {
                         return _buildReelMatchCard(
                           context,
-                          uniqueMembers[index],
+                          displayMembers[index],
                           vm,
                         );
                       },
                     ),
 
                   // Layer 2: The Sliding Header (App Bar + Active Now)
-                  if (!isSearching)
-                    Positioned(
-                      top: headerOffset,
-                      left: 0,
-                      right: 0,
-                      child: Container(
-                        color: MyTheme.white, // Opaque background
-                        child: Column(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            _buildHeader(context, vm),
-                            if (activeNowMatches.isNotEmpty)
-                              _buildActiveNow(context, activeNowMatches),
-                          ],
-                        ),
+                  // Sanket: Only show if NOT searching or if header offset allows
+                  // Actually, user wants to see the header to exit search
+                  Positioned(
+                    top: headerOffset,
+                    left: 0,
+                    right: 0,
+                    child: Container(
+                      color: MyTheme.white, // Opaque background
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          _buildHeader(context, vm),
+                          // Sanket: Active Now removed as requested
+                        ],
                       ),
                     ),
-
-                  // Layer 3: Search Results Overlay (If searching)
-                  if (isSearching)
-                    Positioned.fill(
-                      child: Container(
-                        color: MyTheme.background,
-                        child: Column(
-                          children: [
-                            _buildHeader(context, vm),
-                            Expanded(
-                              child: SingleChildScrollView(
-                                child: _buildFilteredGrid(
-                                  context,
-                                  searchResults,
-                                  vm,
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
+                  ),
                 ],
               ),
             ),
@@ -378,6 +358,7 @@ class _ExploreState extends State<Explore> {
     );
   }
 
+  // ignore: unused_element
   Widget _buildTopMatches(List<MemberData> matches, ExploreViewModel vm) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -575,6 +556,7 @@ class _ExploreState extends State<Explore> {
     );
   }
 
+  // ignore: unused_element
   Widget _buildNearbyMatches(List<MemberData> matches) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -660,98 +642,7 @@ class _ExploreState extends State<Explore> {
     );
   }
 
-  Widget _buildActiveNow(BuildContext context, List<MemberData> matches) {
-    return Theme(
-      data: Theme.of(context).copyWith(dividerColor: Colors.transparent),
-      child: ExpansionTile(
-        tilePadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 0),
-        dense: true,
-        visualDensity: const VisualDensity(horizontal: 0, vertical: -4.0),
-        title: Text(
-          "🟢 ${AppLocalizations.of(context)!.explore_active_now} (${matches.length})",
-          style: Styles.bold_arsenic_12.copyWith(
-            fontSize: 14,
-            color: MyTheme.text_primary,
-            letterSpacing: 0.2,
-          ),
-        ),
-        childrenPadding: const EdgeInsets.only(bottom: 12),
-        children: [
-          SizedBox(
-            height: 90,
-            child: ListView.builder(
-              padding: const EdgeInsets.symmetric(horizontal: 14),
-              scrollDirection: Axis.horizontal,
-              physics: const BouncingScrollPhysics(),
-              itemCount: matches.length,
-              itemBuilder: (ctx, idx) {
-                final m = matches[idx];
-                return GestureDetector(
-                  onTap:
-                      () => AIZRoute.push(
-                        context,
-                        UserPublicProfile(userId: m.userId ?? 0),
-                      ),
-                  child: Padding(
-                    padding: const EdgeInsets.only(right: 14),
-                    child: Column(
-                      children: [
-                        Stack(
-                          children: [
-                            Container(
-                              width: 58,
-                              height: 58,
-                              decoration: BoxDecoration(
-                                shape: BoxShape.circle,
-                                border: Border.all(
-                                  color: MyTheme.primary.withOpacity(0.1),
-                                  width: 1.5,
-                                ),
-                                image: DecorationImage(
-                                  image: MyImage.imageProvider(m.photo),
-                                  fit: BoxFit.cover,
-                                ),
-                              ),
-                            ),
-                            Positioned(
-                              bottom: 0,
-                              right: 0,
-                              child: Container(
-                                width: 12,
-                                height: 12,
-                                decoration: BoxDecoration(
-                                  color: const Color(0xFF1CB14D),
-                                  shape: BoxShape.circle,
-                                  border: Border.all(
-                                    color: MyTheme.white,
-                                    width: 2,
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                        const SizedBox(height: 6),
-                        Text(
-                          "${AppLocalizations.of(ctx)!.explore_active_ago} ${idx * 5 + 1}m",
-                          style: const TextStyle(
-                            fontFamily: 'Mukta',
-                            fontSize: 10,
-                            fontWeight: FontWeight.w500,
-                            color: Color(0xFF6B7280),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                );
-              },
-            ),
-          ),
-        ],
-      ),
-    );
-  }
+  // Sanket: _buildActiveNow removed as requested
 
   Widget _buildReelMatchCard(
     BuildContext context,
@@ -956,6 +847,7 @@ class _ExploreState extends State<Explore> {
     );
   }
 
+  // ignore: unused_element
   Widget _buildNewMatchesGrid(List<MemberData> matches) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,

@@ -4,6 +4,7 @@ import 'package:active_matrimonial_flutter_app/const/style.dart';
 import 'package:active_matrimonial_flutter_app/redux/libs/drop_down/caste_middleware.dart';
 import 'package:active_matrimonial_flutter_app/redux/libs/drop_down/city_middleware.dart';
 import 'package:active_matrimonial_flutter_app/redux/libs/drop_down/state_middleware.dart';
+import 'package:active_matrimonial_flutter_app/redux/libs/drop_down/profile_dropdown_middleware.dart';
 import 'package:active_matrimonial_flutter_app/screens/core.dart';
 import 'package:active_matrimonial_flutter_app/screens/search_screens/search_middleware.dart';
 import 'package:active_matrimonial_flutter_app/screens/search_screens/search_action.dart';
@@ -22,7 +23,8 @@ class AdvancedSearch extends StatefulWidget {
 class _AdvancedSearchState extends State<AdvancedSearch> {
   // Selection States
   RangeValues _ageRange = const RangeValues(21, 40);
-  RangeValues _heightRange = const RangeValues(5.0, 6.2);
+  String _minHeight = "5.0";
+  String _maxHeight = "6.2";
 
   List<String> _selectedQuickFilters = [];
   dynamic _religion_id;
@@ -44,10 +46,8 @@ class _AdvancedSearchState extends State<AdvancedSearch> {
     super.initState();
     final searchState = store.state.basicSearchState!;
     _ageRange = RangeValues(searchState.minAge ?? 21, searchState.maxAge ?? 40);
-    _heightRange = RangeValues(
-      searchState.minHeight ?? 5.0,
-      searchState.maxHeight ?? 6.2,
-    );
+    _minHeight = searchState.minHeight ?? "5.0";
+    _maxHeight = searchState.maxHeight ?? "6.2";
     _selectedQuickFilters = List.from(searchState.quickFilters ?? []);
 
     // Map state to local variables (Fallback to SharedPrefs if app restarted)
@@ -65,12 +65,23 @@ class _AdvancedSearchState extends State<AdvancedSearch> {
     _hasPhoto = searchState.hasPhoto ?? false;
     _recentlyJoined = searchState.recentlyJoined ?? false;
 
-    // Trigger dependent data fetching
-    if (_religion_id != null && _religion_id is int) {
-      store.dispatch(casteMiddleware(_religion_id));
+    // Sanket: Ensure initial data is fetched (Religions and States for India/99)
+    if (store.state.manageProfileCombineState?.profiledropdownResponseData?.data?.religionList == null || 
+        store.state.manageProfileCombineState!.profiledropdownResponseData!.data!.religionList!.isEmpty) {
+      store.dispatch(profiledropdownMiddleware());
     }
-    // Sanket: Auto-fetch states if none selected (assuming India/Maharashtra context)
-    if (_state_value != null && _state_value is int) {
+
+    if (store.state.basicSearchState?.stateResponse?.data == null || 
+        store.state.basicSearchState!.stateResponse!.data!.isEmpty) {
+      // Fetching states for India (99) by default as it's the primary market
+      store.dispatch(stateMiddleware(99, state: AppStates.advancedSearch));
+    }
+
+    // Trigger dependent data fetching for pre-selected values
+    if (_religion_id != null) {
+      store.dispatch(casteMiddleware(_religion_id, state: AppStates.advancedSearch));
+    }
+    if (_state_value != null) {
       store.dispatch(cityMiddleware(_state_value, AppStates.advancedSearch));
     }
   }
@@ -84,7 +95,8 @@ class _AdvancedSearchState extends State<AdvancedSearch> {
   void _handleReset() {
     setState(() {
       _ageRange = const RangeValues(21, 40);
-      _heightRange = const RangeValues(5.0, 6.2);
+      _minHeight = "5.0";
+      _maxHeight = "6.2";
       _selectedQuickFilters = [];
       _religion_id = null;
       _marital_status_value = null;
@@ -147,8 +159,8 @@ class _AdvancedSearchState extends State<AdvancedSearch> {
         caste: _caste_value,
         state: _state_value,
         city: _city_value,
-        minHeight: _heightRange.start.toString(),
-        maxHeight: _heightRange.end.toString(),
+        minHeight: _minHeight,
+        maxHeight: _maxHeight,
         education: _education_value,
         income: _income_value,
         manglik: _isManglik ? 1 : 0,
@@ -313,10 +325,10 @@ class _AdvancedSearchState extends State<AdvancedSearch> {
           ),
           const SizedBox(height: 12),
 
-          // State
+          // State -> District (जिल्हा)
           _dropdownWithId(
             context,
-            AppLocalizations.of(context)!.advanced_search_screen_state,
+            "जिल्हा (District)",
             _state_value,
             state.basicSearchState?.stateResponse?.data ?? [],
             (id) {
@@ -377,34 +389,45 @@ class _AdvancedSearchState extends State<AdvancedSearch> {
   }
 
   Widget _buildHeightRange(BuildContext context) {
+    // Shared list of options for min/max
+    final heightOptions = [
+      '4.0', '4.1', '4.2', '4.3', '4.4', '4.5', '4.6', '4.7', '4.8', '4.9', '4.10', '4.11',
+      '5.0', '5.1', '5.2', '5.3', '5.4', '5.5', '5.6', '5.7', '5.8', '5.9', '5.10', '5.11',
+      '6.0', '6.1', '6.2', '6.3', '6.4', '6.5', '6.6', '6.7', '6.8', '6.9', '6.10', '6.11',
+      '7.0'
+    ];
+
     return _filterCard(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
+          Text(
+            "उंचीची श्रेणी",
+            style: Styles.body.copyWith(fontWeight: FontWeight.w600),
+          ),
+          const SizedBox(height: 12),
           Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text(
-                "उंचीची श्रेणी",
-                style: Styles.body.copyWith(fontWeight: FontWeight.w600),
+              Expanded(
+                child: _dropdownInput(
+                  context,
+                  "किमान (Min)",
+                  _minHeight,
+                  heightOptions,
+                  (val) => setState(() => _minHeight = val),
+                ),
               ),
-              Text(
-                "${_heightRange.start.toStringAsFixed(1)} - ${_heightRange.end.toStringAsFixed(1)} फूट",
-                style: Styles.body.copyWith(
-                  color: MyTheme.primary,
-                  fontWeight: FontWeight.bold,
+              const SizedBox(width: 16),
+              Expanded(
+                child: _dropdownInput(
+                  context,
+                  "कमाल (Max)",
+                  _maxHeight,
+                  heightOptions,
+                  (val) => setState(() => _maxHeight = val),
                 ),
               ),
             ],
-          ),
-          RangeSlider(
-            values: _heightRange,
-            min: 4.0,
-            max: 7.5,
-            divisions: 35,
-            activeColor: MyTheme.primary,
-            inactiveColor: MyTheme.solitude,
-            onChanged: (val) => setState(() => _heightRange = val),
           ),
         ],
       ),

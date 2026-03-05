@@ -211,35 +211,21 @@ class PackageCard extends StatelessWidget {
                                         ),
                                 child: InkWell(
                                   onTap: () {
-                                    // First, check if the user is logged in.
+                                    // Sanket: Approval status does NOT gate purchases.
+                                    // Only require login; any registered user can buy a package.
                                     if (SharedPref().isLoggedIn) {
-                                      // If logged in, check if their account is approved.
-                                      if (!store
-                                          .state
-                                          .userVerifyState!
-                                          .isApprove!) {
-                                        store.dispatch(
-                                          ShowMessageAction(
-                                            msg: "Please verify your account",
-                                            color: MyTheme.failure,
+                                      if (packageList![index].packageId != 1) {
+                                        NavigatorPush.push(
+                                          context,
+                                          Payment(
+                                            payment_type: "package_payment",
+                                            title: "Package Payment",
+                                            amount: packageList![index].price
+                                                .toDouble(),
+                                            package_id:
+                                                packageList![index].packageId,
                                           ),
                                         );
-                                      } else {
-                                        if (packageList![index].packageId !=
-                                            1) {
-                                          NavigatorPush.push(
-                                            context,
-                                            Payment(
-                                              payment_type: "package_payment",
-                                              title: "Package Payment",
-                                              amount:
-                                                  packageList![index].price
-                                                      .toDouble(),
-                                              package_id:
-                                                  packageList![index].packageId,
-                                            ),
-                                          );
-                                        }
                                       }
                                     } else {
                                       CustomPopUp(context).loginDialog(context);

@@ -1,3 +1,4 @@
+import 'package:active_matrimonial_flutter_app/components/common_widget.dart';
 import 'package:active_matrimonial_flutter_app/components/common_app_bar.dart';
 import 'package:active_matrimonial_flutter_app/components/my_images.dart';
 import 'package:active_matrimonial_flutter_app/const/my_theme.dart';
@@ -22,19 +23,9 @@ class _IgnoreState extends State<Ignore> {
   @override
   void initState() {
     super.initState();
-
-    if (!store.state.userVerifyState!.isApprove!) {
-      OneContext().pop();
-      store.dispatch(
-        ShowMessageAction(
-          msg: "Please verify your account",
-          color: MyTheme.failure,
-        ),
-      );
-    } else {
-      store.dispatch(Reset.ignoreList);
-      store.dispatch(ignoreMiddleware());
-    }
+    // Sanket: Approval status does NOT gate app access — any registered user can use the app.
+    store.dispatch(Reset.ignoreList);
+    store.dispatch(ignoreMiddleware());
     scrollController.addListener(() {
       if (scrollController.position.maxScrollExtent ==
           scrollController.offset) {

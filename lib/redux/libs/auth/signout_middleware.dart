@@ -3,8 +3,7 @@ import 'package:active_matrimonial_flutter_app/helpers/get_context.dart';
 import 'package:active_matrimonial_flutter_app/helpers/navigator_push.dart';
 import 'package:active_matrimonial_flutter_app/redux/app/app_state.dart';
 import 'package:active_matrimonial_flutter_app/repository/auth_repository.dart';
-import 'package:active_matrimonial_flutter_app/screens/app_navigation.dart';
-import 'package:active_matrimonial_flutter_app/screens/auth/signin/phone_login.dart';
+
 import 'package:active_matrimonial_flutter_app/screens/startup_pages/landing_page/landing_page.dart';
 import 'package:flutter/material.dart';
 import 'package:redux/redux.dart';

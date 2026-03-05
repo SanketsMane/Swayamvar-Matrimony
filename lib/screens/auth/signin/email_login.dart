@@ -12,6 +12,7 @@ import 'package:active_matrimonial_flutter_app/components/social_login_widget.da
 import 'package:active_matrimonial_flutter_app/helpers/main_helpers.dart';
 import 'package:active_matrimonial_flutter_app/redux/libs/staticPage/static_page.dart';
 import 'package:active_matrimonial_flutter_app/screens/auth/signin/signin_reducer.dart';
+import 'package:active_matrimonial_flutter_app/l10n/app_localizations.dart';
 
 class EmailLogin extends StatefulWidget {
   const EmailLogin({super.key});
@@ -64,14 +65,16 @@ class _EmailLoginState extends State<EmailLogin> {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             const SizedBox(height: 64),
-            Image.asset(
-              'assets/logo/app_logo.png',
-              height: 80,
-              color: primaryColor,
+            ColorFiltered(
+              colorFilter: ColorFilter.mode(primaryColor, BlendMode.srcIn),
+              child: Image.asset(
+                'assets/logo/app_logo.png',
+                height: 80,
+              ),
             ),
             const SizedBox(height: 16),
             Text(
-              'तुमचा योग्य जीवनसाथी शोधा ❤️',
+              AppLocalizations.of(context)!.login_screen_phone_subtitle,
               style: Styles.body.copyWith(color: textSecondary),
             ),
             const SizedBox(height: 40),
@@ -83,7 +86,7 @@ class _EmailLoginState extends State<EmailLogin> {
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 12.0),
                   child: Text(
-                    'किंवा', // OR
+                    AppLocalizations.of(context)!.login_screen_or,
                     style: Styles.body.copyWith(color: textSecondary),
                   ),
                 ),
@@ -95,7 +98,7 @@ class _EmailLoginState extends State<EmailLogin> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Text(
-                  "खाते नाही का? ", // Don't have an account?
+                  AppLocalizations.of(context)!.login_screen_if_have_account,
                   style: Styles.body.copyWith(color: textSecondary),
                 ),
                 TextButton(
@@ -103,7 +106,7 @@ class _EmailLoginState extends State<EmailLogin> {
                       () => Navigator.push(
                         context,
                         MaterialPageRoute(builder: (context) => const SignUp()),
-                      ), // Register/Sign Up
+                      ),
                   style: TextButton.styleFrom(
                     foregroundColor: primaryColor,
                     textStyle: Styles.buttonText.copyWith(
@@ -111,7 +114,7 @@ class _EmailLoginState extends State<EmailLogin> {
                       fontSize: 15,
                     ),
                   ),
-                  child: const Text('नोंदणी करा'),
+                  child: Text(AppLocalizations.of(context)!.login_screen_signup),
                 ),
               ],
             ),
@@ -119,7 +122,7 @@ class _EmailLoginState extends State<EmailLogin> {
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 24.0),
               child: Text(
-                'सुरू ठेवून तुम्ही अटी आणि गोपनीयता धोरणाशी सहमत आहात', // Terms & Privacy
+                '${AppLocalizations.of(context)!.signup_screen_terms_part1} ${AppLocalizations.of(context)!.signup_screen_terms_part2} ${AppLocalizations.of(context)!.signup_screen_terms_part3} ${AppLocalizations.of(context)!.signup_screen_terms_part4}',
                 textAlign: TextAlign.center,
                 style: Styles.caption.copyWith(color: textSecondary),
               ),
@@ -155,14 +158,14 @@ class _EmailLoginState extends State<EmailLogin> {
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           Text(
-            'लॉगिन करा', // Sign In
+            AppLocalizations.of(context)!.login_button_text,
             textAlign: TextAlign.center,
             style: Styles.h2.copyWith(fontSize: 20, color: textPrimary),
           ),
           const SizedBox(height: 24),
           _buildInputField(
             controller: state.signInState!.emailController!,
-            hint: "ईमेल किंवा मोबाईल नंबर", // Email or Mobile Number
+            hint: AppLocalizations.of(context)!.common_email_or_phone,
             icon: Icons.person_outline,
           ),
           const SizedBox(height: 16),
@@ -178,7 +181,7 @@ class _EmailLoginState extends State<EmailLogin> {
                     ),
                   ),
               child: Text(
-                "पासवर्ड विसरलात?", // Forgot Password?
+                AppLocalizations.of(context)!.login_screen_forget_password,
                 style: Styles.buttonText.copyWith(
                   fontSize: 13,
                   color: primaryColor,
@@ -188,13 +191,29 @@ class _EmailLoginState extends State<EmailLogin> {
             ),
           ),
           const SizedBox(height: 20),
-          SizedBox(
+          Container(
             height: 52,
+            decoration: BoxDecoration(
+              gradient: state.signInState!.isLogin == false ? Styles.primaryGradient : null,
+              borderRadius: BorderRadius.circular(12),
+              color: state.signInState!.isLogin == false ? null : primaryColor.withOpacity(0.5),
+              boxShadow: state.signInState!.isLogin == false ? [
+                BoxShadow(
+                  color: primaryColor.withOpacity(0.3),
+                  blurRadius: 12,
+                  offset: const Offset(0, 4),
+                )
+              ] : [],
+            ),
             child: ElevatedButton(
               onPressed:
-                  () => store.dispatch(LoginRequest(payloadContext: context)),
+                  state.signInState!.isLogin == false
+                      ? () => store.dispatch(LoginRequest(payloadContext: context))
+                      : null,
               style: ElevatedButton.styleFrom(
-                backgroundColor: primaryColor,
+                backgroundColor: Colors.transparent,
+                shadowColor: Colors.transparent,
+                disabledBackgroundColor: Colors.transparent,
                 foregroundColor: Colors.white,
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(12),
@@ -204,7 +223,7 @@ class _EmailLoginState extends State<EmailLogin> {
               child:
                   state.signInState!.isLogin == false
                       ? Text(
-                        'लॉगिन करा',
+                        AppLocalizations.of(context)!.login_button_text,
                         style: Styles.buttonText.copyWith(
                           fontSize: 16,
                           fontWeight: FontWeight.w700,

@@ -32,20 +32,11 @@ class _UserPublicProfileState extends State<UserPublicProfile> {
   }
 
   void _fetchData() {
-    if (!store.state.userVerifyState!.isApprove!) {
-      OneContext().pop();
-      store.dispatch(
-        ShowMessageAction(
-          msg: "Please verify your account",
-          color: MyTheme.failure,
-        ),
-      );
-    } else {
-      store.dispatch(Reset.publicProfile);
-      store.dispatch(publicProfileMiddleware(userId: widget.userId));
-      store.dispatch(Reset.memberInfo);
-      store.dispatch(memberInfoMiddleware(userId: widget.userId));
-    }
+    // Sanket: Approval status does NOT gate app access — any registered user can view profiles.
+    store.dispatch(Reset.publicProfile);
+    store.dispatch(publicProfileMiddleware(userId: widget.userId));
+    store.dispatch(Reset.memberInfo);
+    store.dispatch(memberInfoMiddleware(userId: widget.userId));
   }
 
   @override
@@ -278,31 +269,32 @@ class _UserPublicProfileState extends State<UserPublicProfile> {
         ),
 
         // Verified Badge overlay
-        Positioned(
-          top: MediaQuery.of(context).padding.top + 16,
-          right: 70,
-          child: Container(
-            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
-            decoration: BoxDecoration(
-              color: MyTheme.success.withOpacity(0.9),
-              borderRadius: BorderRadius.circular(20),
-            ),
-            child: const Row(
-              children: [
-                Icon(Icons.verified, color: Colors.white, size: 14),
-                SizedBox(width: 4),
-                Text(
-                  "पडताळणी केलेले",
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 11,
-                    fontWeight: FontWeight.bold,
+        if (basic?.approved == 1)
+          Positioned(
+            top: MediaQuery.of(context).padding.top + 16,
+            right: 70,
+            child: Container(
+              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+              decoration: BoxDecoration(
+                color: MyTheme.success.withOpacity(0.9),
+                borderRadius: BorderRadius.circular(20),
+              ),
+              child: const Row(
+                children: [
+                  Icon(Icons.verified, color: Colors.white, size: 14),
+                  SizedBox(width: 4),
+                  Text(
+                    "पडताळणी केलेले",
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 11,
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
           ),
-        ),
 
         // Name, Age, Location & Compatibility Bottom Overlay
         Positioned(
@@ -714,6 +706,10 @@ class _UserPublicProfileState extends State<UserPublicProfile> {
                           userId: widget.userId,
                           name: state.publicProfileState!.basic?.firsName,
                           picture: state.publicProfileState!.basic?.photo,
+                          age: state.publicProfileState!.basic?.age?.toString(),
+                          isVerified:
+                              state.publicProfileState!.basic?.approved == 1,
+                          phone: state.publicProfileState!.basic?.phone,
                         ),
                   ),
                 );

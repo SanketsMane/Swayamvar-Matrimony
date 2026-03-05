@@ -1,5 +1,7 @@
 import 'package:active_matrimonial_flutter_app/models_response/drop_down/caste.dart';
 import 'package:active_matrimonial_flutter_app/models_response/drop_down/subcaste.dart';
+import 'package:active_matrimonial_flutter_app/models_response/drop_down/state.dart' as ds;
+import 'package:active_matrimonial_flutter_app/models_response/drop_down/city.dart' as dc;
 import 'package:active_matrimonial_flutter_app/screens/search_screens/basic_search_state.dart';
 
 import '../../enums/enums.dart';
@@ -11,13 +13,13 @@ BasicSearchState? basic_search_reducer(
 ) {
   // store search data
   if (action is SearchStoreAction) {
-    state!.isFetching = false;
-    state.searchList = action.payload!.data!.members;
-    return state;
+    return state!.copyWith(
+      isFetching: false,
+      searchList: action.payload!.data!.members,
+    );
   }
   if (action is SearchFailureAction) {
-    state!.error = action.error;
-    return state;
+    return state!.copyWith(error: action.error);
   }
   if (action == Reset.search) {
     state = BasicSearchState.initialState();
@@ -39,29 +41,23 @@ BasicSearchState? basic_search_reducer(
     return city_response(state!, action);
   }
   if (action is SearchAddCasteValueAction) {
-    state!.caste_value = action.value;
-    return state;
+    return state!.copyWith(caste_value: action.value);
   }
   if (action is SearchAddReligionValueAction) {
-    state!.religion_value = action.value;
-    return state;
+    return state!.copyWith(religion_value: action.value);
   }
   if (action is SearchAddSubCasteValueAction) {
-    state!.sub_caste_value = action.value;
-    return state;
+    return state!.copyWith(sub_caste_value: action.value);
   }
 
   if (action is SearchCountryAddValueAction) {
-    state!.country_value = action.value;
-    return state;
+    return state!.copyWith(country_value: action.value);
   }
   if (action is SearchStateAddValueAction) {
-    state!.state_value = action.value;
-    return state;
+    return state!.copyWith(state_value: action.value);
   }
   if (action is SearchCityAddValueAction) {
-    state!.city_value = action.value;
-    return state;
+    return state!.copyWith(city_value: action.value);
   }
   if (action is SearchEmptyCaste) {
     return empty_caste(state!, action);
@@ -77,48 +73,49 @@ BasicSearchState? basic_search_reducer(
   }
 
   if (action is SearchSetFiltersAction) {
-    state!.minAge = action.minAge ?? state.minAge;
-    state.maxAge = action.maxAge ?? state.maxAge;
-    state.religion_value = action.religion ?? state.religion_value;
-    state.caste_value = action.caste ?? state.caste_value;
-    state.marital_status_value =
-        action.maritalStatus ?? state.marital_status_value;
-    state.country_value = action.country ?? state.country_value;
-    state.state_value = action.state ?? state.state_value;
-    state.city_value = action.city ?? state.city_value;
-    state.quickFilters = action.quickFilters ?? state.quickFilters;
-    state.diet = action.diet ?? state.diet;
-    state.smoking = action.smoking ?? state.smoking;
-    state.drinking = action.drinking ?? state.drinking;
-    state.searchText = action.searchText ?? state.searchText;
-    state.education = action.education ?? state.education;
-    state.income = action.income ?? state.income;
-    state.isManglik = action.isManglik ?? state.isManglik;
-    state.isIntercaste = action.isIntercaste ?? state.isIntercaste;
-    state.isDisabled = action.isDisabled ?? state.isDisabled;
-    state.hasPhoto = action.hasPhoto ?? state.hasPhoto;
-    state.recentlyJoined = action.recentlyJoined ?? state.recentlyJoined;
-    return state;
+    return state!.copyWith(
+      minAge: action.minAge,
+      maxAge: action.maxAge,
+      religion_value: action.religion,
+      caste_value: action.caste,
+      marital_status_value: action.maritalStatus,
+      country_value: action.country,
+      state_value: action.state,
+      city_value: action.city,
+      quickFilters: action.quickFilters,
+      diet: action.diet,
+      smoking: action.smoking,
+      drinking: action.drinking,
+      searchText: action.searchText,
+      education: action.education,
+      income: action.income,
+      isManglik: action.isManglik,
+      isIntercaste: action.isIntercaste,
+      isDisabled: action.isDisabled,
+      hasPhoto: action.hasPhoto,
+      recentlyJoined: action.recentlyJoined,
+    );
   }
 
   if (action is SearchSaveAdvancedFiltersAction) {
-    state!.minAge = action.minAge;
-    state.maxAge = action.maxAge;
-    state.religion_value = action.religion;
-    state.caste_value = action.caste;
-    state.marital_status_value = action.maritalStatus;
-    state.country_value = action.country;
-    state.state_value = action.state;
-    state.city_value = action.city;
-    state.quickFilters = action.quickFilters;
-    state.education = action.education;
-    state.income = action.income;
-    state.isManglik = action.isManglik;
-    state.isIntercaste = action.isIntercaste;
-    state.isDisabled = action.isDisabled;
-    state.hasPhoto = action.hasPhoto;
-    state.recentlyJoined = action.recentlyJoined;
-    return state;
+    return state!.copyWith(
+      minAge: action.minAge,
+      maxAge: action.maxAge,
+      religion_value: action.religion,
+      caste_value: action.caste,
+      marital_status_value: action.maritalStatus,
+      country_value: action.country,
+      state_value: action.state,
+      city_value: action.city,
+      quickFilters: action.quickFilters,
+      education: action.education,
+      income: action.income,
+      isManglik: action.isManglik,
+      isIntercaste: action.isIntercaste,
+      isDisabled: action.isDisabled,
+      hasPhoto: action.hasPhoto,
+      recentlyJoined: action.recentlyJoined,
+    );
   }
 
   if (action is SearchClearFiltersAction) {
@@ -147,70 +144,66 @@ BasicSearchState? basic_search_reducer(
 }
 
 BasicSearchState addReligionValue(BasicSearchState state, BasicSearchReligionAdd action) {
-  state.religion_value = action.value;
-  return state;
+  return state.copyWith(religion_value: action.value);
 }
 
 BasicSearchState addMotherTongue(BasicSearchState state, BasicSearchMotherTongueAdd action) {
-  state.mother_tongue = action.value;
-  return state;
+  return state.copyWith(mother_tongue: action.value);
 }
 
 BasicSearchState basic_search_mother_tongue_clear(BasicSearchState state, dynamic action) {
-  state.mother_tongue = null;
-  return state;
+  return state.copyWith(mother_tongue: null);
 }
 
 BasicSearchState basic_search_religion_clear(BasicSearchState state, dynamic action) {
-  state.religion_value = null;
-  return state;
+  return state.copyWith(religion_value: null);
 }
 
 /// empty caste value
 BasicSearchState empty_caste(BasicSearchState state, SearchEmptyCaste action) {
-  state.casteResponse!.data!.clear();
-  state.caste_value = null;
-  return state;
+  return state.copyWith(
+    casteResponse: CasteResponse(data: []),
+    caste_value: null,
+  );
 }
 
 BasicSearchState empty_sub_caste(BasicSearchState state, SearchEmptySubCaste action) {
-  state.subcasteResponse!.data!.clear();
-  state.sub_caste_value = null;
-  return state;
+  return state.copyWith(
+    subcasteResponse: SubcasteResponse(data: []),
+    sub_caste_value: null,
+  );
 }
 
 BasicSearchState empty_state(BasicSearchState state, SearchEmptyState action) {
-  state.stateResponse!.data!.clear();
-  state.state_value = null;
-  return state;
+  return state.copyWith(
+    stateResponse: ds.StateResponse(data: []),
+    state_value: null,
+  );
 }
 
 BasicSearchState empty_city(BasicSearchState state, SearchEmptyCity action) {
-  state.cityResponse!.data!.clear();
-  state.city_value = null;
-  return state;
+  return state.copyWith(
+    cityResponse: dc.CityResponse(data: []),
+    city_value: null,
+  );
 }
 
 ///-----------------------------------------------------------------------------
 
 BasicSearchState caste_response(BasicSearchState state, CasteResponse action) {
-  state.casteResponse!.data = action.data;
-  return state;
+  return state.copyWith(casteResponse: action);
 }
 
 BasicSearchState sub_caste_response(BasicSearchState state, SubcasteResponse action) {
-  state.subcasteResponse!.data = action.data;
-  return state;
+  return state.copyWith(subcasteResponse: action);
 }
 
 BasicSearchState state_response(BasicSearchState state, SearchGetStateValueAction action) {
-  state.stateResponse!.data = action.data;
-  return state;
+  return state.copyWith(stateResponse: ds.StateResponse(data: action.data));
 }
 
 BasicSearchState city_response(BasicSearchState state, SearchGetCityValueAction action) {
-  state.cityResponse!.data = action.data;
-  return state;
+  return state.copyWith(cityResponse: dc.CityResponse(data: action.data));
 }
 
 ///classes

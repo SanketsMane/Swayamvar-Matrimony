@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
 
 import '../app_config.dart';
@@ -57,13 +58,23 @@ class SupportTicketRepository {
     request.fields["support_category_id"] = category;
     request.fields["description"] = details;
     if (image != null) {
-      var pic = await http.MultipartFile.fromPath("attachment", image.path);
-      request.files.add(pic);
+      if (kIsWeb) {
+        // Sanket: Use fromBytes for web
+        var pic = http.MultipartFile.fromBytes(
+          "attachment",
+          await image.readAsBytes(),
+          filename: image.name,
+        );
+        request.files.add(pic);
+      } else {
+        // Sanket: Use fromPath for mobile
+        var pic = await http.MultipartFile.fromPath("attachment", image.path);
+        request.files.add(pic);
+      }
     }
 
     request.headers.addAll({
       "Accept": "application/json",
-      "Content-Type": "application/json",
       "Authorization": "Bearer $accessToken",
     });
 
@@ -90,16 +101,26 @@ class SupportTicketRepository {
     request.fields["reply"] = reply;
 
     if (attachment != null) {
-      var pic = await http.MultipartFile.fromPath(
-        "attachment",
-        attachment.path,
-      );
-      request.files.add(pic);
+      if (kIsWeb) {
+        // Sanket: Use fromBytes for web
+        var pic = http.MultipartFile.fromBytes(
+          "attachment",
+          await attachment.readAsBytes(),
+          filename: attachment.name,
+        );
+        request.files.add(pic);
+      } else {
+        // Sanket: Use fromPath for mobile
+        var pic = await http.MultipartFile.fromPath(
+          "attachment",
+          attachment.path,
+        );
+        request.files.add(pic);
+      }
     }
 
     request.headers.addAll({
       "Accept": "application/json",
-      "Content-Type": "application/json",
       "Authorization": "Bearer $accessToken",
     });
 

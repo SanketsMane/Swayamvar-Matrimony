@@ -35,6 +35,10 @@ class BasicInfoData {
     this.gender,
     this.phone,
     this.maritialStatus,
+    this.religionId,
+    this.religion,
+    this.casteId,
+    this.caste,
     this.photo,
   });
 
@@ -46,6 +50,10 @@ class BasicInfoData {
   dynamic gender;
   dynamic phone;
   dynamic maritialStatus;
+  int? religionId;
+  String? religion;
+  int? casteId;
+  String? caste;
   dynamic photo;
 
   factory BasicInfoData.fromJson(Map<String, dynamic> json) => BasicInfoData(
@@ -57,6 +65,10 @@ class BasicInfoData {
     gender: json["gender"],
     phone: json["phone"],
     maritialStatus: json["maritial_status"],
+    religionId: json["religion_id"],
+    religion: json["religion"],
+    casteId: json["caste_id"],
+    caste: json["caste"],
     photo: json["photo"],
   );
 
@@ -69,6 +81,10 @@ class BasicInfoData {
     "gender": gender,
     "phone": phone,
     "maritial_status": maritialStatus,
+    "religion_id": religionId,
+    "religion": religion,
+    "caste_id": casteId,
+    "caste": caste,
     "photo": photo,
   };
 }

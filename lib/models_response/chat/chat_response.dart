@@ -41,6 +41,9 @@ class Data {
   String? lastMessageTime;
   String? lastMessage;
   MemberPackage? memberPackage;
+  var age;
+  var approved;
+  String? phone;
 
   Data({
     this.id,
@@ -53,6 +56,9 @@ class Data {
     this.lastMessageTime,
     this.lastMessage,
     this.memberPackage,
+    this.age,
+    this.approved,
+    this.phone,
   });
 
   factory Data.fromJson(Map<String, dynamic> json) => Data(
@@ -66,6 +72,9 @@ class Data {
     lastMessageTime: json["last_message_time"],
     lastMessage: json["last_message"],
     memberPackage: MemberPackage.fromJson(json["member_package"]),
+    age: json["age"],
+    approved: json["approved"],
+    phone: json["phone"],
   );
 
   Map<String, dynamic> toJson() => {
@@ -79,6 +88,9 @@ class Data {
     "last_message_time": lastMessageTime,
     "last_message": lastMessage,
     "member_package": memberPackage!.toJson(),
+    "age": age,
+    "approved": approved,
+    "phone": phone,
   };
 }
 

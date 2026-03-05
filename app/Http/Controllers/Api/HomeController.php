@@ -154,25 +154,37 @@ class HomeController extends Controller
             $user = $token->tokenable;
         }
         // new members & premium members
+        $currUser = auth()->user();
+        if (!$currUser) {
+            $token = PersonalAccessToken::findToken(request()->bearerToken());
+            if ($token) {
+                $currUser = $token->tokenable;
+            }
+        }
+
         $members = User::where('user_type', 'member')
             ->where('approved', 1)
             ->where('blocked', 0)
             ->where('deactivated', 0);
-
-        if ($token && $user->user_type == 'member') {
-            $members = $members->where('id', '!=', $user->id)
-                ->whereIn("id", function ($query) use ($user) {
-                    $query->select('user_id')
-                        ->from('members')
-                        ->where('gender', '!=', $user->member->gender);
-                });
-
-            $ignored_to = IgnoredUser::where('ignored_by', $user->id)->pluck('user_id')->toArray();
+ 
+        if ($currUser && $currUser->user_type == 'member') {
+            $currentUserMember = $currUser->member;
+            if ($currentUserMember && !empty($currentUserMember->gender)) {
+                $oppositeGender = ($currentUserMember->gender == 1) ? 2 : 1;
+                $members = $members->where('id', '!=', $currUser->id)
+                    ->whereHas('member', function ($query) use ($oppositeGender) {
+                        $query->where('gender', $oppositeGender);
+                    });
+            } else {
+                $members = $members->where('id', '!=', $currUser->id);
+            }
+ 
+            $ignored_to = IgnoredUser::where('ignored_by', $currUser->id)->pluck('user_id')->toArray();
             if (count($ignored_to) > 0) {
                 $members = $members->whereNotIn('id', $ignored_to);
             }
-
-            $ignored_by_ids = IgnoredUser::where('user_id', $user->id)->pluck('ignored_by')->toArray();
+ 
+            $ignored_by_ids = IgnoredUser::where('user_id', $currUser->id)->pluck('ignored_by')->toArray();
             if (count($ignored_by_ids) > 0) {
                 $members = $members->whereNotIn('id', $ignored_by_ids);
             }
@@ -191,25 +203,37 @@ class HomeController extends Controller
             $user = $token->tokenable;
         }
         // new members & premium members
+        $currUser = auth()->user();
+        if (!$currUser) {
+            $token = PersonalAccessToken::findToken(request()->bearerToken());
+            if ($token) {
+                $currUser = $token->tokenable;
+            }
+        }
+
         $members = User::where('user_type', 'member')
             ->where('approved', 1)
             ->where('blocked', 0)
             ->where('deactivated', 0);
-
-        if ($user && $user->user_type == 'member') {
-            $members = $members->where('id', '!=', $user->id)
-                ->whereIn("id", function ($query) use ($user) {
-                    $query->select('user_id')
-                        ->from('members')
-                        ->where('gender', '!=', $user->member->gender);
-                });
-
-            $ignored_to = IgnoredUser::where('ignored_by', $user->id)->pluck('user_id')->toArray();
+ 
+        if ($currUser && $currUser->user_type == 'member') {
+            $currentUserMember = $currUser->member;
+            if ($currentUserMember && !empty($currentUserMember->gender)) {
+                $oppositeGender = ($currentUserMember->gender == 1) ? 2 : 1;
+                $members = $members->where('id', '!=', $currUser->id)
+                    ->whereHas('member', function ($query) use ($oppositeGender) {
+                        $query->where('gender', $oppositeGender);
+                    });
+            } else {
+                $members = $members->where('id', '!=', $currUser->id);
+            }
+ 
+            $ignored_to = IgnoredUser::where('ignored_by', $currUser->id)->pluck('user_id')->toArray();
             if (count($ignored_to) > 0) {
                 $members = $members->whereNotIn('id', $ignored_to);
             }
-
-            $ignored_by_ids = IgnoredUser::where('user_id', $user->id)->pluck('ignored_by')->toArray();
+ 
+            $ignored_by_ids = IgnoredUser::where('user_id', $currUser->id)->pluck('ignored_by')->toArray();
             if (count($ignored_by_ids) > 0) {
                 $members = $members->whereNotIn('id', $ignored_by_ids);
             }
@@ -236,25 +260,37 @@ class HomeController extends Controller
         $data['slider_images'] = $slider_images;
 
         // new members & premium members
+        $currUser = auth()->user();
+        if (!$currUser) {
+            $token = PersonalAccessToken::findToken(request()->bearerToken());
+            if ($token) {
+                $currUser = $token->tokenable;
+            }
+        }
+
         $members = User::where('user_type', 'member')
             ->where('approved', 1)
             ->where('blocked', 0)
             ->where('deactivated', 0);
             
-        if (auth()->user() && auth()->user()->user_type == 'member') {
-            $members = $members->where('id', '!=', auth()->user()->id)
-                ->whereIn("id", function ($query) {
-                    $query->select('user_id')
-                        ->from('members')
-                        ->where('gender', '!=', auth()->user()->member->gender);
-                });
-
-            $ignored_to = IgnoredUser::where('ignored_by', auth()->user()->id)->pluck('user_id')->toArray();
+        if ($currUser && $currUser->user_type == 'member') {
+            $currentUserMember = $currUser->member;
+            if ($currentUserMember && !empty($currentUserMember->gender)) {
+                $oppositeGender = ($currentUserMember->gender == 1) ? 2 : 1;
+                $members = $members->where('id', '!=', $currUser->id)
+                    ->whereHas('member', function ($query) use ($oppositeGender) {
+                        $query->where('gender', $oppositeGender);
+                    });
+            } else {
+                $members = $members->where('id', '!=', $currUser->id);
+            }
+ 
+            $ignored_to = IgnoredUser::where('ignored_by', $currUser->id)->pluck('user_id')->toArray();
             if (count($ignored_to) > 0) {
                 $members = $members->whereNotIn('id', $ignored_to);
             }
-
-            $ignored_by_ids = IgnoredUser::where('user_id', auth()->user()->id)->pluck('ignored_by')->toArray();
+ 
+            $ignored_by_ids = IgnoredUser::where('user_id', $currUser->id)->pluck('ignored_by')->toArray();
             if (count($ignored_by_ids) > 0) {
                 $members = $members->whereNotIn('id', $ignored_by_ids);
             }
@@ -353,57 +389,97 @@ class HomeController extends Controller
 
     public function home_with_login()
     {
-        $base_query = User::query()
-            ->where('user_type', 'member')
-            ->where('approved', 1)
-            ->where('blocked', 0)
-            ->where('deactivated', 0);
-
-        if (auth()->user() && auth()->user()->user_type == 'member') {
-            $base_query->where('id', '!=', auth()->user()->id)
-                ->whereIn("id", function ($query) {
-                    $query->select('user_id')
-                        ->from('members')
-                        ->where('gender', '!=', auth()->user()->member->gender);
-                });
-
-            $ignored_to = IgnoredUser::where('ignored_by', auth()->user()->id)->pluck('user_id')->toArray();
-            if (count($ignored_to) > 0) {
-                $base_query->whereNotIn('id', $ignored_to);
+        try {
+            $currUser = auth()->user();
+            if (!$currUser) {
+                $token = PersonalAccessToken::findToken(request()->bearerToken());
+                if ($token) {
+                    $currUser = $token->tokenable;
+                }
             }
 
-            $ignored_by_ids = IgnoredUser::where('user_id', auth()->user()->id)->pluck('ignored_by')->toArray();
-            if (count($ignored_by_ids) > 0) {
-                $base_query->whereNotIn('id', $ignored_by_ids);
+            // Start with a clean query
+            $base_query = User::select('users.*')
+                ->where('users.user_type', 'member')
+                ->where('users.approved', 1)
+                ->where('users.blocked', 0)
+                ->where('users.deactivated', 0);
+
+            $debug_info = "User: " . ($currUser ? $currUser->id : 'Guest');
+
+            if ($currUser && strtolower($currUser->user_type) == 'member') {
+                $currentUserMember = $currUser->member;
+                if ($currentUserMember && !empty($currentUserMember->gender)) {
+                    $genderValue = strtolower($currentUserMember->gender);
+                    // Sanket: Robustly determine opposite gender strings/integers
+                    if ($genderValue == '1' || $genderValue == 'male') {
+                        $oppositeGenders = ['2', 'female'];
+                    } else {
+                        $oppositeGenders = ['1', 'male'];
+                    }
+                    
+                    $debug_info .= " | Gender: " . $currentUserMember->gender . " | Seeking: " . implode(',', $oppositeGenders);
+                    
+                    // Sanket: Strict gender filtering (no fallback)
+                    $base_query->join('members', 'users.id', '=', 'members.user_id')
+                               ->whereIn('members.gender', $oppositeGenders)
+                               ->where('users.id', '!=', $currUser->id);
+                }
+                
+                // Exclude ignored
+                $ignored_to = IgnoredUser::where('ignored_by', $currUser->id)->pluck('user_id')->toArray();
+                if (count($ignored_to) > 0) {
+                    $base_query->whereNotIn('users.id', $ignored_to);
+                }
+                $ignored_by_ids = IgnoredUser::where('user_id', $currUser->id)->pluck('ignored_by')->toArray();
+                if (count($ignored_by_ids) > 0) {
+                    $base_query->whereNotIn('users.id', $ignored_by_ids);
+                }
+            } else {
+                // Sanket: For Guest users, just show all approved members
+                $debug_info .= " | Guest Mode";
             }
+
+            // Log debug info
+            $final_count = $base_query->clone()->count();
+            @file_put_contents(public_path('debug_home.txt'), date('Y-m-d H:i:s') . " | $debug_info | Count: $final_count\n", FILE_APPEND);
+
+            // 1. One "Hero" Match
+
+            // 1. One "Hero" Match
+            $hero_match = (clone $base_query)->orderBy('users.id', 'desc')->limit(20)->get();
+            // Filter locally for photo if possible, or just pick first
+            $hero_match_filtered = $hero_match->whereNotNull('photo')->take(1);
+            if ($hero_match_filtered->isEmpty()) {
+                $hero_match_filtered = $hero_match->take(1);
+            }
+
+            // 2. Verified Matches
+            $verified_matches = (clone $base_query)->whereNotNull('email_verified_at')->inRandomOrder()->limit(5)->get();
+            if ($verified_matches->isEmpty()) {
+                $verified_matches = (clone $base_query)->inRandomOrder()->limit(5)->get();
+            }
+
+            // 3. Active Now
+            $active_now = (clone $base_query)->orderBy('users.updated_at', 'desc')->limit(5)->get();
+
+            // 4. New Matches
+            $new_matches = (clone $base_query)->orderBy('users.created_at', 'desc')->limit(10)->get();
+
+            return response()->json([
+                'result' => true,
+                'hero_match' => MemberResource::collection($hero_match_filtered),
+                'verified' => MemberResource::collection($verified_matches),
+                'active_now' => MemberResource::collection($active_now),
+                'new_matches' => MemberResource::collection($new_matches),
+            ]);
+        } catch (\Exception $e) {
+            @file_put_contents(public_path('debug_home.txt'), date('Y-m-d H:i:s') . " | ERROR: " . $e->getMessage() . " at " . $e->getLine() . "\n", FILE_APPEND);
+            return response()->json([
+                'result' => false,
+                'error' => $e->getMessage()
+            ], 500);
         }
-
-        // 1. One "Hero" Match (Latest high-quality profile with photo)
-        $hero_match = clone $base_query;
-        $hero_match = $hero_match->whereNotNull('photo')->orderBy('id', 'desc')->limit(1)->get();
-
-        // 2. Verified Matches
-        $verified_matches = clone $base_query;
-        $verified_matches = $verified_matches->where('email_verified_at', '!=', null)
-                                             ->inRandomOrder()->limit(5)->get();
-
-        // 3. Active Now (Proxy: Recently updated/created or from a recent activity table)
-        // Since there is no explicit 'last_seen' natively, we use updated_at and order desc.
-        $active_now = clone $base_query;
-        $active_now = $active_now->orderBy('updated_at', 'desc')->limit(5)->get();
-
-        // 4. New Matches
-        $new_matches = clone $base_query;
-        $new_matches = $new_matches->orderBy('created_at', 'desc')->limit(10)->get();
-
-
-        return response()->json([
-            'result' => true,
-            'hero_match' => MemberResource::collection($hero_match),
-            'verified' => MemberResource::collection($verified_matches),
-            'active_now' => MemberResource::collection($active_now),
-            'new_matches' => MemberResource::collection($new_matches)
-        ]);
     }
     // app_info
     public function app_info()

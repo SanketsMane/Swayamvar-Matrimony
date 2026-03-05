@@ -35,7 +35,7 @@ class _NewPasswordState extends State<NewPassword> {
 
   bool requiredFieldVerification() {
     if (store.state.resetPasswordState!.passwordController!.text.isEmpty) {
-      passwordErrorText = "Please enter password";
+      passwordErrorText = AppLocalizations.of(context)!.common_enter_password;
       visibility = true;
       setState(() {});
       return false;
@@ -46,7 +46,7 @@ class _NewPasswordState extends State<NewPassword> {
             .text
             .length <=
         7) {
-      passwordErrorText = "Password should be 8 Characters long";
+      passwordErrorText = AppLocalizations.of(context)!.common_screen_8_or_more_char;
       visibility = true;
 
       setState(() {});
@@ -58,14 +58,14 @@ class _NewPasswordState extends State<NewPassword> {
         .confirmPasswordController!
         .text
         .isEmpty) {
-      confirmPasswordErrorText = "Please enter confirm password";
+      confirmPasswordErrorText = AppLocalizations.of(context)!.common_screen_confim_password;
       setState(() {});
       return false;
     } else if (store.state.resetPasswordState!.passwordController!.text
             .toString() !=
         store.state.resetPasswordState!.confirmPasswordController!.text
             .toString()) {
-      confirmPasswordErrorText = "Password don't match";
+      confirmPasswordErrorText = "Passwords do not match";
       setState(() {});
       return false;
     }
@@ -293,18 +293,39 @@ class _NewPasswordState extends State<NewPassword> {
                             // confirm button
                             InkWell(
                               onTap: () => confirm(context),
-                              child: MyGradientContainer(
-                                text:
-                                    state.resetPasswordState!.rp_loader == false
-                                        ? Text(
-                                          AppLocalizations.of(
-                                            context,
-                                          )!.common_confirm,
-                                          style: Styles.bold_white_14,
-                                        )
-                                        : CircularProgressIndicator(
-                                          color: MyTheme.storm_grey,
-                                        ),
+                              child: Container(
+                                height: 50,
+                                width: double.infinity,
+                                decoration: BoxDecoration(
+                                  gradient: state.resetPasswordState!.rp_loader == false ? Styles.primaryGradient : null,
+                                  borderRadius: BorderRadius.circular(12),
+                                  color: state.resetPasswordState!.rp_loader == false ? null : MyTheme.primary.withOpacity(0.5),
+                                  boxShadow: state.resetPasswordState!.rp_loader == false ? [
+                                    BoxShadow(
+                                      color: MyTheme.primary.withOpacity(0.3),
+                                      blurRadius: 10,
+                                      offset: const Offset(0, 4),
+                                    )
+                                  ] : [],
+                                ),
+                                child: Center(
+                                  child:
+                                      state.resetPasswordState!.rp_loader == false
+                                          ? Text(
+                                            AppLocalizations.of(
+                                              context,
+                                            )!.common_confirm,
+                                            style: Styles.bold_white_14,
+                                          )
+                                          : const SizedBox(
+                                              height: 20,
+                                              width: 20,
+                                              child: CircularProgressIndicator(
+                                                color: Colors.white,
+                                                strokeWidth: 2,
+                                              ),
+                                            ),
+                                ),
                               ),
                             ),
 
@@ -315,7 +336,7 @@ class _NewPasswordState extends State<NewPassword> {
                               children: [
                                 // timer text
                                 Text(
-                                  "Don't receive code? $secondsRemaining",
+                                  "Didn't receive code? $secondsRemaining",
                                   style: Styles.body.copyWith(
                                     color: MyTheme.storm_grey,
                                   ),
@@ -399,11 +420,16 @@ class _NewPasswordState extends State<NewPassword> {
       child: Column(
         children: [
           const SizedBox(height: 78),
-          const ImageIcon(
-            AssetImage('assets/logo/app_logo.png'),
-            size: 93,
-            color: MyTheme.white,
+          Center(
+            child: ColorFiltered(
+              colorFilter: const ColorFilter.mode(MyTheme.white, BlendMode.srcIn),
+              child: Image.asset(
+                'assets/logo/app_logo.png',
+                height: 72,
+              ),
+            ),
           ),
+          const SizedBox(height: 12),
           Text(
             AppLocalizations.of(context)!.new_password_screen_title,
             style: Styles.bold_white_22,

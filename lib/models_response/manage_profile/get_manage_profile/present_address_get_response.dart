@@ -29,12 +29,19 @@ class PresentAddressGetResponse {
 }
 
 class PresentAddressData {
-  PresentAddressData({this.country, this.state, this.city, this.postalCode});
+  PresentAddressData({
+    this.country,
+    this.state,
+    this.city,
+    this.postalCode,
+    this.address,
+  });
 
   String? country;
   String? state;
   String? city;
   String? postalCode;
+  String? address;
 
   factory PresentAddressData.fromJson(Map<String, dynamic> json) =>
       PresentAddressData(
@@ -42,6 +49,7 @@ class PresentAddressData {
         state: json["state"],
         city: json["city"],
         postalCode: json["postal_code"],
+        address: json["address"],
       );
 
   Map<String, dynamic> toJson() => {
@@ -49,5 +57,6 @@ class PresentAddressData {
     "state": state,
     "city": city,
     "postal_code": postalCode,
+    "address": address,
   };
 }

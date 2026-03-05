@@ -27,19 +27,10 @@ class _ReferralEarningsWalletState extends State<ReferralEarningsWallet> {
   @override
   void initState() {
     super.initState();
-    if (!store.state.userVerifyState!.isApprove!) {
-      OneContext().pop();
-      store.dispatch(
-        ShowMessageAction(
-          msg: "Please verify your account",
-          color: MyTheme.failure,
-        ),
-      );
-    } else {
-      store.dispatch(Reset.referralHistoryRequestList);
-      store.dispatch(walletBalanceMiddleware());
-      store.dispatch(referralWithdrawRequestHistoryMiddleware());
-    }
+    // Sanket: Approval status does NOT gate app access — any registered user can use the app.
+    store.dispatch(Reset.referralHistoryRequestList);
+    store.dispatch(walletBalanceMiddleware());
+    store.dispatch(referralWithdrawRequestHistoryMiddleware());
     scrollController.addListener(() {
       if (scrollController.position.maxScrollExtent ==
           scrollController.offset) {

@@ -35,54 +35,40 @@ class _MyHappyStoriesState extends State<MyHappyStories> {
   @override
   void initState() {
     super.initState();
+    // Sanket: Approval status does NOT gate app access — any registered user can use the app.
+    store.dispatch(happyStoryCheckMiddleware());
 
-    if (!store.state.userVerifyState!.isApprove!) {
-      OneContext().pop();
-      store.dispatch(
-        ShowMessageAction(
-          msg: "Please verify your account",
-          color: MyTheme.failure,
-        ),
-      );
-    } else {
-      store.dispatch(happyStoryCheckMiddleware());
+    webViewController.loadHtmlString(
+      '''
+                            <iframe src="${store.state.myHappyStoryState!.src}" style="height:600px; width : 1000px;" frameborder="0" allowfullscreen>></iframe>''',
+    );
 
-      webViewController.loadHtmlString(
-        '''
-                              <iframe src="${store.state.myHappyStoryState!.src}" style="height:600px; width : 1000px;" frameborder="0" allowfullscreen>></iframe>''',
-      );
-
-      if (videoProvider != null) {
-        if (videoProvider == 'youtube') {
-          var data = store.state.myHappyStoryState!.myHappyStory!.videoLink!
-              .split("=");
-          var videoLink = "";
-          // print(data.length);
-          if (data.length > 1) {
-            videoLink = data[1];
-          }
-
-          store.state.myHappyStoryState!.src =
-              "https://www.youtube.com/embed/$videoLink";
+    if (videoProvider != null) {
+      if (videoProvider == 'youtube') {
+        var data = store.state.myHappyStoryState!.myHappyStory!.videoLink!
+            .split("=");
+        var videoLink = "";
+        if (data.length > 1) {
+          videoLink = data[1];
         }
-        if (videoProvider == 'dailymotion') {
-          var videoLink =
-              store.state.myHappyStoryState!.myHappyStory!.videoLink!.split(
-                "video/",
-              )[1];
-
-          store.state.myHappyStoryState!.src =
-              "https://www.dailymotion.com/embed/video/$videoLink";
-        }
-        if (videoProvider == 'vimeo') {
-          var videoLink =
-              store.state.myHappyStoryState!.myHappyStory!.videoLink!.split(
-                "vimeo.com/",
-              )[1];
-
-          store.state.myHappyStoryState!.src =
-              "https://player.vimeo.com/video/$videoLink";
-        }
+        store.state.myHappyStoryState!.src =
+            "https://www.youtube.com/embed/$videoLink";
+      }
+      if (videoProvider == 'dailymotion') {
+        var videoLink =
+            store.state.myHappyStoryState!.myHappyStory!.videoLink!.split(
+              "video/",
+            )[1];
+        store.state.myHappyStoryState!.src =
+            "https://www.dailymotion.com/embed/video/$videoLink";
+      }
+      if (videoProvider == 'vimeo') {
+        var videoLink =
+            store.state.myHappyStoryState!.myHappyStory!.videoLink!.split(
+              "vimeo.com/",
+            )[1];
+        store.state.myHappyStoryState!.src =
+            "https://player.vimeo.com/video/$videoLink";
       }
     }
   }
@@ -108,7 +94,12 @@ class _MyHappyStoriesState extends State<MyHappyStories> {
 
   Future getImage() async {
     try {
-      final image = await _picker.pickImage(source: ImageSource.gallery);
+      final XFile? image = await _picker.pickImage(
+        source: ImageSource.gallery,
+        maxWidth: 1000,
+        maxHeight: 1000,
+        imageQuality: 85,
+      );
       if (image == null) return;
 
       final imageTemporay = File(image.path);

@@ -55,6 +55,9 @@ ThunkAction<AppState> pickVerifyImage(String type) {
     final ImagePicker picker = ImagePicker();
     final XFile? image = await picker.pickImage(
       source: type == 'selfie' ? ImageSource.camera : ImageSource.gallery,
+      maxWidth: 1000,
+      maxHeight: 1000,
+      imageQuality: 85,
     );
     if (image != null) {
       File file = File(image.path);

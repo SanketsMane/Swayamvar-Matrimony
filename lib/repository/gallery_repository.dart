@@ -1,6 +1,7 @@
 import 'package:active_matrimonial_flutter_app/app_config.dart';
 import 'package:active_matrimonial_flutter_app/models_response/gallery_images_response.dart';
 import 'package:active_matrimonial_flutter_app/models_response/others/common_response.dart';
+import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
 
 import '../helpers/main_helpers.dart';
@@ -45,12 +46,24 @@ class GalleryRepository {
     final uri = Uri.parse(baseUrl);
     var request = http.MultipartRequest('POST', uri);
 
-    var pic = await http.MultipartFile.fromPath("gallery_image", photo.path);
-    request.files.add(pic);
+    if (photo != null) {
+      if (kIsWeb) {
+        // Sanket: Use fromBytes for web
+        var pic = http.MultipartFile.fromBytes(
+          "gallery_image",
+          await photo.readAsBytes(),
+          filename: photo.name,
+        );
+        request.files.add(pic);
+      } else {
+        // Sanket: Use fromPath for mobile
+        var pic = await http.MultipartFile.fromPath("gallery_image", photo.path);
+        request.files.add(pic);
+      }
+    }
 
     request.headers.addAll({
       "Accept": "application/json",
-      "Content-Type": "application/json",
       "Authorization": "Bearer $accessToken",
     });
 

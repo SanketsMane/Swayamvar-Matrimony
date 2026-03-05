@@ -384,26 +384,18 @@ class _PremiumPlansState extends State<PremiumPlans> {
       return;
     }
 
-    if (!store.state.userVerifyState!.isApprove!) {
-      store.dispatch(
-        ShowMessageAction(
-          msg: "Please verify your account",
-          color: MyTheme.failure,
+    // Sanket: Approval status does NOT gate purchases — only a deactivated account is blocked.
+    if (selectedPackage.packageId != 1) {
+      // 1 is Free
+      NavigatorPush.push(
+        context,
+        Payment(
+          title: "Package Payment",
+          payment_type: "package_payment",
+          amount: selectedPackage.price.toDouble(),
+          package_id: selectedPackage.packageId,
         ),
       );
-    } else {
-      if (selectedPackage.packageId != 1) {
-        // 1 is Free
-        NavigatorPush.push(
-          context,
-          Payment(
-            title: "Package Payment",
-            payment_type: "package_payment",
-            amount: selectedPackage.price.toDouble(),
-            package_id: selectedPackage.packageId,
-          ),
-        );
-      }
     }
   }
 }

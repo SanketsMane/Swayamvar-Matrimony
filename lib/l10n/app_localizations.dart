@@ -3137,11 +3137,23 @@ abstract class AppLocalizations {
   /// **'Physical Disability'**
   String get profile_label_disability;
 
+  /// No description provided for @profile_physical_disability.
+  ///
+  /// In en, this message translates to:
+  /// **'Physical Disability'**
+  String get profile_physical_disability;
+
   /// No description provided for @profile_label_disability_details.
   ///
   /// In en, this message translates to:
   /// **'Disability Details'**
   String get profile_label_disability_details;
+
+  /// No description provided for @profile_disability_details.
+  ///
+  /// In en, this message translates to:
+  /// **'Disability Details'**
+  String get profile_disability_details;
 
   /// No description provided for @profile_label_diet.
   ///
@@ -4645,14 +4657,6 @@ class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> 
 
   @override
   bool shouldReload(_AppLocalizationsDelegate old) => false;
-
-  String get profile_error_first_name;
-  String get profile_error_dob;
-  String get profile_error_mobile;
-  String get profile_error_mobile_invalid;
-  String get profile_error_married_brothers;
-  String get profile_error_married_sisters;
-  String get profile_web_photo_note;
 }
 
 AppLocalizations lookupAppLocalizations(Locale locale) {

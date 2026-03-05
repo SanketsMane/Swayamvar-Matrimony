@@ -1,4 +1,5 @@
 import 'package:active_matrimonial_flutter_app/components/basic_form_widget.dart';
+import 'package:active_matrimonial_flutter_app/components/height_dropdown.dart';
 import 'package:active_matrimonial_flutter_app/components/common_app_bar_manageprofile.dart';
 import 'package:active_matrimonial_flutter_app/components/common_widget.dart';
 import 'package:active_matrimonial_flutter_app/const/my_theme.dart';
@@ -60,21 +61,15 @@ class _PhysicalAtrributesState extends State<PhysicalAtrributes> {
           style: Styles.bold_app_accent_14,
         ),
         Const.height25,
-        BasicFormWidget(
-          text: AppLocalizations.of(context)!.manage_profile_height,
-          style: Styles.bold_arsenic_12,
-          controller:
-              state
-                  .manageProfileCombineState!
-                  .physicalAttrState!
-                  .heightController,
-          keyboard_type: TextInputType.number,
-          hint: "5.3",
-          validator: (value) {
-            if (value == null || value.isEmpty) {
-              return "Enter height";
+        HeightDropdown(
+          label: AppLocalizations.of(context)!.manage_profile_height,
+          value: state.manageProfileCombineState!.physicalAttrState!.heightController!.text,
+          onChanged: (String? newValue) {
+            if (newValue != null) {
+              setState(() {
+                state.manageProfileCombineState!.physicalAttrState!.heightController!.text = newValue;
+              });
             }
-            return null;
           },
         ),
         Const.height20,

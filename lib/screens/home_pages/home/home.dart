@@ -23,17 +23,20 @@ import 'package:active_matrimonial_flutter_app/screens/auth/verify/verify_action
 import 'package:active_matrimonial_flutter_app/screens/manage_profiles/manage_profile.dart';
 import 'package:active_matrimonial_flutter_app/screens/account/account_middleware.dart';
 import 'package:flutter/foundation.dart';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:active_matrimonial_flutter_app/components/main_drawer.dart';
 import 'package:active_matrimonial_flutter_app/components/deactivate_Massage.dart';
 import 'package:active_matrimonial_flutter_app/helpers/aiz_route.dart';
+import 'package:active_matrimonial_flutter_app/screens/search_screens/advanced_search.dart';
 import 'package:active_matrimonial_flutter_app/redux/libs/report/report_middleware.dart';
 import 'package:active_matrimonial_flutter_app/screens/my_dashboard_pages/shortlist/my_shortlist.dart';
 import 'package:active_matrimonial_flutter_app/screens/my_dashboard_pages/interest/express_interest_middleware.dart';
 import 'package:active_matrimonial_flutter_app/screens/my_dashboard_pages/shortlist/add_shortlist_middleware.dart';
 import 'package:active_matrimonial_flutter_app/screens/notifications/notifications.dart';
-import 'package:active_matrimonial_flutter_app/screens/search_screens/search.dart';
+
+import '../explore/explore.dart';
 import 'home_action.dart';
 import 'home_middleware.dart';
 
@@ -44,7 +47,6 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
-  final bool _showFilters = false;
 
   void onRefresh() {
     store.dispatch(accountMiddleware());
@@ -69,9 +71,6 @@ class _HomeState extends State<Home> {
 
   @override
   Widget build(BuildContext context) {
-    Color primaryColor = MyTheme.primary;
-    Color textPrimary = MyTheme.text_primary;
-    Color textSecondary = MyTheme.text_secondary;
 
     return StoreConnector<AppState, HomeViewModel>(
       converter: (store) => HomeViewModel.fromStore(store),
@@ -429,7 +428,7 @@ class _HomeState extends State<Home> {
         label: AppLocalizations.of(context)!.home_action_search,
         sub: AppLocalizations.of(context)!.home_new_partner,
         gradient: const [Color(0xFFFF6B9D), Color(0xFFFF8E53)],
-        onTap: () => AIZRoute.push(context, const AdvancedSearch()),
+        onTap: () => AIZRoute.push(context, AdvancedSearch()),
       ),
       _ActionItem(
         icon: Icons.favorite_rounded,
@@ -583,11 +582,14 @@ class _HomeState extends State<Home> {
                 AppLocalizations.of(context)!.home_recommended_for_you,
                 style: Styles.h2,
               ),
-              Text(
-                AppLocalizations.of(context)!.home_see_all,
-                style: Styles.caption.copyWith(
-                  color: MyTheme.primary,
-                  fontWeight: FontWeight.bold,
+              InkWell(
+                onTap: () => AIZRoute.push(context, Explore()),
+                child: Text(
+                  AppLocalizations.of(context)!.home_see_all,
+                  style: Styles.caption.copyWith(
+                    color: MyTheme.primary,
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
               ),
             ],

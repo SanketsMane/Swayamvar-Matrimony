@@ -27,24 +27,9 @@ class _MyGalleryState extends State<MyGallery> {
       converter: (store) => store.state,
       onInit:
           (store) => [
-            if (!store.state.userVerifyState!.isApprove!)
-              {
-                OneContext().pop(),
-                store.dispatch(
-                  ShowMessageAction(
-                    msg:
-                        AppLocalizations.of(
-                          context,
-                        )!.gallery_verify_account_msg,
-                    color: MyTheme.failure,
-                  ),
-                ),
-              }
-            else
-              {
-                store.dispatch(Reset.myGallery),
-                store.dispatch(galleryImageMiddleware()),
-              },
+            // Sanket: Approval status does NOT gate app access — any registered user can use the app.
+            store.dispatch(Reset.myGallery),
+            store.dispatch(galleryImageMiddleware()),
           ],
       builder:
           (_, state) => Scaffold(

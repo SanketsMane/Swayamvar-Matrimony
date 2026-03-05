@@ -6,6 +6,8 @@ import 'package:active_matrimonial_flutter_app/const/my_theme.dart';
 import 'package:active_matrimonial_flutter_app/const/style.dart';
 import 'package:active_matrimonial_flutter_app/l10n/app_localizations.dart';
 import 'package:flutter/foundation.dart';
+import 'package:active_matrimonial_flutter_app/repository/drop_down_repository.dart';
+import 'package:active_matrimonial_flutter_app/models_response/common_models/ddown.dart';
 import 'package:active_matrimonial_flutter_app/repository/manage_profile_repository.dart';
 import 'package:intl/intl.dart';
 
@@ -33,23 +35,15 @@ class _MyProfileState extends State<MyProfile> {
 
   // Sanket: Dropdown display label → api value maps for all enum fields
   // This prevents sending Marathi UI strings to the backend (Bug #8)
-  static const Map<String, String> _religionOptions = {
-    'हिंदू': 'Hindu',
-    'मुस्लिम': 'Muslim',
-    'ख्रिश्चन': 'Christian',
-    'शीख': 'Sikh',
-    'जैन': 'Jain',
-    'बौद्ध': 'Buddhist',
-  };
-  static const Map<String, String> _casteOptions = {
-    'मराठा': 'Maratha',
-    'ब्राह्मण': 'Brahman',
-    'कुणबी': 'Kunabi',
-    'धनगर': 'Dhangar',
-    'माळी': 'Mali',
-    'चांभार': 'Chambhar',
-    'महार': 'Mahar',
-  };
+  // Dropdown lists fetched from API
+  List<DDown> _religionList = [];
+  List<DDown> _casteList = [];
+  List<DDown> _subCasteList = [];
+
+  // Selected IDs for submission
+  int? _selectedReligionId;
+  int? _selectedCasteId;
+  int? _selectedSubCasteId;
   static const Map<String, String> _maritalOptions = {
     'अविवाहित': 'Unmarried',
     'घटस्फोटित पुरुष': 'Divorced (M)',
@@ -58,14 +52,10 @@ class _MyProfileState extends State<MyProfile> {
     'विधुर': 'Widower',
   };
   static const Map<String, String> _heightOptions = {
-    '4.5 फूट': '4.5',
-    '5.0 फूट': '5.0',
-    '5.2 फूट': '5.2',
-    '5.5 फूट': '5.5',
-    '5.8 फूट': '5.8',
-    '6.0 फूट': '6.0',
-    '6.2 फूट': '6.2',
-    '6.5 फूट': '6.5',
+    '4 फूट 0 इंच': '4.0', '4 फूट 1 इंच': '4.1', '4 फूट 2 इंच': '4.2', '4 फूट 3 इंच': '4.3', '4 फूट 4 इंच': '4.4', '4 फूट 5 इंच': '4.5', '4 फूट 6 इंच': '4.6', '4 फूट 7 इंच': '4.7', '4 फूट 8 इंच': '4.8', '4 फूट 9 इंच': '4.9', '4 फूट 10 इंच': '4.10', '4 फूट 11 इंच': '4.11',
+    '5 फूट 0 इंच': '5.0', '5 फूट 1 इंच': '5.1', '5 फूट 2 इंच': '5.2', '5 फूट 3 इंच': '5.3', '5 फूट 4 इंच': '5.4', '5 फूट 5 इंच': '5.5', '5 फूट 6 इंच': '5.6', '5 फूट 7 इंच': '5.7', '5 फूट 8 इंच': '5.8', '5 फूट 9 इंच': '5.9', '5 फूट 10 इंच': '5.10', '5 फूट 11 इंच': '5.11',
+    '6 फूट 0 इंच': '6.0', '6 फूट 1 इंच': '6.1', '6 फूट 2 इंच': '6.2', '6 फूट 3 इंच': '6.3', '6 फूट 4 इंच': '6.4', '6 फूट 5 इंच': '6.5', '6 फूट 6 इंच': '6.6', '6 फूट 7 इंच': '6.7', '6 फूट 8 इंच': '6.8', '6 फूट 9 इंच': '6.9', '6 फूट 10 इंच': '6.10', '6 फूट 11 इंच': '6.11',
+    '7 फूट 0 इंच': '7.0',
   };
   static const Map<String, String> _complexionOptions = {
     'गोरा': 'fair',
@@ -85,6 +75,7 @@ class _MyProfileState extends State<MyProfile> {
   // Sanket: Display label held in state; apiValue() converts on submit
   String? _religionDisplay;
   String? _casteDisplay;
+  String? _subCasteDisplay;
   String? _maritalStatusDisplay;
   String? _heightDisplay;
   final TextEditingController _weight = TextEditingController();
@@ -194,9 +185,9 @@ class _MyProfileState extends State<MyProfile> {
   final TextEditingController _mobile1 = TextEditingController();
   final TextEditingController _mobile2 = TextEditingController();
 
-  File? _profilePhoto;
-  List<File> _otherPhotos = [];
-  File? _idProof;
+  dynamic _profilePhoto; // Sanket: Use dynamic (XFile or File) for platform compatibility
+  List<dynamic> _otherPhotos = [];
+  dynamic _idProof;
 
   // =========================================================================
   // STEP 4: Partner Expectations
@@ -208,6 +199,16 @@ class _MyProfileState extends State<MyProfile> {
   String? _expectedIncomeDisplay;
   bool? _divorceAccepted; // null = not answered
   bool? _partnerIntercaste; // null = not answered
+
+  // Sanket: Partner specific selection IDs
+  int? _partnerReligionId;
+  String? _partnerReligionDisplay;
+  int? _partnerCasteId;
+  String? _partnerCasteDisplay;
+  int? _partnerSubCasteId;
+  String? _partnerSubCasteDisplay;
+  List<DDown> _partnerCasteList = [];
+  List<DDown> _partnerSubCasteList = [];
 
   final ImagePicker _picker = ImagePicker();
   bool _isSubmitting = false;
@@ -229,7 +230,64 @@ class _MyProfileState extends State<MyProfile> {
     super.initState();
     _currentStep = widget.initialStep;
     _pageController = PageController(initialPage: widget.initialStep);
+    _loadInitialDropdowns();
     _loadProfileData();
+  }
+
+  Future<void> _loadInitialDropdowns() async {
+    try {
+      final res = await DropDownRepository().fetchProfileDropDown();
+      if (res.result == true && res.data != null) {
+        setState(() {
+          _religionList = res.data!.religionList ?? [];
+        });
+      }
+    } catch (e) {
+      debugPrint("Error loading religions: $e");
+    }
+  }
+
+  Future<void> _onReligionChanged(DDown? religion) async {
+    if (religion == null) return;
+    setState(() {
+      _religionDisplay = religion.name;
+      _selectedReligionId = religion.id;
+      _casteDisplay = null;
+      _selectedCasteId = null;
+      _subCasteDisplay = null;
+      _selectedSubCasteId = null;
+      _casteList = [];
+      _subCasteList = [];
+    });
+
+    try {
+      final res = await DropDownRepository().fetchCaste(religion.id);
+      if (res.data != null) {
+        setState(() => _casteList = res.data ?? []);
+      }
+    } catch (e) {
+      debugPrint("Error loading castes: $e");
+    }
+  }
+
+  Future<void> _onCasteChanged(DDown? caste) async {
+    if (caste == null) return;
+    setState(() {
+      _casteDisplay = caste.name;
+      _selectedCasteId = caste.id;
+      _subCasteDisplay = null;
+      _selectedSubCasteId = null;
+      _subCasteList = [];
+    });
+
+    try {
+      final res = await DropDownRepository().fetchSubCaste(caste.id);
+      if (res.data != null) {
+        setState(() => _subCasteList = res.data ?? []);
+      }
+    } catch (e) {
+      debugPrint("Error loading sub-castes: $e");
+    }
   }
 
   // Bug #1 fix: dispose ALL controllers
@@ -262,13 +320,30 @@ class _MyProfileState extends State<MyProfile> {
       final basicFuture = repo.fetchBasicInfo();
       final phyFuture = repo.fetchPhysicalAttribute();
       final famFuture = repo.fetchFamily();
-      await Future.wait([basicFuture, phyFuture, famFuture]);
+      final eduFuture = repo.fetchEducation();
+      final careerFuture = repo.fetchCareer();
+      final addrFuture = repo.fetchPresentAddress();
+      final partnerFuture = repo.fetchPartnerExpectation();
+
+      await Future.wait([
+        basicFuture,
+        phyFuture,
+        famFuture,
+        eduFuture,
+        careerFuture,
+        addrFuture,
+        partnerFuture
+      ]);
 
       if (!mounted) return;
 
       final basicRes = await basicFuture;
       final phyRes = await phyFuture;
       final famRes = await famFuture;
+      final eduRes = await eduFuture;
+      final careerRes = await careerFuture;
+      final addrRes = await addrFuture;
+      final partnerRes = await partnerFuture;
 
       setState(() {
         // ---- Basic info ----
@@ -288,6 +363,7 @@ class _MyProfileState extends State<MyProfile> {
                 .map((e) => e.key)
                 .firstOrNull;
           }
+          _mobile1.text = d.phone ?? '';
         }
 
         // ---- Physical attributes ----
@@ -295,11 +371,13 @@ class _MyProfileState extends State<MyProfile> {
           final p = phyRes.data!;
           _weight.text = p.weight?.toString() ?? '';
           _disabilityDetails.text = p.disability ?? '';
+          _physicalDisability = p.disability != null && p.disability! != "None";
           if (p.complexion != null) {
             _complexionDisplay = _complexionOptions.entries
-                .where((e) => e.value == p.complexion)
-                .map((e) => e.key)
-                .firstOrNull ?? p.complexion;
+                    .where((e) => e.value == p.complexion)
+                    .map((e) => e.key)
+                    .firstOrNull ??
+                p.complexion;
           }
           if (p.bloodGroup != null) {
             _bloodGroupDisplay = p.bloodGroup;
@@ -316,7 +394,99 @@ class _MyProfileState extends State<MyProfile> {
         // ---- Family info ----
         if (famRes.result == true && famRes.data != null) {
           final f = famRes.data!;
-          _parentsOccupation.text = '${f.father ?? ''} / ${f.mother ?? ''}';
+          _fatherAlive = f.father == 'Alive';
+          _motherAlive = f.mother == 'Alive';
+          // Sanket: sibling field parsing if needed, but we use the defaults for now
+        }
+
+        // ---- Education ----
+        if (eduRes.result == true &&
+            eduRes.data != null &&
+            eduRes.data!.isNotEmpty) {
+          final e = eduRes.data!.first;
+          _educationDisplay = _educationOptions.entries
+              .where((item) => item.value == e.degree)
+              .map((item) => item.key)
+              .firstOrNull ?? e.degree;
+          _educationDetails.text = e.institution ?? '';
+        }
+
+        // ---- Career ----
+        if (careerRes.result == true &&
+            careerRes.data != null &&
+            careerRes.data!.isNotEmpty) {
+          final c = careerRes.data!.first;
+          _occupationDisplay = _occupationOptions.entries
+              .where((item) => item.value == c.designation)
+              .map((item) => item.key)
+              .firstOrNull ?? c.designation;
+          _occupationDetails.text = c.company ?? '';
+        }
+
+        // ---- Address & District ----
+        if (addrRes.result == true && addrRes.data != null) {
+          final a = addrRes.data!;
+          _address.text = a.address ?? '';
+          if (a.city != null) {
+            _districtDisplay = _districtOptions.entries
+                .where((e) => e.value == a.city)
+                .map((e) => e.key)
+                .firstOrNull ?? a.city;
+          }
+          // Assuming country/state are fixed for Maharashtra/India
+        }
+
+        // ---- Expectations ----
+        if (partnerRes.result == true && partnerRes.data != null) {
+          final ex = partnerRes.data!;
+          _preferredCitiesCtrl.text = ex.general ?? '';
+          if (ex.manglik != null) _partnerManglik = ex.manglik == '1';
+          if (ex.childrenAcceptable != null)
+            _divorceAccepted = ex.childrenAcceptable == 'yes';
+
+          // Sanket: Load partner religion/caste IDs
+          _partnerReligionId = int.tryParse(ex.religionId ?? '');
+          _partnerReligionDisplay = ex.religion;
+          _partnerCasteId = int.tryParse(ex.casteId ?? '');
+          _partnerCasteDisplay = ex.caste;
+          _partnerSubCasteId = int.tryParse(ex.subCasteId ?? '');
+          _partnerSubCasteDisplay = ex.subCaste;
+
+          // If IDs exist, pre-fetch their dependent lists
+          if (_partnerReligionId != null) {
+            DropDownRepository().fetchCaste(_partnerReligionId!).then((res) {
+              if (res.data != null && mounted) {
+                setState(() => _partnerCasteList = res.data ?? []);
+              }
+            });
+          }
+          if (_partnerCasteId != null) {
+            DropDownRepository().fetchSubCaste(_partnerCasteId!).then((res) {
+              if (res.data != null && mounted) {
+                setState(() => _partnerSubCasteList = res.data ?? []);
+              }
+            });
+          }
+        }
+
+        // ---- Spiritual Background (Added by Sanket) ----
+        if (basicRes.data?.religionId != null) {
+           _selectedReligionId = basicRes.data!.religionId;
+           _religionDisplay = basicRes.data!.religion;
+           DropDownRepository().fetchCaste(_selectedReligionId!).then((res) {
+              if (res.data != null && mounted) {
+                setState(() => _casteList = res.data ?? []);
+              }
+           });
+        }
+        if (basicRes.data?.casteId != null) {
+           _selectedCasteId = basicRes.data!.casteId;
+           _casteDisplay = basicRes.data!.caste;
+           DropDownRepository().fetchSubCaste(_selectedCasteId!).then((res) {
+              if (res.data != null && mounted) {
+                setState(() => _subCasteList = res.data ?? []);
+              }
+           });
         }
 
         _isLoadingData = false;
@@ -379,18 +549,24 @@ class _MyProfileState extends State<MyProfile> {
     final loc = AppLocalizations.of(context)!;
     switch (_currentStep) {
       case 0:
-        if (_firstName.text.trim().isEmpty || _middleName.text.trim().isEmpty || _surname.text.trim().isEmpty) {
-          return "Please fill all name fields.";
+        if (_firstName.text.trim().isEmpty || _surname.text.trim().isEmpty || _middleName.text.trim().isEmpty) {
+          return "First, Middle, and Last Name are required.";
         }
         if (_dob == null) return loc.profile_error_dob;
         if (_religionDisplay == null || _casteDisplay == null || _maritalStatusDisplay == null) {
-          return "Please select religion, caste, and marital status.";
+          return "Please select Religion, Caste, and Marital Status.";
         }
-        if (_heightDisplay == null || _weight.text.trim().isEmpty || _bloodGroupDisplay == null || _complexionDisplay == null || _dietDisplay == null) {
-          return "Please fill all physical attributes.";
+        if (_heightDisplay == null || _weight.text.trim().isEmpty) {
+          return "Please fill Height and Weight.";
+        }
+        if (_bloodGroupDisplay == null || _complexionDisplay == null || _dietDisplay == null) {
+          return "Please select Blood Group, Complexion, and Diet.";
         }
         if (_physicalDisability == null || _manglik == null || _intercasteAccepted == null) {
           return "Please answer all Yes/No questions.";
+        }
+        if (_physicalDisability == true && _disabilityDetails.text.trim().isEmpty) {
+          return "Please provide Disability Details.";
         }
         return null;
 
@@ -398,42 +574,42 @@ class _MyProfileState extends State<MyProfile> {
         if (_fatherAlive == null || _motherAlive == null) {
           return "Please select Parents status.";
         }
-        if (_noOfBrothers == null || _noOfSisters == null) {
-          return "Please enter number of brothers and sisters.";
+        if (_noOfBrothers == null || _marriedBrothers == null || _noOfSisters == null || _marriedSisters == null) {
+          return "Please provide Siblings count.";
         }
-        final brothers = int.tryParse(_noOfBrothers ?? '0') ?? 0;
-        final marriedBrothers = int.tryParse(_marriedBrothers ?? '0') ?? 0;
-        if (marriedBrothers > brothers) {
-          return loc.profile_error_married_brothers;
+        // Excluded: _parentsOccupation, _propertyDetails
+        if (_educationDisplay == null) {
+          return "Please select your Education level.";
         }
-        final sisters = int.tryParse(_noOfSisters ?? '0') ?? 0;
-        final marriedSisters = int.tryParse(_marriedSisters ?? '0') ?? 0;
-        if (marriedSisters > sisters) {
-          return loc.profile_error_married_sisters;
+        if (_educationDetails.text.trim().isEmpty) {
+          return "Please provide Education details.";
         }
-        if (_parentsOccupation.text.trim().isEmpty) {
-          return "Please enter Parents Occupation.";
-        }
-        if (_educationDisplay == null || _educationDetails.text.trim().isEmpty) {
-          return "Please completely fill your Education details.";
-        }
-        if (_occupationDisplay == null || _occupationDetails.text.trim().isEmpty || _annualIncomeDisplay == null) {
-          return "Please fill your Career and Income details.";
+        if (_occupationDisplay == null || _annualIncomeDisplay == null || _occupationDetails.text.trim().isEmpty) {
+          return "Please fill all Career and Income details.";
         }
         return null;
 
       case 2:
         if (_govIdTypeDisplay == null || _govIdNumber.text.trim().isEmpty) {
-          return "Please provide Government ID details.";
+          return "Please provide Govt ID Type and Number.";
         }
         if (_address.text.trim().isEmpty || _districtDisplay == null) {
-          return "Please fill complete address including district.";
+          return "Please fill address and select District.";
         }
-        if (_mobile1.text.trim().isEmpty) {
-          return loc.profile_error_mobile;
-        }
-        if (_mobile1.text.trim().length < 10) {
+        if (_mobile1.text.trim().isEmpty || _mobile1.text.trim().length < 10) {
           return loc.profile_error_mobile_invalid;
+        }
+        return null;
+
+      case 3:
+        if (_preferredCitiesCtrl.text.trim().isEmpty) {
+          return "Please enter Preferred Cities.";
+        }
+        if (_partnerManglik == null || _divorceAccepted == null || _partnerIntercaste == null) {
+          return "Please answer all Partner Expectations Yes/No questions.";
+        }
+        if (_expectedEducationDisplay == null || _expectedIncomeDisplay == null) {
+          return "Please select Expected Education and Income.";
         }
         return null;
 
@@ -452,115 +628,76 @@ class _MyProfileState extends State<MyProfile> {
     final repo = ManageProfileRepository();
 
     try {
-      // Bug #9 fix: read preferred cities from the dedicated controller
-      // and pass as a comma-separated string in general partner expectation
       final preferredCitiesText = _preferredCitiesCtrl.text.trim();
 
-      // Sanket: Use per-section repository methods — proper API contracts
-      final f1 = repo.basicInfoUpdate(
+      // Sanket: Use Atomic Update (B-001) - send all text data in one request
+      final response = await repo.fullProfileUpdate(
         f_name: _firstName.text.trim(),
+        middle_name: _middleName.text.trim(),
         l_name: _surname.text.trim(),
         dob: _dob != null ? DateFormat('yyyy-MM-dd').format(_dob!) : '',
         phone: _mobile1.text.trim(),
         m_status: _apiVal(_maritalOptions, _maritalStatusDisplay),
-        noofChild: '0',
-        photo: _profilePhoto,
-      );
-      // Physical attributes update
-      final f2 = repo.updatePhysicalAttr(
         height: _apiVal(_heightOptions, _heightDisplay),
         weight: _weight.text.isNotEmpty ? _weight.text : null,
         complexion: _apiVal(_complexionOptions, _complexionDisplay),
         blood_group: _bloodGroupDisplay,
-        disability: _disabilityDetails.text.isNotEmpty
-            ? _disabilityDetails.text
-            : null,
-      );
-      // Partner expectations update
-      final f3 = repo.updatePartnerExpectation(
-        general_info: preferredCitiesText.isNotEmpty
-            ? preferredCitiesText
-            : null,
-        manglik: _partnerManglik != null
-            ? (_partnerManglik! ? '1' : '0')
-            : null,
-        education: _apiVal(_educationOptions, _expectedEducationDisplay),
-        min_height: null,
-        max_weight: null,
-        residency_country: null,
-        marital_status: null,
-        children: _divorceAccepted != null
-            ? (_divorceAccepted! ? '1' : '0')
-            : null,
-        religion: null,
-        caste: null,
-        subcaste: null,
-          language: null,
-          smoking: null,
-          profession: null,
-          drinking: null,
-          diet: null,
-          body_type: null,
-          personal_value: null,
-          pref_country: null,
-          pref_state: null,
-          family_val: null,
-          complexion: null,
-      );
-
-      // Missing API Calls (Bug #6 & #7 Fix): Submit Family, Education, Career
-      final f4 = repo.updateFamily(
+        disability: _physicalDisability == true ? _disabilityDetails.text : "None",
+        religion: _religionDisplay,
+        religion_id: _selectedReligionId,
+        caste: _casteDisplay,
+        caste_id: _selectedCasteId,
+        sub_caste_id: _selectedSubCasteId,
+        diet: _apiVal(_dietOptions, _dietDisplay),
+        personal_manglik: _manglik != null ? (_manglik! ? '1' : '0') : null,
+        intercaste_accepted: _intercasteAccepted != null ? (_intercasteAccepted! ? '1' : '0') : null,
         father: _fatherAlive == true ? 'Alive' : 'Deceased',
         mother: _motherAlive == true ? 'Alive' : 'Deceased',
-        sibling:
-            '${_noOfBrothers ?? 0} Brothers, ${_noOfSisters ?? 0} Sisters',
+        brothers: _noOfBrothers ?? '0',
+        married_brothers: _marriedBrothers ?? '0',
+        sisters: _noOfSisters ?? '0',
+        married_sisters: _marriedSisters ?? '0',
+        parents_occupation: _parentsOccupation.text.isNotEmpty ? _parentsOccupation.text : null,
+        property_details: _propertyDetails.text.isNotEmpty ? _propertyDetails.text : null,
+        degree: _apiVal(_educationOptions, _educationDisplay),
+        institution: _educationDetails.text.isNotEmpty
+            ? _educationDetails.text
+            : "N/A",
+        education_start: 0,
+        designation: _apiVal(_occupationOptions, _occupationDisplay),
+        company: _occupationDetails.text.isNotEmpty
+            ? _occupationDetails.text
+            : "N/A",
+        career_start: 0,
+        annual_income: _apiVal(_incomeOptions, _annualIncomeDisplay),
+        gov_id_type: _apiVal(_govIdOptions, _govIdTypeDisplay),
+        gov_id_number: _govIdNumber.text.trim(),
+        address: _address.text.trim(),
+        district: _apiVal(_districtOptions, _districtDisplay),
+        phone2: _mobile2.text.trim(),
+        general_info: preferredCitiesText.isNotEmpty ? preferredCitiesText : null,
+        manglik: _partnerManglik != null ? (_partnerManglik! ? '1' : '0') : null,
+        partner_religion_id: _partnerReligionId,
+        partner_caste_id: _partnerCasteId,
+        partner_sub_caste_id: _partnerSubCasteId,
+        education_expectation: _apiVal(_educationOptions, _expectedEducationDisplay),
+        expected_income: _apiVal(_incomeOptions, _expectedIncomeDisplay),
+        children_acceptable: _divorceAccepted != null ? (_divorceAccepted! ? '1' : '0') : null,
+        partner_intercaste: _partnerIntercaste != null ? (_partnerIntercaste! ? '1' : '0') : null,
       );
-      final f5 = _educationDisplay != null
-          ? repo.educationCreate(
-              degree: _educationDisplay,
-              institution: _educationDetails.text.isNotEmpty
-                  ? _educationDetails.text
-                  : "N/A",
-              start: "N/A",
-              end: "N/A",
-            )
-          : Future.value(CommonResponse(result: true));
-      final f6 = _occupationDisplay != null
-          ? repo.careerCreate(
-              designation: _occupationDisplay,
-              company: _occupationDetails.text.isNotEmpty
-                  ? _occupationDetails.text
-                  : "N/A",
-              start: "N/A",
-              end: "N/A",
-            )
-          : Future.value(CommonResponse(result: true));
 
-      // Bug #6 fix: await all, then check mounted before touching context
-      await Future.wait([f1, f2, f3, f4, f5, f6]);
 
       if (!mounted) return;
 
-      final res1 = await f1;
-      final res2 = await f2;
-      final res3 = await f3;
-      final res4 = await f4;
-      final res5 = await f5;
-      final res6 = await f6;
+      if (response.result == true) {
+        // Atomic data saved. Now handle photo separately if exists.
+        if (_profilePhoto != null) {
+          await repo.profilePictureUpdate(photo: _profilePhoto);
+        }
 
-      // Bug #5 fix: check result field from each response, not just HTTP status
-      final allSuccess = (res1.result == true) &&
-          (res2.result == true) &&
-          (res3.result == true) &&
-          (res4.result == true) &&
-          (res5.result == true) &&
-          (res6.result == true);
+        setState(() => _isSubmitting = false);
+        if (!mounted) return;
 
-      setState(() => _isSubmitting = false);
-
-      if (!mounted) return;
-
-      if (allSuccess) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text(AppLocalizations.of(context)!.profile_saved_ok),
@@ -569,16 +706,18 @@ class _MyProfileState extends State<MyProfile> {
         );
         Navigator.pop(context);
       } else {
+        setState(() => _isSubmitting = false);
         if (!mounted) return;
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text(AppLocalizations.of(context)!.profile_saved_fail),
+            content: Text(
+                response.message ?? AppLocalizations.of(context)!.profile_saved_fail),
             backgroundColor: Colors.red,
           ),
         );
       }
     } catch (e) {
-      if (!mounted) return; // Bug #6 fix
+      if (!mounted) return;
       setState(() => _isSubmitting = false);
       debugPrint('Sanket: Profile submit error: $e');
       ScaffoldMessenger.of(context).showSnackBar(
@@ -789,10 +928,12 @@ class _MyProfileState extends State<MyProfile> {
       _buildTextField(
         AppLocalizations.of(context)!.profile_label_middle_name,
         _middleName,
+        isRequired: true,
       ),
       _buildTextField(
         AppLocalizations.of(context)!.profile_label_last_name,
         _surname,
+        isRequired: true,
       ),
       _buildDatePicker(
         AppLocalizations.of(context)!.profile_label_dob,
@@ -816,23 +957,35 @@ class _MyProfileState extends State<MyProfile> {
             ),
           ),
         ),
-      _buildMappedDropdown(
+      _buildDDown(
         AppLocalizations.of(context)!.profile_label_religion,
-        _religionOptions,
+        _religionList,
         _religionDisplay,
-        (v) => setState(() => _religionDisplay = v),
+        _onReligionChanged,
+        isRequired: true,
       ),
-      _buildMappedDropdown(
+      _buildDDown(
         AppLocalizations.of(context)!.profile_label_caste,
-        _casteOptions,
+        _casteList,
         _casteDisplay,
-        (v) => setState(() => _casteDisplay = v),
+        _onCasteChanged,
+        isRequired: true,
+      ),
+      _buildDDown(
+        "पोट-जात (Sub-Caste)",
+        _subCasteList,
+        _subCasteDisplay,
+        (v) => setState(() {
+          _subCasteDisplay = v?.name;
+          _selectedSubCasteId = v?.id;
+        }),
       ),
       _buildMappedDropdown(
         AppLocalizations.of(context)!.profile_label_marital_status,
         _maritalOptions,
         _maritalStatusDisplay,
         (v) => setState(() => _maritalStatusDisplay = v),
+        isRequired: true,
       ),
 
       const SizedBox(height: 16),
@@ -842,23 +995,27 @@ class _MyProfileState extends State<MyProfile> {
         _heightOptions,
         _heightDisplay,
         (v) => setState(() => _heightDisplay = v),
+        isRequired: true,
       ),
       _buildTextField(
         AppLocalizations.of(context)!.profile_label_weight,
         _weight,
         isNumber: true,
+        isRequired: true,
       ),
       _buildMappedDropdown(
         AppLocalizations.of(context)!.profile_label_blood_group,
         _bloodGroupOptions,
         _bloodGroupDisplay,
         (v) => setState(() => _bloodGroupDisplay = v),
+        isRequired: true,
       ),
       _buildMappedDropdown(
         AppLocalizations.of(context)!.profile_label_complexion,
         _complexionOptions,
         _complexionDisplay,
         (v) => setState(() => _complexionDisplay = v),
+        isRequired: true,
       ),
 
       const SizedBox(height: 16),
@@ -877,14 +1034,16 @@ class _MyProfileState extends State<MyProfile> {
             }
           });
         },
+        isRequired: true,
       ),
       if (_physicalDisability == true)
         Column(
           children: [
             const SizedBox(height: 16),
             _buildTextField(
-              label: loc.profile_disability_details,
-              controller: _disabilityDetails,
+              loc.profile_disability_details,
+              _disabilityDetails,
+              isRequired: true,
             ),
           ],
         ),
@@ -894,16 +1053,19 @@ class _MyProfileState extends State<MyProfile> {
         _dietOptions,
         _dietDisplay,
         (v) => setState(() => _dietDisplay = v),
+        isRequired: true,
       ),
       _buildNullableRadioOption(
         AppLocalizations.of(context)!.profile_label_manglik,
         _manglik,
         (v) => setState(() => _manglik = v),
+        isRequired: true,
       ),
       _buildNullableRadioOption(
         AppLocalizations.of(context)!.profile_label_intercaste,
         _intercasteAccepted,
         (v) => setState(() => _intercasteAccepted = v),
+        isRequired: true,
       ),
     ]);
   }
@@ -921,35 +1083,41 @@ class _MyProfileState extends State<MyProfile> {
         AppLocalizations.of(context)!.profile_label_father_alive,
         _fatherAlive,
         (v) => setState(() => _fatherAlive = v),
+        isRequired: true,
       ),
       _buildNullableRadioOption(
         AppLocalizations.of(context)!.profile_label_mother_alive,
         _motherAlive,
         (v) => setState(() => _motherAlive = v),
+        isRequired: true,
       ),
       _buildMappedDropdown(
         AppLocalizations.of(context)!.profile_label_brothers,
         numberOptions,
         _noOfBrothers,
         (v) => setState(() => _noOfBrothers = v),
+        isRequired: true,
       ),
       _buildMappedDropdown(
         AppLocalizations.of(context)!.profile_label_married_brothers,
         numberOptions,
         _marriedBrothers,
         (v) => setState(() => _marriedBrothers = v),
+        isRequired: true,
       ),
       _buildMappedDropdown(
         AppLocalizations.of(context)!.profile_label_sisters,
         numberOptions,
         _noOfSisters,
         (v) => setState(() => _noOfSisters = v),
+        isRequired: true,
       ),
       _buildMappedDropdown(
         AppLocalizations.of(context)!.profile_label_married_sisters,
         numberOptions,
         _marriedSisters,
         (v) => setState(() => _marriedSisters = v),
+        isRequired: true,
       ),
       _buildTextField(
         AppLocalizations.of(context)!.profile_label_parents_occ,
@@ -968,12 +1136,14 @@ class _MyProfileState extends State<MyProfile> {
         _educationOptions,
         _educationDisplay,
         (v) => setState(() => _educationDisplay = v),
+        isRequired: true,
       ),
       if (_educationDisplay != null) ...[
         const SizedBox(height: 16),
         _buildTextField(
           "Degree / Specialization (उदा. B.E. Computer)",
           _educationDetails,
+          isRequired: true,
         ),
       ],
       const SizedBox(height: 16),
@@ -983,17 +1153,20 @@ class _MyProfileState extends State<MyProfile> {
         _occupationOptions,
         _occupationDisplay,
         (v) => setState(() => _occupationDisplay = v),
+        isRequired: true,
       ),
       _buildTextField(
         AppLocalizations.of(context)!.profile_label_occ_details,
         _occupationDetails,
         maxLines: 2,
+        isRequired: true,
       ),
       _buildMappedDropdown(
         AppLocalizations.of(context)!.profile_label_income,
         _incomeOptions,
         _annualIncomeDisplay,
         (v) => setState(() => _annualIncomeDisplay = v),
+        isRequired: true,
       ),
     ]);
   }
@@ -1009,21 +1182,30 @@ class _MyProfileState extends State<MyProfile> {
         _govIdOptions,
         _govIdTypeDisplay,
         (v) => setState(() => _govIdTypeDisplay = v),
+        isRequired: true,
       ),
       _buildTextField(
         AppLocalizations.of(context)!.profile_label_gov_id_number,
         _govIdNumber,
+        isRequired: true,
       ),
       _buildTextField(
         AppLocalizations.of(context)!.profile_label_address,
         _address,
         maxLines: 3,
+        isRequired: true,
+      ),
+      _buildTextField(
+        "राज्य (State)",
+        TextEditingController(text: "Maharashtra"),
+        isRequired: true,
       ),
       _buildMappedDropdown(
-        AppLocalizations.of(context)!.profile_label_city,
-        _cityOptions,
-        _cityDisplay,
-        (v) => setState(() => _cityDisplay = v),
+        "जिल्हा (District)",
+        _districtOptions,
+        _districtDisplay,
+        (v) => setState(() => _districtDisplay = v),
+        isRequired: true,
       ),
       _buildTextField(
         AppLocalizations.of(context)!.profile_label_mobile1,
@@ -1083,6 +1265,49 @@ class _MyProfileState extends State<MyProfile> {
     ]);
   }
 
+  Future<void> _onPartnerReligionChanged(DDown? religion) async {
+    if (religion == null) return;
+    setState(() {
+      _partnerReligionDisplay = religion.name;
+      _partnerReligionId = religion.id;
+      _partnerCasteDisplay = null;
+      _partnerCasteId = null;
+      _partnerSubCasteDisplay = null;
+      _partnerSubCasteId = null;
+      _partnerCasteList = [];
+      _partnerSubCasteList = [];
+    });
+
+    try {
+      final res = await DropDownRepository().fetchCaste(religion.id);
+      if (res.data != null) {
+        setState(() => _partnerCasteList = res.data ?? []);
+      }
+    } catch (e) {
+      debugPrint("Error loading partner castes: $e");
+    }
+  }
+
+  Future<void> _onPartnerCasteChanged(DDown? caste) async {
+    if (caste == null) return;
+    setState(() {
+      _partnerCasteDisplay = caste.name;
+      _partnerCasteId = caste.id;
+      _partnerSubCasteDisplay = null;
+      _partnerSubCasteId = null;
+      _partnerSubCasteList = [];
+    });
+
+    try {
+      final res = await DropDownRepository().fetchSubCaste(caste.id);
+      if (res.data != null) {
+        setState(() => _partnerSubCasteList = res.data ?? []);
+      }
+    } catch (e) {
+      debugPrint("Error loading partner sub-castes: $e");
+    }
+  }
+
   // =========================================================================
   // STEP 4: Partner Expectations
   // =========================================================================
@@ -1095,33 +1320,62 @@ class _MyProfileState extends State<MyProfile> {
       _buildTextField(
         AppLocalizations.of(context)!.profile_label_preferred_cities,
         _preferredCitiesCtrl,
+        isRequired: true,
       ),
       _buildNullableRadioOption(
         AppLocalizations.of(context)!.profile_label_partner_manglik,
         _partnerManglik,
         (v) => setState(() => _partnerManglik = v),
+        isRequired: true,
+      ),
+      _buildDDown(
+        AppLocalizations.of(context)!.profile_label_religion,
+        _religionList,
+        _partnerReligionDisplay,
+        _onPartnerReligionChanged,
+        isRequired: true,
+      ),
+      _buildDDown(
+        AppLocalizations.of(context)!.profile_label_caste,
+        _partnerCasteList,
+        _partnerCasteDisplay,
+        _onPartnerCasteChanged,
+        isRequired: true,
+      ),
+      _buildDDown(
+        "अपेक्षित पोट-जात (Partner Sub-Caste)",
+        _partnerSubCasteList,
+        _partnerSubCasteDisplay,
+        (v) => setState(() {
+          _partnerSubCasteDisplay = v?.name;
+          _partnerSubCasteId = v?.id;
+        }),
       ),
       _buildMappedDropdown(
         AppLocalizations.of(context)!.profile_label_expected_edu,
         _educationOptions,
         _expectedEducationDisplay,
         (v) => setState(() => _expectedEducationDisplay = v),
+        isRequired: true,
       ),
       _buildMappedDropdown(
         AppLocalizations.of(context)!.profile_label_expected_income,
         _incomeOptions,
         _expectedIncomeDisplay,
         (v) => setState(() => _expectedIncomeDisplay = v),
+        isRequired: true,
       ),
       _buildNullableRadioOption(
         AppLocalizations.of(context)!.profile_label_divorce_accepted,
         _divorceAccepted,
         (v) => setState(() => _divorceAccepted = v),
+        isRequired: true,
       ),
       _buildNullableRadioOption(
         AppLocalizations.of(context)!.profile_label_partner_intercaste,
         _partnerIntercaste,
         (v) => setState(() => _partnerIntercaste = v),
+        isRequired: true,
       ),
     ]);
   }
@@ -1200,6 +1454,66 @@ class _MyProfileState extends State<MyProfile> {
 
   // Sanket: Takes Map<displayLabel, apiValue> — only display labels shown to
   // user; apiValue is what gets submitted. Fixes Bug #8.
+  Widget _buildDDown(
+    String label,
+    List<DDown> items,
+    String? selectedDisplay,
+    Function(DDown?) onChanged, {
+    bool isRequired = false,
+  }) {
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 16),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              Text(
+                label,
+                style: Styles.body.copyWith(
+                  color: MyTheme.text_secondary,
+                  fontSize: 13,
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+              if (isRequired)
+                const Text(' *', style: TextStyle(color: Colors.red)),
+            ],
+          ),
+          const SizedBox(height: 8),
+          Container(
+            padding: const EdgeInsets.symmetric(horizontal: 16),
+            decoration: BoxDecoration(
+              color: MyTheme.white,
+              borderRadius: BorderRadius.circular(12),
+              border: Border.all(color: MyTheme.border),
+            ),
+            child: DropdownButtonHideUnderline(
+              child: DropdownButton<DDown>(
+                isExpanded: true,
+                value: items.any((e) => e.name == selectedDisplay)
+                    ? items.firstWhere((e) => e.name == selectedDisplay)
+                    : null,
+                hint: Text(
+                  AppLocalizations.of(context)!.profile_label_select,
+                ),
+                items: items
+                    .map(
+                      (item) => DropdownMenuItem(
+                        value: item,
+                        child: Text(item.name ?? ''),
+                      ),
+                    )
+                    .toList(),
+                onChanged: onChanged,
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
   Widget _buildMappedDropdown(
     String label,
     Map<String, String> items,
@@ -1334,20 +1648,27 @@ class _MyProfileState extends State<MyProfile> {
   Widget _buildNullableRadioOption(
     String label,
     bool? value,
-    Function(bool?) onChanged,
-  ) {
+    Function(bool?) onChanged, {
+    bool isRequired = false,
+  }) {
     return Padding(
       padding: const EdgeInsets.only(bottom: 16),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(
-            label,
-            style: Styles.body.copyWith(
-              color: MyTheme.text_secondary,
-              fontSize: 13,
-              fontWeight: FontWeight.w600,
-            ),
+          Row(
+            children: [
+              Text(
+                label,
+                style: Styles.body.copyWith(
+                  color: MyTheme.text_secondary,
+                  fontSize: 13,
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+              if (isRequired)
+                const Text(' *', style: TextStyle(color: Colors.red)),
+            ],
           ),
           const SizedBox(height: 8),
           Row(
@@ -1379,7 +1700,7 @@ class _MyProfileState extends State<MyProfile> {
     );
   }
 
-  Widget _buildUploadBox(String label, File? file, Function(File) onPicked) {
+  Widget _buildUploadBox(String label, dynamic file, Function(dynamic) onPicked) {
     return Padding(
       padding: const EdgeInsets.only(bottom: 16),
       child: Column(
@@ -1397,8 +1718,16 @@ class _MyProfileState extends State<MyProfile> {
           InkWell(
             onTap: () async {
               final XFile? image =
-                  await _picker.pickImage(source: ImageSource.gallery);
-              if (image != null) onPicked(File(image.path));
+                  await _picker.pickImage(
+                    source: ImageSource.gallery,
+                    maxWidth: 1000,
+                    maxHeight: 1000,
+                    imageQuality: 85,
+                  );
+              if (image != null) {
+                // Sanket: Keep as XFile to avoid dart:io 'Namespace' error on Web
+                onPicked(image);
+              }
             },
             child: Container(
               height: 120,
@@ -1411,7 +1740,9 @@ class _MyProfileState extends State<MyProfile> {
               child: file != null
                   ? ClipRRect(
                       borderRadius: BorderRadius.circular(12),
-                      child: Image.file(file, fit: BoxFit.cover),
+                      child: kIsWeb
+                          ? Image.network(file.path, fit: BoxFit.cover)
+                          : Image.file(File(file.path), fit: BoxFit.cover),
                     )
                   : Column(
                       mainAxisAlignment: MainAxisAlignment.center,
@@ -1437,8 +1768,8 @@ class _MyProfileState extends State<MyProfile> {
 
   Widget _buildMultiUploadBox(
     String label,
-    List<File> files,
-    Function(List<File>) onPicked,
+    List<dynamic> files,
+    Function(List<dynamic>) onPicked,
   ) {
     return Padding(
       padding: const EdgeInsets.only(bottom: 16),
@@ -1458,7 +1789,7 @@ class _MyProfileState extends State<MyProfile> {
             onTap: () async {
               final List<XFile> images = await _picker.pickMultiImage();
               if (images.isNotEmpty) {
-                onPicked(images.map((e) => File(e.path)).toList());
+                onPicked(images);
               }
             },
             child: Container(
@@ -1480,12 +1811,19 @@ class _MyProfileState extends State<MyProfile> {
                                 padding: const EdgeInsets.only(right: 8),
                                 child: ClipRRect(
                                   borderRadius: BorderRadius.circular(8),
-                                  child: Image.file(
-                                    f,
-                                    height: 100,
-                                    width: 100,
-                                    fit: BoxFit.cover,
-                                  ),
+                                  child: kIsWeb
+                                      ? Image.network(
+                                          f.path,
+                                          height: 100,
+                                          width: 100,
+                                          fit: BoxFit.cover,
+                                        )
+                                      : Image.file(
+                                          File(f.path),
+                                          height: 100,
+                                          width: 100,
+                                          fit: BoxFit.cover,
+                                        ),
                                 ),
                               ),
                             )
@@ -1515,4 +1853,63 @@ class _MyProfileState extends State<MyProfile> {
       ),
     );
   }
+
+  Widget _buildDropdown({
+    required String label,
+    required String? value,
+    required List<String> items,
+    required Function(String?) onChanged,
+    bool isRequired = false,
+  }) {
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 16),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              Text(
+                label,
+                style: Styles.body.copyWith(
+                  color: MyTheme.text_secondary,
+                  fontSize: 13,
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+              if (isRequired)
+                const Text(' *', style: TextStyle(color: Colors.red)),
+            ],
+          ),
+          const SizedBox(height: 8),
+          Container(
+            padding: const EdgeInsets.symmetric(horizontal: 16),
+            decoration: BoxDecoration(
+              color: MyTheme.white,
+              borderRadius: BorderRadius.circular(12),
+              border: Border.all(color: MyTheme.border),
+            ),
+            child: DropdownButtonHideUnderline(
+              child: DropdownButton<String>(
+                isExpanded: true,
+                value: value,
+                hint: Text(
+                  AppLocalizations.of(context)!.profile_label_select,
+                ),
+                items: items
+                    .map(
+                      (item) => DropdownMenuItem(
+                        value: item,
+                        child: Text(item),
+                      ),
+                    )
+                    .toList(),
+                onChanged: onChanged,
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
 }
+

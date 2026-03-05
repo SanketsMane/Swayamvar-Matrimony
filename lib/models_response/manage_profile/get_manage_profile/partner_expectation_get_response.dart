@@ -13,16 +13,18 @@ String partnerExpectationGetResponseToJson(
 ) => json.encode(data.toJson());
 
 class PartnerExpectationGetResponse {
-  PartnerExpectationGetResponse({this.data});
+  PartnerExpectationGetResponse({this.data, this.result});
 
   Data? data;
+  bool? result;
 
   factory PartnerExpectationGetResponse.fromJson(Map<String, dynamic> json) =>
       PartnerExpectationGetResponse(
         data: json["data"] == null ? null : Data.fromJson(json["data"]),
+        result: json["result"],
       );
 
-  Map<String, dynamic> toJson() => {"data": data?.toJson()};
+  Map<String, dynamic> toJson() => {"data": data?.toJson(), "result": result};
 
   PartnerExpectationGetResponse.initialState() : data = Data.initialState();
 }
@@ -36,8 +38,11 @@ class Data {
     this.childrenAcceptable,
     this.residenceCountryId,
     this.religionId,
+    this.religion,
     this.casteId,
+    this.caste,
     this.subCasteId,
+    this.subCaste,
     this.education,
     this.profession,
     this.smokingAcceptable,
@@ -60,8 +65,11 @@ class Data {
   String? childrenAcceptable;
   String? residenceCountryId;
   String? religionId;
+  String? religion;
   String? casteId;
+  String? caste;
   String? subCasteId;
+  String? subCaste;
   dynamic education;
   dynamic profession;
   String? smokingAcceptable;
@@ -83,9 +91,12 @@ class Data {
     maritalStatusId: json["marital_status"],
     childrenAcceptable: json["children_acceptable"],
     residenceCountryId: json["residence_country_id"],
-    religionId: json["religion_id"],
-    casteId: json["caste_id"],
-    subCasteId: json["sub_caste_id"],
+    religionId: json["religion_id"]?.toString(),
+    religion: json["religion"],
+    casteId: json["caste_id"]?.toString(),
+    caste: json["caste"],
+    subCasteId: json["sub_caste_id"]?.toString(),
+    subCaste: json["sub_caste"],
     education: json["education"],
     profession: json["profession"],
     smokingAcceptable: json["smoking_acceptable"],
@@ -109,8 +120,11 @@ class Data {
     "children_acceptable": childrenAcceptable,
     "residence_country_id": residenceCountryId,
     "religion_id": religionId,
+    "religion": religion,
     "caste_id": casteId,
+    "caste": caste,
     "sub_caste_id": subCasteId,
+    "sub_caste": subCaste,
     "education": education,
     "profession": profession,
     "smoking_acceptable": smokingAcceptable,
@@ -134,8 +148,11 @@ class Data {
       childrenAcceptable = '',
       residenceCountryId = '',
       religionId = '',
+      religion = '',
       casteId = '',
+      caste = '',
       subCasteId = '',
+      subCaste = '',
       education = '',
       profession = '',
       smokingAcceptable = '',

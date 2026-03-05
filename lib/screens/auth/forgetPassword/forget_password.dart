@@ -5,6 +5,8 @@ import 'package:active_matrimonial_flutter_app/const/style.dart';
 import 'package:active_matrimonial_flutter_app/redux/store.dart';
 import 'package:active_matrimonial_flutter_app/redux/app/app_state.dart';
 import 'package:active_matrimonial_flutter_app/screens/auth/forgetPassword/forgetpassword_action.dart';
+import 'package:active_matrimonial_flutter_app/l10n/app_localizations.dart';
+import 'package:active_matrimonial_flutter_app/helpers/device_info.dart';
 
 class ForgetPassword extends StatefulWidget {
   const ForgetPassword({super.key});
@@ -46,7 +48,7 @@ class _ForgetPasswordState extends State<ForgetPassword> {
             ),
             centerTitle: true,
             title: Text(
-              "पासवर्ड विसरलात?", // Forgot Password
+              AppLocalizations.of(context)!.forget_screen_title,
               style: Styles.h2.copyWith(color: textPrimary),
             ),
             bottom: PreferredSize(
@@ -64,7 +66,7 @@ class _ForgetPasswordState extends State<ForgetPassword> {
 
                   // Instruction Section
                   Text(
-                    "पासवर्ड रिसेट करा", // Reset Your Password
+                    AppLocalizations.of(context)!.forget_screen_title,
                     style: Styles.h1.copyWith(
                       color: textPrimary,
                       letterSpacing: -0.5,
@@ -72,7 +74,7 @@ class _ForgetPasswordState extends State<ForgetPassword> {
                   ),
                   const SizedBox(height: 12),
                   Text(
-                    "तुमचा मोबाईल नंबर किंवा ईमेल प्रविष्ट करा.", // Enter your mobile number or email
+                    AppLocalizations.of(context)!.forget_screen_subtitle,
                     textAlign: TextAlign.center,
                     style: Styles.body.copyWith(
                       color: textSecondary,
@@ -102,8 +104,8 @@ class _ForgetPasswordState extends State<ForgetPassword> {
                         children: [
                           Text(
                             state.forgetPasswordState!.valueChanger!
-                                ? "मोबाईल नंबर" // Mobile Number
-                                : "ईमेल आयडी", // Email ID
+                                ? AppLocalizations.of(context)!.profile_label_mobile1
+                                : AppLocalizations.of(context)!.common_email_or_phone,
                             style: Styles.body.copyWith(
                               color: textPrimary,
                               fontSize: 13,
@@ -139,9 +141,10 @@ class _ForgetPasswordState extends State<ForgetPassword> {
                                               PhoneInputSelectorType.DIALOG,
                                           setSelectorButtonAsPrefixIcon: true,
                                           trailingSpace: false,
+                                          showFlags: false,
                                         ),
                                         inputDecoration: _inputDecoration(
-                                          "मोबाईल नंबर",
+                                          AppLocalizations.of(context)!.profile_label_mobile1,
                                         ),
                                         textStyle: Styles.body.copyWith(
                                           color: textPrimary,
@@ -158,12 +161,12 @@ class _ForgetPasswordState extends State<ForgetPassword> {
                                     ),
                                     validator: (value) {
                                       if (value == null || value.isEmpty) {
-                                        return "कृपया तुमचा ईमेल प्रविष्ट करा";
+                                        return AppLocalizations.of(context)!.common_enter_email;
                                       }
                                       return null;
                                     },
                                     decoration: _inputDecoration(
-                                      "ईमेल प्रविष्ट करा",
+                                      AppLocalizations.of(context)!.common_enter_email,
                                     ),
                                   ),
                           ),
@@ -178,8 +181,8 @@ class _ForgetPasswordState extends State<ForgetPassword> {
                               ),
                               child: Text(
                                 state.forgetPasswordState!.valueChanger!
-                                    ? "ईमेल वापरा" // Use Email instead
-                                    : "फोन नंबर वापरा", // Use Phone Number instead
+                                    ? AppLocalizations.of(context)!.forget_screen_use_email_instead
+                                    : AppLocalizations.of(context)!.common_screen_use_phone,
                                 style: Styles.buttonText.copyWith(
                                   color: primaryColor,
                                   fontSize: 12,
@@ -191,39 +194,56 @@ class _ForgetPasswordState extends State<ForgetPassword> {
                           const SizedBox(height: 32),
 
                           // Send Code Button
-                          ElevatedButton(
-                            onPressed:
-                                state.forgetPasswordState!.fp_loader == false
-                                    ? () => store.dispatch(
-                                          SendCodeAction(
-                                              payloadContext: context),
-                                        )
-                                    : null,
-                            style: ElevatedButton.styleFrom(
-                              backgroundColor: primaryColor,
-                              foregroundColor: Colors.white,
-                              elevation: 0,
-                              minimumSize: const Size(double.infinity, 52),
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(12),
-                              ),
+                          Container(
+                            height: 52,
+                            width: double.infinity,
+                            decoration: BoxDecoration(
+                              gradient: state.forgetPasswordState!.fp_loader == false ? Styles.primaryGradient : null,
+                              borderRadius: BorderRadius.circular(12),
+                              color: state.forgetPasswordState!.fp_loader == false ? null : primaryColor.withOpacity(0.5),
+                              boxShadow: state.forgetPasswordState!.fp_loader == false ? [
+                                BoxShadow(
+                                  color: primaryColor.withOpacity(0.3),
+                                  blurRadius: 12,
+                                  offset: const Offset(0, 4),
+                                )
+                              ] : [],
                             ),
-                            child: state.forgetPasswordState!.fp_loader == false
-                                ? Text(
-                                    "OTP पाठवा", // Send OTP
-                                    style: Styles.buttonText.copyWith(
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.w700,
+                            child: ElevatedButton(
+                              onPressed:
+                                  state.forgetPasswordState!.fp_loader == false
+                                      ? () => store.dispatch(
+                                            SendCodeAction(
+                                                payloadContext: context),
+                                          )
+                                      : null,
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: Colors.transparent,
+                                shadowColor: Colors.transparent,
+                                disabledBackgroundColor: Colors.transparent,
+                                foregroundColor: Colors.white,
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(12),
+                                ),
+                                elevation: 0,
+                              ),
+                              child: state.forgetPasswordState!.fp_loader == false
+                                  ? Text(
+                                      AppLocalizations.of(context)!.forget_screen_send_code,
+                                      style: Styles.buttonText.copyWith(
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.w700,
+                                      ),
+                                    )
+                                  : const SizedBox(
+                                      height: 24,
+                                      width: 24,
+                                      child: CircularProgressIndicator(
+                                        color: Colors.white,
+                                        strokeWidth: 2,
+                                      ),
                                     ),
-                                  )
-                                : const SizedBox(
-                                    height: 24,
-                                    width: 24,
-                                    child: CircularProgressIndicator(
-                                      color: Colors.white,
-                                      strokeWidth: 2,
-                                    ),
-                                  ),
+                            ),
                           ),
                         ],
                       ),
@@ -236,7 +256,7 @@ class _ForgetPasswordState extends State<ForgetPassword> {
                     child: InkWell(
                       onTap: () => Navigator.pop(context),
                       child: Text(
-                        "लॉगिनवर परत जा", // Back to Sign In
+                        AppLocalizations.of(context)!.forget_screen_or_back_to,
                         style: Styles.buttonText.copyWith(
                           color: primaryColor,
                           fontSize: 14,

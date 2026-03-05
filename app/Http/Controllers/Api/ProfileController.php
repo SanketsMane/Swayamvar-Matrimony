@@ -212,14 +212,24 @@ class ProfileController extends Controller
 
         // --- Spiritual Background (Religion, Caste, Manglik, Intercaste) ---
         $spiritual = SpiritualBackground::firstOrNew(['user_id' => $user->id]);
-        if ($request->religion) {
+        if ($request->religion_id) {
+            $spiritual->religion_id = $request->religion_id;
+        } elseif ($request->religion) {
             $religionObj = Religion::where('name', $request->religion)->first();
             if ($religionObj) $spiritual->religion_id = $religionObj->id;
         }
-        if ($request->caste) {
+
+        if ($request->caste_id) {
+            $spiritual->caste_id = $request->caste_id;
+        } elseif ($request->caste) {
             $casteObj = Caste::where('name', $request->caste)->first();
             if ($casteObj) $spiritual->caste_id = $casteObj->id;
         }
+
+        if ($request->sub_caste_id) {
+            $spiritual->sub_caste_id = $request->sub_caste_id;
+        }
+
         if ($request->has('manglik')) {
             $spiritual->manglik = $request->manglik == 'true' || $request->manglik == 1;
         }
@@ -227,6 +237,7 @@ class ProfileController extends Controller
             $spiritual->intercaste_accepted = $request->intercaste_accepted == 'true' || $request->intercaste_accepted == 1;
         }
         $spiritual->save();
+
 
         // --- Lifestyle (Diet) ---
         $lifestyle = Lifestyle::firstOrNew(['user_id' => $user->id]);
@@ -293,6 +304,27 @@ class ProfileController extends Controller
             'result' => true,
             'message' => 'Profile compiled successfully with 44 fields.'
         ]);
+    }
+
+    public function profile_picture_update(Request $request)
+    {
+        $this->validate($request, [
+            'photo' => ['required', 'mimes:jpeg,jpg,png,gif,webp', 'image'],
+        ]);
+
+        $user = User::findOrFail(auth()->id());
+        $photo = upload_api_file($request->file('photo'));
+        $user->photo = $photo;
+
+        if (
+            Setting::where('type', 'profile_picture_approval_by_admin')->first()->value &&
+            auth()->user()->user_type == 'member'
+        ) {
+            $user->photo_approved = 0;
+        }
+
+        $user->save();
+        return $this->success_message('Profile picture has been updated successfully.');
     }
 
     public function present_address()

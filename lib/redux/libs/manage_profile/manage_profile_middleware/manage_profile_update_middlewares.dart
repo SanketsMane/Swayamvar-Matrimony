@@ -38,32 +38,35 @@ ThunkAction<AppState> basicInfoUpdateMiddleware({
   return (Store<AppState> store) async {
     store.dispatch(SaveChanges.basicInfo);
 
-    var response = await ManageProfileRepository().basicInfoUpdate(
-      f_name: f_name,
-      l_name: l_name,
-      gender: gender,
-      dob: dob,
-      phone: phone,
-      onbehalf: onbehalf,
-      m_status: m_status,
-      noofChild: noofChild,
-      photo: photo,
-    );
-    // print(response.toJson());
+    try {
+      var response = await ManageProfileRepository().basicInfoUpdate(
+        f_name: f_name,
+        l_name: l_name,
+        gender: gender,
+        dob: dob,
+        phone: phone,
+        onbehalf: onbehalf,
+        m_status: m_status,
+        noofChild: noofChild,
+        photo: photo,
+      );
 
-    if (response.result) {
-      store.dispatch(
-        ShowMessageAction(msg: response.message, color: MyTheme.success),
-      );
-      store.dispatch(basicInfoGetMiddleware());
-      store.dispatch(accountMiddleware());
-    } else {
-      store.dispatch(
-        ShowMessageAction(msg: response.message, color: MyTheme.failure),
-      );
+      if (response.result) {
+        store.dispatch(
+          ShowMessageAction(msg: response.message, color: MyTheme.success),
+        );
+        store.dispatch(basicInfoGetMiddleware());
+        store.dispatch(accountMiddleware());
+      } else {
+        store.dispatch(
+          ShowMessageAction(msg: response.message, color: MyTheme.failure),
+        );
+      }
+    } catch (e) {
+      debugPrint(e.toString());
+    } finally {
+      store.dispatch(SaveChanges.basicInfo);
     }
-
-    store.dispatch(SaveChanges.basicInfo);
   };
 }
 

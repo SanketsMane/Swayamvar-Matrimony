@@ -14,6 +14,9 @@ class ChatListWidget extends StatelessWidget {
   final int active;
   final String? lastMessage;
   final int unseenMessageCount;
+  final String? age;
+  final bool? isVerified;
+  final String? phone;
 
   const ChatListWidget({
     super.key,
@@ -25,6 +28,9 @@ class ChatListWidget extends StatelessWidget {
     required this.packageImage,
     required this.lastMessage,
     required this.unseenMessageCount,
+    this.age,
+    this.isVerified,
+    this.phone,
   });
 
   @override
@@ -43,6 +49,9 @@ class ChatListWidget extends StatelessWidget {
                   userId: userId,
                   name: name,
                   picture: photo,
+                  age: age,
+                  isVerified: isVerified,
+                  phone: phone,
                 ),
           ),
         );
@@ -117,6 +126,14 @@ class ChatListWidget extends StatelessWidget {
                           ),
                         ),
                       ),
+                      if (isVerified == true) ...[
+                        const SizedBox(width: 4),
+                        const Icon(
+                          Icons.check_circle,
+                          color: Colors.blue,
+                          size: 14,
+                        ),
+                      ],
                       const SizedBox(width: 8),
                       // Compatibility Badge
                       Container(

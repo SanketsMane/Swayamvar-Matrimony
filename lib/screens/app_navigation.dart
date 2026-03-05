@@ -3,7 +3,7 @@ import 'package:active_matrimonial_flutter_app/helpers/get_context.dart';
 import 'package:active_matrimonial_flutter_app/redux/libs/common/common_states_middleware.dart';
 import 'package:active_matrimonial_flutter_app/redux/libs/drop_down/profile_dropdown_middleware.dart';
 import 'package:active_matrimonial_flutter_app/screens/account/account.dart';
-import 'package:active_matrimonial_flutter_app/screens/auth/signin/phone_login.dart';
+
 import 'package:active_matrimonial_flutter_app/screens/chat/chat_list.dart';
 import 'package:active_matrimonial_flutter_app/screens/core.dart';
 import 'package:active_matrimonial_flutter_app/screens/home_pages/explore/explore.dart';
@@ -11,7 +11,7 @@ import 'package:active_matrimonial_flutter_app/screens/home_pages/home/home.dart
 import 'package:flutter/material.dart';
 
 import '../helpers/push_notification_service.dart';
-import '../helpers/push_notification_service.dart';
+
 import '../redux/store.dart';
 import '../widgets/custom_bottom_navbar.dart';
 

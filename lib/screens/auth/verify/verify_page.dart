@@ -3,6 +3,7 @@ import 'package:active_matrimonial_flutter_app/l10n/app_localizations.dart';
 import 'package:active_matrimonial_flutter_app/const/my_theme.dart';
 import 'package:active_matrimonial_flutter_app/screens/core.dart';
 import 'package:flutter/material.dart';
+import 'package:active_matrimonial_flutter_app/const/style.dart';
 import 'verify_action.dart';
 
 class VerifyPage extends StatefulWidget {
@@ -434,44 +435,61 @@ class _VerifyPageState extends State<VerifyPage> {
           if (_currentPage > 0) const SizedBox(width: 16),
           Expanded(
             flex: 2,
-            child: ElevatedButton(
-              onPressed:
-                  v.isSubmitting
-                      ? null
-                      : () {
-                        if (_currentPage < 2) {
-                          _nextPage();
-                        } else {
-                          store.dispatch(submitVerifyFormAction(context));
-                        }
-                      },
-              style: ElevatedButton.styleFrom(
-                backgroundColor: MyTheme.primary,
-                minimumSize: const Size(0, 50),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(12),
-                ),
-                elevation: 0,
+            child: Container(
+              height: 50,
+              decoration: BoxDecoration(
+                gradient: !v.isSubmitting ? Styles.primaryGradient : null,
+                borderRadius: BorderRadius.circular(12),
+                color: !v.isSubmitting ? null : MyTheme.primary.withOpacity(0.5),
+                boxShadow: !v.isSubmitting ? [
+                  BoxShadow(
+                    color: MyTheme.primary.withOpacity(0.3),
+                    blurRadius: 10,
+                    offset: const Offset(0, 4),
+                  )
+                ] : [],
               ),
-              child:
-                  v.isSubmitting
-                      ? const SizedBox(
-                        height: 20,
-                        width: 20,
-                        child: CircularProgressIndicator(
-                          color: Colors.white,
-                          strokeWidth: 2,
+              child: ElevatedButton(
+                onPressed:
+                    v.isSubmitting
+                        ? null
+                        : () {
+                          if (_currentPage < 2) {
+                            _nextPage();
+                          } else {
+                            store.dispatch(submitVerifyFormAction(context));
+                          }
+                        },
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.transparent,
+                  shadowColor: Colors.transparent,
+                  disabledBackgroundColor: Colors.transparent,
+                  foregroundColor: Colors.white,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  elevation: 0,
+                ),
+                child:
+                    v.isSubmitting
+                        ? const SizedBox(
+                          height: 20,
+                          width: 20,
+                          child: CircularProgressIndicator(
+                            color: Colors.white,
+                            strokeWidth: 2,
+                          ),
+                        )
+                        : Text(
+                          _currentPage == 2
+                              ? l.verify_submit_for_review
+                              : l.verify_next,
+                          style: const TextStyle(
+                            color: Colors.white,
+                            fontWeight: FontWeight.bold,
+                          ),
                         ),
-                      )
-                      : Text(
-                        _currentPage == 2
-                            ? l.verify_submit_for_review
-                            : l.verify_next,
-                        style: const TextStyle(
-                          color: Colors.white,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
+              ),
             ),
           ),
         ],

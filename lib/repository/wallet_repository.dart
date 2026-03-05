@@ -1,6 +1,7 @@
 import 'package:active_matrimonial_flutter_app/app_config.dart';
 import 'package:active_matrimonial_flutter_app/models_response/wallet/wallet_balance_response.dart';
 import 'package:active_matrimonial_flutter_app/models_response/wallet/wallet_history_res.dart';
+import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
 
 import '../helpers/main_helpers.dart';
@@ -56,17 +57,27 @@ class WalletRepository {
     request.fields["transaction_id"] = postBody['transaction_id'];
     request.fields["payment_details"] = postBody['payment_details'];
 
-    if (postBody['payment_proof']?.path != null) {
-      var pic = await http.MultipartFile.fromPath(
-        "reciept",
-        (postBody['payment_proof']?.path),
-      );
-      request.files.add(pic);
+    if (postBody['payment_proof'] != null) {
+      if (kIsWeb) {
+        // Sanket: Use fromBytes for web
+        var pic = http.MultipartFile.fromBytes(
+          "reciept",
+          await postBody['payment_proof'].readAsBytes(),
+          filename: postBody['payment_proof'].name,
+        );
+        request.files.add(pic);
+      } else if (postBody['payment_proof'].path != null && postBody['payment_proof'].path.isNotEmpty) {
+        // Sanket: Use fromPath for mobile
+        var pic = await http.MultipartFile.fromPath(
+          "reciept",
+          postBody['payment_proof'].path,
+        );
+        request.files.add(pic);
+      }
     }
 
     request.headers.addAll({
       "Accept": "application/json",
-      "Content-Type": "application/json",
       "Authorization": "Bearer $accessToken",
     });
 

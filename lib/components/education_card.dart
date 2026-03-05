@@ -30,7 +30,7 @@ class EducationCard extends StatelessWidget {
 
   final bool? isDelete;
   final int? educationStateIndex;
-  late final GlobalKey<FormState>? ky;
+  final GlobalKey<FormState>? ky;
 
   final String? degreeText;
   final String? instituteText;

@@ -44,9 +44,12 @@ class _PhoneLoginState extends State<PhoneLogin> {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               const SizedBox(height: 32),
-              Image.asset(
-                'assets/logo/app_logo.png',
-                height: 80,
+              ColorFiltered(
+                colorFilter: ColorFilter.mode(primaryColor, BlendMode.srcIn),
+                child: Image.asset(
+                  'assets/logo/app_logo.png',
+                  height: 80,
+                ),
               ),
               const SizedBox(height: 16),
               Text(
@@ -102,11 +105,11 @@ class _PhoneLoginState extends State<PhoneLogin> {
           ),
           const SizedBox(height: 32),
           Container(
-            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
             decoration: BoxDecoration(
-              color: const Color(0xFFF5F5F5),
+              color: const Color(0xFFF8F9FA),
               borderRadius: BorderRadius.circular(12),
-              border: Border.all(color: borderColor),
+              border: Border.all(color: borderColor.withOpacity(0.5)),
             ),
             child: InternationalPhoneNumberInput(
               onInputChanged: (PhoneNumber number) {
@@ -123,11 +126,12 @@ class _PhoneLoginState extends State<PhoneLogin> {
                 selectorType: PhoneInputSelectorType.BOTTOM_SHEET,
                 setSelectorButtonAsPrefixIcon: true,
                 leadingPadding: 0,
+                showFlags: false,
               ),
               countries: const ['IN'],
               ignoreBlank: false,
               autoValidateMode: AutovalidateMode.disabled,
-              selectorTextStyle: TextStyle(color: textPrimary),
+              selectorTextStyle: TextStyle(color: textPrimary, fontWeight: FontWeight.w600),
               initialValue: _selectedPhoneNumber,
               formatInput: true,
               keyboardType: const TextInputType.numberWithOptions(
@@ -136,19 +140,32 @@ class _PhoneLoginState extends State<PhoneLogin> {
               ),
               inputDecoration: InputDecoration(
                 hintText: AppLocalizations.of(context)!.profile_label_mobile1,
-                hintStyle: TextStyle(color: textSecondary.withOpacity(0.5)),
+                hintStyle: TextStyle(color: textSecondary.withOpacity(0.4), fontSize: 14),
                 border: InputBorder.none,
-                isDense: false,
+                isDense: true,
+                contentPadding: const EdgeInsets.symmetric(vertical: 12),
               ),
               textFieldController: _phoneController,
             ),
           ),
           const SizedBox(height: 32),
-          SizedBox(
+          Container(
             height: 52,
+            decoration: BoxDecoration(
+              gradient: _isPhoneValid && !_isLoading ? Styles.primaryGradient : null,
+              borderRadius: BorderRadius.circular(12),
+              color: _isPhoneValid && !_isLoading ? null : primaryColor.withOpacity(0.5),
+              boxShadow: _isPhoneValid && !_isLoading ? [
+                BoxShadow(
+                  color: primaryColor.withOpacity(0.3),
+                  blurRadius: 12,
+                  offset: const Offset(0, 4),
+                )
+              ] : [],
+            ),
             child: ElevatedButton(
               onPressed:
-                  !_isLoading && (_phoneController.text.length >= 10)
+                  !_isLoading && _isPhoneValid
                       ? () {
                         setState(() {
                           _isLoading = true;
@@ -169,8 +186,9 @@ class _PhoneLoginState extends State<PhoneLogin> {
                       }
                       : null,
               style: ElevatedButton.styleFrom(
-                backgroundColor: primaryColor,
-                disabledBackgroundColor: primaryColor.withOpacity(0.5),
+                backgroundColor: Colors.transparent,
+                shadowColor: Colors.transparent,
+                disabledBackgroundColor: Colors.transparent,
                 foregroundColor: Colors.white,
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(12),

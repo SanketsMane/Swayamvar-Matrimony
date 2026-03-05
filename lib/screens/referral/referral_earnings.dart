@@ -21,18 +21,9 @@ class _RefferalEarningsState extends State<RefferalEarnings> {
   @override
   void initState() {
     super.initState();
-    if (!store.state.userVerifyState!.isApprove!) {
-      OneContext().pop();
-      store.dispatch(
-        ShowMessageAction(
-          msg: "Please verify your account",
-          color: MyTheme.failure,
-        ),
-      );
-    } else {
-      store.dispatch(Reset.referralEarningList);
-      store.dispatch(referralEarningMiddleware());
-    }
+    // Sanket: Approval status does NOT gate app access — any registered user can use the app.
+    store.dispatch(Reset.referralEarningList);
+    store.dispatch(referralEarningMiddleware());
     scrollController.addListener(() {
       if (scrollController.position.maxScrollExtent ==
           scrollController.offset) {

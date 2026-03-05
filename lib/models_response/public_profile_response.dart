@@ -278,63 +278,65 @@ class BasicInfo {
     this.phone,
     this.maritialStatus,
     this.photo,
-    this.mothereTongue, // Sanket: Added for compatibility
+    this.mothereTongue,
+    this.approved,
   });
 
   String? firsName;
   String? lastName;
   String? code;
-  var age;
+  dynamic age;
   String? religion;
   String? caste;
   DateTime? dateOfBirth;
   MotherTongue? onbehalf;
-  var noOfChildren;
+  dynamic noOfChildren;
   String? gender;
   String? phone;
   String? maritialStatus;
   String? photo;
-  String? mothereTongue; // Sanket: Alias to prevent crashes
+  String? mothereTongue;
+  dynamic approved;
 
   factory BasicInfo.fromJson(Map<String, dynamic> json) => BasicInfo(
-    firsName: json["firs_name"],
-    lastName: json["last_name"],
-    code: json["code"],
-    age: json["age"],
-    religion: json["religion"],
-    caste: json["caste"],
-    dateOfBirth:
-        json["date_of_birth"] == null
+        firsName: json["firs_name"],
+        lastName: json["last_name"],
+        code: json["code"],
+        age: json["age"],
+        religion: json["religion"],
+        caste: json["caste"],
+        dateOfBirth: json["date_of_birth"] == null
             ? null
             : DateTime.tryParse(json["date_of_birth"]),
-    onbehalf:
-        json["onbehalf"] == null
+        onbehalf: json["onbehalf"] == null
             ? null
             : MotherTongue.fromJson(json["onbehalf"]),
-    noOfChildren: json["no_of_children"],
-    gender: json["gender"],
-    phone: json["phone"],
-    maritialStatus: json["maritial_status"],
-    photo: json["photo"],
-    mothereTongue: json["mothere_tongue"]?.toString(), // Sanket: Alias
-  );
+        noOfChildren: json["no_of_children"],
+        gender: json["gender"],
+        phone: json["phone"],
+        maritialStatus: json["maritial_status"],
+        photo: json["photo"],
+        mothereTongue: json["mothere_tongue"]?.toString(),
+        approved: json["approved"],
+      );
 
   Map<String, dynamic> toJson() => {
-    "firs_name": firsName,
-    "last_name": lastName,
-    "code": code,
-    "age": age,
-    "religion": religion,
-    "caste": caste,
-    "date_of_birth": dateOfBirth?.toIso8601String(), // Sanket: Null safety
-    "onbehalf": onbehalf?.toJson(),
-    "no_of_children": noOfChildren,
-    "gender": gender,
-    "phone": phone,
-    "maritial_status": maritialStatus,
-    "photo": photo,
-    "mothere_tongue": mothereTongue,
-  };
+        "firs_name": firsName,
+        "last_name": lastName,
+        "code": code,
+        "age": age,
+        "religion": religion,
+        "caste": caste,
+        "date_of_birth": dateOfBirth?.toIso8601String(),
+        "onbehalf": onbehalf?.toJson(),
+        "no_of_children": noOfChildren,
+        "gender": gender,
+        "phone": phone,
+        "maritial_status": maritialStatus,
+        "photo": photo,
+        "mothere_tongue": mothereTongue,
+        "approved": approved,
+      };
 }
 
 class MotherTongue {

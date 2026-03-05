@@ -524,6 +524,7 @@ class CustomPopUp {
                                         selectorConfig: const SelectorConfig(
                                           selectorType:
                                               PhoneInputSelectorType.DIALOG,
+                                          showFlags: false,
                                         ),
                                         // inputBorder: InputBorder.none,
                                         inputDecoration:

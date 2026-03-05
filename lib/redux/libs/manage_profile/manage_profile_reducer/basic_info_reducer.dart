@@ -91,7 +91,12 @@ ThunkAction<AppState> getBasicGalleryImageAction() {
           .manageProfileCombineState!
           .basicInfoState!
           .picker
-          .pickImage(source: ImageSource.gallery);
+          .pickImage(
+            source: ImageSource.gallery,
+            maxWidth: 1000,
+            maxHeight: 1000,
+            imageQuality: 85,
+          );
       if (image == null) return;
       final tmpImage = File(image.path);
       store.dispatch(

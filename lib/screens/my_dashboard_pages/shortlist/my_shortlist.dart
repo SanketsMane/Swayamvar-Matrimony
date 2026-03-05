@@ -26,19 +26,9 @@ class _MyShortlistState extends State<MyShortlist> {
   @override
   void initState() {
     super.initState();
-
-    if (!store.state.userVerifyState!.isApprove!) {
-      OneContext().pop();
-      store.dispatch(
-        ShowMessageAction(
-          msg: "Please verify your account",
-          color: MyTheme.failure,
-        ),
-      );
-    } else {
-      store.dispatch(ShortListReset());
-      store.dispatch(shortlistMiddleware());
-    }
+    // Sanket: Approval status does NOT gate app access — any registered user can use the app.
+    store.dispatch(ShortListReset());
+    store.dispatch(shortlistMiddleware());
     scrollController.addListener(() {
       if (scrollController.position.maxScrollExtent ==
           scrollController.offset) {

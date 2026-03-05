@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import '../helpers/shared_pref.dart';
 
 class LanguageProvider with ChangeNotifier {
-  Locale _appLocale = const Locale('mr'); // Default Marathi
+  Locale _appLocale = const Locale('en'); // Sanket: Default English
 
   Locale get appLocale => _appLocale;
 
@@ -15,7 +15,8 @@ class LanguageProvider with ChangeNotifier {
     if (languageCode != null) {
       _appLocale = Locale(languageCode);
     } else {
-      _appLocale = const Locale('mr');
+      // Sanket: Fallback to English if no language is saved
+      _appLocale = const Locale('en');
     }
     notifyListeners();
   }

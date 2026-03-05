@@ -28,7 +28,7 @@ class SignUp extends StatefulWidget {
 
 class _SignUpState extends State<SignUp> {
   bool _isRecaptchaActive = false;
-  late final WebViewController _controller;
+  WebViewController? _controller;
   final String _recaptchaUrl = "${AppConfig.BASE_URL}/google-recaptcha";
   bool _isObscure = true; // Controls password field visibility toggle
   // Sanket: Removed 5 dead OTP final booleans — they were never used (bugs 10, 11)
@@ -103,9 +103,12 @@ class _SignUpState extends State<SignUp> {
               child: Column(
                 children: [
                   Center(
-                    child: Image.asset(
-                      'assets/logo/app_logo.png',
-                      height: 72,
+                    child: ColorFiltered(
+                      colorFilter: ColorFilter.mode(primaryColor, BlendMode.srcIn),
+                      child: Image.asset(
+                        'assets/logo/app_logo.png',
+                        height: 72,
+                      ),
                     ),
                   ),
                   const SizedBox(height: 24),
@@ -115,7 +118,7 @@ class _SignUpState extends State<SignUp> {
                   ),
                   const SizedBox(height: 8),
                   Text(
-                    "तुमचा योग्य जीवनसाथी शोधण्यासाठी प्रवास सुरू करा ❤️",
+                    AppLocalizations.of(context)!.login_screen_phone_subtitle,
                     textAlign: TextAlign.center,
                     style: Styles.body.copyWith(color: textSecondary),
                   ),
@@ -139,7 +142,7 @@ class _SignUpState extends State<SignUp> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           _buildInputField(
-                            title: "च्या वतीने",
+                            title: AppLocalizations.of(context)!.signup_screen_onbehalf,
                             child: DropdownButtonFormField<dynamic>(
                               dropdownColor: cardColor,
                               icon: Icon(
@@ -322,16 +325,16 @@ class _SignUpState extends State<SignUp> {
                               // Sanket: Bug 7 — validate email format and non-empty
                               validator: (val) {
                                 if (val == null || val.trim().isEmpty) {
-                                  return 'ईमेल आवश्यक आहे';
+                                  return AppLocalizations.of(context)!.common_enter_email;
                                 }
                                 final emailRegex = RegExp(r'^[\w.+-]+@[\w-]+\.[\w.]+$');
                                 if (!emailRegex.hasMatch(val.trim())) {
-                                  return 'वैध ईमेल पत्ता प्रविष्ट करा';
+                                  return AppLocalizations.of(context)!.common_enter_email;
                                 }
                                 return null;
                               },
-                              decoration: const InputDecoration(
-                                hintText: "ईमेल प्रविष्ट करा",
+                              decoration: InputDecoration(
+                                hintText: AppLocalizations.of(context)!.common_enter_email,
                                 border: InputBorder.none,
                               ),
                             ),
@@ -358,6 +361,7 @@ class _SignUpState extends State<SignUp> {
                                 selectorType:
                                     PhoneInputSelectorType.BOTTOM_SHEET,
                                 setSelectorButtonAsPrefixIcon: true,
+                                showFlags: false,
                               ),
                               countries: const ['IN'],
                               textStyle: Styles.body.copyWith(
@@ -502,43 +506,66 @@ class _SignUpState extends State<SignUp> {
                             ],
                           ),
                           const SizedBox(height: 32),
-                          ElevatedButton(
-                            onPressed:
-                                 // Sanket: Always tappable — phone checked inside callback
-                                 (state.signUpState!.isLoading ?? false)
-                                     ? null
-                                     : () {
-                                         if (!_isPhoneValid) {
-                                           store.dispatch(ShowMessageAction(
-                                             msg: 'कृपया वैध 10-अंकी मोबाइल नंबर प्रविष्ट करा',
-                                           ));
-                                           return;
-                                         }
-                                         store.dispatch(SignUpRequestAction(
-                                           payloadContext: context,
-                                           phoneNumber: _selectedPhoneNumber,
-                                         ));
-                                       },
-                            style: ElevatedButton.styleFrom(
-                              backgroundColor: primaryColor,
-                              foregroundColor: Colors.white,
-                              minimumSize: const Size(double.infinity, 52),
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(12),
-                              ),
+                          Container(
+                            height: 52,
+                            width: double.infinity,
+                            decoration: BoxDecoration(
+                              gradient: !(state.signUpState!.isLoading ?? false) ? Styles.primaryGradient : null,
+                              borderRadius: BorderRadius.circular(12),
+                              color: !(state.signUpState!.isLoading ?? false) ? null : primaryColor.withOpacity(0.5),
+                              boxShadow: !(state.signUpState!.isLoading ?? false) ? [
+                                BoxShadow(
+                                  color: primaryColor.withOpacity(0.3),
+                                  blurRadius: 12,
+                                  offset: const Offset(0, 4),
+                                )
+                              ] : [],
                             ),
-                            child:
-                                (state.signUpState!.isLoading ?? false)
-                                    ? const CircularProgressIndicator(
-                                      color: Colors.white,
-                                    )
-                                    : Text(
-                                      AppLocalizations.of(context)!.signup_screen_button_text_signup,
-                                      style: Styles.buttonText.copyWith(
-                                        fontSize: 16,
-                                        fontWeight: FontWeight.w700,
+                            child: ElevatedButton(
+                              onPressed:
+                                   // Sanket: Always tappable — phone checked inside callback
+                                   (state.signUpState!.isLoading ?? false)
+                                       ? null
+                                       : () {
+                                           if (!_isPhoneValid) {
+                                             store.dispatch(ShowMessageAction(
+                                               msg: AppLocalizations.of(context)!.profile_error_mobile_invalid,
+                                             ));
+                                             return;
+                                           }
+                                           store.dispatch(SignUpRequestAction(
+                                             payloadContext: context,
+                                             phoneNumber: _selectedPhoneNumber,
+                                           ));
+                                         },
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: Colors.transparent,
+                                shadowColor: Colors.transparent,
+                                disabledBackgroundColor: Colors.transparent,
+                                foregroundColor: Colors.white,
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(12),
+                                ),
+                                elevation: 0,
+                              ),
+                              child:
+                                  (state.signUpState!.isLoading ?? false)
+                                      ? const SizedBox(
+                                          width: 20,
+                                          height: 20,
+                                          child: CircularProgressIndicator(
+                                            color: Colors.white,
+                                            strokeWidth: 2,
+                                          ),
+                                        )
+                                      : Text(
+                                        AppLocalizations.of(context)!.signup_screen_button_text_signup,
+                                        style: Styles.buttonText.copyWith(
+                                          fontSize: 16,
+                                          fontWeight: FontWeight.w700,
+                                        ),
                                       ),
-                                    ),
+                            ),
                           ),
                           const SizedBox(height: 24),
                           if ((isGoogle ?? false) ||
@@ -569,11 +596,11 @@ class _SignUpState extends State<SignUp> {
                       onTap: () => Navigator.pop(context),
                       child: RichText(
                         text: TextSpan(
-                          text: "आधीच खाते आहे का? ",
+                          text: AppLocalizations.of(context)!.login_screen_if_have_account,
                           style: Styles.body.copyWith(color: textSecondary),
                           children: [
                             TextSpan(
-                              text: "लॉगिन करा",
+                              text: " ${AppLocalizations.of(context)!.login_button_text}",
                               style: Styles.buttonText.copyWith(
                                 color: primaryColor,
                                 fontWeight: FontWeight.w700,

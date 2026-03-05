@@ -62,6 +62,9 @@ ThunkAction<AppState> getImageAction() {
     try {
       final image = await store.state.offlinePaymentState!.picker.pickImage(
         source: ImageSource.gallery,
+        maxWidth: 1000,
+        maxHeight: 1000,
+        imageQuality: 85,
       );
       if (image == null) return;
       final tmpImage = File(image.path);

@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:active_matrimonial_flutter_app/const/style.dart';
 import 'package:active_matrimonial_flutter_app/screens/auth/signin/otp_middleware.dart';
 import 'package:active_matrimonial_flutter_app/redux/store.dart';
-import 'package:active_matrimonial_flutter_app/redux/store.dart';
+
 import 'package:pinput/pinput.dart';
 
 class PhoneOtpVerify extends StatefulWidget {

@@ -69,7 +69,7 @@ class _CustomBottomNavBarState extends State<CustomBottomNavBar>
   Widget build(BuildContext context) {
     final width = MediaQuery.of(context).size.width;
     final itemWidth = width / icons.length;
-    final labels = ["मुख्य पान", "शोधा", "चॅट", "प्रोफाइल"];
+    // Sanket: labels removed — icon-only nav design
     const double navbarHeight = 65.0; // Slightly increased for labels
     const double circleSize = 52.0;
 
@@ -148,7 +148,7 @@ class _CustomBottomNavBarState extends State<CustomBottomNavBar>
                         shape: BoxShape.circle,
                         boxShadow: [
                           BoxShadow(
-                            color: MyTheme.primary.withOpacity(0.3),
+                            color: MyTheme.primary.withValues(alpha: 0.3),
                             blurRadius: 10,
                             offset: const Offset(0, 4),
                           ),

@@ -1,6 +1,8 @@
 import 'dart:convert';
 
 import 'package:active_matrimonial_flutter_app/models_response/others/common_response.dart';
+
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
@@ -44,51 +46,123 @@ class ManageProfileRepository {
     return data;
   }
 
-  Future<CommonResponse> basicInfoUpdate({
+  Future<CommonResponse> fullProfileUpdate({
     required dynamic f_name,
+    dynamic middle_name,
     required dynamic l_name,
-    dynamic gender,
     required dynamic dob,
     required dynamic phone,
-    dynamic onbehalf,
     dynamic m_status,
-    required dynamic noofChild,
-    dynamic photo,
+    dynamic height,
+    dynamic weight,
+    dynamic complexion,
+    dynamic blood_group,
+    dynamic disability,
+    dynamic religion,
+    dynamic religion_id,
+    dynamic caste,
+    dynamic caste_id,
+    dynamic sub_caste_id,
+    dynamic diet,
+    dynamic personal_manglik,
+    dynamic intercaste_accepted,
+    dynamic father,
+    dynamic mother,
+    dynamic brothers,
+    dynamic married_brothers,
+    dynamic sisters,
+    dynamic married_sisters,
+    dynamic parents_occupation,
+    dynamic property_details,
+    dynamic degree,
+    dynamic institution,
+    dynamic education_start,
+    dynamic designation,
+    dynamic company,
+    dynamic career_start,
+    dynamic annual_income,
+    dynamic gov_id_type,
+    dynamic gov_id_number,
+    dynamic address,
+    dynamic district,
+    dynamic phone2,
+    dynamic general_info,
+    dynamic manglik,
+    dynamic partner_religion_id,
+    dynamic partner_caste_id,
+    dynamic partner_sub_caste_id,
+    dynamic education_expectation,
+    dynamic expected_income,
+    dynamic children_acceptable,
+    dynamic partner_intercaste,
   }) async {
-    var baseUrl = "${AppConfig.BASE_URL}/member/basic-info/update";
+    var baseUrl = "${AppConfig.BASE_URL}/member/full-profile-update";
     var accessToken = getToken;
 
-    final uri = Uri.parse(baseUrl);
-    var request = http.MultipartRequest('POST', uri);
+    var response = await http.post(
+      Uri.parse(baseUrl),
+      headers: {
+        "Accept": "application/json",
+        "Content-Type": "application/json",
+        "Authorization": "Bearer $accessToken",
+      },
+      body: jsonEncode({
+        "first_name": f_name,
+        "middle_name": middle_name,
+        "surname": l_name,
+        "dob": dob,
+        "mobile1": phone,
+        "mobile2": phone2,
+        "marital_status": m_status,
+        "height": height,
+        "weight": weight,
+        "complexion": complexion,
+        "blood_group": blood_group,
+        "physical_disability": disability,
+        "religion": religion,
+        "religion_id": religion_id,
+        "caste": caste,
+        "caste_id": caste_id,
+        "sub_caste_id": sub_caste_id,
+        "diet": diet,
+        "manglik_personal": personal_manglik,
+        "intercaste_accepted": intercaste_accepted,
 
-    request.fields["first_name"] = f_name;
-    request.fields["last_name"] = l_name;
-    request.fields["gender"] = '$gender';
-    request.fields["date_of_birth"] = dob;
-    request.fields["phone"] = phone;
-    if (onbehalf != null) request.fields["on_behalf"] = "$onbehalf";
-    if (m_status != null) {
-      request.fields["marital_status"] = m_status.toString();
-    }
-    request.fields["children"] = noofChild;
+        "father_alive": father,
+        "mother_alive": mother,
+        "no_of_brothers": brothers,
+        "married_brothers": married_brothers,
+        "no_of_sisters": sisters,
+        "married_sisters": married_sisters,
+        "parents_occupation": parents_occupation,
+        "property_details": property_details,
 
-    // print(photo?.path != null);
+        "education_level": degree,
+        "institution": institution,
+        "education_start": education_start,
+        "occupation_type": designation,
+        "company": company,
+        "career_start": career_start,
+        "annual_income": annual_income,
 
-    if (photo?.path != null) {
-      var pic = await http.MultipartFile.fromPath("photo", (photo.path));
-      request.files.add(pic);
-    }
+        "gov_id_type": gov_id_type,
+        "gov_id_number": gov_id_number,
+        "address": address,
+        "city": district,
+        "general_info": general_info,
+        "partner_manglik": manglik,
+        "partner_religion_id": partner_religion_id,
+        "partner_caste_id": partner_caste_id,
+        "partner_sub_caste_id": partner_sub_caste_id,
+        "expected_education": education_expectation,
+        "expected_income": expected_income,
+        "children_acceptable": children_acceptable,
+        "partner_intercaste": partner_intercaste,
+      }),
+    );
 
-    request.headers.addAll({
-      "Accept": "application/json",
-      "Content-Type": "application/json",
-      "Authorization": "Bearer $accessToken",
-    });
 
-    var response = await request.send();
-    var responseString = await response.stream.bytesToString();
-
-    var data = commonResponseFromJson(responseString);
+    var data = commonResponseFromJson(response.body);
     return data;
   }
 
@@ -101,14 +175,24 @@ class ManageProfileRepository {
     final uri = Uri.parse(baseUrl);
     var request = http.MultipartRequest('POST', uri);
 
-    if (photo?.path != null) {
-      var pic = await http.MultipartFile.fromPath("photo", (photo.path));
-      request.files.add(pic);
+    if (photo != null) {
+      if (kIsWeb) {
+        // Sanket: Use fromBytes for web with XFile support
+        var pic = http.MultipartFile.fromBytes(
+          "photo",
+          await photo.readAsBytes(),
+          filename: photo.name, // XFile has .name
+        );
+        request.files.add(pic);
+      } else {
+        // Sanket: Use fromPath for mobile/desktop (compatible with XFile.path)
+        var pic = await http.MultipartFile.fromPath("photo", photo.path);
+        request.files.add(pic);
+      }
     }
 
     request.headers.addAll({
       "Accept": "application/json",
-      "Content-Type": "application/json",
       "Authorization": "Bearer $accessToken",
     });
 
@@ -116,6 +200,45 @@ class ManageProfileRepository {
     var responseString = await response.stream.bytesToString();
 
     var data = commonResponseFromJson(responseString);
+    return data;
+  }
+
+  Future<CommonResponse> basicInfoUpdate({
+    required dynamic f_name,
+    required dynamic l_name,
+    required dynamic gender,
+    required dynamic dob,
+    required dynamic phone,
+    required dynamic onbehalf,
+    required dynamic m_status,
+    required dynamic noofChild,
+    required dynamic photo,
+  }) async {
+    var baseUrl = "${AppConfig.BASE_URL}/member/basic-info/update";
+    var accessToken = getToken;
+
+    var postBody = jsonEncode({
+      "first_name": f_name,
+      "last_name": l_name,
+      "gender": gender,
+      "date_of_birth": dob,
+      "phone": phone,
+      "on_behalf": onbehalf,
+      "maritial_status": m_status,
+      "children": noofChild,
+    });
+
+    var response = await http.post(
+      Uri.parse(baseUrl),
+      headers: {
+        "Accept": "application/json",
+        "Content-Type": "application/json",
+        "Authorization": "Bearer $accessToken",
+      },
+      body: postBody,
+    );
+
+    var data = commonResponseFromJson(response.body);
     return data;
   }
 

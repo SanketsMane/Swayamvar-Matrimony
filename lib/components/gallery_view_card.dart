@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:active_matrimonial_flutter_app/components/my_images.dart';
 import 'full_screen_image_viewer.dart';
 

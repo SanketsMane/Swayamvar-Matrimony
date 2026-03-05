@@ -13,6 +13,7 @@ import 'package:active_matrimonial_flutter_app/screens/chat/chat_reply_middlewar
 import 'package:active_matrimonial_flutter_app/screens/core.dart';
 import 'package:active_matrimonial_flutter_app/screens/user_pages/user_public_profile.dart';
 import 'package:flutter/material.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../../models_response/chat/chat_details_response.dart';
 import 'chat_details_middleware.dart';
@@ -22,6 +23,9 @@ class Chat extends StatefulWidget {
   final int userId;
   final dynamic name;
   final dynamic picture;
+  final String? age;
+  final bool? isVerified;
+  final String? phone;
 
   const Chat({
     this.chatId,
@@ -29,6 +33,9 @@ class Chat extends StatefulWidget {
     super.key,
     this.name,
     this.picture,
+    this.age,
+    this.isVerified,
+    this.phone,
   });
 
   @override
@@ -46,7 +53,12 @@ class _ChatState extends State<Chat> {
 
   Future<void> _pickImage() async {
     try {
-      final XFile? image = await _picker.pickImage(source: ImageSource.gallery);
+      final XFile? image = await _picker.pickImage(
+        source: ImageSource.gallery,
+        maxWidth: 1000,
+        maxHeight: 1000,
+        imageQuality: 85,
+      );
       if (image != null) {
         setState(() {
           _selectedImage = File(image.path);
@@ -156,7 +168,8 @@ class _ChatState extends State<Chat> {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          _infoBadge(Icons.verified, "पडताळणी केलेले", Colors.blue),
+          if (widget.isVerified ?? false)
+            _infoBadge(Icons.verified, "पडताळणी केलेले", Colors.blue),
           const SizedBox(width: 20),
           _infoBadge(Icons.favorite, "गंभीर जोडी", MyTheme.primary),
         ],
@@ -431,13 +444,25 @@ class _ChatState extends State<Chat> {
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(
-                  "${widget.name} | 28",
-                  // Sanket: Profile name uses Mukta SemiBold per typography system
-                  style: Styles.profileName.copyWith(
-                    fontSize: 16,
-                    color: MyTheme.text_primary,
-                  ),
+                Row(
+                  children: [
+                    Text(
+                      "${widget.name}${widget.age != null ? ' | ${widget.age}' : ''}",
+                      // Sanket: Profile name uses Mukta SemiBold per typography system
+                      style: Styles.profileName.copyWith(
+                        fontSize: 16,
+                        color: MyTheme.text_primary,
+                      ),
+                    ),
+                    if (widget.isVerified == true) ...[
+                      const SizedBox(width: 4),
+                      const Icon(
+                        Icons.check_circle,
+                        color: Colors.blue,
+                        size: 16,
+                      ),
+                    ],
+                  ],
                 ),
                 Text(
                   compatibility,
@@ -453,7 +478,19 @@ class _ChatState extends State<Chat> {
         ),
       ),
       actions: [
-        _headerIcon(Icons.call_rounded, () {}),
+        _headerIcon(Icons.call_rounded, () async {
+          if (widget.phone != null && widget.phone!.isNotEmpty) {
+            final Uri launchUri = Uri(
+              scheme: 'tel',
+              path: widget.phone,
+            );
+            await launchUrl(launchUri);
+          } else {
+            store.dispatch(
+              ShowMessageAction(msg: "Phone number not available"),
+            );
+          }
+        }),
         _headerIcon(Icons.more_vert_rounded, () {}),
         const SizedBox(width: 8),
       ],

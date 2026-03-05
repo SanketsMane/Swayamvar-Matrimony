@@ -14,13 +14,13 @@ import 'package:active_matrimonial_flutter_app/screens/package/premium_plans.dar
 import 'package:active_matrimonial_flutter_app/screens/referral/referral.dart';
 import 'package:active_matrimonial_flutter_app/screens/settings/settings.dart';
 import 'dart:io';
-import 'package:active_matrimonial_flutter_app/custom/my_images_dialog.dart';
+// import 'package:active_matrimonial_flutter_app/custom/my_images_dialog.dart';
 import 'package:active_matrimonial_flutter_app/repository/manage_profile_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:active_matrimonial_flutter_app/l10n/app_localizations.dart';
 import 'package:active_matrimonial_flutter_app/helpers/profile_completeness_helper.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:active_matrimonial_flutter_app/custom/my_scaffold_messenger.dart';
+// import 'package:active_matrimonial_flutter_app/custom/my_scaffold_messenger.dart';
 
 class Account extends StatefulWidget {
   const Account({super.key});
@@ -35,23 +35,28 @@ class _AccountState extends State<Account> {
 
   Future<void> _pickAndUploadImage() async {
     try {
-      final XFile? image = await _picker.pickImage(source: ImageSource.gallery);
+      final XFile? image = await _picker.pickImage(
+        source: ImageSource.gallery,
+        maxWidth: 1000,
+        maxHeight: 1000,
+        imageQuality: 85,
+      );
       if (image == null) return;
 
       setState(() {
         _isUploadingPhoto = true;
       });
 
-      File photoFile = File(image.path);
+      // Sanket: Pass XFile directly to repo to avoid 'Namespace' error on Web
       var response = await ManageProfileRepository().profilePictureUpdate(
-        photo: photoFile,
+        photo: image,
       );
 
       setState(() {
         _isUploadingPhoto = false;
       });
 
-      if (response.result!) {
+      if (response.result) {
         // Refresh account and auth states to get new photo
         store.dispatch(accountMiddleware());
         ScaffoldMessenger.of(context).showSnackBar(
@@ -397,72 +402,114 @@ class _AccountState extends State<Account> {
     final l = AppLocalizations.of(context)!;
     final packageName =
         profileData?.currentPackageInfo?.packageName ?? "Free Member";
+    final packageExpiry = profileData?.currentPackageInfo?.packageExpiry;
 
     return Container(
       padding: const EdgeInsets.all(20),
-      decoration: BoxDecoration(
-        color: MyTheme.white,
-        borderRadius: BorderRadius.circular(16),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(0.04),
-            blurRadius: 10,
-            offset: const Offset(0, 4),
-          ),
-        ],
+      decoration: Styles.cardDecoration.copyWith(
+        gradient: LinearGradient(
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+          colors: [
+            MyTheme.white,
+            MyTheme.primary.withOpacity(0.02),
+          ],
+        ),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(
-            l.profile_membership_status,
-            style: Styles.regular_gull_grey_12,
-          ),
-          const SizedBox(height: 4),
-          Text(
-            packageName,
-            style: Styles.bold_arsenic_16.copyWith(fontSize: 18),
-          ),
-          const SizedBox(height: 16),
-
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              _creditItem(
-                Icons.favorite_outline,
-                "12",
-                l.profile_interests,
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    l.profile_membership_status,
+                    style: Styles.regular_gull_grey_12.copyWith(fontSize: 11),
+                  ),
+                  const SizedBox(height: 2),
+                  Text(
+                    packageName,
+                    style: Styles.bold_arsenic_16.copyWith(
+                      fontSize: 20,
+                      color: MyTheme.primary,
+                    ),
+                  ),
+                ],
               ),
-              _creditItem(
-                Icons.visibility_outlined,
-                "5",
-                l.profile_contacts,
-              ),
-              _creditItem(
-                Icons.photo_library_outlined,
-                "3",
-                l.profile_gallery,
-              ),
+              if (packageExpiry != null)
+                Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+                  decoration: BoxDecoration(
+                    color: MyTheme.primary.withOpacity(0.1),
+                    borderRadius: BorderRadius.circular(20),
+                  ),
+                  child: Text(
+                    packageExpiry,
+                    style: Styles.bold_app_accent_12.copyWith(fontSize: 10),
+                  ),
+                ),
             ],
           ),
+          const SizedBox(height: 24),
+          Container(
+            padding: const EdgeInsets.symmetric(vertical: 16),
+            decoration: BoxDecoration(
+              color: MyTheme.background,
+              borderRadius: BorderRadius.circular(12),
+            ),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: [
+                _creditItem(
+                  Icons.favorite_rounded,
+                  "${profileData?.remainingInterest ?? 0}",
+                  l.profile_interests,
+                ),
+                Container(width: 1, height: 30, color: MyTheme.border),
+                _creditItem(
+                  Icons.remove_red_eye_rounded,
+                  "${profileData?.remainingContactView ?? 0}",
+                  l.profile_contacts,
+                ),
+                Container(width: 1, height: 30, color: MyTheme.border),
+                _creditItem(
+                  Icons.collections_rounded,
+                  "${profileData?.remainingPhotoGallery ?? 0}",
+                  l.profile_gallery,
+                ),
+              ],
+            ),
+          ),
           const SizedBox(height: 20),
-
-          SizedBox(
+          Container(
             width: double.infinity,
+            height: 50,
+            decoration: BoxDecoration(
+              gradient: Styles.primaryGradient,
+              borderRadius: BorderRadius.circular(Styles.br_btn),
+              boxShadow: [
+                BoxShadow(
+                  color: MyTheme.primary.withOpacity(0.3),
+                  blurRadius: 12,
+                  offset: const Offset(0, 4),
+                ),
+              ],
+            ),
             child: ElevatedButton(
               onPressed: () => NavigatorPush.push(context, PremiumPlans()),
               style: ElevatedButton.styleFrom(
-                backgroundColor: MyTheme.primary,
-                foregroundColor: MyTheme.white,
-                elevation: 0,
+                backgroundColor: Colors.transparent,
+                shadowColor: Colors.transparent,
                 shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(12),
+                  borderRadius: BorderRadius.circular(Styles.br_btn),
                 ),
-                padding: const EdgeInsets.symmetric(vertical: 14),
               ),
               child: Text(
                 l.profile_upgrade,
-                style: const TextStyle(fontWeight: FontWeight.bold),
+                style: Styles.bold_white_14.copyWith(fontSize: 15),
               ),
             ),
           ),

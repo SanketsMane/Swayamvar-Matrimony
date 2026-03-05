@@ -27,20 +27,8 @@ class _ReferralState extends State<Referral> {
   @override
   void initState() {
     super.initState();
-    if (!store.state.userVerifyState!.isApprove!) {
-      OneContext().pop();
-      store.dispatch(
-        ShowMessageAction(
-          msg:
-              AppLocalizations.of(
-                OneContext().context!,
-              )!.gallery_verify_account_msg,
-          color: MyTheme.failure,
-        ),
-      );
-    } else {
-      _fetchData();
-    }
+    // Sanket: Approval status does NOT gate app access — any registered user can use referrals.
+    _fetchData();
     scrollController.addListener(() {
       if (scrollController.position.maxScrollExtent ==
           scrollController.offset) {

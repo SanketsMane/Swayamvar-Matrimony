@@ -111,9 +111,9 @@ class _SignupVerifyState extends State<SignupVerify> {
       onTap: () {
         FocusManager.instance.primaryFocus?.unfocus();
         if (_verifyController.text.isEmpty) {
-          store.dispatch(ShowMessageAction(msg: 'Please enter code.'));
+          store.dispatch(ShowMessageAction(msg: 'Please enter verification code.'));
         } else if (_verifyController.text.length < 6) {
-          store.dispatch(ShowMessageAction(msg: 'Must be 4 character.'));
+          store.dispatch(ShowMessageAction(msg: 'Verification code must be 6 digits.'));
         } else {
           store.dispatch(
             verifyMiddleware(

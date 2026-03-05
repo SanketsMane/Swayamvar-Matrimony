@@ -9,8 +9,8 @@ class PercentageCalculator {
     dynamic map = data;
 
     Map jsonData = map.toJson();
-    double percentage;
-    int completed;
+    double percentage = 0.0;
+    int completed = 0;
     Map? finalData;
 
     jsonData.forEach((key, value) {
@@ -25,7 +25,11 @@ class PercentageCalculator {
           }
         });
 
-        percentage = ((completed / finalData!.length) * 100) / 100;
+        if (finalData!.isNotEmpty) {
+          percentage = ((completed / finalData!.length) * 100) / 100;
+        } else {
+          percentage = 0.0;
+        }
 
         var twoDecimalValue = percentage.toStringAsFixed(2); // '2.35'
         percentage = double.parse(twoDecimalValue);
@@ -35,8 +39,8 @@ class PercentageCalculator {
   }
 
   dynamic getBasicPercentage() {
-    double percentage;
-    int completed;
+    double percentage = 0.0;
+    int completed = 0;
     Map? jsonData;
 
     if (data == null) {
@@ -50,7 +54,11 @@ class PercentageCalculator {
             completed--;
           }
         });
-        percentage = ((completed / jsonData.length) * 100) / 100;
+        if (jsonData.isNotEmpty) {
+          percentage = ((completed / jsonData.length) * 100) / 100;
+        } else {
+          percentage = 0.0;
+        }
 
         var twoDecimalValue = percentage.toStringAsFixed(2); // '2.35'
         percentage = double.parse(twoDecimalValue);

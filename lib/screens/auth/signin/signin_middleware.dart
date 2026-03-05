@@ -3,11 +3,8 @@ import 'package:active_matrimonial_flutter_app/helpers/auth_helper.dart';
 import 'package:active_matrimonial_flutter_app/repository/auth_repository.dart';
 import 'package:active_matrimonial_flutter_app/screens/auth/signin/signin_action.dart';
 import 'package:active_matrimonial_flutter_app/screens/core.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
-import '../../../helpers/shared_pref.dart';
-import '../../../repository/app_info_repository.dart';
 import '../../app_navigation.dart';
 import '../verify/verify_action.dart';
 
@@ -31,13 +28,6 @@ ThunkAction<AppState> signInMiddleware({email, password, from, context}) {
       store.state.signInState!.emailController!.clear();
       store.state.signInState!.passwordController!.clear();
 
-      Navigator.pushAndRemoveUntil(
-        context,
-        MaterialPageRoute(builder: (context) => AppNavigation()),
-        (route) => false,
-      );
-      store.state.signInState!.emailController!.clear();
-      store.state.signInState!.passwordController!.clear();
     } else {
       store.dispatch(
         ShowMessageAction(msg: data.message, color: MyTheme.failure),

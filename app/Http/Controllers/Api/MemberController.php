@@ -51,28 +51,55 @@ class MemberController extends Controller
         $with_photo          = ($request->with_photo != null) ? filter_var($request->with_photo, FILTER_VALIDATE_BOOLEAN) : null;
         $recently_joined     = ($request->recently_joined != null) ? filter_var($request->recently_joined, FILTER_VALIDATE_BOOLEAN) : null;
 
+        $currUser = auth()->user();
+        if (!$currUser) {
+            $token = PersonalAccessToken::findToken($request->bearerToken());
+            if ($token) {
+                $currUser = $token->tokenable;
+            }
+        }
+
         $users_query = User::query();
         $users_query->orderBy('created_at', 'desc')
             ->where('user_type', 'member')
-            ->where('id', '!=', auth()->user()->id)
             ->where('blocked', 0)
             ->where('deactivated', 0);
 
-        // Gender Check
-        $user_ids = Member::where('gender', '!=', auth()->user()->member->gender)->pluck('user_id')->toArray();
-        $users_query->whereIn('id', $user_ids);
+        if ($currUser) {
+            $users_query->where('id', '!=', $currUser->id);
+        }
+
+        if ($currUser && strtolower($currUser->user_type) == 'member') {
+            $currentUserMember = $currUser->member;
+            if ($currentUserMember && !empty($currentUserMember->gender)) {
+                $genderValue = strtolower($currentUserMember->gender);
+                if ($genderValue == '1' || $genderValue == 'male') {
+                    $oppositeGenders = ['2', 'female'];
+                } else {
+                    $oppositeGenders = ['1', 'male'];
+                }
+                
+                // Sanket: Strict gender filtering using JOIN
+                $users_query->join('members', 'users.id', '=', 'members.user_id')
+                           ->whereIn('members.gender', $oppositeGenders);
+                
+                @file_put_contents(public_path('debug_member.txt'), date('Y-m-d H:i:s') . " | Strict Filter applied for UID: " . $currUser->id . " Seeking: " . implode(',', $oppositeGenders) . "\n", FILE_APPEND);
+            }
+        }
 
         // Ignored member and ignored by member check
-        $users_query->whereNotIn("id", function ($query) {
-            $query->select('user_id')
-                ->from('ignored_users')
-                ->where('ignored_by', auth()->user()->id)->orWhere('user_id', auth()->user()->id);
-        })
-            ->whereNotIn("id", function ($query) {
-                $query->select('ignored_by')
+        if ($currUser) {
+            $users_query->whereNotIn("id", function ($query) use ($currUser) {
+                $query->select('user_id')
                     ->from('ignored_users')
-                    ->where('ignored_by', auth()->user()->id)->orWhere('user_id', auth()->user()->id);
-            });
+                    ->where('ignored_by', $currUser->id)->orWhere('user_id', $currUser->id);
+            })
+                ->whereNotIn("id", function ($query) use ($currUser) {
+                    $query->select('ignored_by')
+                        ->from('ignored_users')
+                        ->where('ignored_by', $currUser->id)->orWhere('user_id', $currUser->id);
+                });
+        }
 
         // Membership Check
         if ($member_type == 1 || $member_type == 2) {

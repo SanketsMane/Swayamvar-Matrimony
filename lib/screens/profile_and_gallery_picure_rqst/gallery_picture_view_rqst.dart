@@ -24,18 +24,9 @@ class _GalleryProfileViewRqstState extends State<GalleryProfileViewRqst> {
   @override
   void initState() {
     super.initState();
-    if (!store.state.userVerifyState!.isApprove!) {
-      OneContext().pop();
-      store.dispatch(
-        ShowMessageAction(
-          msg: "Please verify your account",
-          color: MyTheme.failure,
-        ),
-      );
-    } else {
-      store.dispatch(GalleryPictureViewReset());
-      store.dispatch(getGalleryPictureViewRequestMiddleware());
-    }
+    // Sanket: Approval status does NOT gate app access — any registered user can use the app.
+    store.dispatch(GalleryPictureViewReset());
+    store.dispatch(getGalleryPictureViewRequestMiddleware());
     _xcrollController.addListener(() {
       if (_xcrollController.position.maxScrollExtent ==
           _xcrollController.offset) {

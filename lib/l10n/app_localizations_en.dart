@@ -1534,7 +1534,13 @@ class AppLocalizationsEn extends AppLocalizations {
   String get profile_label_disability => 'Physical Disability';
 
   @override
+  String get profile_physical_disability => 'Physical Disability';
+
+  @override
   String get profile_label_disability_details => 'Disability Details';
+
+  @override
+  String get profile_disability_details => 'Disability Details';
 
   @override
   String get profile_label_diet => 'Diet';
@@ -2279,21 +2285,6 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get profile_error_married_sisters => 'Married sisters cannot exceed total sisters.';
 
-  @override
-  String get profile_web_photo_note => 'Photo uploads are only supported on the mobile app. Please use the Android or iOS app to upload your photos.';
-
-  @override
-  String get profile_error_first_name => 'First name is required.';
-  @override
-  String get profile_error_dob => 'Please select your date of birth.';
-  @override
-  String get profile_error_mobile => 'Mobile number is required.';
-  @override
-  String get profile_error_mobile_invalid => 'Please enter a valid 10-digit mobile number.';
-  @override
-  String get profile_error_married_brothers => 'Married brothers cannot exceed total brothers.';
-  @override
-  String get profile_error_married_sisters => 'Married sisters cannot exceed total sisters.';
   @override
   String get profile_web_photo_note => 'Photo uploads are only supported on the mobile app. Please use the Android or iOS app to upload your photos.';
 }

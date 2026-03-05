@@ -25,12 +25,17 @@ class SupportTicket extends StatefulWidget {
 }
 
 class _SupportTicketState extends State<SupportTicket> {
+  final ImagePicker _picker = ImagePicker();
   final _replySummernoteKey = GlobalKey<FlutterSummernoteState>();
 
   Future getReplyImage() async {
     try {
-      final image = await store.state.supportTicketReplyState!.replyImagePicker!
-          .pickImage(source: ImageSource.gallery);
+      final XFile? image = await _picker.pickImage(
+        source: ImageSource.gallery,
+        maxWidth: 1000,
+        maxHeight: 1000,
+        imageQuality: 85,
+      );
       if (image == null) return;
 
       final imageTemporay = File(image.path);
@@ -677,8 +682,12 @@ class _CreateTicketFormState extends State<CreateTicketForm> {
 
   Future getImage() async {
     try {
-      final image = await store.state.supportTicketCreateState!.picker
-          .pickImage(source: ImageSource.gallery);
+      final image = await store.state.supportTicketCreateState!.picker.pickImage(
+        source: ImageSource.gallery,
+        maxWidth: 1000,
+        maxHeight: 1000,
+        imageQuality: 85,
+      );
       if (image == null) return;
 
       final imageTemporay = File(image.path);

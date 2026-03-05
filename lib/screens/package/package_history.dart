@@ -24,18 +24,9 @@ class _PackageHistoryState extends State<PackageHistory> {
   @override
   void initState() {
     super.initState();
-    if (!store.state.userVerifyState!.isApprove!) {
-      OneContext().pop();
-      store.dispatch(
-        ShowMessageAction(
-          msg: "Please verify your account",
-          color: MyTheme.failure,
-        ),
-      );
-    } else {
-      store.dispatch(Reset.packageHistory);
-      store.dispatch(packageHistoryMiddleware());
-    }
+    // Sanket: Approval status does NOT gate app access — any registered user can use the app.
+    store.dispatch(Reset.packageHistory);
+    store.dispatch(packageHistoryMiddleware());
     scrollController.addListener(() {
       if (scrollController.position.maxScrollExtent ==
           scrollController.offset) {

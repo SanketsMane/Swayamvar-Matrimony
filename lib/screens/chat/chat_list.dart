@@ -37,19 +37,10 @@ class _ChatListState extends State<ChatList> {
 
   void _initialFetch() {
     bool isDeactivated = store.state.authState?.userData?.deactivated == 1;
-    bool isApproved = store.state.userVerifyState?.isApprove ?? false;
 
-    if (!isApproved) {
-      if (widget.backButtonAppearance == true) {
-        OneContext().pop();
-      }
-      store.dispatch(
-        ShowMessageAction(
-          msg: "Please verify your account",
-          color: MyTheme.failure,
-        ),
-      );
-    } else if (!isDeactivated) {
+    // Sanket: Approval status does NOT gate app access — any registered user can use the app.
+    // Only a deactivated account is blocked.
+    if (!isDeactivated) {
       store.dispatch(Reset.chatList);
       store.dispatch(chatMiddleware());
       store.dispatch(matchedProfileFetchAction());
@@ -248,6 +239,9 @@ class _ChatListState extends State<ChatList> {
           packageImage: chat.memberPackage?.image ?? "",
           lastMessage: chat.lastMessage,
           unseenMessageCount: chat.unseenMessageCount,
+          age: chat.age?.toString(),
+          isVerified: chat.approved == 1,
+          phone: chat.phone,
         );
       },
     );
