@@ -682,6 +682,13 @@
                                         <span class="aiz-side-nav-text">{{ translate('Telecaller Management') }}</span>
                                     </a>
                                 </li>
+                                {{-- Sanket: Admin view for tracking all biodatas filled by telecallers --}}
+                                <li class="aiz-side-nav-item">
+                                    <a href="{{ route('telecallers.biodata_tracking') }}"
+                                        class="aiz-side-nav-link {{ areActiveRoutes(['telecallers.biodata_tracking']) }}">
+                                        <span class="aiz-side-nav-text">{{ translate('Biodata Tracking') }}</span>
+                                    </a>
+                                </li>
                             @endcan
                             @can('lead_upload')
                                 <li class="aiz-side-nav-item">

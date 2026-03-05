@@ -100,6 +100,10 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth', 'admin']], function 
     Route::group(['prefix' => 'telecalling'], function () {
         Route::resource('telecallers', \App\Http\Controllers\Admin\TelecallerController::class);
         Route::post('/telecallers/status', [\App\Http\Controllers\Admin\TelecallerController::class, 'update_status'])->name('telecallers.update_status');
+        Route::post('/telecallers/reset-password', [\App\Http\Controllers\Admin\TelecallerController::class, 'reset_password'])->name('telecallers.reset_password');
+        Route::get('/telecallers/{id}/performance', [\App\Http\Controllers\Admin\TelecallerController::class, 'performance'])->name('telecallers.performance');
+        // Sanket: Admin biodata tracking — view all member profiles filled by telecallers
+        Route::get('/telecallers/biodata-tracking', [\App\Http\Controllers\Admin\TelecallerController::class, 'biodataTracking'])->name('telecallers.biodata_tracking');
         
         Route::resource('campaigns', \App\Http\Controllers\Admin\TelecallingCampaignController::class);
         Route::resource('lead-upload', \App\Http\Controllers\Admin\LeadUploadController::class);
@@ -126,6 +130,11 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth', 'admin']], function 
 
         // Agent Dashboard & Workflow [Sanket]
         Route::get('/dashboard', [\App\Http\Controllers\Admin\TelecallingDashboardController::class, 'index'])->name('telecalling.dashboard');
+        
+        // Sanket: Web Panel Fill Biodata
+        Route::get('/fill-biodata', [\App\Http\Controllers\Admin\TelecallingDashboardController::class, 'fillBiodata'])->name('telecalling.fill_biodata');
+        Route::post('/fill-biodata', [\App\Http\Controllers\Admin\TelecallingDashboardController::class, 'storeBiodata'])->name('telecalling.store_biodata');
+
         Route::get('/assigned-leads', [\App\Http\Controllers\Admin\TelecallingDashboardController::class, 'assigned_leads'])->name('telecalling.assigned_leads');
         Route::post('/lead/update-action', [\App\Http\Controllers\Admin\TelecallingDashboardController::class, 'update_lead_action'])->name('telecalling.lead_action');
 

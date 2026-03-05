@@ -13,6 +13,7 @@
 
 
 
+/*
 //Admin
 Route::group(['prefix' =>'admin', 'middleware' => ['auth', 'admin']], function(){
   Route::get('/set-referral-commission', 'ReferralSystemController@set_referral_commission')->name('set_referral_commission');
@@ -35,3 +36,4 @@ Route::group(['middleware' => ['member','verified']], function(){
   Route::post('/wallet/withdraw-request-store', 'WalletWithdrawRequestController@store')->name('wallet_withdraw_request.store');
 
 });
+*/

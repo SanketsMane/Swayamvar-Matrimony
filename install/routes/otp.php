@@ -12,6 +12,7 @@
 */
 
 
+/*
 //Verofocation phone
 Route::get('/verification', 'OTPVerificationController@verification')->name('verification');
 Route::post('/verification', 'OTPVerificationController@verify_phone')->name('verification.submit');
@@ -32,3 +33,4 @@ Route::group(['prefix' =>'admin', 'middleware' => ['auth', 'admin']], function()
     Route::get('/bulk-sms', 'OTPController@bulk_sms')->name('bulk_sms.index');
     Route::post('/bulk-sms-send', 'OTPController@bulk_sms_send')->name('bulk_sms.send');
 });
+*/

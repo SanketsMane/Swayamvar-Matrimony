@@ -2,6 +2,8 @@
 
 use App\Http\Controllers\Api\Payment\PhonepeController;
 use App\Http\Controllers\Api\Payment\RazorpayController;
+use App\Http\Controllers\Api\Telecalling\TelecallerProfileApiController;
+use App\Http\Controllers\Api\Telecalling\TelecallerDashboardApiController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -40,9 +42,21 @@ Route::group(['prefix' => 'telecaller', 'namespace' => 'Api\Telecalling', 'middl
         Route::get('/followups', 'TelecallerFollowupApiController@getFollowups');
         
         // Profile & Commissions
-        Route::get('/profile', 'TelecallerProfileApiController@getProfile');
+        Route::get('telecaller/profile', [TelecallerProfileApiController::class, 'getProfile']);
+        Route::post('telecaller/logout', [TelecallerProfileApiController::class, 'logout']);
+        // Sanket: Password change endpoint for the Telecaller mobile app
+        Route::post('telecaller/change-password', [TelecallerProfileApiController::class, 'changePassword']);
+        
+        // Telecaller Biodata APIs [Sanket]
+        Route::get('biodata/dropdowns', [TelecallerProfileApiController::class, 'getDropdownData']);
+        Route::get('biodata/get-states/{country_id}', [TelecallerProfileApiController::class, 'getStates']);
+        Route::get('biodata/get-cities/{state_id}', [TelecallerProfileApiController::class, 'getCities']);
+        Route::post('biodata/create', [TelecallerProfileApiController::class, 'storeProfile']);
+        Route::get('biodata/my-profiles', [TelecallerProfileApiController::class, 'getMyProfiles']);
+
+        // Telecaller Dashboard API
+        Route::get('telecaller/dashboard', [TelecallerDashboardApiController::class, 'index']);
         Route::get('/commissions', 'TelecallerCommissionApiController@getCommissionStats'); // New: Commissions
-        Route::post('/logout', 'TelecallerProfileApiController@logout');
         
         // Call History
         Route::get('/call-history', 'TelecallerCallHistoryApiController@getCallHistory');
@@ -131,7 +145,7 @@ Route::group(['namespace' => 'Api', 'middleware' => ['app_language']], function 
         });
     });
 
-    Route::post('/logout', 'AuthController@logout')->name('logout')->middleware('auth:sanctum');
+    Route::post('/logout', 'AuthController@logout')->name('api.logout')->middleware('auth:sanctum');
     Route::get('/member-validate', 'MemberController@member_validate');
 
     Route::group(['middleware' => ['auth:sanctum', 'api_email_verified']], function () {
@@ -215,23 +229,25 @@ Route::group(['namespace' => 'Api', 'middleware' => ['app_language']], function 
             Route::get('/home-with-login', 'HomeController@home_with_login');
             Route::get('/check-happy-story', 'HappyStoryController@happy_story_check');
             Route::post('/happy-story', 'HappyStoryController@store');
-            Route::apiResources([
-                'gallery-image' => 'GalleryImageController',
-                'career' => 'CareerController',
-                'education' => 'EducationController',
-                'support-ticket' => 'SupportTicketController',
-            ]);
+            Route::group(['as' => 'api.'], function () {
+                Route::apiResources([
+                    'gallery-image' => 'GalleryImageController',
+                    'career' => 'CareerController',
+                    'education' => 'EducationController',
+                    'support-ticket' => 'SupportTicketController',
+                ]);
+            });
 
             // Gallery Image View Request
             Route::get('/gallery-image-view-request', 'GalleryImageController@image_view_request');
             Route::post('/gallery-image-view-request', 'GalleryImageController@store_image_view_request');
-            Route::post('/gallery-image-view-request/accept', 'GalleryImageController@accept_image_view_request')->name('gallery_image_view_request_accept');
-            Route::post('/gallery-image-view-request/reject', 'GalleryImageController@reject_image_view_request')->name('gallery_image_view_request_reject');
+            Route::post('/gallery-image-view-request/accept', 'GalleryImageController@accept_image_view_request')->name('api.gallery_image_view_request_accept');
+            Route::post('/gallery-image-view-request/reject', 'GalleryImageController@reject_image_view_request')->name('api.gallery_image_view_request_reject');
             // Profile Image View Request
             Route::get('/profile-picture-view-request', 'ProfileImageController@image_view_request');
             Route::post('/profile-picture-view-request', 'ProfileImageController@store_image_view_request');
-            Route::post('/profile-picture-view-request/accept', 'ProfileImageController@accept_image_view_request')->name('profile_picture_view_request_accept');
-            Route::post('/profile-picture-view-request/reject', 'ProfileImageController@reject_image_view_request')->name('profile_picture_view_request_reject');
+            Route::post('/profile-picture-view-request/accept', 'ProfileImageController@accept_image_view_request')->name('api.profile_picture_view_request_accept');
+            Route::post('/profile-picture-view-request/reject', 'ProfileImageController@reject_image_view_request')->name('api.profile_picture_view_request_reject');
 
 
             Route::get('/maritial-status', 'ProfileDropdownController@maritial_status');

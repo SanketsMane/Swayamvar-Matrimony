@@ -55,10 +55,10 @@ Auth::routes(['verify' => true]);
 
 // Route::get('/logout', 'Auth\LoginController@logout')->name('logout');
 
-Route::get('/email/resend', 'Auth\VerificationController@resend')->name('verification.resend');
+// Route::get('/email/resend', 'Auth\VerificationController@resend')->name('verification.resend');
 Route::get('/verification-confirmation/{code}', 'Auth\VerificationController@verification_confirmation')->name('email.verification.confirmation');
 Route::get('/email_change/callback', 'HomeController@email_change_callback')->name('email_change.callback');
-Route::post('/password/reset/email/submit', 'HomeController@reset_password_with_code')->name('password.update');
+Route::post('/password/reset/email/submit', 'HomeController@reset_password_with_code')->name('password.update_custom');
 
 // Agent Login [Sanket]
 Route::get('/agent', [App\Http\Controllers\Agent\Auth\LoginController::class, 'showLoginForm'])->name('agent.login');
@@ -185,17 +185,17 @@ Route::group(['middleware' => ['auth']], function () {
 
     // Member education
     Route::resource('/education', 'EducationController');
-    Route::post('/education/create', 'EducationController@create')->name('education.create');
-    Route::post('/education/edit', 'EducationController@edit')->name('education.edit');
+    Route::post('/education/create', 'EducationController@create')->name('education.create_custom');
+    Route::post('/education/edit', 'EducationController@edit')->name('education.edit_custom');
     Route::post('/education/update_education_present_status', 'EducationController@update_education_present_status')->name('education.update_education_present_status');
-    Route::get('/education/destroy/{id}', 'EducationController@destroy')->name('education.destroy');
+    Route::get('/education/destroy/{id}', 'EducationController@destroy')->name('education.destroy_custom');
 
     // Member Career
     Route::resource('/career', 'CareerController');
-    Route::post('/career/create', 'CareerController@create')->name('career.create');
-    Route::post('/career/edit', 'CareerController@edit')->name('career.edit');
+    Route::post('/career/create', 'CareerController@create')->name('career.create_custom');
+    Route::post('/career/edit', 'CareerController@edit')->name('career.edit_custom');
     Route::post('/career/update_career_present_status', 'CareerController@update_career_present_status')->name('career.update_career_present_status');
-    Route::get('/career/destroy/{id}', 'CareerController@destroy')->name('career.destroy');
+    Route::get('/career/destroy/{id}', 'CareerController@destroy')->name('career.destroy_custom');
 
     Route::resource('/physical-attribute', 'PhysicalAttributeController');
     Route::resource('/hobbies', 'HobbyController');
@@ -221,7 +221,7 @@ Route::group(['middleware' => ['auth']], function () {
 // Contact Us page
 Route::controller(ContactUsController::class)->group(function () {
     Route::get('/contact-us/page', 'show_contact_us_page')->name('contact_us');
-    Route::post('/contact-us', 'store')->name('contact-us.store');
+    Route::post('/contact-us', 'store')->name('contact-us.store_web');
 });
 
 // Payment gateway Redirect
@@ -269,7 +269,7 @@ Route::controller(PhonepeController::class)->group(function () {
     Route::any('/phonepe/callbackUrl', 'phonepe_callbackUrl')->name('phonepe.callbackUrl');
 });
 
-Route::get('/customer-products/admin', 'HomeController@profile_edit')->name('profile.edit');
+Route::get('/customer-products/admin', 'HomeController@profile_edit')->name('profile.edit_custom');
 Route::get('/check_for_package_invalid', 'PackageController@check_for_package_invalid')->name('member.check_for_package_invalid');
 
 Route::get('/match_profiles', 'ProfileMatchController@match_profiles')->name('match_profiles');
