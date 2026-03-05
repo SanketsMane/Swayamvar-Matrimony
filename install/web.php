@@ -27,7 +27,7 @@ Route::controller(DemoController::class)->group(function () {
     Route::get('/demo/cron_2', 'cron_2');
 });
 
-Auth::routes();
+// Auth::routes();
 
 //Home Page
 Route::get('/', 'HomeController@index')->name('index');
@@ -53,7 +53,7 @@ Route::controller(AizUploadController::class)->group(function () {
 
 Auth::routes(['verify' => true]);
 
-Route::get('/logout', 'Auth\LoginController@logout')->name('logout.get');
+// Route::get('/logout', 'Auth\LoginController@logout')->name('logout.get');
 
 Route::get('/email/resend', 'Auth\VerificationController@resend')->name('verification.resend_manual');
 Route::get('/verification-confirmation/{code}', 'Auth\VerificationController@verification_confirmation')->name('email.verification.confirmation');

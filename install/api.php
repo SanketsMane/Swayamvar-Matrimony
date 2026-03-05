@@ -133,6 +133,7 @@ Route::group(['namespace' => 'Api', 'middleware' => ['app_language']], function 
             Route::post('/introduction-update', 'ProfileController@introduction_update');
             Route::get('/basic-info', 'ProfileController@get_basic_info');
             Route::post('/basic-info/update', 'ProfileController@basic_info_update');
+            Route::post('/profile-picture/update', 'ProfileController@profile_picture_update');
             Route::get('present/address', 'ProfileController@present_address');
             Route::get('permanent/address', 'ProfileController@permanent_address');
             Route::post('/address/update', 'ProfileController@address_update');

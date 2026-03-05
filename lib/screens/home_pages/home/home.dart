@@ -749,11 +749,14 @@ class _HomeState extends State<Home> {
             style: Styles.body.copyWith(fontWeight: FontWeight.w700),
           ),
           const SizedBox(width: 4),
-          Text(
-            description,
-            style: Styles.body.copyWith(color: MyTheme.text_secondary),
+          Expanded(
+            child: Text(
+              description,
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+              style: Styles.body.copyWith(color: MyTheme.text_secondary),
+            ),
           ),
-          const Spacer(),
           const Icon(
             Icons.chevron_right,
             color: MyTheme.text_secondary,

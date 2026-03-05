@@ -293,6 +293,27 @@ class ProfileController extends Controller
         ]);
     }
 
+    public function profile_picture_update(Request $request)
+    {
+        $user = User::findOrFail(auth()->id());
+        if ($request->hasFile('photo')) {
+            $user->photo = upload_api_file($request->file('photo'));
+            if (Setting::where('type', 'profile_picture_approval_by_admin')->first()->value && auth()->user()->user_type == 'member') {
+                $user->photo_approved = 0;
+            }
+            $user->save();
+            return response()->json([
+                'result' => true,
+                'message' => 'Profile picture has been updated successfully',
+                'photo' => $user->photo
+            ]);
+        }
+        return response()->json([
+            'result' => false,
+            'message' => 'No photo found'
+        ]);
+    }
+
     public function present_address()
     {
         $present_address = Address::where('user_id', auth()->id())->where('type', 'present')->first();
