@@ -159,9 +159,17 @@ Route::group(['namespace' => 'Api', 'middleware' => ['app_language']], function 
         Route::post('/member/verification-info-store', 'MemberController@store_verification_info');
     });
 
+    Route::post('update-member-location', [\App\Http\Controllers\Api\MemberLocationController::class, 'update']);
+    Route::post('update-device-token', [\App\Http\Controllers\Api\MemberLocationController::class, 'updateDeviceToken']);
+
+    Route::get('/fix-lead-upload', function() {
+        \Spatie\Permission\Models\Permission::firstOrCreate(['name' => 'lead_upload', 'guard_name' => 'web']);
+        $role = \Spatie\Permission\Models\Role::where('name', 'Admin')->first();
+        if ($role) $role->givePermissionTo('lead_upload');
+        return 'Fixed Lead Upload Permission!';
+    });
 
     Route::group(['middleware' => ['auth:sanctum', 'api_email_verified', 'api_member']], function () {
-        Route::post('/update-device-token', 'AuthController@update_device_token');
         Route::get('/app-check', 'AuthController@checkedData');
         //Payment Gateways
         Route::group(['namespace' => 'Payment'], function () {
