@@ -111,6 +111,43 @@ class TelecallerProfileApiController extends Controller
                     ['id' => 'Vegetarian', 'name' => 'Vegetarian'], ['id' => 'Non-Vegetarian', 'name' => 'Non-Vegetarian'],
                     ['id' => 'Eggetarian', 'name' => 'Eggetarian'], ['id' => 'Vegan', 'name' => 'Vegan'],
                 ],
+                'educations' => [
+                    ['id' => '10th', 'name' => '10th'],
+                    ['id' => '12th', 'name' => '12th'],
+                    ['id' => 'Diploma', 'name' => 'Diploma'],
+                    ['id' => 'Undergraduate', 'name' => 'Undergraduate'],
+                    ['id' => 'Postgraduate', 'name' => 'Postgraduate'],
+                    ['id' => 'Doctorate', 'name' => 'Doctorate'],
+                    ['id' => 'MBA', 'name' => 'MBA'],
+                    ['id' => 'B.Tech / B.E', 'name' => 'B.Tech / B.E'],
+                    ['id' => 'M.Tech / M.E', 'name' => 'M.Tech / M.E'],
+                    ['id' => 'MBBS / BDS', 'name' => 'MBBS / BDS'],
+                    ['id' => 'CA / CS / ICWA', 'name' => 'CA / CS / ICWA'],
+                    ['id' => 'Other', 'name' => 'Other'],
+                ],
+                'heights' => [
+                    ['id' => '4.5', 'name' => '4 ft 5 in'],
+                    ['id' => '4.6', 'name' => '4 ft 6 in'],
+                    ['id' => '4.7', 'name' => '4 ft 7 in'],
+                    ['id' => '4.8', 'name' => '4 ft 8 in'],
+                    ['id' => '4.9', 'name' => '4 ft 9 in'],
+                    ['id' => '5.0', 'name' => '5 ft 0 in'],
+                    ['id' => '5.1', 'name' => '5 ft 1 in'],
+                    ['id' => '5.2', 'name' => '5 ft 2 in'],
+                    ['id' => '5.3', 'name' => '5 ft 3 in'],
+                    ['id' => '5.4', 'name' => '5 ft 4 in'],
+                    ['id' => '5.5', 'name' => '5 ft 5 in'],
+                    ['id' => '5.6', 'name' => '5 ft 6 in'],
+                    ['id' => '5.7', 'name' => '5 ft 7 in'],
+                    ['id' => '5.8', 'name' => '5 ft 8 in'],
+                    ['id' => '5.9', 'name' => '5 ft 9 in'],
+                    ['id' => '6.0', 'name' => '6 ft 0 in'],
+                    ['id' => '6.1', 'name' => '6 ft 1 in'],
+                    ['id' => '6.2', 'name' => '6 ft 2 in'],
+                    ['id' => '6.3', 'name' => '6 ft 3 in'],
+                    ['id' => '6.4', 'name' => '6 ft 4 in'],
+                    ['id' => '6.5', 'name' => '6 ft 5 in'],
+                ],
             ]
         ]);
     }
@@ -148,6 +185,8 @@ class TelecallerProfileApiController extends Controller
             'email' => 'nullable|email|unique:users',
             // Basic fields from Phase 1
             'marital_status' => 'required',
+            'religion' => 'required',
+            'caste' => 'required',
             'language' => 'required',
             'photo' => 'nullable|image|mimes:jpg,jpeg,png,webp|max:2048', // Added photo validation [Sanket]
         ]);
@@ -228,17 +267,10 @@ class TelecallerProfileApiController extends Controller
             }
 
             // --- Physical Attributes ---
-            if ($request->has('height') || $request->has('weight') || $request->has('blood_group') || $request->has('complexion') || $request->has('physical_disability')) {
+            if ($request->has('height')) {
                 $physical = new \App\Models\PhysicalAttribute;
                 $physical->user_id = $user->id;
                 $physical->height = $request->height ?? null;
-                $physical->weight = $request->weight ?? null;
-                $physical->blood_group = $request->blood_group ?? null;
-                $physical->complexion = $request->complexion ?? null;
-                if ($request->has('physical_disability')) {
-                    $physical->disability = $request->physical_disability;
-                }
-                $physical->disability_details = $request->disability_details ?? null;
                 $physical->save();
             }
 
@@ -248,7 +280,6 @@ class TelecallerProfileApiController extends Controller
                 $spiritual->user_id = $user->id;
                 $spiritual->religion_id = $request->religion ?? null;
                 $spiritual->caste_id = $request->caste ?? null;
-                $spiritual->sub_caste_id = $request->sub_caste ?? null;
                 if ($request->has('manglik')) {
                     $spiritual->manglik = $request->manglik == 'true' || $request->manglik == 1;
                 }
@@ -256,16 +287,6 @@ class TelecallerProfileApiController extends Controller
                     $spiritual->intercaste_accepted = $request->intercaste_accepted == 'true' || $request->intercaste_accepted == 1;
                 }
                 $spiritual->save();
-            }
-
-            // --- Lifestyle ---
-            if ($request->has('diet') || $request->has('drink') || $request->has('smoke')) {
-                $lifestyle = new \App\Models\Lifestyle;
-                $lifestyle->user_id = $user->id;
-                $lifestyle->diet = $request->diet ?? null;
-                $lifestyle->drink = $request->drink ?? null;
-                $lifestyle->smoke = $request->smoke ?? null;
-                $lifestyle->save();
             }
 
             // --- Family Details ---
@@ -283,7 +304,6 @@ class TelecallerProfileApiController extends Controller
                 $family->no_of_sisters = $request->no_of_sisters ?? null;
                 $family->married_sisters = $request->married_sisters ?? null;
                 $family->father = $request->parents_occupation ?? null;
-                $family->property_details = $request->property_details ?? null;
                 $family->save();
             }
 
@@ -306,12 +326,16 @@ class TelecallerProfileApiController extends Controller
             }
 
             // --- Address ---
-            if ($request->has('country') || $request->has('address')) {
+            if ($request->has('address') || $request->has('city')) {
+                // Hardcode Country to India (1) and State to Maharashtra (22)
+                $country_india = \App\Models\Country::where('name', 'India')->first();
+                $state_mh = \App\Models\State::where('name', 'Maharashtra')->first();
+
                 $address = new \App\Models\Address;
                 $address->user_id = $user->id;
                 $address->type = 'present';
-                $address->country_id = $request->country ?? null;
-                $address->state_id = $request->state ?? null;
+                $address->country_id = $country_india ? $country_india->id : 1;
+                $address->state_id = $state_mh ? $state_mh->id : 22;
                 $address->city_id = $request->city ?? null;
                 $address->postal_code = $request->address ?? null;
                 $address->save();
