@@ -171,7 +171,7 @@ if (!function_exists('get_email_template')) {
 if (!function_exists('get_sms_template')) {
     function get_sms_template($identifier, $colmn_name = null)
     {
-        $value = SmsTemplate::where('identifier', $identifier)->first()->$colmn_name;
+        $value = \App\Models\SmsTemplate::where('identifier', $identifier)->first()->$colmn_name;
         return $value;
     }
 }

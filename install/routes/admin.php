@@ -98,15 +98,19 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth', 'admin']], function 
 
     // Telecalling Module [Sanket]
     Route::group(['prefix' => 'telecalling'], function () {
+        // Sanket: Admin biodata tracking — view all member profiles filled by telecallers
+        Route::get('/telecallers/biodata-tracking', [\App\Http\Controllers\Admin\TelecallerController::class, 'biodataTracking'])->name('telecallers.biodata_tracking');
+        
         Route::resource('telecallers', \App\Http\Controllers\Admin\TelecallerController::class);
         Route::post('/telecallers/status', [\App\Http\Controllers\Admin\TelecallerController::class, 'update_status'])->name('telecallers.update_status');
         Route::post('/telecallers/reset-password', [\App\Http\Controllers\Admin\TelecallerController::class, 'reset_password'])->name('telecallers.reset_password');
         Route::get('/telecallers/{id}/performance', [\App\Http\Controllers\Admin\TelecallerController::class, 'performance'])->name('telecallers.performance');
-        // Sanket: Admin biodata tracking — view all member profiles filled by telecallers
-        Route::get('/telecallers/biodata-tracking', [\App\Http\Controllers\Admin\TelecallerController::class, 'biodataTracking'])->name('telecallers.biodata_tracking');
-        
+
         Route::resource('campaigns', \App\Http\Controllers\Admin\TelecallingCampaignController::class);
         Route::resource('lead-upload', \App\Http\Controllers\Admin\LeadUploadController::class);
+        // Sanket: Smart Lead Upload Mapping
+        Route::get('/lead-upload/{id}/map', [\App\Http\Controllers\Admin\LeadUploadController::class, 'map'])->name('lead-upload.map');
+        Route::post('/lead-upload/{id}/process', [\App\Http\Controllers\Admin\LeadUploadController::class, 'processImport'])->name('lead-upload.process');
 
         // Lead Distribution [Sanket]
         Route::get('/lead-distribution', [\App\Http\Controllers\Admin\LeadDistributionController::class, 'index'])->name('lead-distribution.index');
