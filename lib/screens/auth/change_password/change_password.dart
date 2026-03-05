@@ -156,7 +156,7 @@ class ChangePassword extends StatelessWidget {
         },
         padding: EdgeInsets.zero,
         constraints: BoxConstraints(),
-        icon: Image.asset('icon/icon_pop.png', height: 16, width: 23),
+        icon: Image.asset('assets/icon/icon_pop.png', height: 16, width: 23),
       ),
       titleSpacing: 0,
       elevation: 0.0,
