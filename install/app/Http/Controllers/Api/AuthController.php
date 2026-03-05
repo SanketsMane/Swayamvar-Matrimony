@@ -96,8 +96,12 @@ class AuthController extends Controller
 
     public function signin(Request $request)
     {
-        $user = User::where('email', $request->email_or_phone)
-            ->orWhere('phone', $request->email_or_phone)
+        $identifier = $request->email_or_phone;
+        $clean_phone = ltrim($identifier, '0');
+        
+        $user = User::where('email', $identifier)
+            ->orWhere('phone', $identifier)
+            ->orWhere('phone', 'like', '%' . $clean_phone)
             ->first();
 
         //memeber check
@@ -309,7 +313,11 @@ class AuthController extends Controller
             $this->validate($request, [
                 'email_or_phone' => 'required',
             ]);
-            $user = User::where('phone', $request->email_or_phone)->first();
+            $identifier = $request->email_or_phone;
+            $clean_phone = ltrim($identifier, '0');
+            $user = User::where('phone', $identifier)
+                        ->orWhere('phone', 'like', '%' . $clean_phone)
+                        ->first();
         }
         if ($user) {
             $user->verification_code = rand(100000, 999999);
@@ -407,7 +415,11 @@ class AuthController extends Controller
         ]);
 
         if ($request->send_code_by == 'phone' && !empty($request->email_or_phone)) {
-            $user = User::where('phone', $request->email_or_phone)->first();
+            $identifier = $request->email_or_phone;
+            $clean_phone = ltrim($identifier, '0');
+            $user = User::where('phone', $identifier)
+                        ->orWhere('phone', 'like', '%' . $clean_phone)
+                        ->first();
         } elseif ($request->send_code_by == 'email' && !empty($request->email_or_phone)) {
             $user = User::where('email', $request->email_or_phone)->first();
         }
