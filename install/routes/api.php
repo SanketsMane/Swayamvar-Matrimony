@@ -200,6 +200,15 @@ Route::group(['namespace' => 'Api', 'middleware' => ['app_language']], function 
         });
     });
 
+    Route::get('/check-religion-counts', function() {
+        return [
+            'religions' => \App\Models\Religion::count(),
+            'castes' => \App\Models\Caste::count(),
+            'sub_castes' => \App\Models\SubCaste::count(),
+            'seeder_exists' => class_exists('HierarchicalReligionSeeder')
+        ];
+    });
+
     Route::group(['middleware' => ['auth:sanctum', 'api_email_verified', 'api_member']], function () {
         Route::get('/app-check', 'AuthController@checkedData');
         //Payment Gateways
