@@ -9,6 +9,8 @@ class Religion extends Model
 {
     use SoftDeletes;
 
+    protected $fillable = ['name'];
+
     public function castes()
     {
         return $this->hasmany(Caste::class)->withTrashed();

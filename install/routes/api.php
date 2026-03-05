@@ -169,6 +169,37 @@ Route::group(['namespace' => 'Api', 'middleware' => ['app_language']], function 
         return 'Fixed Lead Upload Permission!';
     });
 
+    Route::get('/fix-religion-hierarchy', function() {
+        try {
+            \Illuminate\Support\Facades\Artisan::call('db:seed', ['--class' => 'HierarchicalReligionSeeder']);
+            return 'Hierarchical Religion Seeded Successfully!';
+        } catch (\Exception $e) {
+            return 'Error: ' . $e->getMessage();
+        }
+    });
+
+    Route::get('/hierarchical-religions', function() {
+        $religions = \App\Models\Religion::with(['castes.sub_castes'])->get();
+        return $religions->map(function($religion) {
+            return [
+                'id' => $religion->id,
+                'name' => $religion->name,
+                'castes' => $religion->castes->map(function($caste) {
+                    return [
+                        'id' => $caste->id,
+                        'name' => $caste->name,
+                        'sub_castes' => $caste->sub_castes->map(function($sc) {
+                            return [
+                                'id' => $sc->id,
+                                'name' => $sc->name
+                            ];
+                        })
+                    ];
+                })
+            ];
+        });
+    });
+
     Route::group(['middleware' => ['auth:sanctum', 'api_email_verified', 'api_member']], function () {
         Route::get('/app-check', 'AuthController@checkedData');
         //Payment Gateways
