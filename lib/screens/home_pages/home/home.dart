@@ -88,6 +88,26 @@ class _HomeState extends State<Home> {
                           color: MyTheme.primary,
                         ),
                       )
+                      : vm.accountError != null && vm.accountError!.isNotEmpty
+                      ? Center(
+                        child: Padding(
+                           padding: const EdgeInsets.symmetric(horizontal: 24),
+                           child: Column(
+                             mainAxisAlignment: MainAxisAlignment.center,
+                             children: [
+                               Icon(Icons.mark_email_unread, size: 48, color: MyTheme.failure),
+                               const SizedBox(height: 16),
+                               Text(
+                                 vm.accountError!.contains('un_verified') 
+                                     ? "Your email address is not verified.\nPlease verify your email to access the dashboard."
+                                     : vm.accountError!,
+                                 style: Styles.body.copyWith(color: MyTheme.failure, fontSize: 16),
+                                 textAlign: TextAlign.center,
+                               ),
+                             ],
+                           ),
+                        ),
+                      )
                       : vm.isDeactivated
                       ? Center(
                         child: Padding(
@@ -1407,6 +1427,7 @@ class HomeViewModel {
   final String? myMembershipType;
   final bool isDeactivated;
   final bool isAccountDataLoading;
+  final String? accountError;
   final PageController? controller;
   final TextEditingController? reportController;
   final void Function({dynamic user, dynamic reason})? userReport;
@@ -1438,6 +1459,7 @@ class HomeViewModel {
     this.myMembershipType,
     required this.isDeactivated,
     required this.isAccountDataLoading,
+    this.accountError,
     this.controller,
     this.reportController,
     this.goToNext,
@@ -1450,12 +1472,14 @@ class HomeViewModel {
   });
 
   static HomeViewModel fromStore(Store<AppState> store) {
-    bool isLoading = store.state.accountState?.profileData == null;
+    String? error = store.state.accountState?.error;
+    bool isLoading = store.state.accountState?.profileData == null && (error == null || error.isEmpty);
 
     return HomeViewModel(
       profileData: store.state.accountState?.profileData,
       profileState: store.state.manageProfileCombineState,
       isAccountDataLoading: isLoading,
+      accountError: error,
       isDeactivated: store.state.authState?.userData?.deactivated == 1,
       isFullProfileView: settingIsActive(
         "full_profile_show_according_to_membership",

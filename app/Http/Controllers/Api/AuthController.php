@@ -213,9 +213,14 @@ class AuthController extends Controller
 
     protected function authResponse($user)
     {
-        $maritial_status = MaritalStatus::where('id', $user->member->marital_status_id)->first();
+        // Sanket: Added null checks for member profile and attributes
+        $maritial_status = null;
+        if ($user->member && $user->member->marital_status_id) {
+            $maritial_status = MaritalStatus::find($user->member->marital_status_id);
+        }
+        
         $token = $user->createToken('API Token')->plainTextToken;
-        $age = Carbon::parse($user->member->birthday)->age;
+        $age = ($user->member && $user->member->birthday) ? Carbon::parse($user->member->birthday)->age : 0;
 
         return response()->json([
             'result' => true,
@@ -236,7 +241,7 @@ class AuthController extends Controller
                 'email' => $user->email,
                 'birthday' => $age,
                 'height' => $user->physical_attributes ? $user->physical_attributes->height : 0,
-                'marital_status_id' => $maritial_status ? new MaritialStatusResource($maritial_status) :  new MaritialStatusResource($maritial_status),
+                'marital_status_id' => $maritial_status ? new MaritialStatusResource($maritial_status) : null,
                 'avatar' => $user->avatar ?? '',
                 'avatar_original' => uploaded_asset($user->avatar_original) ?? '',
                 'phone' => $user->phone ?? '',
@@ -378,9 +383,13 @@ class AuthController extends Controller
 
     public function authData($user)
     {
-        // $user = auth()->user();
-        $maritial_status = MaritalStatus::where('id', $user->member->marital_status_id)->first();
-        $age = Carbon::parse($user->member->birthday)->age;
+        // Sanket: Added null checks for member profile and attributes
+        $maritial_status = null;
+        if ($user->member && $user->member->marital_status_id) {
+            $maritial_status = MaritalStatus::find($user->member->marital_status_id);
+        }
+        $age = ($user->member && $user->member->birthday) ? Carbon::parse($user->member->birthday)->age : 0;
+        
         return response()->json(
             [
                 'id' => $user->id,
@@ -395,7 +404,7 @@ class AuthController extends Controller
                 'email' => $user->email,
                 'birthday' => $age,
                 'height' => $user->physical_attributes ? $user->physical_attributes->height : 0,
-                'marital_status_id' => $maritial_status ? new MaritialStatusResource($maritial_status) :  new MaritialStatusResource($maritial_status),
+                'marital_status_id' => $maritial_status ? new MaritialStatusResource($maritial_status) : null,
                 'avatar' => $user->avatar ?? '',
                 'avatar_original' => uploaded_asset($user->avatar_original) ?? '',
                 'phone' => $user->phone ?? '',

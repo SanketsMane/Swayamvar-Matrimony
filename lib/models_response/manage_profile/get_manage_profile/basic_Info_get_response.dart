@@ -18,11 +18,14 @@ class BasicInfoGetResponse {
 
   factory BasicInfoGetResponse.fromJson(Map<String, dynamic> json) =>
       BasicInfoGetResponse(
-        data: BasicInfoData.fromJson(json["data"]),
+        data: json["data"] == null ? null : BasicInfoData.fromJson(json["data"]),
         result: json["result"],
       );
 
-  Map<String, dynamic> toJson() => {"data": data!.toJson(), "result": result};
+  Map<String, dynamic> toJson() => {
+    "data": data?.toJson(),
+    "result": result
+  };
 }
 
 class BasicInfoData {
@@ -59,8 +62,8 @@ class BasicInfoData {
   factory BasicInfoData.fromJson(Map<String, dynamic> json) => BasicInfoData(
     firsName: json["firs_name"],
     lastName: json["last_name"],
-    dateOfBirth: DateTime.parse(json["date_of_birth"]),
-    onbehalf: Onbehalf.fromJson(json["onbehalf"]),
+    dateOfBirth: json["date_of_birth"] == null ? null : DateTime.tryParse(json["date_of_birth"]),
+    onbehalf: json["onbehalf"] == null ? null : Onbehalf.fromJson(json["onbehalf"]),
     noOfChildren: json["no_of_children"],
     gender: json["gender"],
     phone: json["phone"],
@@ -75,8 +78,8 @@ class BasicInfoData {
   Map<String, dynamic> toJson() => {
     "firs_name": firsName,
     "last_name": lastName,
-    "date_of_birth": dateOfBirth!.toIso8601String(),
-    "onbehalf": onbehalf.toJson(),
+    "date_of_birth": dateOfBirth?.toIso8601String(),
+    "onbehalf": onbehalf?.toJson(),
     "no_of_children": noOfChildren,
     "gender": gender,
     "phone": phone,

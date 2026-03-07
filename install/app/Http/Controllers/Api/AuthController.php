@@ -391,20 +391,25 @@ class AuthController extends Controller
 
     public function resendVerifyCode(Request $request)
     {
-
         $user = auth()->user();
         // verification code send to user
-        $user->verification_code = rand(1000, 999999);
+        $user->verification_code = rand(100000, 999999);
         $user->save();
+
+        if (addon_activation('otp_system') && $user->phone != null) {
+            $otpController = new OTPVerificationController();
+            $otpController->send_code($user);
+        }
+
         try {
             $user->notify(new VerificationCode($user));
         } catch (\Exception $e) {
         }
+
         return response()->json(
             [
                 'result' => true,
-                'message' => 'OTP resend successfull.',
-
+                'message' => 'OTP resend successful. Please check your email or phone.',
             ],
             200
         );

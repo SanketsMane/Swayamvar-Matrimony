@@ -62,8 +62,10 @@ class GalleryImageController extends Controller
                 ]);
 
                 $member = Member::where('user_id', auth()->user()->id)->first();
-                $member->remaining_photo_gallery = $member->remaining_photo_gallery - 1;
-                $member->save();
+                if ($member) {
+                    $member->remaining_photo_gallery = $member->remaining_photo_gallery - 1;
+                    $member->save();
+                }
                 return $this->success_message('Gallery image uploaded successfully.');
             }
             return $this->failure_message('You have 0 remaining gallery photo upload. Please update your package.');
@@ -130,8 +132,10 @@ class GalleryImageController extends Controller
             $view_gallert_image->requested_by  = $auth_user->id;
             if ($view_gallert_image->save()) {
                 $member = Member::where('user_id', $auth_user->id)->first();
-                $member->remaining_gallery_image_view = $member->remaining_gallery_image_view - 1;
-                $member->save();
+                if ($member) {
+                    $member->remaining_gallery_image_view = $member->remaining_gallery_image_view - 1;
+                    $member->save();
+                }
 
                 $notify_user = User::where('id', $request->id)->first();
 

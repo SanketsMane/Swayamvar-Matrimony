@@ -19,7 +19,7 @@ class ContactGetResponse {
   factory ContactGetResponse.fromJson(Map<String, dynamic> json) =>
       ContactGetResponse(
         result: json["result"],
-        data: ContactData.fromJson(json["data"]),
+        data: json["data"] == null ? null : ContactData.fromJson(json["data"]),
       );
 
   Map<String, dynamic> toJson() => {"result": result, "data": data!.toJson()};

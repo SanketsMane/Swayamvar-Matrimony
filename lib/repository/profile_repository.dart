@@ -3,6 +3,7 @@ import 'package:active_matrimonial_flutter_app/models_response/account_response.
 import 'package:http/http.dart' as http;
 
 import '../helpers/main_helpers.dart';
+import 'package:active_matrimonial_flutter_app/helpers/aiz_request_response.dart';
 
 class AccountRepository {
   // fetch profile
@@ -19,8 +20,16 @@ class AccountRepository {
         "Authorization": "Bearer $accessToken",
       },
     );
+    
+    // Check for "un_verified" or "blocked"
+    AizRequestResponse.check(response);
+
     print("RAW JSON RESPONSE FROM PROFILE API: ${response.body}");
     var data = profileResponseFromJson(response.body);
+
+    if (data.result == false && data.data == null) {
+       throw Exception("Failed to load profile data: un_verified");
+    }
 
     return data;
   }

@@ -111,9 +111,12 @@ class ProfileController extends Controller
     public function introduction_update(Request $request)
     {
         $member = Member::where('user_id', auth()->id())->first();
-        $member->introduction = $request->introduction;
-        $member->save();
-        return $this->success_message('Introduction updated successfully!');
+        if ($member) {
+            $member->introduction = $request->introduction;
+            $member->save();
+            return $this->success_message('Introduction updated successfully!');
+        }
+        return $this->failure_message('Member not found');
     }
 
     public function get_basic_info()
@@ -150,12 +153,14 @@ class ProfileController extends Controller
         $user->phone        = $request->phone;
         $user->save();
         $member                     = Member::where('user_id', $user->id)->first();
-        $member->gender             = $request->gender;
-        $member->on_behalves_id     = $request->on_behalf;
-        $member->birthday           = date('Y-m-d', strtotime($request->date_of_birth));
-        $member->marital_status_id  = $request->marital_status;
-        $member->children           = $request->children;
-        $member->save();
+        if ($member) {
+            $member->gender             = $request->gender;
+            $member->on_behalves_id     = $request->on_behalf;
+            $member->birthday           = date('Y-m-d', strtotime($request->date_of_birth));
+            $member->marital_status_id  = $request->marital_status;
+            $member->children           = $request->children;
+            $member->save();
+        }
         return $this->success_message('Member basic info  has been updated successfully.');
     }
 
@@ -420,14 +425,19 @@ class ProfileController extends Controller
     {
         $member_known_languages = null;
         $member_mother_tongue = null;
-        $known_languages = json_decode(auth()->user()->member->known_languages);
-        $mother_tongue = auth()->user()->member->mothere_tongue;
-        if ($known_languages != null) {
-            $member_known_languages = LanguageResource::collection(MemberLanguage::whereIn('id', $known_languages)->get());
+        
+        $user = auth()->user();
+        if ($user->member) {
+            $known_languages = json_decode($user->member->known_languages);
+            $mother_tongue = $user->member->mothere_tongue;
+            if ($known_languages != null) {
+                $member_known_languages = LanguageResource::collection(MemberLanguage::whereIn('id', $known_languages)->get());
+            }
+            if ($mother_tongue != null) {
+                $member_mother_tongue =  new LanguageResource(MemberLanguage::where('id', $mother_tongue)->first());
+            }
         }
-        if ($mother_tongue != null) {
-            $member_mother_tongue =  new LanguageResource(MemberLanguage::where('id', $mother_tongue)->first());
-        }
+        
         $data['mother_tongue'] = $member_mother_tongue;
         $data['known_languages'] = $member_known_languages;
         return $this->response_data($data);
@@ -718,14 +728,18 @@ class ProfileController extends Controller
         if ($user) {
             $member_known_languages = null;
             $member_mother_tongue = null;
-            $known_languages = json_decode($user->member->known_languages);
-            $mother_tongue = json_decode($user->member->mothere_tongue);
-            if ($known_languages != null) {
-                $member_known_languages = LanguageResource::collection(MemberLanguage::whereIn('id', $known_languages)->get());
+            
+            if ($user->member) {
+                $known_languages = json_decode($user->member->known_languages);
+                $mother_tongue = json_decode($user->member->mothere_tongue);
+                if ($known_languages != null) {
+                    $member_known_languages = LanguageResource::collection(MemberLanguage::whereIn('id', $known_languages)->get());
+                }
+                if ($mother_tongue != null) {
+                    $member_mother_tongue = new LanguageResource(MemberLanguage::where('id', $mother_tongue)->first());
+                }
             }
-            if ($mother_tongue != null) {
-                $member_mother_tongue = new LanguageResource(MemberLanguage::where('id', $mother_tongue)->first());
-            }
+            
             $data['intoduction'] = new AboutUser($user);
             $data['basic_info'] = new BasicInformation($user);
 
@@ -775,7 +789,7 @@ class ProfileController extends Controller
             $profile_match = ProfileMatch::where('user_id', auth()->user()->id)
                 ->where('match_id', $user->id)
                 ->first();
-            if (!empty($profile_match) && auth()->user()->member->auto_profile_match == 1) {
+            if (!empty($profile_match) && auth()->user()->member && auth()->user()->member->auto_profile_match == 1) {
                 $data['profile_match'] = $profile_match->match_percentage;
             }
             $data['view_contact_check'] = ViewContact::where('user_id', $user->id)->where('viewed_by', auth()->id())->first() ? true : false;

@@ -21,7 +21,7 @@ class LanguageGetResponse {
   factory LanguageGetResponse.fromJson(Map<String, dynamic> json) =>
       LanguageGetResponse(
         result: json["result"],
-        data: Data.fromJson(json["data"]),
+        data: json["data"] == null ? null : Data.fromJson(json["data"]),
       );
 
   Map<String, dynamic> toJson() => {"result": result, "data": data!.toJson()};

@@ -536,11 +536,21 @@ class HomeController extends Controller
         $data['remaining_profile_image_view'] = (get_setting('profile_picture_privacy') == 'only_me') ? get_remaining_package_value($user->id, 'remaining_profile_image_view') : '';
         $data['remaining_gallery_image_view'] = (get_setting('gallery_image_privacy') == 'only_me') ? get_remaining_package_value($user->id, 'remaining_gallery_image_view') : '';
 
-        $current_package_info = array(
-            'package_id' => $user->member->package->id,
-            'package_name' => $user->member->package->name,
-            'package_expiry' => package_validity($user->id) ? date('d.m.Y', strtotime($user->member->package_validity)) : translate('Expired'),
-        );
+        // Sanket: Added robust null checks for member detail and package
+        $current_package_info = [
+            'package_id' => '',
+            'package_name' => translate('No Package'),
+            'package_expiry' => translate('Expired'),
+        ];
+
+        if ($user->member) {
+            if ($user->member->package) {
+                $current_package_info['package_id'] = $user->member->package->id;
+                $current_package_info['package_name'] = $user->member->package->name;
+            }
+            $current_package_info['package_expiry'] = package_validity($user->id) ? date('d.m.Y', strtotime($user->member->package_validity)) : translate('Expired');
+        }
+        
         $data['current_package_info'] = $current_package_info;
 
         return $this->response_data($data);

@@ -44,8 +44,10 @@ class ProfileImageController extends Controller
             $view_profile_picture->requested_by   = $auth_user->id;
             if ($view_profile_picture->save()) {
                 $member = Member::where('user_id', $auth_user->id)->first();
-                $member->remaining_profile_image_view = $member->remaining_profile_image_view - 1;
-                $member->save();
+                if ($member) {
+                    $member->remaining_profile_image_view = $member->remaining_profile_image_view - 1;
+                    $member->save();
+                }
 
                 $notify_user = User::where('id', $request->id)->first();
 

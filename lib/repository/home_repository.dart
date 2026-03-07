@@ -27,6 +27,7 @@
 import 'dart:convert';
 import 'package:active_matrimonial_flutter_app/app_config.dart';
 import 'package:active_matrimonial_flutter_app/helpers/main_helpers.dart';
+import 'package:active_matrimonial_flutter_app/helpers/aiz_request_response.dart';
 import 'package:active_matrimonial_flutter_app/models_response/home_response.dart';
 import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
@@ -47,7 +48,12 @@ class HomeRepository {
 
     if (response.statusCode == 200) {
       debugPrint("Home Response Success: ${response.body}");
-      return homeResponseFromJson(response.body);
+      AizRequestResponse.check(response);
+      var data = homeResponseFromJson(response.body);
+      if (data.result == false && (data.data == null || data.data!.isEmpty)) {
+        throw Exception("Failed to load home data: un_verified or blocked");
+      }
+      return data;
     } else {
       debugPrint("Home Response Error: ${response.statusCode}");
       debugPrint("Error Body: ${response.body}");

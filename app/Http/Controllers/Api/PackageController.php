@@ -149,66 +149,68 @@ class PackageController extends Controller
 
         $member = Member::where('user_id', $user->id)->first();
         $package = Package::where('id', $payment_data['package_id'])->first();
-        $member->current_package_id = $package->id;
-        $member->remaining_interest = $member->remaining_interest + $package->express_interest;
-        $member->remaining_photo_gallery = $member->remaining_photo_gallery + $package->photo_gallery;
-        $member->remaining_contact_view = $member->remaining_contact_view + $package->contact;
-        $member->remaining_profile_image_view = $member->remaining_profile_image_view + $package->profile_image_view;
-        $member->remaining_gallery_image_view = $member->remaining_gallery_image_view + $package->gallery_image_view;
-        $member->auto_profile_match = $package->auto_profile_match;
-        $member->package_validity = date('Y-m-d', strtotime($member->package_validity . ' +' . $package->validity . 'days'));
+        if ($member && $package) {
+            $member->current_package_id = $package->id;
+            $member->remaining_interest = $member->remaining_interest + $package->express_interest;
+            $member->remaining_photo_gallery = $member->remaining_photo_gallery + $package->photo_gallery;
+            $member->remaining_contact_view = $member->remaining_contact_view + $package->contact;
+            $member->remaining_profile_image_view = $member->remaining_profile_image_view + $package->profile_image_view;
+            $member->remaining_gallery_image_view = $member->remaining_gallery_image_view + $package->gallery_image_view;
+            $member->auto_profile_match = $package->auto_profile_match;
+            $member->package_validity = date('Y-m-d', strtotime($member->package_validity . ' +' . $package->validity . 'days'));
 
-        if ($member->save()) {
-            $user->membership = 2;
-            $user->save();
-
-            if (addon_activation('referral_system') && $user->referred_by != null && $user->referral_comission == 0) {
-                // For Referred by user
-                $reffered_by = User::where('id', $user->referred_by)->first();
-                $wallet = new Wallet();
-                $wallet->user_id = $reffered_by->id;
-                $wallet->amount = get_setting('referred_by_user_commission');
-                $wallet->payment_method = 'reffered_commission';
-                $wallet->payment_details = '';
-                $wallet->referral_user = $user->id;
-                $wallet->save();
-
-                $reffered_by->balance = $reffered_by->balance + get_setting('referred_by_user_commission');
-                $reffered_by->save();
-
-                $user->referral_comission = 1;
+            if ($member->save()) {
+                $user->membership = 2;
                 $user->save();
-            }
 
-            // Package Payment Store Notification for member
-            try {
-                $notify_type = 'package_purchase';
-                $id = unique_notify_id();
-                $notify_by = $user->id;
-                $info_id = $package_payment->id;
-                $message = $user->first_name . ' ' . $user->last_name . translate('has been purchased a new package. Payment Code: ') . $package_payment->payment_code;
-                $route = route('package-payments.index');
+                if (addon_activation('referral_system') && $user->referred_by != null && $user->referral_comission == 0) {
+                    // For Referred by user
+                    $reffered_by = User::where('id', $user->referred_by)->first();
+                    $wallet = new Wallet();
+                    $wallet->user_id = $reffered_by->id;
+                    $wallet->amount = get_setting('referred_by_user_commission');
+                    $wallet->payment_method = 'reffered_commission';
+                    $wallet->payment_details = '';
+                    $wallet->referral_user = $user->id;
+                    $wallet->save();
 
-                // fcm
-                if (get_setting('firebase_push_notification') == 1) {
-                    $fcmTokens = User::where('user_type', 'admin')
-                        ->whereNotNull('fcm_token')
-                        ->pluck('fcm_token')
-                        ->toArray();
-                    Larafirebase::withTitle($notify_type)
-                        ->withBody($message)
-                        ->sendMessage($fcmTokens);
+                    $reffered_by->balance = $reffered_by->balance + get_setting('referred_by_user_commission');
+                    $reffered_by->save();
+
+                    $user->referral_comission = 1;
+                    $user->save();
                 }
-                // end of fcm
 
-                Notification::send(User::where('user_type', 'admin')->first(), new DbStoreNotification($notify_type, $id, $notify_by, $info_id, $message, $route));
-            } catch (\Exception $e) {
-                // dd($e);
-            }
+                // Package Payment Store Notification for member
+                try {
+                    $notify_type = 'package_purchase';
+                    $id = unique_notify_id();
+                    $notify_by = $user->id;
+                    $info_id = $package_payment->id;
+                    $message = $user->first_name . ' ' . $user->last_name . translate('has been purchased a new package. Payment Code: ') . $package_payment->payment_code;
+                    $route = route('package-payments.index');
 
-            // Payment approval email send to member
-            if ($user->email != null && get_email_template('package_purchase_email', 'status')) {
-                EmailUtility::package_purchase_email($user, $package_payment);
+                    // fcm
+                    if (get_setting('firebase_push_notification') == 1) {
+                        $fcmTokens = User::where('user_type', 'admin')
+                            ->whereNotNull('fcm_token')
+                            ->pluck('fcm_token')
+                            ->toArray();
+                        Larafirebase::withTitle($notify_type)
+                            ->withBody($message)
+                            ->sendMessage($fcmTokens);
+                    }
+                    // end of fcm
+
+                    Notification::send(User::where('user_type', 'admin')->first(), new DbStoreNotification($notify_type, $id, $notify_by, $info_id, $message, $route));
+                } catch (\Exception $e) {
+                    // dd($e);
+                }
+
+                // Payment approval email send to member
+                if ($user->email != null && get_email_template('package_purchase_email', 'status')) {
+                    EmailUtility::package_purchase_email($user, $package_payment);
+                }
             }
         }
         return response()->json(['result' => true, 'message' => translate("Payment completed")]);

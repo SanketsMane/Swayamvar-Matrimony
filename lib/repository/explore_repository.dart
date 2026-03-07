@@ -125,6 +125,7 @@ import 'dart:io'; // Required for SocketException
 
 import 'package:active_matrimonial_flutter_app/app_config.dart';
 import 'package:active_matrimonial_flutter_app/helpers/main_helpers.dart';
+import 'package:active_matrimonial_flutter_app/helpers/aiz_request_response.dart';
 import 'package:active_matrimonial_flutter_app/models_response/Explore/blogs_response.dart';
 import 'package:active_matrimonial_flutter_app/models_response/Explore/e_happy_stories_response.dart';
 import 'package:active_matrimonial_flutter_app/models_response/Explore/new_members_response.dart';
@@ -177,7 +178,12 @@ class ExploreRepository {
       var response = await http.get(Uri.parse(baseUrl), headers: authHeaders);
 
       if (response.statusCode == 200) {
-        return premiumMembersResponseFromJson(response.body);
+        AizRequestResponse.check(response);
+        var data = premiumMembersResponseFromJson(response.body);
+        if (data.result == false && (data.data == null || data.data!.isEmpty)) {
+          throw Exception("Failed to load premium members: un_verified or blocked");
+        }
+        return data;
       } else {
         throw Exception(
           "Failed to load premium members. Status Code: ${response.statusCode}",
@@ -246,7 +252,12 @@ class ExploreRepository {
       var response = await http.get(Uri.parse(baseUrl), headers: authHeaders);
 
       if (response.statusCode == 200) {
-        return newMembersResponseFromJson(response.body);
+        AizRequestResponse.check(response);
+        var data = newMembersResponseFromJson(response.body);
+        if (data.result == false && (data.data == null || data.data!.isEmpty)) {
+          throw Exception("Failed to load new members: un_verified or blocked");
+        }
+        return data;
       } else {
         throw Exception(
           "Failed to load new members. Status Code: ${response.statusCode}",

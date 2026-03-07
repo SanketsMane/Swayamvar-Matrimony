@@ -34,7 +34,7 @@ class _VerifyState extends State<Verify> {
       converter: (store) => store.state,
       builder:
           (_, state) => Scaffold(
-            resizeToAvoidBottomInset: false,
+            resizeToAvoidBottomInset: true,
             body: SizedBox(
               height: screenSize.height,
               child: Stack(
@@ -59,51 +59,53 @@ class _VerifyState extends State<Verify> {
                         ),
                         child: Form(
                           key: _formKey,
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              SizedBox(height: screenSize.height * 0.02),
-                              buildPinPutContainer(context, screenSize),
-                              SizedBox(height: screenSize.height * 0.05),
-                              buildVerifyButtonContainer(
-                                context,
-                                state,
-                                screenSize,
-                              ),
-                              SizedBox(height: screenSize.height * 0.04),
-                              InkWell(
-                                onTap: () {
-                                  store.dispatch(resendVerifyCodeMiddleware());
-                                },
-                                child: Center(
-                                  child: Text(
-                                    AppLocalizations.of(context)!.re_send_otp,
-                                    style: Styles.bold_app_accent_12.copyWith(
-                                      fontSize: screenSize.width * 0.035,
-                                    ), // Responsive font
-                                  ),
+                          child: SingleChildScrollView(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                SizedBox(height: screenSize.height * 0.02),
+                                buildPinPutContainer(context, screenSize),
+                                SizedBox(height: screenSize.height * 0.05),
+                                buildVerifyButtonContainer(
+                                  context,
+                                  state,
+                                  screenSize,
                                 ),
-                              ),
-                              const Spacer(),
-                              Center(
-                                child: InkWell(
+                                SizedBox(height: screenSize.height * 0.04),
+                                InkWell(
                                   onTap: () {
-                                    store.dispatch(signOutMiddleware(context));
+                                    store.dispatch(resendVerifyCodeMiddleware());
                                   },
-                                  child: Text(
-                                    LangText(
-                                      context: SystemHelper.context,
-                                    ).getLocal().or_logout,
-                                    style: Styles.buttonText.copyWith(
-                                      fontSize: screenSize.width * 0.04,
-                                      color: MyTheme.app_accent_color,
-                                      decoration: TextDecoration.underline,
+                                  child: Center(
+                                    child: Text(
+                                      AppLocalizations.of(context)!.re_send_otp,
+                                      style: Styles.bold_app_accent_12.copyWith(
+                                        fontSize: screenSize.width * 0.035,
+                                      ), // Responsive font
                                     ),
                                   ),
                                 ),
-                              ),
-                              SizedBox(height: screenSize.height * 0.02),
-                            ],
+                                SizedBox(height: screenSize.height * 0.04),
+                                Center(
+                                  child: InkWell(
+                                    onTap: () {
+                                      store.dispatch(signOutMiddleware(context));
+                                    },
+                                    child: Text(
+                                      LangText(
+                                        context: SystemHelper.context,
+                                      ).getLocal().or_logout,
+                                      style: Styles.buttonText.copyWith(
+                                        fontSize: screenSize.width * 0.04,
+                                        color: MyTheme.app_accent_color,
+                                        decoration: TextDecoration.underline,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                                SizedBox(height: screenSize.height * 0.02),
+                              ],
+                            ),
                           ),
                         ),
                       ),
@@ -195,31 +197,33 @@ class _VerifyState extends State<Verify> {
           end: Alignment.bottomCenter,
         ),
       ),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          SizedBox(height: screenSize.height * 0.05),
-          ImageIcon(
-            const AssetImage('assets/logo/app_logo.png'),
-            size: screenSize.height * 0.11,
-            color: MyTheme.white,
-          ),
-          SizedBox(height: screenSize.height * 0.02),
-          Text(
-            AppLocalizations.of(context)!.verify_screen_title,
-            style: Styles.h1.copyWith(
+      child: SingleChildScrollView(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            SizedBox(height: screenSize.height * 0.05),
+            ImageIcon(
+              const AssetImage('assets/logo/app_logo.png'),
+              size: screenSize.height * 0.11,
               color: MyTheme.white,
-              fontSize: screenSize.width * 0.06,
             ),
-          ),
-          SizedBox(height: screenSize.height * 0.01),
-          Text(
-            AppLocalizations.of(context)!.verify_screen_sub_title,
-            style: Styles.regular_white_14.copyWith(
-              fontSize: screenSize.width * 0.035,
-            ), // Responsive font
-          ),
-        ],
+            SizedBox(height: screenSize.height * 0.02),
+            Text(
+              AppLocalizations.of(context)!.verify_screen_title,
+              style: Styles.h1.copyWith(
+                color: MyTheme.white,
+                fontSize: screenSize.width * 0.06,
+              ),
+            ),
+            SizedBox(height: screenSize.height * 0.01),
+            Text(
+              "Enter the code we sent to your email or number",
+              style: Styles.regular_white_14.copyWith(
+                fontSize: screenSize.width * 0.035,
+              ), // Responsive font
+            ),
+          ],
+        ),
       ),
     );
   }

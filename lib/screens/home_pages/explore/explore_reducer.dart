@@ -25,7 +25,8 @@ ExploreState? explore_reducer(ExploreState? state, action) {
     return state;
   }
   if (action is PremiumMembersFailureAction) {
-    state!.premiumMembersError = action.error;
+    state!.isFetchingPremiumMembers = false;
+    state.premiumMembersError = action.error;
     return state;
   }
 
@@ -36,7 +37,8 @@ ExploreState? explore_reducer(ExploreState? state, action) {
     return state;
   }
   if (action is BannerFailureAction) {
-    state!.bannerError = action.error;
+    state!.isFetchingBanner = false;
+    state.bannerError = action.error;
     return state;
   }
 
@@ -47,7 +49,8 @@ ExploreState? explore_reducer(ExploreState? state, action) {
     return state;
   }
   if (action is TrustedByFailureAction) {
-    state!.trustedByError = action.error;
+    state!.isFetchingTrustedBy = false;
+    state.trustedByError = action.error;
     return state;
   }
 
@@ -58,7 +61,8 @@ ExploreState? explore_reducer(ExploreState? state, action) {
     return state;
   }
   if (action is NewMembersFailureAction) {
-    state!.newMemberError = action.error;
+    state!.isFetchingNewMembers = false;
+    state.newMemberError = action.error;
     return state;
   }
   // happy stories

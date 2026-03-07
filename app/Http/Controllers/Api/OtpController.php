@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
+use Carbon\Carbon;
 
 class OtpController extends Controller
 {
@@ -65,6 +66,7 @@ class OtpController extends Controller
         $user = User::where('phone', $request->phone)->where('verification_code', $request->otp)->first();
 
         if ($user) {
+            $user->email_verified_at = Carbon::now();
             $user->verification_code = null; // Clear OTP after success
             $user->save();
 

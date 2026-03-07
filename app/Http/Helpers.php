@@ -362,8 +362,12 @@ if (!function_exists('sendSMS')) {
 if (!function_exists('get_remaining_package_value')) {
     function get_remaining_package_value($id, $colmn_name)
     {
-        $value = Member::where('user_id', $id)->first()->$colmn_name;
-        return $value;
+        // Sanket: Added null check for member record to prevent "Attempt to read property on null"
+        $member = Member::where('user_id', $id)->first();
+        if ($member) {
+            return $member->$colmn_name;
+        }
+        return 0;
     }
 }
 
@@ -371,7 +375,12 @@ if (!function_exists('get_remaining_package_value')) {
 if (!function_exists('package_validity')) {
     function package_validity($id)
     {
-        $package_validity = Member::where('user_id', $id)->first()->package_validity;
+        // Sanket: Added null check for member record to prevent "Attempt to read property on null"
+        $member = Member::where('user_id', $id)->first();
+        if (!$member) {
+            return false;
+        }
+        $package_validity = $member->package_validity;
         if ($package_validity == null || ($package_validity < date('Y-m-d'))) {
             return false;
         } else {
