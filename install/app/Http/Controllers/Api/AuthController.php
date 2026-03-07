@@ -447,9 +447,15 @@ class AuthController extends Controller
 
     public function authData($user)
     {
-        // $user = auth()->user();
-        $maritial_status = MaritalStatus::where('id', $user->member->marital_status_id)->first();
-        $age = Carbon::parse($user->member->birthday)->age;
+        $maritial_status = null;
+        $age = 0;
+        
+        if ($user->member) {
+            $maritial_status = \App\Models\MaritalStatus::where('id', $user->member->marital_status_id)->first();
+            if ($user->member->birthday) {
+                $age = \Carbon\Carbon::parse($user->member->birthday)->age;
+            }
+        }
         return response()->json(
             [
                 'id' => $user->id,
