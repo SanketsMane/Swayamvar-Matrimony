@@ -5,6 +5,7 @@ import 'package:active_matrimonial_flutter_app/screens/auth/signin/phone_otp_ver
 import 'package:active_matrimonial_flutter_app/screens/core.dart';
 import 'package:active_matrimonial_flutter_app/helpers/auth_helper.dart';
 import 'package:active_matrimonial_flutter_app/screens/auth/verify/verify_action.dart';
+import 'package:active_matrimonial_flutter_app/screens/auth/signup/signup.dart';
 import 'package:flutter/material.dart';
 
 
@@ -44,6 +45,15 @@ ThunkAction<AppState> requestOtpAction({
             color: MyTheme.failure,
           ),
         );
+        
+        if (data.message == 'User not found with this phone number') {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => const SignUp(),
+              ),
+            );
+        }
       }
     } catch (e) {
       debugPrint("Sanket: OTP Request Error -> $e");
