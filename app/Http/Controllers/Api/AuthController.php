@@ -42,9 +42,14 @@ class AuthController extends Controller
         $request->merge(['user_id' => $user->id]);
         $member = $member_service->store($request->only(['gender', 'birthday', 'on_behalves_id', 'user_id']), $package);
 
-        if (addon_activation('otp_system') && $request->phone != null) {
+        if (addon_activation('otp_system') && $user->phone != null) {
             $otpController = new OTPVerificationController();
             $otpController->send_code($user);
+        }
+
+        try {
+            $user->notify(new VerificationCode($user));
+        } catch (\Exception $e) {
         }
         // Email to member
         if ($request->email != null && env('MAIL_USERNAME') != null) {
@@ -331,11 +336,16 @@ class AuthController extends Controller
 
     public function resendVerifyCode(Request $request)
     {
-
         $user = auth()->user();
         // verification code send to user
-        $user->verification_code = rand(1000, 999999);
+        $user->verification_code = rand(100000, 999999);
         $user->save();
+
+        if (addon_activation('otp_system') && $user->phone != null) {
+            $otpController = new OTPVerificationController();
+            $otpController->send_code($user);
+        }
+
         try {
             $user->notify(new VerificationCode($user));
         } catch (\Exception $e) {
@@ -343,7 +353,7 @@ class AuthController extends Controller
         return response()->json(
             [
                 'result' => true,
-                'message' => 'OTP resend successfull.',
+                'message' => 'OTP resend successful. Please check your email or phone.',
 
             ],
             200

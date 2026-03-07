@@ -194,6 +194,24 @@ if (!function_exists('addon_activation')) {
 if (!function_exists('sendSMS')) {
     function sendSMS($to, $from, $text, $template_id)
     {
+        if (env('RENFLAIR_API_KEY') != null) {
+            $api = env('RENFLAIR_API_KEY');
+            if (strpos($to, '+91') !== false) {
+                $to = substr($to, 3); // Strip +91 for Renflair
+            }
+
+            $url = "https://sms.renflair.in/V1.php?API=" . urlencode($api) . "&PHONE=" . urlencode($to) . "&OTP=" . urlencode($template_id);
+            $ch = curl_init();
+            curl_setopt($ch, CURLOPT_URL, $url);
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+            curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+
+            $response = curl_exec($ch);
+            curl_close($ch);
+
+            return $response;
+        }
+
         if (get_setting('nexmo_activation') == 1) {
             $api_key = env("NEXMO_KEY"); //put ssl provided api_token here
             $api_secret = env("NEXMO_SECRET"); // put ssl provided sid here
