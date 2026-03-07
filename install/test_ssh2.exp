@@ -1,0 +1,10 @@
+#!/usr/bin/expect -f
+set timeout 10
+spawn ssh -o StrictHostKeyChecking=no -p 22 root@91.99.127.245 "cd /var/www/swayamvar && php artisan tinker --execute='echo json_encode(\\App\\Models\\User::whereIn(\"id\", \[35, 37, 39, 40, 43\])->get(\[\"id\", \"first_name\", \"last_name\", \"photo\", \"photo_approved\"\]));'"
+expect {
+  "password:" {
+    send "!Jn\$J!@0SA87Q5z8AAts\r"
+    exp_continue
+  }
+  eof
+}

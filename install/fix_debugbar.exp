@@ -1,0 +1,30 @@
+#!/usr/bin/expect -f
+set timeout 60
+set ip "91.99.127.245"
+set password "!Jn\$J!@0SA87Q5z8AAts"
+
+spawn ssh -o StrictHostKeyChecking=no root@$ip
+expect "password:"
+send "$password\r"
+
+expect "#"
+send "cd /var/www/swayamvar\r"
+
+expect "#"
+send "export COMPOSER_ALLOW_SUPERUSER=1\r"
+
+expect "#"
+send "composer install --no-dev\r"
+
+expect "#"
+send "php artisan migrate --force\r"
+
+expect "#"
+send "php artisan optimize:clear\r"
+
+expect "#"
+send "php artisan optimize\r"
+
+expect "#"
+send "exit\r"
+expect eof

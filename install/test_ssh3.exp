@@ -1,0 +1,10 @@
+#!/usr/bin/expect -f
+set timeout 10
+spawn ssh -o StrictHostKeyChecking=no -p 22 root@91.99.127.245 "cd /var/www/swayamvar && php artisan tinker --execute='\$t = \\Laravel\\Sanctum\\PersonalAccessToken::findToken(\"385|5Zz5K8nL7pZ3Q5Q1W4C4A3P2E9F2G6H8J6K7L1M3\"); if(\$t) { echo json_encode(\$t->tokenable->only(\"id\", \"membership\", \"first_name\")); }'"
+expect {
+  "password:" {
+    send "!Jn\$J!@0SA87Q5z8AAts\r"
+    exp_continue
+  }
+  eof
+}

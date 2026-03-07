@@ -1,0 +1,14 @@
+@@ -17,6 +17,13 @@
+ |
+ */
+ 
++Route::get('/fix-lead-upload', function() {
++    \Spatie\Permission\Models\Permission::firstOrCreate(['name' => 'lead_upload', 'guard_name' => 'web']);
++    $role = \Spatie\Permission\Models\Role::where('name', 'Admin')->first();
++    if ($role) $role->givePermissionTo('lead_upload');
++    return 'Fixed Lead Upload Permission';
++});
++
+ Route::post('update-member-location', [\App\Http\Controllers\Api\MemberLocationController::class, 'update']);
+ Route::post('update-device-token', [\App\Http\Controllers\Api\MemberLocationController::class, 'updateDeviceToken']);
+ 
