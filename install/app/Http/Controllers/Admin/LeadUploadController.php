@@ -36,16 +36,18 @@ class LeadUploadController extends Controller
             $file_name = time() . '_' . $file->getClientOriginalName();
             
             // Move file temporarily to storage for mapping phase [Sanket]
-            $path = $file->storeAs('temp_lead_uploads', $file_name, 'local');
+            $file->move(storage_path('app/temp_lead_uploads'), $file_name);
+            $full_path = storage_path('app/temp_lead_uploads/' . $file_name);
             
             // Read ONLY the first row (headers) to show in the mapping UI [Sanket]
             $headers = [];
             try {
-                $data = Excel::toArray(new \stdClass(), storage_path('app/' . $path));
+                $data = Excel::toArray(new \stdClass(), $full_path);
                 if (isset($data[0]) && count($data[0]) > 0) {
                     $headers = $data[0][0]; // First sheet, first row
                 }
             } catch (\Exception $e) {
+                \Log::error('Lead Upload Error: ' . $e->getMessage());
                 flash(translate('Failed to read Excel file headers.'))->error();
                 return back();
             }

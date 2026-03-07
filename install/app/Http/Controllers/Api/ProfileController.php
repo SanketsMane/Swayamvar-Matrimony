@@ -819,16 +819,22 @@ class ProfileController extends Controller
         $matched_profiles = [];
         $user = auth()->user();
         if ($user->member->auto_profile_match == 1) {
-            $matched_profiles = ProfileMatch::orderBy('match_percentage', 'desc')
-                ->where('user_id', $user->id)
-                ->where('match_percentage', '>=', 50);
+            $matched_profiles = ProfileMatch::join('users', 'profile_matches.match_id', '=', 'users.id')
+                ->where('users.approved', 1)
+                ->where('users.blocked', 0)
+                ->where('users.deactivated', 0)
+                ->where('profile_matches.user_id', $user->id)
+                ->where('profile_matches.match_percentage', '>=', 50)
+                ->orderBy('profile_matches.match_percentage', 'desc')
+                ->select('profile_matches.*');
+
             $ignored_to = IgnoredUser::where('ignored_by', $user->id)->pluck('user_id')->toArray();
             if (count($ignored_to) > 0) {
-                $matched_profiles = $matched_profiles->whereNotIn('match_id', $ignored_to);
+                $matched_profiles = $matched_profiles->whereNotIn('profile_matches.match_id', $ignored_to);
             }
             $ignored_by_ids = IgnoredUser::where('user_id', $user->id)->pluck('ignored_by')->toArray();
             if (count($ignored_by_ids) > 0) {
-                $matched_profiles = $matched_profiles->whereNotIn('match_id', $ignored_by_ids);
+                $matched_profiles = $matched_profiles->whereNotIn('profile_matches.match_id', $ignored_by_ids);
             }
             $matched_profiles = $matched_profiles->limit(20)->get();
         }

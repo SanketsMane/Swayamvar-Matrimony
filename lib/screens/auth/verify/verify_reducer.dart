@@ -23,7 +23,9 @@ UserVerifyState? userVerifyReducer(UserVerifyState state, dynamic action) {
   if (action is IsApprovedAction) {
     return state
       ..isApprove = action.payload!.isApproved == 1
-      ..verificationInfo = action.payload!.verificationInfo;
+      ..verificationInfo = action.payload!.verificationInfo
+      ..verificationStatus = action.payload!.verificationStatus
+      ..adminMessage = action.payload!.adminMessage;
   }
   if (action is SetVerifyIsFetching) {
     return state..isFetching = action.payload;

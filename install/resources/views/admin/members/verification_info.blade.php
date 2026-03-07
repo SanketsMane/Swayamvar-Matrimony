@@ -4,8 +4,18 @@
 <div class="row">
     <div class="col-lg-8 mx-auto">
         <div class="card">
-            <div class="card-header">
+            <div class="card-header d-flex justify-content-between align-items-center">
                 <h5 class="mb-0 h6">{{ translate('Member Verification') }}</h5>
+                {{-- Sanket: Status badge based on current verification_status --}}
+                @if($user->verification_status == 'approved')
+                    <span class="badge badge-success px-3 py-2">✓ Approved</span>
+                @elseif($user->verification_status == 'rejected')
+                    <span class="badge badge-danger px-3 py-2">✗ Rejected</span>
+                @elseif($user->verification_status == 'query')
+                    <span class="badge badge-warning px-3 py-2">? Query Sent</span>
+                @elseif($user->verification_info != null)
+                    <span class="badge badge-info px-3 py-2">⏳ Pending Review</span>
+                @endif
             </div>
             <div class="card-body row">
                 <div class="col-md-4">
@@ -26,6 +36,14 @@
                         <strong>{{translate('Phone')}} :</strong>
                         <span class="ml-2">{{ $user->phone }}</span>
                     </p>
+
+                    {{-- Sanket: Show previous admin message if set --}}
+                    @if($user->verification_rejection_reason)
+                        <div class="mt-3 p-2 bg-light rounded border-left border-warning">
+                            <strong class="text-warning">Previous Admin Message:</strong>
+                            <p class="mb-0 mt-1 text-muted small">{{ $user->verification_rejection_reason }}</p>
+                        </div>
+                    @endif
                     <br>
                 </div>
                 <div class="col-md-8">
@@ -53,7 +71,7 @@
                                         </tr>
                                     @endforeach
                                 @else
-                                    {{-- New 3-Step Format --}}
+                                    {{-- New 3-Step Format from Flutter --}}
                                     @if(isset($verification_data->id_type))
                                         <tr>
                                             <th class="text-muted">{{ translate('ID Type') }}</th>
@@ -93,11 +111,33 @@
                                 @endif
                             </tbody>
                         </table>
+                    @else
+                        <p class="text-muted">No verification documents submitted yet.</p>
                     @endif
-                    @if ($user->approved != 1 && $user->verification_info != null)
-                        <div class="text-right">
-                            <a href="javascript:void(0);" onclick="verify_member('{{ route('member.reject_verification', $user->id) }}','reject')" class="btn btn-sm btn-danger d-innline-block">{{translate('Reject')}}</a></li>
-                            <a href="javascript:void(0);" onclick="verify_member('{{ route('member.approve_verification', $user->id) }}','approve')" class="btn btn-sm btn-success d-innline-block">{{translate('Accept')}}</a>
+
+                    {{-- Sanket: Admin actions — Approve / Reject / Query with message form --}}
+                    @if ($user->verification_info != null && $user->verification_status != 'approved')
+                        <div class="mt-4 p-3 bg-light rounded">
+                            <h6 class="mb-3 text-dark">Admin Action</h6>
+                            <div class="form-group mb-3">
+                                <label for="admin_message" class="font-weight-bold">Message to Member <span class="text-muted small">(optional — shown for Reject & Query)</span></label>
+                                <textarea id="admin_message" class="form-control" rows="3" placeholder="e.g. Your ID image is blurry. Please re-upload a clear photo."></textarea>
+                            </div>
+                            <div class="d-flex gap-2">
+                                <a href="{{ route('member.approve_verification', $user->id) }}" 
+                                   onclick="return confirm('{{ translate('Are you sure to approve this verification?') }}')"
+                                   class="btn btn-sm btn-success mr-2">
+                                    ✓ {{ translate('Approve') }}
+                                </a>
+                                <button type="button" onclick="submitVerificationAction('{{ route('member.reject_verification', $user->id) }}')" 
+                                        class="btn btn-sm btn-danger mr-2">
+                                    ✗ {{ translate('Reject') }}
+                                </button>
+                                <button type="button" onclick="submitVerificationAction('{{ route('member.query_verification', $user->id) }}')" 
+                                        class="btn btn-sm btn-warning">
+                                    ? {{ translate('Ask Query') }}
+                                </button>
+                            </div>
                         </div>
                     @endif
                 </div>
@@ -107,35 +147,29 @@
 </div>
 @endsection
 
-@section('modal')
-    {{-- Member Approval Modal --}}
-    <div class="modal fade member-verification-modal" id="modal-basic">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h4 class="modal-title h6">{{translate('Member Verification')}}</h4>
-                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
-                </div>
-                <div class="modal-body text-center">
-                    <p class="mt-1" id="verify_member_text"></p>
-                    <button type="button" class="btn btn-sm btn-light mt-2" data-dismiss="modal">{{translate('Cancel')}}</button>
-                    <a type="submit" class="btn btn-sm btn-primary mt-2" id="confirm-link">{{translate('Confirm')}}</a>
-                </div>
-            </div>
-        </div>
-    </div>
-@endsection
-
 @section('script')
-<script type="text/javascript">
-        function verify_member(url, status){
-            var confirmation_text =  status == 'approve' ? 
-                                    "{{ translate("Are you sure to approve this verification?") }}" : 
-                                    "{{ translate("Are you sure to reject this verification?") }}";
-        
-            $('.member-verification-modal').modal('show');
-            $('#verify_member_text').html(confirmation_text);
-            $("#confirm-link").attr("href", url);
-        }
+<script>
+    // Sanket: Submits reject/query form with the optional admin message
+    function submitVerificationAction(url) {
+        const message = document.getElementById('admin_message').value;
+        const form = document.createElement('form');
+        form.method = 'POST';
+        form.action = url;
+
+        const csrf = document.createElement('input');
+        csrf.type = 'hidden';
+        csrf.name = '_token';
+        csrf.value = '{{ csrf_token() }}';
+        form.appendChild(csrf);
+
+        const msg = document.createElement('input');
+        msg.type = 'hidden';
+        msg.name = 'admin_message';
+        msg.value = message;
+        form.appendChild(msg);
+
+        document.body.appendChild(form);
+        form.submit();
+    }
 </script>
 @endsection

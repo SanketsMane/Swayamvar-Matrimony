@@ -80,9 +80,7 @@ class MemberController extends Controller
         }
 
         // Member Approved Check
-        if (get_setting('member_verification') == 1) {
-            $users_query->where('approved', 1);
-        }
+        $users_query->where('approved', 1);
 
         // Sort By age
         if (!empty($age_from)) {
@@ -374,13 +372,16 @@ class MemberController extends Controller
         }
     }
 
-     public function isApproved(){
-        $user = User::where('id',  auth()->user()->id)->first();
-        $verification_info = false;
-        if($user->verification_info != null){
-            $verification_info = true;
-        }
-        return response()->json(['is_approved' => $user->approved, 'verification_info' => $verification_info]);
+    // Sanket: Returns full verification status so Flutter shows correct state
+     public function isApproved()
+    {
+        $user = User::where('id', auth()->user()->id)->first();
+        return response()->json([
+            'is_approved'         => $user->approved,
+            'verification_info'   => $user->verification_info != null,
+            'verification_status' => $user->verification_status,
+            'admin_message'       => $user->verification_rejection_reason,
+        ]);
     }
 
 
@@ -440,6 +441,9 @@ class MemberController extends Controller
 
         $user = auth()->user();
         $user->verification_info = json_encode($data);
+        // Sanket: Reset to pending on every re-submission — clears prior rejection/query state
+        $user->verification_status = 'pending';
+        $user->verification_rejection_reason = null;
         if ($user->save()) {
             return $this->success_message(translate('Your verification request has been submitted successfully!'));
         }

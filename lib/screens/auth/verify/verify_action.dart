@@ -86,18 +86,8 @@ ThunkAction<AppState> submitVerifyFormAction(BuildContext context) {
       );
       return;
     }
-    if (state.idFront == null) {
-      store.dispatch(
-        ShowMessageAction(msg: l.verify_error_id_front, color: MyTheme.failure),
-      );
-      return;
-    }
-    if (state.selfie == null) {
-      store.dispatch(
-        ShowMessageAction(msg: l.verify_error_selfie, color: MyTheme.failure),
-      );
-      return;
-    }
+
+    // Sanket: Images (idFront, idBack, selfie) are optional — submit whatever the user provides
 
     store.dispatch(SetVerifySubmitting(true));
 

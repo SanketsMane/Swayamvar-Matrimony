@@ -429,45 +429,109 @@ class MemberController extends Controller
         return view('admin.members.verification_info', compact('user'));
     }
 
+    // Sanket: Approve member verification — sets approved=1, sends FCM + in-app + email
     public function approve_verification($id)
     {
-        $user             = User::findOrFail($id);
-        $user->approved   = 1;
-        if ($user->save()) {
+        $user           = User::findOrFail($id);
+        $user->approved = 1;
+        $user->verification_status = 'approved';
+        $user->verification_rejection_reason = null;
 
-            $status = 'Approved';
-            
-            // Member verification email send to members
+        if ($user->save()) {
+            // Email notification
             if ($user->email != null && get_email_template('member_verification_email', 'status')) {
-                EmailUtility::member_verification_email($user, $status);
+                EmailUtility::member_verification_email($user, 'Approved');
             }
+
+            // In-app + FCM notification
+            $this->sendVerificationNotification(
+                $user,
+                'verification_approved',
+                'Your profile has been verified! You are now visible to others.'
+            );
 
             flash('Member Verified Successfully')->success();
             return redirect()->route('members.index', $user->membership);
-        } else {
-            flash('Sorry! Something went wrong.')->error();
-            return back();
         }
+
+        flash('Sorry! Something went wrong.')->error();
+        return back();
     }
-    
-    public function reject_verification($id)
+
+    // Sanket: Reject member verification — saves reason, sends FCM + in-app + email
+    public function reject_verification(Request $request, $id)
     {
-        $user             = User::findOrFail($id);
-        $user->verification_info   = null;
+        $user = User::findOrFail($id);
+        $user->verification_status = 'rejected';
+        // Store admin's reason; do NOT clear verification_info so user can see what was submitted
+        $user->verification_rejection_reason = $request->admin_message ?? null;
+
         if ($user->save()) {
-            $status = 'Rejected';
-            
-            // Member verification email send to members
+            // Email notification
             if ($user->email != null && get_email_template('member_verification_email', 'status')) {
-                EmailUtility::member_verification_email($user, $status);
+                EmailUtility::member_verification_email($user, 'Rejected');
             }
+
+            $message = 'Your verification was rejected.';
+            if ($request->admin_message) {
+                $message .= ' Reason: ' . $request->admin_message;
+            }
+
+            // In-app + FCM notification
+            $this->sendVerificationNotification($user, 'verification_rejected', $message);
 
             flash('Member Verification Rejected.')->success();
             return redirect()->route('members.index', $user->membership);
+        }
 
-        } else {
-            flash('Sorry! Something went wrong.')->error();
-            return back();
+        flash('Sorry! Something went wrong.')->error();
+        return back();
+    }
+
+    // Sanket: Query member — admin asks for more details without hard rejection
+    public function query_verification(Request $request, $id)
+    {
+        $user = User::findOrFail($id);
+        $user->verification_status = 'query';
+        $user->verification_rejection_reason = $request->admin_message ?? 'Please provide additional information.';
+
+        if ($user->save()) {
+            $this->sendVerificationNotification(
+                $user,
+                'verification_query',
+                'Admin has a query about your verification: ' . $user->verification_rejection_reason
+            );
+
+            flash('Query sent to member successfully.')->success();
+            return redirect()->back();
+        }
+
+        flash('Sorry! Something went wrong.')->error();
+        return back();
+    }
+
+    // Sanket: Single private helper — sends both FCM push and in-app notification
+    private function sendVerificationNotification(User $user, string $type, string $message): void
+    {
+        // In-app notification via existing utility
+        \App\Utility\NotificationUtility::set_notification(
+            $type,
+            $message,
+            '/member/verification-status',
+            auth()->id(),
+            $user->id,
+            'member'
+        );
+
+        // FCM push notification if device token is present
+        if ($user->fcm_token) {
+            $data = (object)[
+                'fcm_token' => $user->fcm_token,
+                'title'     => $type,
+                'text'      => $message,
+                'notify_by' => auth()->id(),
+            ];
+            \App\Services\FirbaseNotification::send($data);
         }
     }
 

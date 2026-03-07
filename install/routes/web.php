@@ -91,6 +91,11 @@ Route::group(['middleware' => ['verified']], function () {
     Route::get('/dashboard', 'HomeController@dashboard')->name('dashboard');
     Route::get('/member/verification', 'MemberController@verification_form')->name('member.verification');
     Route::post('/member/verification-info/store', 'MemberController@verification_info_store')->name('member.verification_info.store');
+    // Sanket: Admin verification action routes
+    Route::get('/member/verification-info/{id}', 'MemberController@show_verification_info')->name('member.show_verification_info');
+    Route::get('/member/approve-verification/{id}', 'MemberController@approve_verification')->name('member.approve_verification');
+    Route::post('/member/reject-verification/{id}', 'MemberController@reject_verification')->name('member.reject_verification');
+    Route::post('/member/query-verification/{id}', 'MemberController@query_verification')->name('member.query_verification');
 });
 
 
