@@ -46,10 +46,12 @@ class SettingsScreen extends StatelessWidget {
                     l.settings_item_plans,
                     () => NavigatorPush.push(context, const PremiumPlans()),
                   ),
+                  // Sanket: Verify Profile item with real-time status badge
                   _settingsItem(
                     Icons.verified_user_outlined,
                     l.settings_item_verify,
                     () => NavigatorPush.push(context, const VerifyPage()),
+                    trailingWidget: _buildVerifyBadge(state.userVerifyState?.verificationStatus ?? (state.userVerifyState?.verificationInfo == true ? 'pending' : null)),
                   ),
                 ]),
                 const SizedBox(height: 16),
@@ -269,6 +271,7 @@ class SettingsScreen extends StatelessWidget {
     VoidCallback onTap, {
     Color? color,
     String? subtitle,
+    Widget? trailingWidget, // Sanket: Custom trailing widget for badges
   }) {
     return ListTile(
       onTap: onTap,
@@ -285,13 +288,65 @@ class SettingsScreen extends StatelessWidget {
           subtitle != null
               ? Text(subtitle, style: Styles.caption.copyWith(fontSize: 11))
               : null,
-      trailing: const Icon(
-        Icons.chevron_right_rounded,
-        size: 20,
-        color: MyTheme.text_secondary,
+      trailing: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          if (trailingWidget != null) ...[
+            trailingWidget,
+            const SizedBox(width: 8),
+          ],
+          const Icon(
+            Icons.chevron_right_rounded,
+            size: 20,
+            color: MyTheme.text_secondary,
+          ),
+        ],
       ),
       contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 0),
       visualDensity: VisualDensity.compact,
+    );
+  }
+
+  // Sanket: Generates status badge for the verify item
+  Widget? _buildVerifyBadge(String? status) {
+    if (status == null || status.isEmpty) return null;
+
+    Color badgeColor = MyTheme.border;
+    Color textColor = MyTheme.text_secondary;
+    String badgeText = "Pending";
+
+    if (status == 'approved') {
+      badgeColor = Colors.green.withOpacity(0.1);
+      textColor = Colors.green;
+      badgeText = "✅ Approved";
+    } else if (status == 'rejected') {
+      badgeColor = Colors.red.withOpacity(0.1);
+      textColor = Colors.red;
+      badgeText = "❌ Rejected";
+    } else if (status == 'query') {
+      badgeColor = Colors.orange.withOpacity(0.1);
+      textColor = Colors.orange;
+      badgeText = "❓ Query";
+    } else if (status == 'pending') {
+      badgeColor = MyTheme.app_accent_color.withOpacity(0.1);
+      textColor = MyTheme.app_accent_color;
+      badgeText = "🟡 Pending";
+    }
+
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+      decoration: BoxDecoration(
+        color: badgeColor,
+        borderRadius: BorderRadius.circular(12),
+      ),
+      child: Text(
+        badgeText,
+        style: TextStyle(
+          color: textColor,
+          fontSize: 10,
+          fontWeight: FontWeight.bold,
+        ),
+      ),
     );
   }
 

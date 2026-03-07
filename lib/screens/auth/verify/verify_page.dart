@@ -41,38 +41,147 @@ class _VerifyPageState extends State<VerifyPage> {
     return StoreConnector<AppState, AppState>(
       converter: (store) => store.state,
       onInit: (store) {
-        if (store.state.userVerifyState!.verificationInfo!) {
-          WidgetsBinding.instance.addPostFrameCallback((_) {
-            Navigator.pop(context);
-            store.dispatch(
-              ShowMessageAction(
-                msg: l.verify_already_sent,
-                color: MyTheme.failure,
-              ),
-            );
-          });
-        }
+        // Sanket: Removed logic that instantly pops if verificationInfo is true
+        // allow user to see their status
       },
       builder: (_, state) {
+        final v = state.userVerifyState!;
+        
+        // Define colors and icons based on status
+        Color statusColor = MyTheme.app_accent_color;
+        IconData statusIcon = Icons.info_outline;
+        String statusText = l.verify_status_pending ?? "Pending Review";
+        
+        if (v.verificationStatus == 'approved') {
+          statusColor = Colors.green;
+          statusIcon = Icons.check_circle;
+          statusText = l.verify_status_approved ?? "Approved";
+        } else if (v.verificationStatus == 'rejected') {
+          statusColor = Colors.red;
+          statusIcon = Icons.cancel;
+          statusText = l.verify_status_rejected ?? "Rejected";
+        } else if (v.verificationStatus == 'query') {
+          statusColor = Colors.orange;
+          statusIcon = Icons.help_outline;
+          statusText = l.verify_status_query ?? "Action Required";
+        }
+
         return Scaffold(
           backgroundColor: MyTheme.background,
           appBar: _buildHeader(context, l),
           body: Column(
             children: [
-              _buildProgressStepper(l),
-              Expanded(
-                child: PageView(
-                  controller: _pageController,
-                  physics: const NeverScrollableScrollPhysics(),
-                  onPageChanged: (page) => setState(() => _currentPage = page),
-                  children: [
-                    _buildStep1(state, l),
-                    _buildStep2(state, l),
-                    _buildStep3(state, l),
-                  ],
+              // Sanket: Status Banner
+              if (v.verificationInfo == true || v.verificationStatus != null)
+                Container(
+                  width: double.infinity,
+                  padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+                  color: statusColor.withOpacity(0.1),
+                  child: Row(
+                    children: [
+                      Icon(statusIcon, color: statusColor, size: 24),
+                      const SizedBox(width: 12),
+                      Expanded(
+                        child: Text(
+                          statusText,
+                          style: TextStyle(
+                            color: statusColor,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 14,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
-              ),
-              _buildBottomNav(context, state, l),
+
+              // Sanket: Admin Message Banner
+              if (v.adminMessage != null && v.adminMessage!.isNotEmpty && (v.verificationStatus == 'rejected' || v.verificationStatus == 'query'))
+                Container(
+                  width: double.infinity,
+                  padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    border: Border(bottom: BorderSide(color: MyTheme.border)),
+                  ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        "Message from Admin:",
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          color: MyTheme.text_primary,
+                          fontSize: 12,
+                        ),
+                      ),
+                      const SizedBox(height: 4),
+                      Text(
+                        v.adminMessage!,
+                        style: TextStyle(color: MyTheme.text_secondary, fontSize: 13),
+                      ),
+                    ],
+                  ),
+                ),
+
+              if (v.verificationStatus != 'approved' && v.verificationStatus != 'pending') ...[
+                _buildProgressStepper(l),
+                Expanded(
+                  child: PageView(
+                    controller: _pageController,
+                    physics: const NeverScrollableScrollPhysics(),
+                    onPageChanged: (page) => setState(() => _currentPage = page),
+                    children: [
+                      _buildStep1(state, l),
+                      _buildStep2(state, l),
+                      _buildStep3(state, l),
+                    ],
+                  ),
+                ),
+                _buildBottomNav(context, state, l),
+              ] else if (v.verificationStatus == 'approved') ...[
+                 Expanded(
+                    child: Center(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Icon(Icons.verified, size: 80, color: Colors.green),
+                          SizedBox(height: 16),
+                          Text(
+                            "Your profile is fully verified!",
+                            style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                          ),
+                          SizedBox(height: 8),
+                          Text(
+                            "You are now visible to other members.",
+                            style: TextStyle(color: MyTheme.text_secondary),
+                          ),
+                        ],
+                      ),
+                    ),
+                  )
+              ] else if (v.verificationStatus == 'pending' || v.verificationInfo == true) ...[
+                  Expanded(
+                    child: Center(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Icon(Icons.hourglass_empty, size: 80, color: MyTheme.app_accent_color),
+                          SizedBox(height: 16),
+                          Text(
+                            "Verification in Progress",
+                            style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                          ),
+                          SizedBox(height: 8),
+                          Text(
+                            "Our team is reviewing your documents.",
+                            style: TextStyle(color: MyTheme.text_secondary),
+                          ),
+                        ],
+                      ),
+                    ),
+                  )
+              ],
             ],
           ),
         );
