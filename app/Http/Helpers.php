@@ -194,25 +194,31 @@ if (!function_exists('addon_activation')) {
 if (!function_exists('sendSMS')) {
     function sendSMS($to, $from, $text, $template_id)
     {
+        \Log::info("Sanket: sendSMS call to: " . $to . " with code: " . $template_id);
         if (env('RENFLAIR_API_KEY') != null) {
+            \Log::info("Sanket: Using Renflair SMS");
             $api = env('RENFLAIR_API_KEY');
             if (strpos($to, '+91') !== false) {
                 $to = substr($to, 3); // Strip +91 for Renflair
             }
 
             $url = "https://sms.renflair.in/V1.php?API=" . urlencode($api) . "&PHONE=" . urlencode($to) . "&OTP=" . urlencode($template_id);
+            \Log::info("Sanket: Renflair URL: " . $url);
             $ch = curl_init();
             curl_setopt($ch, CURLOPT_URL, $url);
             curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
             curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
 
             $response = curl_exec($ch);
+            \Log::info("Sanket: Renflair Response: " . $response);
             curl_close($ch);
 
             return $response;
         }
 
+        \Log::info("Sanket: Renflair API key missing, checking other providers");
         if (get_setting('nexmo_activation') == 1) {
+            \Log::info("Sanket: Using Nexmo");
             $api_key = env("NEXMO_KEY"); //put ssl provided api_token here
             $api_secret = env("NEXMO_SECRET"); // put ssl provided sid here
 
@@ -245,6 +251,7 @@ if (!function_exists('sendSMS')) {
             return $response;
 
         } elseif (get_setting('twillo_activation') == 1) {
+            \Log::info("Sanket: Using Twilio");
             $sid = env("TWILIO_SID"); 
             $token = env("TWILIO_AUTH_TOKEN"); 
 
@@ -257,10 +264,12 @@ if (!function_exists('sendSMS')) {
                         'body' => $text
                     )
                 );
+                \Log::info("Sanket: Twilio Response SID: " . $message->sid);
             } catch (\Exception $e) {
-                \Log::error("Twilio Error: " . $e->getMessage());
+                \Log::error("Sanket: Twilio Error: " . $e->getMessage());
             }
         } elseif (get_setting('ssl_wireless_activation') == 1) {
+            \Log::info("Sanket: Using SSL Wireless");
             $token = env("SSL_SMS_API_TOKEN"); //put ssl provided api_token here
             $sid = env("SSL_SMS_SID"); // put ssl provided sid here
 
@@ -294,7 +303,7 @@ if (!function_exists('sendSMS')) {
 
             return $response;
         } elseif (get_setting('fast2sms_activation') == 1) {
-
+            \Log::info("Sanket: Using Fast2SMS");
             if (strpos($to, '+91') !== false) {
                 $to = substr($to, 3);
             }
@@ -345,16 +354,18 @@ if (!function_exists('sendSMS')) {
 
             $response = curl_exec($curl);
             $err = curl_error($curl);
-
+            \Log::info("Sanket: Fast2SMS Response: " . $response);
             curl_close($curl);
 
             return $response;
         } elseif (get_setting('mimo_activation') == 1) {
+            \Log::info("Sanket: Using Mimo");
             $token = MimoUtility::getToken();
 
             MimoUtility::sendMessage($text, $to, $token);
             MimoUtility::logout($token);
         } elseif (get_setting('mimsms_activation') == 1) {
+            \Log::info("Sanket: Using MimSMS");
             $url = "https://esms.mimsms.com/smsapi";
             $data = [
                 "api_key" => env('MIM_API_KEY'),
@@ -370,9 +381,13 @@ if (!function_exists('sendSMS')) {
             curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
             curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
             $response = curl_exec($ch);
+            \Log::info("Sanket: MimSMS Response: " . $response);
             curl_close($ch);
             return $response;
         }
+        
+        \Log::warning("Sanket: No SMS provider activated or configured");
+        return false;
     }
 }
 
