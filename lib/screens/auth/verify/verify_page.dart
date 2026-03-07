@@ -50,20 +50,20 @@ class _VerifyPageState extends State<VerifyPage> {
         // Define colors and icons based on status
         Color statusColor = MyTheme.app_accent_color;
         IconData statusIcon = Icons.info_outline;
-        String statusText = l.verify_status_pending ?? "Pending Review";
+        String statusText = "Pending Review";
         
         if (v.verificationStatus == 'approved') {
           statusColor = Colors.green;
           statusIcon = Icons.check_circle;
-          statusText = l.verify_status_approved ?? "Approved";
+          statusText = "Approved";
         } else if (v.verificationStatus == 'rejected') {
           statusColor = Colors.red;
           statusIcon = Icons.cancel;
-          statusText = l.verify_status_rejected ?? "Rejected";
+          statusText = "Rejected";
         } else if (v.verificationStatus == 'query') {
           statusColor = Colors.orange;
           statusIcon = Icons.help_outline;
-          statusText = l.verify_status_query ?? "Action Required";
+          statusText = "Action Required";
         }
 
         return Scaffold(

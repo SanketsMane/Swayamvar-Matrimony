@@ -63,17 +63,3 @@ class VerificationModel<T> {
 }
 
 
-// model verify
-class VerificationModel<T> {
-  String? key, type, title;
-  T data;
-  List<dynamic>? options;
-
-  VerificationModel({
-    required this.key,
-    required this.type,
-    required this.title,
-    required this.data,
-    this.options,
-  });
-}
