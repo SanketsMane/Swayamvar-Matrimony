@@ -266,9 +266,17 @@ class AuthController extends Controller
 
     protected function authResponse($user)
     {
-        $maritial_status = MaritalStatus::where('id', $user->member->marital_status_id)->first();
+        $maritial_status = null;
+        $age = 0;
+        
+        if ($user->member) {
+            $maritial_status = \App\Models\MaritalStatus::where('id', $user->member->marital_status_id)->first();
+            if ($user->member->birthday) {
+                $age = \Carbon\Carbon::parse($user->member->birthday)->age;
+            }
+        }
+
         $token = $user->createToken('API Token')->plainTextToken;
-        $age = Carbon::parse($user->member->birthday)->age;
 
         return response()->json([
             'result' => true,
