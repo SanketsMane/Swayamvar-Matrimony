@@ -15,11 +15,16 @@ class OTPVerificationController extends Controller
      */
     public function send_code(User $user)
     {
-        if ($user->phone != null) {
+        // Ensure we have the latest data from DB
+        $user->refresh();
+        
+        \Log::info("Sanket: OTPVerificationController@send_code for user ID: " . $user->id . " Code: [" . $user->verification_code . "]");
+
+        if ($user->phone != null && !empty($user->verification_code)) {
             $text = "Your verification code is: " . $user->verification_code;
-            // The sendSMS helper uses RENFLAIR_API_KEY from .env
-            // For Renflair, the 4th parameter (template_id) is used as the OTP value in the API call
             sendSMS($user->phone, env('VALID_TWILLO_NUMBER'), $text, $user->verification_code);
+        } else {
+            \Log::warning("Sanket: Skipping SMS because phone is null or verification_code is empty. Phone: " . $user->phone);
         }
     }
 }
