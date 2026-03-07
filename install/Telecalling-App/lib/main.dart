@@ -12,6 +12,7 @@ import 'screens/splash_screen.dart';
 import 'services/notification_service.dart';
 import 'services/offline_sync_service.dart';
 import 'providers/theme_provider.dart';
+import 'package:screen_protector/screen_protector.dart';
 
 
 @pragma('vm:entry-point')
@@ -42,8 +43,18 @@ void main() async {
     }
   }
 
-  // Sanket: Screenshots are now restricted natively in MainActivity.kt
-
+  // Sanket: Screenshots and screen recording restricted via screen_protector (iOS/Android) 
+  // Android also natively uses FLAG_SECURE in MainActivity.kt
+  try {
+    if (!kIsWeb) {
+      await ScreenProtector.preventScreenshotOn();
+      await ScreenProtector.protectDataLeakageWithBlur();
+    }
+  } catch (e) {
+    if (kDebugMode) {
+      print("Screen Protector Initialization Error: $e");
+    }
+  }
 
   runApp(
     MultiProvider(
