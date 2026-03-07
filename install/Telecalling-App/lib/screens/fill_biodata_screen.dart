@@ -19,6 +19,7 @@ class _FillBiodataScreenState extends State<FillBiodataScreen> {
     GlobalKey<FormState>(),
     GlobalKey<FormState>(),
     GlobalKey<FormState>(),
+    GlobalKey<FormState>(),
   ];
   int _currentStep = 0;
   bool _isLoadingDropdowns = true;
@@ -27,6 +28,8 @@ class _FillBiodataScreenState extends State<FillBiodataScreen> {
   // Image Picker
   final ImagePicker _picker = ImagePicker();
   XFile? _profileImage;
+  XFile? _idProofImage;
+  List<XFile> _galleryImages = [];
 
   // Controllers
   final _firstNameController = TextEditingController();
@@ -46,6 +49,9 @@ class _FillBiodataScreenState extends State<FillBiodataScreen> {
   final _occupationDetailsController = TextEditingController();
   final _addressDetailsController = TextEditingController();
   final _expectedEducationController = TextEditingController();
+  final _annualIncomeController = TextEditingController();
+  final _propertyDetailsController = TextEditingController();
+  final _expectedIncomeController = TextEditingController();
 
   // Dropdown Lists
   List<Map<String, String>> _genders = [];
@@ -61,6 +67,13 @@ class _FillBiodataScreenState extends State<FillBiodataScreen> {
   List<Map<String, String>> _packages = [];
   List<Map<String, String>> _educations = [];
   List<Map<String, String>> _heights = [];
+  List<Map<String, dynamic>> _allSubCastes = [];
+  List<Map<String, dynamic>> _filteredSubCastes = [];
+  List<Map<String, String>> _familyValues = [];
+  List<Map<String, String>> _states = [];
+  List<Map<String, String>> _paymentMethods = []; // New [Sanket]
+  bool _isLoadingStates = false;
+  bool _isLoadingCities = false;
 
   // Selections
   String? _selectedGender;
@@ -75,6 +88,11 @@ class _FillBiodataScreenState extends State<FillBiodataScreen> {
   String? _selectedComplexion;
   String? _selectedCity;
   String? _selectedPackage;
+  String? _selectedSubCaste;
+  String? _selectedFamilyValue;
+  String? _selectedState;
+  String? _selectedPaymentMethod; // New [Sanket]
+  String? _selectedCountry = '101'; // Default to India [Sanket]
   DateTime? _selectedDob;
 
   // Yes/No Bools (Stored as String 'true'/'false')
@@ -86,8 +104,6 @@ class _FillBiodataScreenState extends State<FillBiodataScreen> {
   String? _selectedPartnerManglik = 'false';
   String? _selectedDivorceAccepted = 'false';
   String? _selectedPartnerIntercaste = 'false';
-
-  bool _isLoadingCities = false;
 
   @override
   void initState() {
@@ -114,6 +130,9 @@ class _FillBiodataScreenState extends State<FillBiodataScreen> {
     _occupationDetailsController.dispose();
     _addressDetailsController.dispose();
     _expectedEducationController.dispose();
+    _annualIncomeController.dispose();
+    _propertyDetailsController.dispose();
+    _expectedIncomeController.dispose();
     super.dispose();
   }
 
@@ -148,6 +167,18 @@ class _FillBiodataScreenState extends State<FillBiodataScreen> {
         _complexions = _toStringList(data['complexions'] ?? []);
         _allCastes = allCastes;
         _filteredCastes = allCastes;
+
+        final allSubCastes = (data['sub_castes'] as List<dynamic>? ?? []).map<Map<String, dynamic>>((s) => {
+          'id': s['id'].toString(),
+          'name': (s['name'] ?? '').toString(),
+          'caste_id': s['caste_id']?.toString() ?? '',
+        }).toList();
+        _allSubCastes = allSubCastes;
+        _filteredSubCastes = allSubCastes;
+
+        _familyValues = _toStringList(data['family_values'] ?? []);
+        _paymentMethods = _toStringList(data['manual_payment_methods'] ?? []); // New [Sanket]
+
         _packages = (data['packages'] as List<dynamic>? ?? []).map<Map<String, String>>((p) => {
           'id': p['id'].toString(),
           'name': (p['name'] ?? '').toString(),
@@ -201,8 +232,8 @@ class _FillBiodataScreenState extends State<FillBiodataScreen> {
         _isLoadingDropdowns = false;
       });
 
-      // Fetch Maharashtra Districts initially
-      _onStateChanged('22');
+      // Fetch States for India (101) and set Maharashtra (22) as default [Sanket]
+      await _fetchStates('101');
 
     } else if (mounted) {
       setState(() => _isLoadingDropdowns = false);
@@ -222,11 +253,16 @@ class _FillBiodataScreenState extends State<FillBiodataScreen> {
   void _onCasteChanged(String? value) {
     setState(() {
       _selectedCaste = value;
+      _selectedSubCaste = null;
+      _filteredSubCastes = value == null
+          ? _allSubCastes
+          : _allSubCastes.where((s) => s['caste_id'] == value).toList();
     });
   }
 
   Future<void> _onStateChanged(String? value) async {
     setState(() {
+      _selectedState = value;
       _selectedCity = null;
       _cities = [];
     });
@@ -239,6 +275,24 @@ class _FillBiodataScreenState extends State<FillBiodataScreen> {
     if (response['result'] == true && mounted) {
       setState(() {
         _cities = _toStringList(response['data'] ?? []);
+      });
+    }
+  }
+
+  Future<void> _fetchStates(String countryId) async {
+    setState(() => _isLoadingStates = true);
+    final response = await _biodataService.getStates(countryId);
+    setState(() => _isLoadingStates = false);
+
+    if (response['result'] == true && mounted) {
+      setState(() {
+        _states = _toStringList(response['data'] ?? []);
+        // Set Maharashtra (22) as default if available [Sanket]
+        if (_selectedState == null && _states.isNotEmpty) {
+          final maharashtra = _states.firstWhere((s) => s['id'] == '22', orElse: () => _states[0]);
+          _selectedState = maharashtra['id'];
+          _onStateChanged(_selectedState);
+        }
       });
     }
   }
@@ -273,6 +327,25 @@ class _FillBiodataScreenState extends State<FillBiodataScreen> {
     );
     if (image != null) {
       setState(() => _profileImage = image);
+    }
+  }
+
+  Future<void> _pickIdProof() async {
+    final XFile? image = await _picker.pickImage(
+      source: ImageSource.gallery,
+      imageQuality: 70,
+    );
+    if (image != null) {
+      setState(() => _idProofImage = image);
+    }
+  }
+
+  Future<void> _pickGalleryImages() async {
+    final List<XFile> images = await _picker.pickMultiImage(
+      imageQuality: 70,
+    );
+    if (images.isNotEmpty) {
+      setState(() => _galleryImages.addAll(images));
     }
   }
 
@@ -315,8 +388,10 @@ class _FillBiodataScreenState extends State<FillBiodataScreen> {
       // Stage 2: Spiritual & Physical
       'religion': _selectedReligion ?? '',
       'caste': _selectedCaste ?? '',
+      'sub_caste': _selectedSubCaste ?? '',
       'manglik': _selectedManglik ?? 'false',
       'intercaste_accepted': _selectedIntercasteAccepted ?? 'false',
+      'family_value': _selectedFamilyValue ?? '',
       'height': _selectedHeight ?? '',
       'weight': _weightController.text.trim(),
       'blood_group': _selectedBloodGroup ?? '',
@@ -328,6 +403,9 @@ class _FillBiodataScreenState extends State<FillBiodataScreen> {
       'education_level': _selectedEducation ?? '',
       'occupation_type': _occupationTypeController.text.trim(),
       'occupation_details': _occupationDetailsController.text.trim(),
+       'annual_income': _annualIncomeController.text.trim(),
+      'country': _selectedCountry ?? '101',
+      'state': _selectedState ?? '',
       'city': _selectedCity ?? '',
       'address': _addressDetailsController.text.trim(),
       
@@ -339,13 +417,15 @@ class _FillBiodataScreenState extends State<FillBiodataScreen> {
       'married_brothers': _marriedBrothersController.text.trim(),
       'no_of_sisters': _noOfSistersController.text.trim(),
       'married_sisters': _marriedSistersController.text.trim(),
+      'property_details': _propertyDetailsController.text.trim(),
       'partner_manglik': _selectedPartnerManglik ?? 'false',
       'expected_education': _expectedEducationController.text.trim(),
+      'expected_income': _expectedIncomeController.text.trim(),
       'divorce_accepted': _selectedDivorceAccepted ?? 'false',
       'partner_intercaste': _selectedPartnerIntercaste ?? 'false',
 
       'package': _selectedPackage!,
-      'payment_method': 'manual_cash',
+      'payment_method_id': _selectedPaymentMethod ?? '',
     };
 
     http.MultipartFile? imageFile;
@@ -353,17 +433,127 @@ class _FillBiodataScreenState extends State<FillBiodataScreen> {
       imageFile = await http.MultipartFile.fromPath('photo', _profileImage!.path);
     }
 
-    final response = await _biodataService.submitBiodata(data, image: imageFile);
+    http.MultipartFile? idProofFile;
+    if (_idProofImage != null) {
+      idProofFile = await http.MultipartFile.fromPath('id_proof', _idProofImage!.path);
+    }
+    
+    List<http.MultipartFile> otherPhotos = [];
+    for (var img in _galleryImages) {
+      otherPhotos.add(await http.MultipartFile.fromPath('other_photos[]', img.path));
+    }
+
+    final response = await _biodataService.submitBiodata(
+      data, 
+      image: imageFile, 
+      idProof: idProofFile,
+      otherPhotos: otherPhotos,
+    );
     setState(() => _isSaving = false);
 
     if (!mounted) return;
 
     if (response['result'] == true) {
-      _showSnack('Biodata created successfully!', isError: false);
-      Navigator.pop(context, true);
+      _showSuccessDialog(
+        matrimonyId: response['matrimony_id']?.toString() ?? 'N/A',
+        password: response['temporary_password']?.toString() ?? 'N/A',
+      );
     } else {
       _showSnack(response['message'] ?? 'Failed to submit biodata', isError: true);
     }
+  }
+
+  void _showSuccessDialog({required String matrimonyId, required String password}) {
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (context) => AlertDialog(
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+        backgroundColor: Colors.white,
+        title: Column(
+          children: [
+            const Icon(Icons.check_circle_rounded, color: Colors.green, size: 60),
+            const SizedBox(height: 12),
+            Text('Submission Successful!', textAlign: TextAlign.center, style: GoogleFonts.outfit(fontWeight: FontWeight.bold, fontSize: 22)),
+          ],
+        ),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text('The candidate has been onboarded successfully. Please share these credentials with them:', textAlign: TextAlign.center, style: GoogleFonts.inter(color: Colors.grey[600], fontSize: 13)),
+            const SizedBox(height: 20),
+            _infoRow('Matrimony ID', matrimonyId, Icons.badge_rounded),
+            const SizedBox(height: 12),
+            _infoRow('Temp Password', password, Icons.lock_open_rounded),
+            const SizedBox(height: 20),
+            Container(
+              padding: const EdgeInsets.all(12),
+              decoration: BoxDecoration(color: Colors.blue.withValues(alpha: 0.05), borderRadius: BorderRadius.circular(12), border: Border.all(color: Colors.blue.withValues(alpha: 0.1))),
+              child: Row(
+                children: [
+                  const Icon(Icons.info_outline_rounded, color: Colors.blue, size: 18),
+                  const SizedBox(width: 8),
+                  Expanded(child: Text('Candidate can now login to Matrimony App using these details.', style: GoogleFonts.inter(color: Colors.blue[700], fontSize: 11, fontWeight: FontWeight.w500))),
+                ],
+              ),
+            ),
+          ],
+        ),
+        actions: [
+          SizedBox(
+            width: double.infinity,
+            child: ElevatedButton(
+              onPressed: () {
+                Navigator.pop(context); // Close dialog
+                Navigator.pop(context, true); // Go back home
+              },
+              style: ElevatedButton.styleFrom(
+                backgroundColor: AppColors.primary(context),
+                foregroundColor: Colors.white,
+                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                padding: const EdgeInsets.symmetric(vertical: 14),
+                elevation: 0,
+              ),
+              child: Text('Return to Home', style: GoogleFonts.outfit(fontWeight: FontWeight.bold)),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _infoRow(String label, String value, IconData icon) {
+    return Container(
+      padding: const EdgeInsets.all(12),
+      decoration: BoxDecoration(
+        color: const Color(0xFFF8F9FA),
+        borderRadius: BorderRadius.circular(12),
+        border: Border.all(color: Colors.grey.withValues(alpha: 0.1)),
+      ),
+      child: Row(
+        children: [
+          Icon(icon, color: Colors.black54, size: 18),
+          const SizedBox(width: 12),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(label, style: GoogleFonts.inter(color: Colors.grey, fontSize: 10, fontWeight: FontWeight.w500)),
+                Text(value, style: GoogleFonts.outfit(fontWeight: FontWeight.bold, fontSize: 15, letterSpacing: 0.5)),
+              ],
+            ),
+          ),
+          IconButton(
+            icon: const Icon(Icons.copy_rounded, size: 18, color: Colors.blue),
+            onPressed: () {
+              Clipboard.setData(ClipboardData(text: value));
+              _showSnack('$label copied!', isError: false);
+            },
+          ),
+        ],
+      ),
+    );
   }
 
   // --- UI Helpers ---
@@ -586,6 +776,20 @@ class _FillBiodataScreenState extends State<FillBiodataScreen> {
                     isRequired: true,
                   ),
                   const SizedBox(height: 12),
+                  _dropdown(
+                    label: 'Sub-Caste', icon: Icons.account_tree_rounded,
+                    value: _selectedSubCaste,
+                    items: _filteredSubCastes.map((s) => DropdownMenuItem<String>(value: s['id'], child: Text(s['name'] ?? ''))).toList(),
+                    onChanged: (v) => setState(() => _selectedSubCaste = v),
+                  ),
+                  const SizedBox(height: 12),
+                  _dropdown(
+                    label: 'Family Value', icon: Icons.volunteer_activism_rounded,
+                    value: _selectedFamilyValue,
+                    items: _familyValues.map((f) => DropdownMenuItem<String>(value: f['id'], child: Text(f['name'] ?? ''))).toList(),
+                    onChanged: (v) => setState(() => _selectedFamilyValue = v),
+                  ),
+                  const SizedBox(height: 12),
                   Row(
                     children: [
                       Expanded(
@@ -700,6 +904,8 @@ class _FillBiodataScreenState extends State<FillBiodataScreen> {
                   _input(controller: _occupationTypeController, label: 'Occupation/Designation', icon: Icons.work_outline_rounded),
                   const SizedBox(height: 12),
                   _input(controller: _occupationDetailsController, label: 'Occupation Details/Company', icon: Icons.business_rounded),
+                  const SizedBox(height: 12),
+                  _input(controller: _annualIncomeController, label: 'Annual Income', icon: Icons.currency_rupee_rounded, isNumber: true),
                 ],
               ),
               const SizedBox(height: 16),
@@ -708,6 +914,14 @@ class _FillBiodataScreenState extends State<FillBiodataScreen> {
                 title: 'Current Location',
                 icon: Icons.location_on_rounded,
                 children: [
+                  _dropdown(
+                    label: 'State', icon: Icons.map_rounded,
+                    value: _selectedState,
+                    items: _states.map((s) => DropdownMenuItem<String>(value: s['id'], child: Text(s['name'] ?? ''))).toList(),
+                    onChanged: (v) => _onStateChanged(v),
+                  ),
+                  if (_isLoadingStates) const Padding(padding: EdgeInsets.only(top: 8), child: LinearProgressIndicator()),
+                  const SizedBox(height: 12),
                   _dropdown(
                     label: 'District', icon: Icons.location_city_rounded,
                     value: _selectedCity,
@@ -816,49 +1030,162 @@ class _FillBiodataScreenState extends State<FillBiodataScreen> {
                   ),
                   const SizedBox(height: 12),
                   _input(controller: _expectedEducationController, label: 'Min. Education Expected', icon: Icons.school_outlined),
+                  const SizedBox(height: 12),
+                  _input(controller: _expectedIncomeController, label: 'Expected Annual Income', icon: Icons.currency_rupee_rounded, isNumber: true),
                 ],
               ),
               const SizedBox(height: 16),
 
               _buildSectionCard(
-                title: 'Final Submission',
+                title: 'Additional Family Info',
+                icon: Icons.info_outline_rounded,
+                children: [
+                  _input(controller: _propertyDetailsController, label: 'Property Details', icon: Icons.house_rounded),
+                ],
+              ),
+            ],
+          ),
+        ),
+      ),
+      Step(
+        isActive: _currentStep >= 4,
+        title: Text('Uploads & Finish', style: GoogleFonts.outfit(fontWeight: FontWeight.bold, fontSize: _currentStep == 4 ? 14 : 12, color: _currentStep == 4 ? AppColors.primary(context) : AppColors.textSecondary(context))),
+        content: Form(
+          key: _formKeys[4],
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              _buildSectionCard(
+                title: 'Official Identity',
+                icon: Icons.badge_rounded,
+                children: [
+                  GestureDetector(
+                    onTap: _pickIdProof,
+                    child: Container(
+                      height: 100,
+                      width: double.infinity,
+                      decoration: BoxDecoration(
+                        color: AppColors.background(context),
+                        borderRadius: BorderRadius.circular(12),
+                        border: Border.all(color: Colors.grey.withValues(alpha: 0.1)),
+                      ),
+                      child: _idProofImage != null
+                          ? ClipRRect(
+                              borderRadius: BorderRadius.circular(12),
+                              child: Image.network(_idProofImage!.path, fit: BoxFit.cover),
+                            )
+                          : Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Icon(Icons.add_photo_alternate_rounded, color: Colors.grey, size: 24),
+                                const SizedBox(height: 4),
+                                Text('Upload ID Proof', style: GoogleFonts.inter(color: Colors.grey, fontSize: 11)),
+                              ],
+                            ),
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 16),
+
+              _buildSectionCard(
+                title: 'Photo Gallery',
+                icon: Icons.collections_rounded,
+                children: [
+                  GestureDetector(
+                    onTap: _pickGalleryImages,
+                    child: Container(
+                      height: 80,
+                      width: double.infinity,
+                      decoration: BoxDecoration(
+                        color: AppColors.background(context),
+                        borderRadius: BorderRadius.circular(12),
+                        border: Border.all(color: Colors.grey.withValues(alpha: 0.1)),
+                      ),
+                      child: Center(
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Icon(Icons.add_a_photo_rounded, color: AppColors.primary(context), size: 20),
+                            const SizedBox(height: 4),
+                            Text('Add Gallery Photos (${_galleryImages.length})', style: GoogleFonts.inter(color: AppColors.primary(context), fontSize: 11, fontWeight: FontWeight.bold)),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
+                  if (_galleryImages.isNotEmpty) ...[
+                    const SizedBox(height: 12),
+                    SizedBox(
+                      height: 60,
+                      child: ListView.builder(
+                        scrollDirection: Axis.horizontal,
+                        itemCount: _galleryImages.length,
+                        itemBuilder: (context, index) {
+                          return Container(
+                            margin: const EdgeInsets.only(right: 8),
+                            width: 60,
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(8),
+                              image: DecorationImage(image: NetworkImage(_galleryImages[index].path), fit: BoxFit.cover),
+                            ),
+                            child: Align(
+                              alignment: Alignment.topRight,
+                              child: GestureDetector(
+                                onTap: () => setState(() => _galleryImages.removeAt(index)),
+                                child: Container(
+                                  decoration: const BoxDecoration(color: Colors.black54, shape: BoxShape.circle),
+                                  child: const Icon(Icons.close, color: Colors.white, size: 14),
+                                ),
+                              ),
+                            ),
+                          );
+                        },
+                      ),
+                    ),
+                  ],
+                ],
+              ),
+              _buildSectionCard(
+                title: 'Payment Details',
+                icon: Icons.payments_rounded,
+                children: [
+                  _buildDropdown(
+                    label: 'Payment Method',
+                    value: _selectedPaymentMethod,
+                    items: _paymentMethods,
+                    onChanged: (val) => setState(() => _selectedPaymentMethod = val),
+                    required: true,
+                  ),
+                ],
+              ),
+              const SizedBox(height: 16),
+
+              _buildSectionCard(
+                title: 'Member Profile & Package',
                 icon: Icons.verified_user_rounded,
                 children: [
                   GestureDetector(
                     onTap: _pickImage,
                     child: Container(
-                      height: 140,
+                      height: 120,
                       width: double.infinity,
                       decoration: BoxDecoration(
                         color: AppColors.background(context),
                         borderRadius: BorderRadius.circular(16),
-                        border: Border.all(color: AppColors.primary(context).withValues(alpha: 0.1), width: 1.5, style: BorderStyle.solid),
+                        border: Border.all(color: AppColors.primary(context).withValues(alpha: 0.1), width: 1.5),
                       ),
                       child: _profileImage != null
                           ? ClipRRect(
                               borderRadius: BorderRadius.circular(16),
-                              child: Stack(
-                                fit: StackFit.expand,
-                                children: [
-                                   Image.network(_profileImage!.path, fit: BoxFit.cover),
-                                   Container(color: Colors.black45),
-                                   const Center(child: Icon(Icons.cached_rounded, color: Colors.white, size: 40)),
-                                ],
-                              ),
+                              child: Image.network(_profileImage!.path, fit: BoxFit.cover),
                             )
                           : Column(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
-                                Container(
-                                  padding: const EdgeInsets.all(12),
-                                  decoration: BoxDecoration(
-                                    color: AppColors.primary(context).withValues(alpha: 0.05),
-                                    shape: BoxShape.circle,
-                                  ),
-                                  child: Icon(Icons.add_a_photo_rounded, size: 28, color: AppColors.primary(context)),
-                                ),
-                                const SizedBox(height: 10),
-                                Text('Upload Member Photo', style: GoogleFonts.inter(color: AppColors.primary(context), fontWeight: FontWeight.w600, fontSize: 13)),
+                                Icon(Icons.person_add_rounded, size: 28, color: AppColors.primary(context)),
+                                const SizedBox(height: 8),
+                                Text('Profile Photo *', style: GoogleFonts.inter(color: AppColors.primary(context), fontWeight: FontWeight.bold, fontSize: 13)),
                               ],
                             ),
                     ),
@@ -941,7 +1268,7 @@ class _FillBiodataScreenState extends State<FillBiodataScreen> {
 
   void _nextStep() {
     if (_formKeys[_currentStep].currentState!.validate()) {
-      if (_currentStep < 3) {
+      if (_currentStep < 4) {
         setState(() => _currentStep += 1);
       } else {
         _submit();

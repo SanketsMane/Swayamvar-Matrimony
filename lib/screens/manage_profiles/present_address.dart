@@ -43,63 +43,31 @@ class _PresentAddressState extends State<PresentAddress> {
             ?.postalCode ??
         "";
 
-    if (store.state.manageProfileCombineState!.presentAddressState!.result !=
-        false) {
-      for (var element
-          in store
-              .state
-              .manageProfileCombineState!
-              .profiledropdownResponseData!
-              .data!
-              .countryList!) {
-        if (element.name ==
-            store
-                .state
-                .manageProfileCombineState!
-                .presentAddressState!
-                .presentAddressData
-                ?.country) {
-          store
-              .state
-              .manageProfileCombineState!
-              .presentAddressState!
-              .selected_country = element;
-          store.dispatch(
-            stateMiddleware(element.id, state: AppStates.presentAddress),
-          );
+    final presentAddressState = store.state.manageProfileCombineState?.presentAddressState;
+    final dropdownData = store.state.manageProfileCombineState?.profiledropdownResponseData?.data;
+
+    if (presentAddressState?.result != false && dropdownData?.countryList != null) {
+      // Find and set existing country [Sanket]
+      for (var element in dropdownData!.countryList!) {
+        if (element.name == presentAddressState?.presentAddressData?.country) {
+          presentAddressState?.selected_country = element;
+          store.dispatch(stateMiddleware(element.id, state: AppStates.presentAddress));
+          break;
         }
       }
-    } else {
-      if (store
-          .state
-          .manageProfileCombineState!
-          .profiledropdownResponseData!
-          .data!
-          .countryList!
-          .isNotEmpty) {
-        store
-            .state
-            .manageProfileCombineState!
-            .presentAddressState!
-            .selected_country = store
-                .state
-                .manageProfileCombineState!
-                .profiledropdownResponseData!
-                .data!
-                .countryList!
-                .first;
-        store.dispatch(
-          stateMiddleware(
-            store
-                .state
-                .manageProfileCombineState!
-                .presentAddressState!
-                .selected_country!
-                .id,
-            state: AppStates.presentAddress,
-          ),
-        );
+
+      // If country is set but no state selected, try to default to Maharashtra if country is India [Sanket]
+      if (presentAddressState?.selected_country?.id == '101' && presentAddressState?.selected_state == null) {
+         // This might need the state list to be loaded first, but we can set the intent
       }
+    } else if (dropdownData?.countryList?.isNotEmpty ?? false) {
+      // New user or no data: Default to India (101) [Sanket]
+      final india = dropdownData!.countryList!.firstWhere(
+        (e) => e.id == '101' || e.name == 'India',
+        orElse: () => dropdownData.countryList!.first,
+      );
+      presentAddressState?.selected_country = india;
+      store.dispatch(stateMiddleware(india.id, state: AppStates.presentAddress));
     }
   }
 

@@ -32,65 +32,32 @@ class _PermanentAddressState extends State<PermanentAddress> {
   Widget build(BuildContext context) {
     return StoreConnector<AppState, AppState>(
       onInit: (store) {
-        if (store
-                .state
-                .manageProfileCombineState!
-                .permanentAddressState!
-                .permanentGetResponse!
-                .result! &&
-            store
-                .state
-                .manageProfileCombineState!
-                .profiledropdownResponseData!
-                .data!
-                .countryList!
-                .isNotEmpty) {
-          for (var element
-              in store
-                  .state
-                  .manageProfileCombineState!
-                  .profiledropdownResponseData!
-                  .data!
-                  .countryList!) {
-            if (element.name ==
-                store
-                    .state
-                    .manageProfileCombineState!
-                    .permanentAddressState!
-                    .permanentGetResponse!
-                    .data!
-                    .country) {
-              store
-                  .state
-                  .manageProfileCombineState!
-                  .permanentAddressState!
-                  .selected_country = element;
+        final permanentState = store.state.manageProfileCombineState?.permanentAddressState;
+        final dropdownData = store.state.manageProfileCombineState?.profiledropdownResponseData?.data;
+
+        if (permanentState?.permanentGetResponse?.result == true && dropdownData?.countryList?.isNotEmpty == true) {
+          // Find and set existing country [Sanket]
+          for (var element in dropdownData!.countryList!) {
+            if (element.name == permanentState?.permanentGetResponse?.data?.country) {
+              permanentState?.selected_country = element;
+              store.dispatch(stateMiddleware(element.id, state: AppStates.permanentAddress));
+              break;
             }
           }
-          store.dispatch(
-            stateMiddleware(
-              store
-                  .state
-                  .manageProfileCombineState!
-                  .permanentAddressState!
-                  .selected_country!
-                  .id,
-              state: AppStates.permanentAddress,
-            ),
-          );
 
-          store
-              .state
-              .manageProfileCombineState!
-              .permanentAddressState!
-              .postalCodeController
-              .text = store
-                  .state
-                  .manageProfileCombineState!
-                  .permanentAddressState!
-                  .permanentGetResponse!
-                  .data!
-                  .postalCode!;
+          if (permanentState?.permanentGetResponse?.data?.postalCode != null) {
+            permanentState?.postalCodeController.text = permanentState.permanentGetResponse!.data!.postalCode!;
+          }
+
+          // Default state logic could go here once stateMiddleware finishes loading states
+        } else if (dropdownData?.countryList?.isNotEmpty ?? false) {
+          // Default to India (101) [Sanket]
+          final india = dropdownData!.countryList!.firstWhere(
+            (e) => e.id == '101' || e.name == 'India',
+            orElse: () => dropdownData.countryList!.first,
+          );
+          permanentState?.selected_country = india;
+          store.dispatch(stateMiddleware(india.id, state: AppStates.permanentAddress));
         }
       },
       converter: (store) => store.state,

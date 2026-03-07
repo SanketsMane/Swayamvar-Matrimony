@@ -90,11 +90,15 @@ PermanentAddressState state_response(
   if (state.stateResponse!.data!.isNotEmpty) {
     state.selected_state = state.stateResponse!.data!.first;
 
+    // Default to Maharashtra (ID 22) if country is India and no state is previously selected [Sanket]
     for (var element in state.stateResponse!.data!) {
-      if (element.name == state.permanentGetResponse!.data?.state) {
+      if (element.name == state.permanentGetResponse!.data?.state ||
+          (state.permanentGetResponse!.data?.state == null && (element.id == '22' || element.name == 'Maharashtra'))) {
         state.selected_state = element;
+        if (element.name == state.permanentGetResponse!.data?.state) break; // Exact match found
       }
     }
+
     store.dispatch(
       cityMiddleware(state.selected_state!.id, AppStates.permanentAddress),
     );

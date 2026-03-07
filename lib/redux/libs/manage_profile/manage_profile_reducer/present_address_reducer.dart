@@ -111,22 +111,24 @@ PresentAddressState city_response(PresentAddressState state, CityResponseForPres
   return state;
 }
 
-///state
 PresentAddressState state_response(PresentAddressState state, StateResponse action) {
   state.stateResponse!.data!.addAll(action.data!);
-  state.selected_state = action.data!.first;
-  if (state.presentAddressData?.state != null) {
+  if (action.data!.isNotEmpty) {
+    state.selected_state = action.data!.first;
+
+    // Default to Maharashtra (ID 22) if country is India and no state is previously selected [Sanket]
     for (var element in state.stateResponse!.data!) {
-      if (element.name == state.presentAddressData?.state) {
+      if (element.name == state.presentAddressData?.state ||
+          (state.presentAddressData?.state == null && (element.id == '22' || element.name == 'Maharashtra'))) {
         state.selected_state = element;
-        // state.selected_state_id = element.id;
+        if (element.name == state.presentAddressData?.state) break; // Exact match found
       }
     }
-  }
 
-  store.dispatch(
-    cityMiddleware(state.selected_state!.id, AppStates.presentAddress),
-  );
+    store.dispatch(
+      cityMiddleware(state.selected_state!.id, AppStates.presentAddress),
+    );
+  }
 
   return state;
 }

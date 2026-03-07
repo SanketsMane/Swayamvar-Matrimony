@@ -75,7 +75,7 @@ class BiodataService {
   }
 
   // Submits the completed biodata form to create a new member profile [Sanket]
-  Future<Map<String, dynamic>> submitBiodata(Map<String, String> data, {http.MultipartFile? image}) async {
+  Future<Map<String, dynamic>> submitBiodata(Map<String, String> data, {http.MultipartFile? image, http.MultipartFile? idProof, List<http.MultipartFile>? otherPhotos}) async {
     try {
       final prefs = await SharedPreferences.getInstance();
       final token = prefs.getString('telecaller_token');
@@ -94,6 +94,14 @@ class BiodataService {
 
       if (image != null) {
         request.files.add(image);
+      }
+      
+      if (idProof != null) {
+        request.files.add(idProof);
+      }
+      
+      if (otherPhotos != null && otherPhotos.isNotEmpty) {
+        request.files.addAll(otherPhotos);
       }
 
       final streamedResponse = await request.send();
