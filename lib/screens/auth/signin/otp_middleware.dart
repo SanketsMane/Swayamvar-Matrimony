@@ -15,7 +15,7 @@ ThunkAction<AppState> requestOtpAction({
 }) {
   return (Store<AppState> store) async {
     try {
-      debugPrint("Sanket: Starting Backend OTP Flow via Twilio");
+      debugPrint("Sanket: Starting Backend OTP Flow");
       
       var data = await AuthRepository().sendOtp(phone: phoneNumber);
 

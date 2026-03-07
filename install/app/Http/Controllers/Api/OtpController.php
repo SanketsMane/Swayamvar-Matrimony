@@ -46,9 +46,13 @@ class OtpController extends AuthController
         // This helper function uses the active SMS provider configured in settings
         $sms_response = sendSMS($user->phone, env('VALID_TWILLO_NUMBER'), $text, $otp);
 
+        // Debug log for local development since SMS gateway isn't configured
+        \Illuminate\Support\Facades\Log::info("DEBUG - OTP generated for {$user->phone}: {$otp}");
+
         return response()->json([
             'result' => true,
             'message' => 'OTP sent successfully',
+            'debug_otp' => env('APP_DEBUG') ? $otp : null, // Provide OTP in response during debug
             'sms_response' => $sms_response
         ]);
     }
