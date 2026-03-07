@@ -238,6 +238,7 @@ Route::group(['namespace' => 'Api', 'middleware' => ['app_language']], function 
             Route::get('/get-email', 'ProfileController@get_email');
             Route::post('/introduction-update', 'ProfileController@introduction_update');
             Route::post('/profile-wizard/update', 'ProfileController@profile_wizard_update'); // NEW UNIFIED FORM
+            Route::post('/profile-picture/update', 'ProfileController@profile_picture_update');
             Route::get('/basic-info', 'ProfileController@get_basic_info');
             Route::post('/basic-info/update', 'ProfileController@basic_info_update');
             Route::get('present/address', 'ProfileController@present_address');
