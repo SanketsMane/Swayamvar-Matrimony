@@ -54,10 +54,10 @@ Auth::routes(['verify' => true]);
 
 // Route::get('/logout', 'Auth\LoginController@logout')->name('logout'); // Already registered by Auth::routes()
 
-Route::get('/email/resend', 'Auth\VerificationController@resend')->name('verification.resend');
+Route::get('/email/resend', 'Auth\VerificationController@resend')->name('verification.resend_manual');
 Route::get('/verification-confirmation/{code}', 'Auth\VerificationController@verification_confirmation')->name('email.verification.confirmation');
 Route::get('/email_change/callback', 'HomeController@email_change_callback')->name('email_change.callback');
-Route::post('/password/reset/email/submit', 'HomeController@reset_password_with_code')->name('password.update');
+Route::post('/password/reset/email/submit', 'HomeController@reset_password_with_code')->name('password.update_manual');
 
 
 Route::get('/users/login', 'HomeController@login')->name('user.login');
