@@ -238,7 +238,6 @@ Route::group(['namespace' => 'Api', 'middleware' => ['app_language']], function 
                 'gallery-image' => 'GalleryImageController',
                 'career' => 'CareerController',
                 'education' => 'EducationController',
-                'support-ticket' => 'SupportTicketController',
             ]);
 
             // Gallery Image View Request
