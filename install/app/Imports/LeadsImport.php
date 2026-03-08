@@ -6,15 +6,17 @@ use App\Models\ActiveLead;
 use App\Models\InactiveLead;
 use App\Models\DuplicateLead;
 use App\Models\LeadUpload;
-use Maatwebsite\Excel\Concerns\ToCollection;
-use Illuminate\Support\Collection;
+use Maatwebsite\Excel\Concerns\OnEachRow;
+use Maatwebsite\Excel\Concerns\WithChunkReading;
+use Maatwebsite\Excel\Concerns\WithBatchInserts;
+use Maatwebsite\Excel\Row;
 use Auth;
 
-class LeadsImport implements ToCollection
+class LeadsImport implements OnEachRow, WithChunkReading, WithBatchInserts
 {
     private $upload_id;
     private $campaign_id;
-    private $mapping; // Sanket: Dynamic column mapping
+    private $mapping; 
     private $stats = [
         'total'     => 0,
         'valid'     => 0,
@@ -29,71 +31,90 @@ class LeadsImport implements ToCollection
         $this->mapping = $mapping;
     }
 
-    public function collection(Collection $rows)
+    public function onRow(Row $row)
     {
-        foreach ($rows as $key => $row) {
-            if ($key == 0) continue; // Skip header
+        $rowIndex = $row->getIndex();
+        if ($rowIndex == 1) return; // Skip header [Sanket]
 
-            $this->stats['total']++;
+        $rowArr = $row->toArray();
+        $this->stats['total']++;
 
-            // Sanket: Extract data using dynamic mapping
-            $name   = isset($this->mapping['name']) ? ($row[$this->mapping['name']] ?? null) : null;
-            $email  = isset($this->mapping['email']) ? ($row[$this->mapping['email']] ?? null) : null;
-            $mobile = isset($this->mapping['mobile']) ? ($row[$this->mapping['mobile']] ?? null) : null;
-            $city   = isset($this->mapping['city']) ? ($row[$this->mapping['city']] ?? null) : null;
-            $pincode = isset($this->mapping['pincode']) ? ($row[$this->mapping['pincode']] ?? null) : null;
-            $source = isset($this->mapping['source']) ? ($row[$this->mapping['source']] ?? null) : null;
-            $business_type = isset($this->mapping['business_type']) ? ($row[$this->mapping['business_type']] ?? null) : null;
+        // Sanket: Extract data using dynamic mapping
+        $name   = isset($this->mapping['name']) ? ($rowArr[$this->mapping['name']] ?? null) : null;
+        $email  = isset($this->mapping['email']) ? ($rowArr[$this->mapping['email']] ?? null) : null;
+        $mobile = isset($this->mapping['mobile']) ? ($rowArr[$this->mapping['mobile']] ?? null) : null;
+        $city   = isset($this->mapping['city']) ? ($rowArr[$this->mapping['city']] ?? null) : null;
+        $pincode = isset($this->mapping['pincode']) ? ($rowArr[$this->mapping['pincode']] ?? null) : null;
+        $source = isset($this->mapping['source']) ? ($rowArr[$this->mapping['source']] ?? null) : null;
+        $business_type = isset($this->mapping['business_type']) ? ($rowArr[$this->mapping['business_type']] ?? null) : null;
 
-            // Clean mobile
-            $mobile = $mobile ? preg_replace('/[^0-9]/', '', (string)$mobile) : null;
+        // Clean mobile
+        $mobile = $mobile ? preg_replace('/[^0-9]/', '', (string)$mobile) : null;
 
-            // 1. Validation: 10 digit mobile [Sanket]
-            if (!$mobile || strlen($mobile) != 10) {
-                $this->stats['invalid']++;
-                continue;
-            }
-
-            // 2. Duplicate Detection [Sanket]
-            $is_duplicate = ActiveLead::where('mobile', $mobile)->exists() || 
-                           InactiveLead::where('mobile', $mobile)->exists();
-
-            if ($is_duplicate) {
-                $this->stats['duplicate']++;
-                DuplicateLead::create([
-                    'mobile' => $mobile,
-                    'name' => $name,
-                    'data' => $row->toArray(),
-                    'upload_id' => $this->upload_id,
-                ]);
-                continue;
-            }
-
-            // 3. Valid Lead Creation [Sanket]
-            ActiveLead::create([
-                'name' => $name,
-                'mobile' => $mobile,
-                'email' => $email,
-                'city' => $city,
-                'pincode' => $pincode,
-                'source' => $source,
-                'business_type' => $business_type,
-                'campaign_id' => $this->campaign_id,
-                'upload_id' => $this->upload_id,
-                'status' => 'New',
-            ]);
-
-            $this->stats['valid']++;
+        // 1. Validation: 10 digit mobile [Sanket]
+        if (!$mobile || strlen($mobile) != 10) {
+            $this->stats['invalid']++;
+            $this->updateUploadStats();
+            return;
         }
 
-        // Update upload stats
-        $upload = LeadUpload::find($this->upload_id);
-        $upload->update([
-            'total_leads' => $this->stats['total'],
-            'valid_leads' => $this->stats['valid'],
-            'duplicate_leads' => $this->stats['duplicate'],
-            'invalid_leads' => $this->stats['invalid'],
+        // 2. Duplicate Detection [Sanket]
+        $is_duplicate = ActiveLead::where('mobile', $mobile)->exists() || 
+                       InactiveLead::where('mobile', $mobile)->exists();
+
+        if ($is_duplicate) {
+            $this->stats['duplicate']++;
+            DuplicateLead::create([
+                'mobile' => $mobile,
+                'name' => $name,
+                'data' => $rowArr,
+                'upload_id' => $this->upload_id,
+            ]);
+            $this->updateUploadStats();
+            return;
+        }
+
+        // 3. Valid Lead Creation [Sanket]
+        ActiveLead::create([
+            'name' => $name,
+            'mobile' => $mobile,
+            'email' => $email,
+            'city' => $city,
+            'pincode' => $pincode,
+            'source' => $source,
+            'business_type' => $business_type,
+            'campaign_id' => $this->campaign_id,
+            'upload_id' => $this->upload_id,
+            'status' => 'New',
         ]);
+
+        $this->stats['valid']++;
+        $this->updateUploadStats();
+    }
+
+    private function updateUploadStats()
+    {
+        // Periodic update to keep UI informed if needed, or just update at end [Sanket]
+        // Since it's within current request, we'll update it silently.
+        $upload = LeadUpload::find($this->upload_id);
+        if ($upload) {
+            $upload->update([
+                'total_leads' => $this->stats['total'],
+                'valid_leads' => $this->stats['valid'],
+                'duplicate_leads' => $this->stats['duplicate'],
+                'invalid_leads' => $this->stats['invalid'],
+            ]);
+        }
+    }
+
+    public function chunkSize(): int
+    {
+        return 1000; // Sanket: Process 1000 rows at a time to save memory
+    }
+
+    public function batchSize(): int
+    {
+        return 500;
     }
 
     public function getStats()
