@@ -446,13 +446,14 @@ class _FillBiodataScreenState extends State<FillBiodataScreen> {
       'middle_name': _middleNameController.text.trim(),
       'last_name': _lastNameController.text.trim(),
       'gender': _selectedGender ?? 'Male',
-      'on_behalf': '1', // Default to Self/Myself [Sanket]
+      'on_behalf': _selectedOnBehalf ?? '1',
       'date_of_birth': '${_selectedDob!.year}-${_selectedDob!.month.toString().padLeft(2, '0')}-${_selectedDob!.day.toString().padLeft(2, '0')}',
       'religion': _selectedReligion ?? '',
       'caste': _selectedCaste ?? '',
-      'on_behalf': _selectedOnBehalf ?? '1',
       'marital_status': _selectedMaritalStatus ?? '',
-      'package': _selectedPackage ?? '',
+      'package': _selectedPackage ?? '1',
+      // Sanket: Production server requires language — send default ID 1 (not in form)
+      'language': '1',
 
       // 2. Physical
       'height': _selectedHeight ?? '',
@@ -477,13 +478,10 @@ class _FillBiodataScreenState extends State<FillBiodataScreen> {
       'education_level': _selectedEducation ?? '',
       'education_detail': _educationDetailController.text.trim(),
 
-
-
       // 5. Career
       'occupation_type': _selectedOccupationType ?? '',
       'occupation_details': _occupationDetailsController.text.trim(),
       'annual_income': _selectedIncome ?? '',
-
 
       // 6. Contact
       'phone': _phoneController.text.trim(),
@@ -494,7 +492,7 @@ class _FillBiodataScreenState extends State<FillBiodataScreen> {
       'gov_id_number': _govIdNumberController.text.trim(),
       'address': _addressDetailsController.text.trim(),
       'state': _selectedState ?? '',
-      'district': _selectedDistrict ?? '', // Using city for district representation internally 
+      'district': _selectedDistrict ?? '',
     };
 
     http.MultipartFile? imageFile;

@@ -40,17 +40,29 @@ class NotificationController extends Controller
             $notification->save();
         }
 
+        // Sanket: Added defensive checks for missing type or route to prevent 500 errors
+        if (!isset($notification_data->type) || !isset($notification_data->route)) {
+            return redirect()->route('dashboard');
+        }
+
         if($notification_data->type == 'member_registration' && !Str::contains($notification_data->route,'http'))
         {
-            $membership = User::where('id',$notification_data->notify_by)->first()->membership;
-            return redirect()->route($notification_data->route, $membership);
+            $user = User::where('id',$notification_data->notify_by)->first();
+            if ($user && isset($user->membership)) {
+                return redirect()->route($notification_data->route, $user->membership);
+            }
+            return redirect()->route('dashboard');
         }
         else {
             if(Str::contains($notification_data->route,'http')){
                 return redirect($notification_data->route);
             }
             else{
-                return redirect()->route($notification_data->route);
+                try {
+                    return redirect()->route($notification_data->route);
+                } catch (\Exception $e) {
+                    return redirect()->route('dashboard');
+                }
             }
         }
 
