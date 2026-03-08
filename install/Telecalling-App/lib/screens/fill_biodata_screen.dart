@@ -280,15 +280,14 @@ class _FillBiodataScreenState extends State<FillBiodataScreen> {
           {'id': 'NA', 'name': 'NA'},
         ];
       }
-      if ((_occupationTypes ?? []).isEmpty) {
         _occupationTypes = [
           {'id': 'Government', 'name': 'Government'},
           {'id': 'Private Sector', 'name': 'Private Sector'},
           {'id': 'Business / Self Employed', 'name': 'Business / Self Employed'},
+          {'id': 'Farmer', 'name': 'Farmer'},
           {'id': 'Professional', 'name': 'Professional'},
           {'id': 'Not Working', 'name': 'Not Working'},
         ];
-      }
       if ((_incomeSlabs ?? []).isEmpty) {
         _incomeSlabs = [
           {'id': 'Below 2 Lakhs', 'name': 'Below 2 Lakhs'},
@@ -355,6 +354,51 @@ class _FillBiodataScreenState extends State<FillBiodataScreen> {
       _districts = [];
     });
     if (value == null) return;
+
+    if (value == '22') {
+      // Sanket: Hardcoded list of Maharashtra districts [36]
+      setState(() {
+        _districts = [
+          {'id': 'Ahmednagar', 'name': 'Ahmednagar'},
+          {'id': 'Akola', 'name': 'Akola'},
+          {'id': 'Amravati', 'name': 'Amravati'},
+          {'id': 'Beed', 'name': 'Beed'},
+          {'id': 'Bhandara', 'name': 'Bhandara'},
+          {'id': 'Buldhana', 'name': 'Buldhana'},
+          {'id': 'Chandrapur', 'name': 'Chandrapur'},
+          {'id': 'Chhatrapati Sambhaji Nagar', 'name': 'Chhatrapati Sambhaji Nagar'},
+          {'id': 'Dharashiv', 'name': 'Dharashiv'},
+          {'id': 'Dhule', 'name': 'Dhule'},
+          {'id': 'Gadchiroli', 'name': 'Gadchiroli'},
+          {'id': 'Gondia', 'name': 'Gondia'},
+          {'id': 'Hingoli', 'name': 'Hingoli'},
+          {'id': 'Jalgaon', 'name': 'Jalgaon'},
+          {'id': 'Jalna', 'name': 'Jalna'},
+          {'id': 'Kolhapur', 'name': 'Kolhapur'},
+          {'id': 'Latur', 'name': 'Latur'},
+          {'id': 'Mumbai City', 'name': 'Mumbai City'},
+          {'id': 'Mumbai Suburban', 'name': 'Mumbai Suburban'},
+          {'id': 'Nagpur', 'name': 'Nagpur'},
+          {'id': 'Nanded', 'name': 'Nanded'},
+          {'id': 'Nandurbar', 'name': 'Nandurbar'},
+          {'id': 'Nashik', 'name': 'Nashik'},
+          {'id': 'Palghar', 'name': 'Palghar'},
+          {'id': 'Parbhani', 'name': 'Parbhani'},
+          {'id': 'Pune', 'name': 'Pune'},
+          {'id': 'Raigad', 'name': 'Raigad'},
+          {'id': 'Ratnagiri', 'name': 'Ratnagiri'},
+          {'id': 'Sangli', 'name': 'Sangli'},
+          {'id': 'Satara', 'name': 'Satara'},
+          {'id': 'Sindhudurg', 'name': 'Sindhudurg'},
+          {'id': 'Solapur', 'name': 'Solapur'},
+          {'id': 'Thane', 'name': 'Thane'},
+          {'id': 'Wardha', 'name': 'Wardha'},
+          {'id': 'Washim', 'name': 'Washim'},
+          {'id': 'Yavatmal', 'name': 'Yavatmal'},
+        ];
+      });
+      return;
+    }
     
     final response = await _biodataService.getCities(value);
     if (response['result'] == true && mounted) {
@@ -461,6 +505,7 @@ class _FillBiodataScreenState extends State<FillBiodataScreen> {
       'blood_group': _selectedBloodGroup ?? '',
       'complexion': _selectedComplexion ?? '',
       'physical_disability': _selectedPhysicalDisability ?? 'No',
+      'disability_details': _selectedPhysicalDisability == 'Yes' ? _disabilityDetailsController.text.trim() : '',
       'manglik': _selectedManglik ?? 'No',
       'intercaste_accepted': _selectedIntercasteAccepted ?? 'No',
 
@@ -859,6 +904,15 @@ class _FillBiodataScreenState extends State<FillBiodataScreen> {
           onChanged: (v) => setState(() => _selectedPhysicalDisability = v),
           isRequired: true,
         ),
+        if (_selectedPhysicalDisability == 'Yes') ...[
+          const SizedBox(height: 12),
+          _input(
+            controller: _disabilityDetailsController,
+            label: 'Disability Details *',
+            icon: Icons.description_outlined,
+            isRequired: true,
+          ),
+        ],
         const SizedBox(height: 12),
         _dropdown(
           label: 'Manglik *', icon: Icons.star_border,

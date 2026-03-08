@@ -121,6 +121,7 @@ class TelecallerProfileApiController extends Controller
                     ['id' => 'Government', 'name' => 'Government'],
                     ['id' => 'Private Sector', 'name' => 'Private Sector'],
                     ['id' => 'Business / Self Employed', 'name' => 'Business / Self Employed'],
+                    ['id' => 'Farmer', 'name' => 'Farmer'],
                     ['id' => 'Professional', 'name' => 'Professional'],
                     ['id' => 'Not Working', 'name' => 'Not Working'],
                 ],
@@ -229,9 +230,10 @@ class TelecallerProfileApiController extends Controller
             'height' => 'required',
             'weight' => 'nullable',
             'blood_group' => 'required',
-            'complexion' => 'required',
+            'complexion'          => 'required',
             'physical_disability' => 'required',
-            'manglik' => 'required',
+            'disability_details'  => 'nullable',
+            'manglik'             => 'required',
             'intercaste_accepted' => 'required',
 
             // 3. Family
@@ -345,6 +347,7 @@ class TelecallerProfileApiController extends Controller
             $physical->blood_group = $request->blood_group;
             $physical->complexion = $request->complexion;
             $physical->disability = $request->physical_disability;
+            $physical->disability_details = $request->disability_details; // Sanket: save details if any
             $physical->save();
             
             // --- Spiritual Background (Step 1 & 2) ---

@@ -9,10 +9,12 @@ use App\Models\LeadUpload;
 use Maatwebsite\Excel\Concerns\OnEachRow;
 use Maatwebsite\Excel\Concerns\WithChunkReading;
 use Maatwebsite\Excel\Concerns\WithBatchInserts;
+use Maatwebsite\Excel\Concerns\WithReadFilter;
+use PhpOffice\PhpSpreadsheet\Reader\IReadFilter;
 use Maatwebsite\Excel\Row;
 use Auth;
 
-class LeadsImport implements OnEachRow, WithChunkReading, WithBatchInserts
+class LeadsImport implements OnEachRow, WithChunkReading, WithBatchInserts, WithReadFilter
 {
     private $upload_id;
     private $campaign_id;
@@ -29,6 +31,17 @@ class LeadsImport implements OnEachRow, WithChunkReading, WithBatchInserts
         $this->upload_id = $upload_id;
         $this->campaign_id = $campaign_id;
         $this->mapping = $mapping;
+    }
+
+    public function filter(): IReadFilter
+    {
+        return new class implements IReadFilter {
+            public function readCell($columnAddress, $row, $worksheetName = '') {
+                // Maatwebsite handles chunked reading by setting the row range,
+                // but we can add extra safety here if needed.
+                return true; 
+            }
+        };
     }
 
     public function onRow(Row $row)
@@ -91,7 +104,7 @@ class LeadsImport implements OnEachRow, WithChunkReading, WithBatchInserts
 
     public function chunkSize(): int
     {
-        return 1000; // Sanket: Process 1000 rows at a time to save memory
+        return 500; // Sanket: Process 500 rows at a time to save memory
     }
 
     public function batchSize(): int

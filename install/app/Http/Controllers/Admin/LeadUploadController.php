@@ -7,8 +7,17 @@ use Illuminate\Http\Request;
 use App\Models\LeadUpload;
 use App\Models\TelecallingCampaign;
 use App\Imports\LeadsImport;
-use Excel;
+use Maatwebsite\Excel\Facades\Excel;
 use Auth;
+use PhpOffice\PhpSpreadsheet\IOFactory;
+use PhpOffice\PhpSpreadsheet\Reader\IReadFilter;
+
+class HeaderReadFilter implements IReadFilter
+{
+    public function readCell($columnAddress, $row, $worksheetName = '') {
+        return $row == 1;
+    }
+}
 
 class LeadUploadController extends Controller
 {
@@ -42,13 +51,14 @@ class LeadUploadController extends Controller
             // Read ONLY the first row (headers) using PhpSpreadsheet directly to avoid memory exhaustion [Sanket]
             $headers = [];
             try {
-                $reader = \PhpOffice\PhpSpreadsheet\IOFactory::createReaderForFile($full_path);
+                $reader = IOFactory::createReaderForFile($full_path);
                 $reader->setReadDataOnly(true);
+                $reader->setReadFilter(new HeaderReadFilter());
+                
                 $spreadsheet = $reader->load($full_path);
-                $worksheet = $spreadsheet->getActiveSheet();
-                $highestColumn = $worksheet->getHighestColumn();
-                $range = 'A1:' . $highestColumn . '1';
-                $headers = $worksheet->rangeToArray($range, NULL, TRUE, FALSE)[0];
+                $sheet = $spreadsheet->getActiveSheet();
+                $headers = $sheet->toArray()[0] ?? [];
+                
                 $spreadsheet->disconnectWorksheets();
                 unset($spreadsheet);
             } catch (\Exception $e) {
@@ -86,18 +96,16 @@ class LeadUploadController extends Controller
         if (file_exists($path)) {
             try {
                 // Sanket: Efficiently read only the first row (headers)
-                $reader = \PhpOffice\PhpSpreadsheet\IOFactory::createReaderForFile($path);
+                // Sanket: Use ReadFilter to only load headers, avoiding OOM for large files
+                $reader = IOFactory::createReaderForFile($path);
                 $reader->setReadDataOnly(true);
+                $reader->setReadFilter(new HeaderReadFilter());
+                
                 $spreadsheet = $reader->load($path);
-                $worksheet = $spreadsheet->getActiveSheet();
-                $highestColumn = $worksheet->getHighestColumn();
-                $range = 'A1:' . $highestColumn . '1';
-                $rowData = $worksheet->rangeToArray($range, NULL, TRUE, FALSE)[0];
+                $sheet = $spreadsheet->getActiveSheet();
+                $headers = $sheet->toArray()[0] ?? [];
                 
-                foreach($rowData as $index => $col) {
-                    $headers[$index] = $col ?: "Column " . ($index + 1);
-                }
-                
+                // Cleanup memory
                 $spreadsheet->disconnectWorksheets();
                 unset($spreadsheet);
             } catch (\Exception $e) {
