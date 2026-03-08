@@ -149,7 +149,7 @@ Route::group(['namespace' => 'Api', 'middleware' => ['app_language']], function 
         });
     });
 
-    Route::post('/logout', 'AuthController@logout')->name('logout')->middleware('auth:sanctum');
+    Route::post('/logout', 'AuthController@logout')->name('api.logout')->middleware('auth:sanctum');
     Route::get('/member-validate', 'MemberController@member_validate');
 
     Route::group(['middleware' => ['auth:sanctum', 'api_email_verified']], function () {
