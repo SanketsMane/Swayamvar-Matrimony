@@ -203,4 +203,11 @@ class User extends Authenticatable implements MustVerifyEmail
     {
         return $this->hasMany(TelecallingCallLog::class, 'agent_id');
     }
+
+    // Sanket: Get all user profiles (biodatas) filled by this telecaller
+    public function biodatas()
+    {
+        return $this->hasMany(User::class, 'telecaller_id');
+    }
 }
+

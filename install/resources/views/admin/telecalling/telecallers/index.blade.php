@@ -5,11 +5,11 @@
 <div class="aiz-titlebar text-left mt-2 mb-3">
 	<div class="row align-items-center">
 		<div class="col-md-6">
-			<h1 class="h3">{{translate('All Telecallers')}}</h1>
+			<h1 class="h3">{{translate('All Sales Executives')}}</h1>
 		</div>
 		<div class="col-md-6 text-md-right">
 			<a href="{{ route('telecallers.create') }}" class="btn btn-circle btn-primary">
-				<span>{{translate('Add New Telecaller')}}</span>
+				<span>{{translate('Add New Executive')}}</span>
 			</a>
 		</div>
 	</div>
@@ -17,7 +17,7 @@
 
 <div class="card">
     <div class="card-header">
-        <h5 class="mb-0 h6">{{translate('Telecallers')}}</h5>
+        <h5 class="mb-0 h6">{{translate('Sales Executives')}}</h5>
         <div class="pull-right">
             <form id="sort_telecallers" action="" method="GET">
                 <div class="box-inline pad-rgt pull-left">

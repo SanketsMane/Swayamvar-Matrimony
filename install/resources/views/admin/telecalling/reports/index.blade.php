@@ -11,6 +11,70 @@
 </div>
 
 <div class="row gutters-10">
+    <div class="col-lg-3 col-md-6">
+        <div class="card shadow-sm border-0">
+            <div class="card-body p-3">
+                <div class="d-flex align-items-center">
+                    <div class="bg-soft-primary p-2 mr-3 rounded">
+                        <i class="las la-user-plus text-primary fs-24"></i>
+                    </div>
+                    <div>
+                        <span class="d-block text-muted fs-12">{{ translate('Biodatas Today') }}</span>
+                        <span class="d-block fs-18 fw-700">{{ $data['biodatas_today'] }}</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-3 col-md-6">
+        <div class="card shadow-sm border-0">
+            <div class="card-body p-3">
+                <div class="d-flex align-items-center">
+                    <div class="bg-soft-success p-2 mr-3 rounded">
+                        <i class="las la-calendar-week text-success fs-24"></i>
+                    </div>
+                    <div>
+                        <span class="d-block text-muted fs-12">{{ translate('This Week') }}</span>
+                        <span class="d-block fs-18 fw-700">{{ $data['biodatas_this_week'] }}</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-3 col-md-6">
+        <div class="card shadow-sm border-0">
+            <div class="card-body p-3">
+                <div class="d-flex align-items-center">
+                    <div class="bg-soft-info p-2 mr-3 rounded">
+                        <i class="las la-calendar text-info fs-24"></i>
+                    </div>
+                    <div>
+                        <span class="d-block text-muted fs-12">{{ translate('This Month') }}</span>
+                        <span class="d-block fs-18 fw-700">{{ $data['biodatas_this_month'] }}</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-3 col-md-6">
+        <div class="card shadow-sm border-0">
+            <div class="card-body p-3">
+                <div class="d-flex align-items-center">
+                    <div class="bg-soft-warning p-2 mr-3 rounded">
+                        <i class="las la-users text-warning fs-24"></i>
+                    </div>
+                    <div>
+                        <span class="d-block text-muted fs-12">{{ translate('Total Biodatas') }}</span>
+                        <span class="d-block fs-18 fw-700">{{ $data['total_biodatas'] }}</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="row gutters-10">
     <div class="col-md-4">
         <div class="card shadow-sm">
             <div class="card-header">
@@ -33,7 +97,8 @@
                             <th>{{translate('Agent Name')}}</th>
                             <th>{{translate('Assigned Leads')}}</th>
                             <th>{{translate('Total Calls')}}</th>
-                            <th>{{translate('Performance')}}</th>
+                            <th class="text-success fw-600">{{translate('Biodatas Filled')}}</th>
+                            <th>{{translate('Lead Performance')}}</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -42,6 +107,11 @@
                                 <td>{{$agent->first_name}} {{$agent->last_name}}</td>
                                 <td>{{$agent->assigned_leads_count}}</td>
                                 <td>{{ $agent->call_logs_count }}</td>
+                                <td>
+                                    <span class="badge badge-inline badge-soft-success p-2" style="font-size: 14px;">
+                                        {{ $agent->biodatas_count }}
+                                    </span>
+                                </td>
                                 <td>
                                     @php
                                         $calls = $agent->call_logs_count;
@@ -56,6 +126,7 @@
                         @endforeach
                     </tbody>
                 </table>
+
             </div>
         </div>
     </div>

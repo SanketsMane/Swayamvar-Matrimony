@@ -255,7 +255,15 @@ class TelecallingDashboardController extends Controller
         $data['total_inactive'] = InactiveLead::count();
         $data['total_telecallers'] = User::where('user_type', 'telecaller')->count();
         $data['total_calls_today'] = TelecallingCallLog::whereDate('call_time', date('Y-m-d'))->count();
+        $data['total_biodatas'] = User::where('user_type', 'member')->whereNotNull('telecaller_id')->count();
         
+        // Leaderboard: Top 5 Sales Executives by Biodata Entry [Sanket]
+        $data['top_executives'] = User::where('user_type', 'telecaller')
+            ->withCount('biodatas')
+            ->orderBy('biodatas_count', 'desc')
+            ->take(5)
+            ->get();
+
         $recent_activities = TelecallingCallLog::latest()->limit(10)->get();
 
         return view('admin.telecalling.dashboard.admin_index', compact('data', 'recent_activities'));

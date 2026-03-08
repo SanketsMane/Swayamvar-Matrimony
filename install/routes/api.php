@@ -22,6 +22,7 @@ use Illuminate\Support\Facades\Route;
 // });
 
 // Telecaller App APIs [Sanket]
+
 Route::group(['prefix' => 'telecaller', 'namespace' => 'Api\Telecalling', 'middleware' => ['app_language']], function () {
     Route::post('/login', 'TelecallerAuthController@login');
     Route::post('/send-otp', 'TelecallerAuthController@sendOtp');

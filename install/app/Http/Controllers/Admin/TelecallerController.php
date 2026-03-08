@@ -208,7 +208,7 @@ class TelecallerController extends Controller
 
         $query = User::where('user_type', 'member')
                      ->whereNotNull('telecaller_id')
-                     ->with(['telecaller', 'member.package']);
+                     ->with(['telecaller', 'member.package', 'spiritual_backgrounds.religion', 'spiritual_backgrounds.caste']);
 
         if ($search) {
             $query->where(function ($q) use ($search) {

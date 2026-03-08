@@ -58,10 +58,12 @@
                     <tr>
                         <th>#</th>
                         <th>{{ translate('Member') }}</th>
+                        <th>{{ translate('Gender') }}</th>
                         <th>{{ translate('Phone') }}</th>
+                        <th>{{ translate('Religion/Caste') }}</th>
                         <th>{{ translate('Code') }}</th>
                         <th>{{ translate('Package') }}</th>
-                        <th>{{ translate('Filled By (Telecaller)') }}</th>
+                        <th>{{ translate('Filled By') }}</th>
                         <th>{{ translate('Date') }}</th>
                         <th class="text-right">{{ translate('Action') }}</th>
                     </tr>
@@ -73,7 +75,28 @@
                             <td>
                                 <strong>{{ $member->first_name }} {{ $member->last_name }}</strong>
                             </td>
+                            <td>
+                                @if($member->member)
+                                    @if($member->member->gender == 1)
+                                        <span class="badge badge-inline badge-soft-primary">{{ translate('Male') }}</span>
+                                    @else
+                                        <span class="badge badge-inline badge-soft-pink">{{ translate('Female') }}</span>
+                                    @endif
+                                @else
+                                    —
+                                @endif
+                            </td>
                             <td>{{ $member->phone }}</td>
+                            <td>
+                                @if($member->spiritual_backgrounds)
+                                    <span class="fs-12">
+                                        {{ $member->spiritual_backgrounds->religion->name ?? '—' }} / 
+                                        {{ $member->spiritual_backgrounds->caste->name ?? '—' }}
+                                    </span>
+                                @else
+                                    <span class="text-muted fs-12">—</span>
+                                @endif
+                            </td>
                             <td>
                                 <span class="badge badge-soft-secondary">{{ $member->code }}</span>
                             </td>
