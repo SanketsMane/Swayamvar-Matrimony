@@ -80,21 +80,21 @@ class _ExploreState extends State<Explore> {
 
   String _getName(MemberData m, int index) {
     if (m.name == null ||
-        m.name!.trim().isEmpty ||
-        m.name!.toLowerCase() == 'dummy' ||
-        m.name!.toLowerCase() == 'test') {
+        m.name.toString().trim().isEmpty ||
+        m.name.toString().toLowerCase() == 'dummy' ||
+        m.name.toString().toLowerCase() == 'test') {
       return _mockNames[index % _mockNames.length];
     }
-    return m.name!;
+    return m.name.toString();
   }
 
   String _getDistrict(MemberData m, int index) {
     if (m.country == null ||
-        m.country!.trim().isEmpty ||
-        m.country!.toLowerCase().contains('dummy')) {
+        m.country.toString().trim().isEmpty ||
+        m.country.toString().toLowerCase().contains('dummy')) {
       return _mockCities[index % _mockCities.length];
     }
-    return m.country!;
+    return m.country.toString();
   }
 
   @override
@@ -708,7 +708,7 @@ class _ExploreState extends State<Explore> {
                     ),
                     const SizedBox(width: 4),
                     Text(
-                      member.country ?? 'India',
+                      member.country?.toString() ?? 'India',
                       style: Styles.body.copyWith(
                         color: MyTheme.white.withOpacity(0.9),
                       ),
@@ -1053,22 +1053,22 @@ class _ExploreState extends State<Explore> {
           : "${l.explore_chip_height}: $na",
     );
     chips.add(
-      (m.caste != null && m.caste!.isNotEmpty)
-          ? m.caste!
+      (m.caste != null && m.caste.toString().isNotEmpty)
+          ? m.caste.toString()
           : "${l.explore_chip_caste}: $na",
     );
     chips.add(
-      (m.education != null && m.education!.isNotEmpty)
-          ? m.education!
+      (m.education != null && m.education.toString().isNotEmpty)
+          ? m.education.toString()
           : "${l.explore_chip_edu}: $na",
     );
     chips.add(
-      (m.job != null && m.job!.isNotEmpty)
-          ? m.job!
+      (m.job != null && m.job.toString().isNotEmpty)
+          ? m.job.toString()
           : "${l.explore_chip_job}: $na",
     );
     chips.add(
-      (m.income != null && m.income!.toString().isNotEmpty)
+      (m.income != null && m.income.toString().isNotEmpty)
           ? "${l.explore_chip_income}: ${m.income}"
           : "${l.explore_chip_income}: $na",
     );

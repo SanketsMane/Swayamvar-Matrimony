@@ -68,9 +68,9 @@ class BasicInfoData {
     gender: json["gender"],
     phone: json["phone"],
     maritialStatus: json["maritial_status"],
-    religionId: json["religion_id"],
+    religionId: json["religion_id"] == null || json["religion_id"].toString().isEmpty ? null : int.tryParse(json["religion_id"].toString()),
     religion: json["religion"],
-    casteId: json["caste_id"],
+    casteId: json["caste_id"] == null || json["caste_id"].toString().isEmpty ? null : int.tryParse(json["caste_id"].toString()),
     caste: json["caste"],
     photo: json["photo"],
   );
@@ -99,7 +99,10 @@ class Onbehalf {
   String? name;
 
   factory Onbehalf.fromJson(Map<String, dynamic> json) =>
-      Onbehalf(id: json["id"], name: json["name"]);
+      Onbehalf(
+        id: json["id"] == null || json["id"].toString().isEmpty ? null : int.tryParse(json["id"].toString()), 
+        name: json["name"]
+      );
 
   Map<String, dynamic> toJson() => {"id": id, "name": name};
 }

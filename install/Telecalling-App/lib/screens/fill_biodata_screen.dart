@@ -15,13 +15,7 @@ class FillBiodataScreen extends StatefulWidget {
 
 class _FillBiodataScreenState extends State<FillBiodataScreen> {
   final _biodataService = BiodataService();
-  final _formKeys = [
-    GlobalKey<FormState>(),
-    GlobalKey<FormState>(),
-    GlobalKey<FormState>(),
-    GlobalKey<FormState>(),
-    GlobalKey<FormState>(),
-  ];
+  final _formKeys = List.generate(8, (_) => GlobalKey<FormState>());
   int _currentStep = 0;
   bool _isLoadingDropdowns = true;
   bool _isSaving = false;
@@ -29,82 +23,69 @@ class _FillBiodataScreenState extends State<FillBiodataScreen> {
   // Image Picker
   final ImagePicker _picker = ImagePicker();
   XFile? _profileImage;
-  XFile? _idProofImage;
-  List<XFile> _galleryImages = [];
 
   // Controllers
   final _firstNameController = TextEditingController();
   final _middleNameController = TextEditingController();
   final _lastNameController = TextEditingController();
-  final _phoneController = TextEditingController();
-  final _mobile2Controller = TextEditingController();
-  final _emailController = TextEditingController();
+  
   final _weightController = TextEditingController();
-  final _disabilityDetailsController = TextEditingController();
+  final _disabilityDetailsController = TextEditingController(); // Just in case details are asked for Physical Disability
+  final _dietController = TextEditingController();
+  
   final _noOfBrothersController = TextEditingController();
   final _marriedBrothersController = TextEditingController();
   final _noOfSistersController = TextEditingController();
   final _marriedSistersController = TextEditingController();
   final _parentsOccupationController = TextEditingController();
+  final _propertyDetailsController = TextEditingController();
+  
   final _occupationTypeController = TextEditingController();
   final _occupationDetailsController = TextEditingController();
-  final _addressDetailsController = TextEditingController();
-  final _expectedEducationController = TextEditingController();
   final _annualIncomeController = TextEditingController();
-  final _propertyDetailsController = TextEditingController();
-  final _expectedIncomeController = TextEditingController();
+  
+  final _phoneController = TextEditingController();
+  final _mobile2Controller = TextEditingController();
+  
+  final _govIdNumberController = TextEditingController();
+  final _addressDetailsController = TextEditingController();
 
   // Dropdown Lists
   List<Map<String, String>> _genders = [];
-  List<Map<String, String>> _onBehalves = [];
   List<Map<String, String>> _maritalStatuses = [];
-  List<Map<String, String>> _languages = [];
   List<Map<String, String>> _religions = [];
   List<Map<String, dynamic>> _allCastes = [];
   List<Map<String, dynamic>> _filteredCastes = [];
-  List<Map<String, String>> _bloodGroups = [];
-  List<Map<String, String>> _complexions = [];
-  List<Map<String, String>> _cities = []; // Now called Districts
-  List<Map<String, String>> _packages = [];
-  List<Map<String, String>> _educations = [];
-  List<Map<String, String>> _heights = [];
   List<Map<String, dynamic>> _allSubCastes = [];
   List<Map<String, dynamic>> _filteredSubCastes = [];
-  List<Map<String, String>> _familyValues = [];
+  List<Map<String, String>> _heights = [];
+  List<Map<String, String>> _bloodGroups = [];
+  List<Map<String, String>> _complexions = [];
+  List<Map<String, String>> _educations = [];
   List<Map<String, String>> _states = [];
-  List<Map<String, String>> _paymentMethods = []; // New [Sanket]
-  bool _isLoadingStates = false;
-  bool _isLoadingCities = false;
+  List<Map<String, String>> _cities = [];
 
   // Selections
   String? _selectedGender;
-  String? _selectedOnBehalf;
   String? _selectedMaritalStatus;
-  String? _selectedLanguage;
   String? _selectedReligion;
   String? _selectedCaste;
+  String? _selectedSubCaste;
   String? _selectedHeight;
-  String? _selectedEducation;
   String? _selectedBloodGroup;
   String? _selectedComplexion;
-  String? _selectedCity;
-  String? _selectedPackage;
-  String? _selectedSubCaste;
-  String? _selectedFamilyValue;
+  String? _selectedEducation;
+  String? _selectedGovIdType;
   String? _selectedState;
-  String? _selectedPaymentMethod; // New [Sanket]
-  String? _selectedCountry = '101'; // Default to India [Sanket]
+  String? _selectedCity;
   DateTime? _selectedDob;
 
-  // Yes/No Bools (Stored as String 'true'/'false')
-  String? _selectedManglik = 'false';
-  String? _selectedIntercasteAccepted = 'false';
-  String? _selectedPhysicalDisability = 'false';
-  String? _selectedFatherAlive = 'true';
-  String? _selectedMotherAlive = 'true';
-  String? _selectedPartnerManglik = 'false';
-  String? _selectedDivorceAccepted = 'false';
-  String? _selectedPartnerIntercaste = 'false';
+  // Yes/No Bools (Stored as String to easily bind to dropdowns)
+  String? _selectedPhysicalDisability = 'No';
+  String? _selectedManglik = 'No';
+  String? _selectedIntercasteAccepted = 'No';
+  String? _selectedFatherAlive = 'Yes';
+  String? _selectedMotherAlive = 'Yes';
 
   @override
   void initState() {
@@ -117,23 +98,22 @@ class _FillBiodataScreenState extends State<FillBiodataScreen> {
     _firstNameController.dispose();
     _middleNameController.dispose();
     _lastNameController.dispose();
-    _phoneController.dispose();
-    _mobile2Controller.dispose();
-    _emailController.dispose();
     _weightController.dispose();
     _disabilityDetailsController.dispose();
+    _dietController.dispose();
     _noOfBrothersController.dispose();
     _marriedBrothersController.dispose();
     _noOfSistersController.dispose();
     _marriedSistersController.dispose();
     _parentsOccupationController.dispose();
+    _propertyDetailsController.dispose();
     _occupationTypeController.dispose();
     _occupationDetailsController.dispose();
-    _addressDetailsController.dispose();
-    _expectedEducationController.dispose();
     _annualIncomeController.dispose();
-    _propertyDetailsController.dispose();
-    _expectedIncomeController.dispose();
+    _phoneController.dispose();
+    _mobile2Controller.dispose();
+    _govIdNumberController.dispose();
+    _addressDetailsController.dispose();
     super.dispose();
   }
 
@@ -158,12 +138,10 @@ class _FillBiodataScreenState extends State<FillBiodataScreen> {
 
       setState(() {
         _genders = _toStringList(data['genders'] ?? []);
-        _onBehalves = _toStringList(data['on_behalves'] ?? []);
         _maritalStatuses = _toStringList(data['marital_statuses'] ?? []);
-        _languages = _toStringList(data['languages'] ?? []);
         _religions = _toStringList(data['religions'] ?? []);
-        _educations = _toStringList(data['educations'] ?? []); // New Array
-        _heights = _toStringList(data['heights'] ?? []);       // New Array
+        _educations = _toStringList(data['educations'] ?? []); 
+        _heights = _toStringList(data['heights'] ?? []);       
         _bloodGroups = _toStringList(data['blood_groups'] ?? []);
         _complexions = _toStringList(data['complexions'] ?? []);
         _allCastes = allCastes;
@@ -176,15 +154,6 @@ class _FillBiodataScreenState extends State<FillBiodataScreen> {
         }).toList();
         _allSubCastes = allSubCastes;
         _filteredSubCastes = allSubCastes;
-
-        _familyValues = _toStringList(data['family_values'] ?? []);
-        _paymentMethods = _toStringList(data['manual_payment_methods'] ?? []); // New [Sanket]
-
-        _packages = (data['packages'] as List<dynamic>? ?? []).map<Map<String, String>>((p) => {
-          'id': p['id'].toString(),
-          'name': (p['name'] ?? '').toString(),
-          'price': p['price']?.toString() ?? '0',
-        }).toList();
 
         _heights = _heights.isNotEmpty ? _heights : [
           {'id': '1', 'name': '4\' 5" (135 cm)'},
@@ -210,32 +179,29 @@ class _FillBiodataScreenState extends State<FillBiodataScreen> {
         ];
 
         _educations = _educations.isNotEmpty ? _educations : [
-          {'id': '1', 'name': '10th Std'},
-          {'id': '2', 'name': '12th Std (HSC)'},
-          {'id': '3', 'name': 'Diploma'},
-          {'id': '4', 'name': 'B.A'},
-          {'id': '5', 'name': 'B.Com'},
-          {'id': '6', 'name': 'B.Sc'},
-          {'id': '7', 'name': 'B.Tech / B.E'},
-          {'id': '8', 'name': 'B.C.A'},
-          {'id': '9', 'name': 'M.A'},
-          {'id': '10', 'name': 'M.Com'},
-          {'id': '11', 'name': 'M.Sc'},
-          {'id': '12', 'name': 'M.Tech / M.E'},
-          {'id': '13', 'name': 'M.C.A'},
-          {'id': '14', 'name': 'MBA'},
-          {'id': '15', 'name': 'PhD'},
+           {'id': '1', 'name': '10th Std'},
+           {'id': '2', 'name': '12th Std (HSC)'},
+           {'id': '3', 'name': 'Diploma'},
+           {'id': '4', 'name': 'B.A'},
+           {'id': '5', 'name': 'B.Com'},
+           {'id': '6', 'name': 'B.Sc'},
+           {'id': '7', 'name': 'B.Tech / B.E'},
+           {'id': '8', 'name': 'B.C.A'},
+           {'id': '9', 'name': 'M.A'},
+           {'id': '10', 'name': 'M.Com'},
+           {'id': '11', 'name': 'M.Sc'},
+           {'id': '12', 'name': 'M.Tech / M.E'},
+           {'id': '13', 'name': 'M.C.A'},
+           {'id': '14', 'name': 'MBA'},
+           {'id': '15', 'name': 'PhD'},
         ];
 
-        // Defaults
         if (_genders.isNotEmpty) _selectedGender = _genders[0]['id'];
-        if (_packages.isNotEmpty) _selectedPackage = _packages[0]['id'];
         _isLoadingDropdowns = false;
       });
 
-      // Fetch States for India (101) and set Maharashtra (22) as default [Sanket]
+      // Fetch India (101) states by default
       await _fetchStates('101');
-
     } else if (mounted) {
       setState(() => _isLoadingDropdowns = false);
     }
@@ -245,6 +211,7 @@ class _FillBiodataScreenState extends State<FillBiodataScreen> {
     setState(() {
       _selectedReligion = value;
       _selectedCaste = null;
+      _selectedSubCaste = null;
       _filteredCastes = value == null
           ? _allCastes
           : _allCastes.where((c) => c['religion_id'] == value).toList();
@@ -261,6 +228,21 @@ class _FillBiodataScreenState extends State<FillBiodataScreen> {
     });
   }
 
+  Future<void> _fetchStates(String countryId) async {
+    final response = await _biodataService.getStates(countryId);
+    if (response['result'] == true && mounted) {
+      setState(() {
+        _states = _toStringList(response['data'] ?? []);
+        // Set Maharashtra (22) as default if available
+        if (_selectedState == null && _states.isNotEmpty) {
+          final maharashtra = _states.firstWhere((s) => s['id'] == '22', orElse: () => _states[0]);
+          _selectedState = maharashtra['id'];
+          _onStateChanged(_selectedState);
+        }
+      });
+    }
+  }
+
   Future<void> _onStateChanged(String? value) async {
     setState(() {
       _selectedState = value;
@@ -268,32 +250,11 @@ class _FillBiodataScreenState extends State<FillBiodataScreen> {
       _cities = [];
     });
     if (value == null) return;
-
-    setState(() => _isLoadingCities = true);
+    
     final response = await _biodataService.getCities(value);
-    setState(() => _isLoadingCities = false);
-
     if (response['result'] == true && mounted) {
       setState(() {
         _cities = _toStringList(response['data'] ?? []);
-      });
-    }
-  }
-
-  Future<void> _fetchStates(String countryId) async {
-    setState(() => _isLoadingStates = true);
-    final response = await _biodataService.getStates(countryId);
-    setState(() => _isLoadingStates = false);
-
-    if (response['result'] == true && mounted) {
-      setState(() {
-        _states = _toStringList(response['data'] ?? []);
-        // Set Maharashtra (22) as default if available [Sanket]
-        if (_selectedState == null && _states.isNotEmpty) {
-          final maharashtra = _states.firstWhere((s) => s['id'] == '22', orElse: () => _states[0]);
-          _selectedState = maharashtra['id'];
-          _onStateChanged(_selectedState);
-        }
       });
     }
   }
@@ -313,7 +274,7 @@ class _FillBiodataScreenState extends State<FillBiodataScreen> {
             onPrimary: Colors.white,
             surface: AppColors.surface(context),
             onSurface: AppColors.textPrimaryColor(context),
-          ).copyWith(secondary: AppColors.bluePrimary),
+          ),
         ),
         child: child!,
       ),
@@ -331,25 +292,6 @@ class _FillBiodataScreenState extends State<FillBiodataScreen> {
     }
   }
 
-  Future<void> _pickIdProof() async {
-    final XFile? image = await _picker.pickImage(
-      source: ImageSource.gallery,
-      imageQuality: 70,
-    );
-    if (image != null) {
-      setState(() => _idProofImage = image);
-    }
-  }
-
-  Future<void> _pickGalleryImages() async {
-    final List<XFile> images = await _picker.pickMultiImage(
-      imageQuality: 70,
-    );
-    if (images.isNotEmpty) {
-      setState(() => _galleryImages.addAll(images));
-    }
-  }
-
   void _showSnack(String msg, {required bool isError}) {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
@@ -362,16 +304,15 @@ class _FillBiodataScreenState extends State<FillBiodataScreen> {
   }
 
   Future<void> _submit() async {
-    if (!_formKeys[3].currentState!.validate()) return;
+    if (!_formKeys[7].currentState!.validate()) return;
     
-    // Explicit Validation for Stage 1 & 2 specifics
     if (_selectedCaste == null) { _showSnack('Caste is mandatory', isError: true); return; }
-    if (_selectedPackage == null) { _showSnack('Please select a Package', isError: true); return; }
+    if (_selectedDob == null) { _showSnack('Date of Birth is mandatory', isError: true); return; }
 
     setState(() => _isSaving = true);
 
     final data = {
-      // Stage 1: Basic & Physical
+      // 1. Personal
       'first_name': _firstNameController.text.trim(),
       'middle_name': _middleNameController.text.trim(),
       'last_name': _lastNameController.text.trim(),
@@ -379,49 +320,47 @@ class _FillBiodataScreenState extends State<FillBiodataScreen> {
       'date_of_birth': '${_selectedDob!.year}-${_selectedDob!.month.toString().padLeft(2, '0')}-${_selectedDob!.day.toString().padLeft(2, '0')}',
       'religion': _selectedReligion ?? '',
       'caste': _selectedCaste ?? '',
-      'on_behalf': _selectedOnBehalf ?? '',
+      'sub_caste': _selectedSubCaste ?? '',
       'marital_status': _selectedMaritalStatus ?? '',
-      'language': _selectedLanguage ?? '',
+
+      // 2. Physical
       'height': _selectedHeight ?? '',
       'weight': _weightController.text.trim(),
       'blood_group': _selectedBloodGroup ?? '',
       'complexion': _selectedComplexion ?? '',
-      'physical_disability': _selectedPhysicalDisability ?? 'false',
-      'disability_details': _disabilityDetailsController.text.trim(),
-      'manglik_personal': _selectedManglik ?? 'false',
-      'intercaste_accepted': _selectedIntercasteAccepted ?? 'false',
-      
-      // Stage 2: Family & Career
-      'father_alive': _selectedFatherAlive ?? 'true',
-      'mother_alive': _selectedMotherAlive ?? 'true',
-      'parents_occupation': _parentsOccupationController.text.trim(),
-      'property_details': _propertyDetailsController.text.trim(),
+      'physical_disability': _selectedPhysicalDisability ?? 'No',
+      'diet': _dietController.text.trim(),
+      'manglik': _selectedManglik ?? 'No',
+      'intercaste_accepted': _selectedIntercasteAccepted ?? 'No',
+
+      // 3. Family
+      'father_alive': _selectedFatherAlive ?? 'Yes',
+      'mother_alive': _selectedMotherAlive ?? 'Yes',
       'no_of_brothers': _noOfBrothersController.text.trim(),
       'married_brothers': _marriedBrothersController.text.trim(),
       'no_of_sisters': _noOfSistersController.text.trim(),
       'married_sisters': _marriedSistersController.text.trim(),
+      'parents_occupation': _parentsOccupationController.text.trim(),
+      'property_details': _propertyDetailsController.text.trim(),
+
+      // 4. Education
       'education_level': _selectedEducation ?? '',
+
+      // 5. Career
       'occupation_type': _occupationTypeController.text.trim(),
       'occupation_details': _occupationDetailsController.text.trim(),
       'annual_income': _annualIncomeController.text.trim(),
-      
-      // Stage 3: Contact & Photos
+
+      // 6. Contact
       'phone': _phoneController.text.trim(),
       'mobile2': _mobile2Controller.text.trim(),
-      'email': _emailController.text.trim(),
-      'state': _selectedState ?? '',
-      'city': _selectedCity ?? '',
-      'address': _addressDetailsController.text.trim(),
-      
-      // Stage 4: Expectations & Finish
-      'partner_manglik': _selectedPartnerManglik ?? 'false',
-      'expected_education': _expectedEducationController.text.trim(),
-      'expected_income': _expectedIncomeController.text.trim(),
-      'divorce_accepted': _selectedDivorceAccepted ?? 'false',
-      'partner_intercaste': _selectedPartnerIntercaste ?? 'false',
 
-      'package': _selectedPackage!,
-      'payment_method_id': _selectedPaymentMethod ?? '',
+      // 7. Address
+      'gov_id_type': _selectedGovIdType ?? '',
+      'gov_id_number': _govIdNumberController.text.trim(),
+      'address': _addressDetailsController.text.trim(),
+      'state': _selectedState ?? '',
+      'district': _selectedCity ?? '', // Using city for district representation internally 
     };
 
     http.MultipartFile? imageFile;
@@ -429,21 +368,9 @@ class _FillBiodataScreenState extends State<FillBiodataScreen> {
       imageFile = await http.MultipartFile.fromPath('photo', _profileImage!.path);
     }
 
-    http.MultipartFile? idProofFile;
-    if (_idProofImage != null) {
-      idProofFile = await http.MultipartFile.fromPath('id_proof', _idProofImage!.path);
-    }
-    
-    List<http.MultipartFile> otherPhotos = [];
-    for (var img in _galleryImages) {
-      otherPhotos.add(await http.MultipartFile.fromPath('other_photos[]', img.path));
-    }
-
     final response = await _biodataService.submitBiodata(
       data, 
       image: imageFile, 
-      idProof: idProofFile,
-      otherPhotos: otherPhotos,
     );
     setState(() => _isSaving = false);
 
@@ -477,23 +404,9 @@ class _FillBiodataScreenState extends State<FillBiodataScreen> {
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text('The candidate has been onboarded successfully. Please share these credentials with them:', textAlign: TextAlign.center, style: GoogleFonts.inter(color: Colors.grey[600], fontSize: 13)),
+            Text('Candidate has been automatically linked to your Telecaller Profile.', textAlign: TextAlign.center, style: GoogleFonts.inter(color: Colors.grey[600], fontSize: 13)),
             const SizedBox(height: 20),
             _infoRow('Matrimony ID', matrimonyId, Icons.badge_rounded),
-            const SizedBox(height: 12),
-            _infoRow('Temp Password', password, Icons.lock_open_rounded),
-            const SizedBox(height: 20),
-            Container(
-              padding: const EdgeInsets.all(12),
-              decoration: BoxDecoration(color: Colors.blue.withValues(alpha: 0.05), borderRadius: BorderRadius.circular(12), border: Border.all(color: Colors.blue.withValues(alpha: 0.1))),
-              child: Row(
-                children: [
-                  const Icon(Icons.info_outline_rounded, color: Colors.blue, size: 18),
-                  const SizedBox(width: 8),
-                  Expanded(child: Text('Candidate can now login to Matrimony App using these details.', style: GoogleFonts.inter(color: Colors.blue[700], fontSize: 11, fontWeight: FontWeight.w500))),
-                ],
-              ),
-            ),
           ],
         ),
         actions: [
@@ -511,7 +424,7 @@ class _FillBiodataScreenState extends State<FillBiodataScreen> {
                 padding: const EdgeInsets.symmetric(vertical: 14),
                 elevation: 0,
               ),
-              child: Text('Return to Home', style: GoogleFonts.outfit(fontWeight: FontWeight.bold)),
+              child: Text('Return to Dashboard', style: GoogleFonts.outfit(fontWeight: FontWeight.bold)),
             ),
           ),
         ],
@@ -553,7 +466,6 @@ class _FillBiodataScreenState extends State<FillBiodataScreen> {
   }
 
   // --- UI Helpers ---
-
   Widget _input({
     required TextEditingController controller,
     required String label,
@@ -570,6 +482,7 @@ class _FillBiodataScreenState extends State<FillBiodataScreen> {
       child: TextFormField(
         controller: controller,
         keyboardType: isNumber ? TextInputType.number : TextInputType.text,
+        inputFormatters: isNumber ? [FilteringTextInputFormatter.digitsOnly] : [],
         style: GoogleFonts.inter(color: AppColors.textPrimaryColor(context), fontSize: 13),
         decoration: InputDecoration(
           isDense: true,
@@ -608,22 +521,22 @@ class _FillBiodataScreenState extends State<FillBiodataScreen> {
         value: items.where((i) => i.value == value).isNotEmpty ? value : null,
         dropdownColor: AppColors.surface(context),
         icon: const Icon(Icons.keyboard_arrow_down_rounded, color: Colors.grey, size: 16),
-        style: GoogleFonts.inter(color: AppColors.textPrimaryColor(context), fontSize: 12),
+        style: GoogleFonts.inter(color: AppColors.textPrimaryColor(context), fontSize: 13),
         decoration: InputDecoration(
           isDense: true,
           labelText: label,
-          labelStyle: GoogleFonts.inter(color: Colors.grey, fontSize: 10),
+          labelStyle: GoogleFonts.inter(color: Colors.grey, fontSize: 11),
           floatingLabelStyle: GoogleFonts.inter(color: AppColors.bluePrimary),
           prefixIcon: Padding(
-            padding: const EdgeInsets.only(left: 8, right: 4),
-            child: Icon(icon, color: Colors.grey, size: 14),
+            padding: const EdgeInsets.only(left: 10, right: 6),
+            child: Icon(icon, color: Colors.grey, size: 16),
           ),
           prefixIconConstraints: const BoxConstraints(minWidth: 0, minHeight: 0),
           border: InputBorder.none,
-          contentPadding: const EdgeInsets.symmetric(horizontal: 4, vertical: 8),
+          contentPadding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
         ),
         items: items.isEmpty
-            ? [DropdownMenuItem(value: '', child: Text('No options', style: GoogleFonts.inter(color: Colors.grey, fontSize: 12)))]
+            ? [DropdownMenuItem(value: '', child: Text('No options', style: GoogleFonts.inter(color: Colors.grey, fontSize: 13)))]
             : items.map((item) {
                 return DropdownMenuItem<String>(
                   value: item.value,
@@ -631,7 +544,7 @@ class _FillBiodataScreenState extends State<FillBiodataScreen> {
                     item.child is Text ? (item.child as Text).data! : '',
                     overflow: TextOverflow.ellipsis,
                     maxLines: 1,
-                    style: GoogleFonts.inter(fontSize: 12),
+                    style: GoogleFonts.inter(fontSize: 13),
                   ),
                 );
               }).toList(),
@@ -641,522 +554,352 @@ class _FillBiodataScreenState extends State<FillBiodataScreen> {
     );
   }
 
-  // --- Step Content Builders ---
-
+  // --- 8 Steps Builder ---
   List<Step> _buildSteps() {
     return [
-      // STEP 0: Basic & Physical
+      // 1. Personal Information
       Step(
         isActive: _currentStep >= 0,
-        title: Text('Basic & Physical', style: GoogleFonts.outfit(fontWeight: FontWeight.bold, fontSize: _currentStep == 0 ? 14 : 12, color: _currentStep == 0 ? AppColors.primary(context) : AppColors.textSecondary(context))),
+        title: Text('1. Personal Info', style: GoogleFonts.outfit(fontWeight: FontWeight.bold, fontSize: _currentStep == 0 ? 14 : 12, color: _currentStep == 0 ? AppColors.primary(context) : AppColors.textSecondary(context))),
         content: Form(
           key: _formKeys[0],
           child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              _buildSectionCard(
-                title: 'Personal Identity',
-                icon: Icons.person_rounded,
-                children: [
-                  _input(controller: _firstNameController, label: 'First Name', icon: Icons.person_rounded, isRequired: true),
-                  const SizedBox(height: 12),
-                  _input(controller: _middleNameController, label: 'Middle Name', icon: Icons.person_outline_rounded, isRequired: true),
-                  const SizedBox(height: 12),
-                  _input(controller: _lastNameController, label: 'Last Name', icon: Icons.person_outline_rounded, isRequired: true),
-                  const SizedBox(height: 12),
-                  _dropdown(
-                    label: 'Gender', icon: Icons.person_pin_circle_rounded,
-                    value: _selectedGender,
-                    items: _genders.map((g) => DropdownMenuItem<String>(value: g['id'], child: Text(g['name'] ?? ''))).toList(),
-                    onChanged: (v) => setState(() => _selectedGender = v ?? ''),
+              _input(controller: _firstNameController, label: 'First Name *', icon: Icons.person, isRequired: true),
+              const SizedBox(height: 12),
+              _input(controller: _middleNameController, label: 'Middle Name *', icon: Icons.person_outline, isRequired: true),
+              const SizedBox(height: 12),
+              _input(controller: _lastNameController, label: 'Last Name *', icon: Icons.person_outline, isRequired: true),
+              const SizedBox(height: 12),
+              GestureDetector(
+                onTap: _pickDob,
+                child: Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 14),
+                  decoration: BoxDecoration(
+                    color: AppColors.background(context),
+                    borderRadius: BorderRadius.circular(12),
+                    border: Border.all(color: Colors.grey.withValues(alpha: 0.1)),
                   ),
-                  const SizedBox(height: 12),
-                  GestureDetector(
-                    onTap: _pickDob,
-                    child: Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 14),
-                      decoration: BoxDecoration(
-                        color: AppColors.background(context),
-                        borderRadius: BorderRadius.circular(12),
-                        border: Border.all(color: Colors.grey.withValues(alpha: 0.1)),
-                      ),
-                      child: Row(
-                        children: [
-                          Icon(Icons.calendar_today_rounded, color: Colors.grey, size: 16),
-                          const SizedBox(width: 12),
-                          Text(
-                            _selectedDob == null
-                                ? 'Date of Birth *'
-                                : '${_selectedDob!.day}/${_selectedDob!.month}/${_selectedDob!.year}',
-                            style: GoogleFonts.inter(
-                              color: _selectedDob == null ? Colors.grey : AppColors.textPrimary(context),
-                              fontSize: 13,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-              const SizedBox(height: 16),
-              _buildSectionCard(
-                title: 'Religious & Status',
-                icon: Icons.temple_hindu_rounded,
-                children: [
-                  _dropdown(
-                    label: 'Religion', icon: Icons.temple_hindu_rounded,
-                    value: _selectedReligion,
-                    items: _religions.map((r) => DropdownMenuItem<String>(value: r['id'], child: Text(r['name'] ?? ''))).toList(),
-                    onChanged: _onReligionChanged,
-                    isRequired: true,
-                  ),
-                  const SizedBox(height: 12),
-                  _dropdown(
-                    label: 'Caste', icon: Icons.group_work_rounded,
-                    value: _selectedCaste,
-                    items: _filteredCastes.map((c) => DropdownMenuItem<String>(value: c['id'], child: Text(c['name'] ?? ''))).toList(),
-                    onChanged: _onCasteChanged,
-                    isRequired: true,
-                  ),
-                  const SizedBox(height: 12),
-                  _dropdown(
-                    label: 'Profile Created By', icon: Icons.family_restroom_rounded,
-                    value: _selectedOnBehalf,
-                    items: _onBehalves.map((o) => DropdownMenuItem<String>(value: o['id'], child: Text(o['name'] ?? ''))).toList(),
-                    onChanged: (v) => setState(() => _selectedOnBehalf = v),
-                    isRequired: true,
-                  ),
-                  const SizedBox(height: 12),
-                  _dropdown(
-                    label: 'Marital Status', icon: Icons.favourite_border_rounded,
-                    value: _selectedMaritalStatus,
-                    items: _maritalStatuses.map((m) => DropdownMenuItem<String>(value: m['id'], child: Text(m['name'] ?? ''))).toList(),
-                    onChanged: (v) => setState(() => _selectedMaritalStatus = v),
-                    isRequired: true,
-                  ),
-                  const SizedBox(height: 12),
-                  _dropdown(
-                    label: 'Mother Tongue', icon: Icons.translate_rounded,
-                    value: _selectedLanguage,
-                    items: _languages.map((l) => DropdownMenuItem<String>(value: l['id'], child: Text(l['name'] ?? ''))).toList(),
-                    onChanged: (v) => setState(() => _selectedLanguage = v),
-                    isRequired: true,
-                  ),
-                ],
-              ),
-              const SizedBox(height: 16),
-              _buildSectionCard(
-                title: 'Physical & Health',
-                icon: Icons.health_and_safety_rounded,
-                children: [
-                  _dropdown(
-                    label: 'Height', icon: Icons.height_rounded,
-                    value: _selectedHeight,
-                    items: _heights.map((h) => DropdownMenuItem<String>(value: h['id'], child: Text(h['name'] ?? ''))).toList(),
-                    onChanged: (v) => setState(() => _selectedHeight = v),
-                    isRequired: true,
-                  ),
-                  const SizedBox(height: 12),
-                  _input(controller: _weightController, label: 'Weight (kg)', icon: Icons.scale_rounded, isNumber: true),
-                  const SizedBox(height: 12),
-                  Row(
+                  child: Row(
                     children: [
-                      Expanded(
-                        child: _dropdown(
-                          label: 'Blood Group', icon: Icons.bloodtype_rounded,
-                          value: _selectedBloodGroup,
-                          items: _bloodGroups.map((b) => DropdownMenuItem<String>(value: b['id'], child: Text(b['name'] ?? ''))).toList(),
-                          onChanged: (v) => setState(() => _selectedBloodGroup = v),
-                        ),
-                      ),
+                      Icon(Icons.calendar_today_rounded, color: Colors.grey, size: 16),
                       const SizedBox(width: 12),
-                      Expanded(
-                        child: _dropdown(
-                          label: 'Complexion', icon: Icons.face_rounded,
-                          value: _selectedComplexion,
-                          items: _complexions.map((c) => DropdownMenuItem<String>(value: c['id'], child: Text(c['name'] ?? ''))).toList(),
-                          onChanged: (v) => setState(() => _selectedComplexion = v),
+                      Text(
+                        _selectedDob == null ? 'Date of Birth *' : '${_selectedDob!.day}/${_selectedDob!.month}/${_selectedDob!.year}',
+                        style: GoogleFonts.inter(
+                          color: _selectedDob == null ? Colors.grey : AppColors.textPrimary(context),
+                          fontSize: 13,
                         ),
                       ),
                     ],
                   ),
-                  const SizedBox(height: 12),
-                  _dropdown(
-                    label: 'Physical Disability', icon: Icons.accessible_rounded,
-                    value: _selectedPhysicalDisability,
-                    items: const [
-                      DropdownMenuItem<String>(value: 'false', child: Text('No')),
-                      DropdownMenuItem<String>(value: 'true', child: Text('Yes')),
-                    ],
-                    onChanged: (v) => setState(() => _selectedPhysicalDisability = v),
-                  ),
-                  if (_selectedPhysicalDisability == 'true') ...[
-                    const SizedBox(height: 12),
-                    _input(controller: _disabilityDetailsController, label: 'Disability Details', icon: Icons.description_rounded),
-                  ],
-                  const SizedBox(height: 12),
-                  _dropdown(
-                    label: 'Manglik', icon: Icons.star_border_rounded,
-                    value: _selectedManglik,
-                    items: const [
-                      DropdownMenuItem<String>(value: 'true', child: Text('Yes')),
-                      DropdownMenuItem<String>(value: 'false', child: Text('No')),
-                    ],
-                    onChanged: (v) => setState(() => _selectedManglik = v),
-                  ),
-                  const SizedBox(height: 12),
-                  _dropdown(
-                    label: 'Intercaste Accepted', icon: Icons.diversity_1_rounded,
-                    value: _selectedIntercasteAccepted,
-                    items: const [
-                      DropdownMenuItem<String>(value: 'true', child: Text('Accepted')),
-                      DropdownMenuItem<String>(value: 'false', child: Text('Not Accepted')),
-                    ],
-                    onChanged: (v) => setState(() => _selectedIntercasteAccepted = v),
-                  ),
-                ],
+                ),
+              ),
+              const SizedBox(height: 12),
+              _dropdown(
+                label: 'Gender *', icon: Icons.male,
+                value: _selectedGender,
+                items: _genders.map((g) => DropdownMenuItem<String>(value: g['id'], child: Text(g['name'] ?? ''))).toList(),
+                onChanged: (v) => setState(() => _selectedGender = v),
+                isRequired: true,
+              ),
+              const SizedBox(height: 12),
+              _dropdown(
+                label: 'Religion *', icon: Icons.temple_hindu,
+                value: _selectedReligion,
+                items: _religions.map((r) => DropdownMenuItem<String>(value: r['id'], child: Text(r['name'] ?? ''))).toList(),
+                onChanged: _onReligionChanged,
+                isRequired: true,
+              ),
+              const SizedBox(height: 12),
+              _dropdown(
+                label: 'Caste *', icon: Icons.group_work,
+                value: _selectedCaste,
+                items: _filteredCastes.map((c) => DropdownMenuItem<String>(value: c['id'], child: Text(c['name'] ?? ''))).toList(),
+                onChanged: _onCasteChanged,
+                isRequired: true,
+              ),
+              const SizedBox(height: 12),
+              _dropdown(
+                label: 'Sub-Caste', icon: Icons.group_work_outlined,
+                value: _selectedSubCaste,
+                items: _filteredSubCastes.map((s) => DropdownMenuItem<String>(value: s['id'], child: Text(s['name'] ?? ''))).toList(),
+                onChanged: (v) => setState(() => _selectedSubCaste = v),
+              ),
+              const SizedBox(height: 12),
+              _dropdown(
+                label: 'Marital Status *', icon: Icons.favorite_border,
+                value: _selectedMaritalStatus,
+                items: _maritalStatuses.map((m) => DropdownMenuItem<String>(value: m['id'], child: Text(m['name'] ?? ''))).toList(),
+                onChanged: (v) => setState(() => _selectedMaritalStatus = v),
+                isRequired: true,
               ),
             ],
           ),
         ),
       ),
-
-      // STEP 1: Family & Career
+      
+      // 2. Physical Information
       Step(
         isActive: _currentStep >= 1,
-        title: Text('Family & Career', style: GoogleFonts.outfit(fontWeight: FontWeight.bold, fontSize: _currentStep == 1 ? 14 : 12, color: _currentStep == 1 ? AppColors.primary(context) : AppColors.textSecondary(context))),
+        title: Text('2. Physical Info', style: GoogleFonts.outfit(fontWeight: FontWeight.bold, fontSize: _currentStep == 1 ? 14 : 12, color: _currentStep == 1 ? AppColors.primary(context) : AppColors.textSecondary(context))),
         content: Form(
           key: _formKeys[1],
           child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              _buildSectionCard(
-                title: 'Parents Status',
-                icon: Icons.family_restroom_rounded,
-                children: [
-                  Row(
-                    children: [
-                      Expanded(
-                        child: _dropdown(
-                          label: 'Father Alive', icon: Icons.man_rounded,
-                          value: _selectedFatherAlive,
-                          items: const [
-                            DropdownMenuItem<String>(value: 'true', child: Text('Yes')),
-                            DropdownMenuItem<String>(value: 'false', child: Text('No')),
-                          ],
-                          onChanged: (v) => setState(() => _selectedFatherAlive = v),
-                        ),
-                      ),
-                      const SizedBox(width: 12),
-                      Expanded(
-                        child: _dropdown(
-                          label: 'Mother Alive', icon: Icons.woman_rounded,
-                          value: _selectedMotherAlive,
-                          items: const [
-                            DropdownMenuItem<String>(value: 'true', child: Text('Yes')),
-                            DropdownMenuItem<String>(value: 'false', child: Text('No')),
-                          ],
-                          onChanged: (v) => setState(() => _selectedMotherAlive = v),
-                        ),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: 12),
-                  _input(controller: _parentsOccupationController, label: 'Parents Occupation', icon: Icons.group_work_outlined),
-                  const SizedBox(height: 12),
-                  _input(controller: _propertyDetailsController, label: 'Property Details', icon: Icons.house_rounded),
-                ],
+               _dropdown(
+                label: 'Height *', icon: Icons.height,
+                value: _selectedHeight,
+                items: _heights.map((h) => DropdownMenuItem<String>(value: h['id'], child: Text(h['name'] ?? ''))).toList(),
+                onChanged: (v) => setState(() => _selectedHeight = v),
+                isRequired: true,
               ),
-              const SizedBox(height: 16),
-              _buildSectionCard(
-                title: 'Siblings Information',
-                icon: Icons.groups_rounded,
-                children: [
-                  Row(
-                    children: [
-                      Expanded(child: _input(controller: _noOfBrothersController, label: 'Brothers', icon: Icons.boy_rounded, isNumber: true)),
-                      const SizedBox(width: 12),
-                      Expanded(child: _input(controller: _marriedBrothersController, label: 'Married', icon: Icons.check_circle_outline_rounded, isNumber: true)),
-                    ],
-                  ),
-                  const SizedBox(height: 12),
-                  Row(
-                    children: [
-                      Expanded(child: _input(controller: _noOfSistersController, label: 'Sisters', icon: Icons.girl_rounded, isNumber: true)),
-                      const SizedBox(width: 12),
-                      Expanded(child: _input(controller: _marriedSistersController, label: 'Married', icon: Icons.check_circle_outline_rounded, isNumber: true)),
-                    ],
-                  ),
-                ],
+              const SizedBox(height: 12),
+              _input(controller: _weightController, label: 'Weight (kg)', icon: Icons.scale_rounded, isNumber: true),
+              const SizedBox(height: 12),
+              _dropdown(
+                label: 'Blood Group *', icon: Icons.bloodtype,
+                value: _selectedBloodGroup,
+                items: _bloodGroups.map((b) => DropdownMenuItem<String>(value: b['id'], child: Text(b['name'] ?? ''))).toList(),
+                onChanged: (v) => setState(() => _selectedBloodGroup = v),
+                isRequired: true,
               ),
-              const SizedBox(height: 16),
-              _buildSectionCard(
-                title: 'Career & Academics',
-                icon: Icons.school_rounded,
-                children: [
-                  _dropdown(
-                    label: 'Education Level', icon: Icons.school_rounded,
-                    value: _selectedEducation,
-                    items: _educations.map((e) => DropdownMenuItem<String>(value: e['id'], child: Text(e['name'] ?? ''))).toList(),
-                    onChanged: (v) => setState(() => _selectedEducation = v),
-                    isRequired: true,
-                  ),
-                  const SizedBox(height: 12),
-                  _input(controller: _occupationTypeController, label: 'Occupation/Designation', icon: Icons.work_outline_rounded, isRequired: true),
-                  const SizedBox(height: 12),
-                  _input(controller: _occupationDetailsController, label: 'Occupation Details/Company', icon: Icons.business_rounded),
-                  const SizedBox(height: 12),
-                  _input(controller: _annualIncomeController, label: 'Annual Income', icon: Icons.currency_rupee_rounded, isNumber: true, isRequired: true),
+              const SizedBox(height: 12),
+              _dropdown(
+                label: 'Complexion *', icon: Icons.face,
+                value: _selectedComplexion,
+                items: _complexions.map((c) => DropdownMenuItem<String>(value: c['id'], child: Text(c['name'] ?? ''))).toList(),
+                onChanged: (v) => setState(() => _selectedComplexion = v),
+                isRequired: true,
+              ),
+              const SizedBox(height: 12),
+               _dropdown(
+                label: 'Physical Disability *', icon: Icons.accessible,
+                value: _selectedPhysicalDisability,
+                items: const [
+                  DropdownMenuItem<String>(value: 'No', child: Text('No')),
+                  DropdownMenuItem<String>(value: 'Yes', child: Text('Yes')),
                 ],
+                onChanged: (v) => setState(() => _selectedPhysicalDisability = v),
+                isRequired: true,
+              ),
+              const SizedBox(height: 12),
+              _input(controller: _dietController, label: 'Diet (Vegetarian, Non-Veg, etc.)', icon: Icons.restaurant),
+              const SizedBox(height: 12),
+              _dropdown(
+                label: 'Manglik *', icon: Icons.star_border,
+                value: _selectedManglik,
+                items: const [
+                  DropdownMenuItem<String>(value: 'No', child: Text('No')),
+                  DropdownMenuItem<String>(value: 'Yes', child: Text('Yes')),
+                ],
+                onChanged: (v) => setState(() => _selectedManglik = v),
+                isRequired: true,
+              ),
+              const SizedBox(height: 12),
+              _dropdown(
+                label: 'Intercaste Marriage Accepted *', icon: Icons.diversity_1,
+                value: _selectedIntercasteAccepted,
+                items: const [
+                  DropdownMenuItem<String>(value: 'No', child: Text('No')),
+                  DropdownMenuItem<String>(value: 'Yes', child: Text('Yes')),
+                ],
+                onChanged: (v) => setState(() => _selectedIntercasteAccepted = v),
+                isRequired: true,
               ),
             ],
           ),
         ),
       ),
 
-      // STEP 2: Contact & Photos
+      // 3. Family Information
       Step(
         isActive: _currentStep >= 2,
-        title: Text('Contact & Photos', style: GoogleFonts.outfit(fontWeight: FontWeight.bold, fontSize: _currentStep == 2 ? 14 : 12, color: _currentStep == 2 ? AppColors.primary(context) : AppColors.textSecondary(context))),
+        title: Text('3. Family Info', style: GoogleFonts.outfit(fontWeight: FontWeight.bold, fontSize: _currentStep == 2 ? 14 : 12, color: _currentStep == 2 ? AppColors.primary(context) : AppColors.textSecondary(context))),
         content: Form(
           key: _formKeys[2],
           child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              _buildSectionCard(
-                title: 'Current Location',
-                icon: Icons.location_on_rounded,
+               _dropdown(
+                label: 'Is Father Alive? *', icon: Icons.man,
+                value: _selectedFatherAlive,
+                items: const [
+                  DropdownMenuItem<String>(value: 'Yes', child: Text('Yes')),
+                  DropdownMenuItem<String>(value: 'No', child: Text('No')),
+                ],
+                onChanged: (v) => setState(() => _selectedFatherAlive = v),
+                isRequired: true,
+              ),
+              const SizedBox(height: 12),
+              _dropdown(
+                label: 'Is Mother Alive? *', icon: Icons.woman,
+                value: _selectedMotherAlive,
+                items: const [
+                  DropdownMenuItem<String>(value: 'Yes', child: Text('Yes')),
+                  DropdownMenuItem<String>(value: 'No', child: Text('No')),
+                ],
+                onChanged: (v) => setState(() => _selectedMotherAlive = v),
+                isRequired: true,
+              ),
+              const SizedBox(height: 12),
+              Row(
                 children: [
-                  _input(controller: _phoneController, label: 'Primary Mobile', icon: Icons.phone_rounded, isNumber: true, isRequired: true),
-                  const SizedBox(height: 12),
-                  _input(controller: _mobile2Controller, label: 'Alternate Mobile', icon: Icons.phone_android_rounded, isNumber: true),
-                  const SizedBox(height: 12),
-                  _dropdown(
-                    label: 'State', icon: Icons.map_rounded,
-                    value: _selectedState,
-                    items: _states.map((s) => DropdownMenuItem<String>(value: s['id'], child: Text(s['name'] ?? ''))).toList(),
-                    onChanged: (v) => _onStateChanged(v),
-                    isRequired: true,
-                  ),
-                  const SizedBox(height: 12),
-                  _dropdown(
-                    label: 'District', icon: Icons.location_city_rounded,
-                    value: _selectedCity,
-                    items: _cities.map((c) => DropdownMenuItem<String>(value: c['id'], child: Text(c['name'] ?? ''))).toList(),
-                    onChanged: (v) => setState(() => _selectedCity = v),
-                    isRequired: true,
-                  ),
-                  const SizedBox(height: 12),
-                  _input(controller: _addressDetailsController, label: 'Full Address', icon: Icons.home_rounded, isRequired: true),
+                  Expanded(child: _input(controller: _noOfBrothersController, label: 'No. of Brothers *', icon: Icons.boy, isNumber: true, isRequired: true)),
+                  const SizedBox(width: 8),
+                  Expanded(child: _input(controller: _marriedBrothersController, label: 'Married Brothers', icon: Icons.check_circle_outline, isNumber: true)),
                 ],
               ),
-              const SizedBox(height: 16),
-              _buildSectionCard(
-                title: 'Security & Photos',
-                icon: Icons.collections_rounded,
+              const SizedBox(height: 12),
+              Row(
                 children: [
-                  GestureDetector(
-                    onTap: _pickImage,
-                    child: Container(
-                      height: 120,
-                      width: double.infinity,
-                      decoration: BoxDecoration(
-                        color: AppColors.background(context),
-                        borderRadius: BorderRadius.circular(16),
-                        border: Border.all(color: AppColors.primary(context).withValues(alpha: 0.1), width: 1.5),
-                      ),
-                      child: _profileImage != null
-                          ? ClipRRect(
-                              borderRadius: BorderRadius.circular(16),
-                               child: Image.network(_profileImage!.path, fit: BoxFit.cover),
-                            )
-                          : Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Icon(Icons.person_add_rounded, size: 28, color: AppColors.primary(context)),
-                                const SizedBox(height: 8),
-                                Text('Profile Photo *', style: GoogleFonts.inter(color: AppColors.primary(context), fontWeight: FontWeight.bold, fontSize: 13)),
-                              ],
-                            ),
-                    ),
-                  ),
-                  const SizedBox(height: 16),
-                  const Text('ID Proof (Optional)', style: TextStyle(fontSize: 11, color: Colors.grey, fontWeight: FontWeight.bold)),
-                  const SizedBox(height: 8),
-                  GestureDetector(
-                    onTap: _pickIdProof,
-                    child: Container(
-                      height: 100,
-                      width: double.infinity,
-                      decoration: BoxDecoration(
-                        color: AppColors.background(context),
-                        borderRadius: BorderRadius.circular(12),
-                        border: Border.all(color: Colors.grey.withValues(alpha: 0.1)),
-                      ),
-                      child: _idProofImage != null
-                          ? ClipRRect(
-                              borderRadius: BorderRadius.circular(12),
-                              child: Image.network(_idProofImage!.path, fit: BoxFit.cover),
-                            )
-                          : Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Icon(Icons.add_photo_alternate_rounded, color: Colors.grey, size: 24),
-                                const SizedBox(height: 4),
-                                Text('Upload ID Proof', style: GoogleFonts.inter(color: Colors.grey, fontSize: 11)),
-                              ],
-                            ),
-                    ),
-                  ),
-                  const SizedBox(height: 16),
-                  GestureDetector(
-                    onTap: _pickGalleryImages,
-                    child: Container(
-                      height: 80,
-                      width: double.infinity,
-                      decoration: BoxDecoration(
-                        color: AppColors.background(context),
-                        borderRadius: BorderRadius.circular(12),
-                        border: Border.all(color: Colors.grey.withValues(alpha: 0.1)),
-                      ),
-                      child: Center(
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Icon(Icons.add_a_photo_rounded, color: AppColors.primary(context), size: 20),
-                            const SizedBox(height: 4),
-                            Text('Add Gallery Photos (${_galleryImages.length})', style: GoogleFonts.inter(color: AppColors.primary(context), fontSize: 11, fontWeight: FontWeight.bold)),
-                          ],
-                        ),
-                      ),
-                    ),
-                  ),
-                  if (_galleryImages.isNotEmpty) ...[
-                    const SizedBox(height: 12),
-                    SizedBox(
-                      height: 60,
-                      child: ListView.builder(
-                        scrollDirection: Axis.horizontal,
-                        itemCount: _galleryImages.length,
-                        itemBuilder: (context, index) {
-                          return Container(
-                            margin: const EdgeInsets.only(right: 8),
-                            width: 60,
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(8),
-                              image: DecorationImage(image: NetworkImage(_galleryImages[index].path), fit: BoxFit.cover),
-                            ),
-                            child: Align(
-                              alignment: Alignment.topRight,
-                              child: GestureDetector(
-                                onTap: () => setState(() => _galleryImages.removeAt(index)),
-                                child: Container(
-                                  decoration: const BoxDecoration(color: Colors.black54, shape: BoxShape.circle),
-                                  child: const Icon(Icons.close, color: Colors.white, size: 14),
-                                ),
-                              ),
-                            ),
-                          );
-                        },
-                      ),
-                    ),
-                  ],
+                  Expanded(child: _input(controller: _noOfSistersController, label: 'No. of Sisters *', icon: Icons.girl, isNumber: true, isRequired: true)),
+                  const SizedBox(width: 8),
+                  Expanded(child: _input(controller: _marriedSistersController, label: 'Married Sisters', icon: Icons.check_circle_outline, isNumber: true)),
                 ],
+              ),
+              const SizedBox(height: 12),
+              _input(controller: _parentsOccupationController, label: 'Parents Occupation', icon: Icons.work_outline),
+              const SizedBox(height: 12),
+              _input(controller: _propertyDetailsController, label: 'Property Details', icon: Icons.home),
+            ],
+          ),
+        ),
+      ),
+
+      // 4. Education
+      Step(
+        isActive: _currentStep >= 3,
+        title: Text('4. Education', style: GoogleFonts.outfit(fontWeight: FontWeight.bold, fontSize: _currentStep == 3 ? 14 : 12, color: _currentStep == 3 ? AppColors.primary(context) : AppColors.textSecondary(context))),
+        content: Form(
+          key: _formKeys[3],
+          child: Column(
+            children: [
+              _dropdown(
+                label: 'Education Level *', icon: Icons.school,
+                value: _selectedEducation,
+                items: _educations.map((e) => DropdownMenuItem<String>(value: e['id'], child: Text(e['name'] ?? ''))).toList(),
+                onChanged: (v) => setState(() => _selectedEducation = v),
+                isRequired: true,
               ),
             ],
           ),
         ),
       ),
 
-      // STEP 3: Expectations & Membership
+      // 5. Career
       Step(
-        isActive: _currentStep >= 3,
-        title: Text('Expectations & Finish', style: GoogleFonts.outfit(fontWeight: FontWeight.bold, fontSize: _currentStep == 3 ? 14 : 12, color: _currentStep == 3 ? AppColors.primary(context) : AppColors.textSecondary(context))),
+        isActive: _currentStep >= 4,
+        title: Text('5. Career', style: GoogleFonts.outfit(fontWeight: FontWeight.bold, fontSize: _currentStep == 4 ? 14 : 12, color: _currentStep == 4 ? AppColors.primary(context) : AppColors.textSecondary(context))),
         content: Form(
-          key: _formKeys[3],
+          key: _formKeys[4],
           child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              _buildSectionCard(
-                title: 'Partner Expectations',
-                icon: Icons.favorite_rounded,
-                children: [
-                   _dropdown(
-                    label: 'Expect Partner Manglik?', icon: Icons.stars_rounded,
-                    value: _selectedPartnerManglik,
-                    items: const [
-                      DropdownMenuItem<String>(value: 'false', child: Text('Not Mandatory')),
-                      DropdownMenuItem<String>(value: 'true', child: Text('Yes, Required')),
-                    ],
-                    onChanged: (v) => setState(() => _selectedPartnerManglik = v),
-                    isRequired: true,
-                  ),
-                  const SizedBox(height: 12),
-                  _dropdown(
-                    label: 'Partner Religion', icon: Icons.temple_hindu_rounded,
-                    value: null,
-                    items: _religions.map((r) => DropdownMenuItem<String>(value: r['id'], child: Text(r['name'] ?? ''))).toList(),
-                    onChanged: (v) => {},
-                    isRequired: true,
-                  ),
-                  const SizedBox(height: 12),
-                  _dropdown(
-                    label: 'Partner Caste (Optional)', icon: Icons.group_work_rounded,
-                    value: null,
-                    items: _filteredCastes.map((c) => DropdownMenuItem<String>(value: c['id'], child: Text(c['name'] ?? ''))).toList(),
-                    onChanged: (v) => {},
-                  ),
-                  const SizedBox(height: 12),
-                  _input(controller: _expectedEducationController, label: 'Min. Education Expected', icon: Icons.school_outlined),
-                  const SizedBox(height: 12),
-                  _input(controller: _expectedIncomeController, label: 'Expected Annual Income', icon: Icons.currency_rupee_rounded, isNumber: true),
-                   const SizedBox(height: 12),
-                  _dropdown(
-                    label: 'Divorce Accepted?', icon: Icons.heart_broken_rounded,
-                    value: _selectedDivorceAccepted,
-                    items: const [
-                       DropdownMenuItem<String>(value: 'false', child: Text('No')),
-                       DropdownMenuItem<String>(value: 'true', child: Text('Yes')),
-                    ],
-                    onChanged: (v) => setState(() => _selectedDivorceAccepted = v),
-                    isRequired: true,
-                  ),
-                  const SizedBox(height: 12),
-                  _dropdown(
-                    label: 'Intercaste Accepted?', icon: Icons.diversity_3_rounded,
-                    value: _selectedPartnerIntercaste,
-                    items: const [
-                      DropdownMenuItem<String>(value: 'false', child: Text('Not Accepted')),
-                      DropdownMenuItem<String>(value: 'true', child: Text('Accepted')),
-                    ],
-                    onChanged: (v) => setState(() => _selectedPartnerIntercaste = v),
-                    isRequired: true,
-                  ),
+              _input(controller: _occupationTypeController, label: 'Occupation Type *', icon: Icons.business_center, isRequired: true),
+              const SizedBox(height: 12),
+              _input(controller: _occupationDetailsController, label: 'Occupation Details/Company', icon: Icons.business),
+              const SizedBox(height: 12),
+              _input(controller: _annualIncomeController, label: 'Annual Income *', icon: Icons.currency_rupee, isNumber: true, isRequired: true),
+            ],
+          ),
+        ),
+      ),
+
+      // 6. Contact Information
+      Step(
+        isActive: _currentStep >= 5,
+        title: Text('6. Contact Info', style: GoogleFonts.outfit(fontWeight: FontWeight.bold, fontSize: _currentStep == 5 ? 14 : 12, color: _currentStep == 5 ? AppColors.primary(context) : AppColors.textSecondary(context))),
+        content: Form(
+          key: _formKeys[5],
+          child: Column(
+            children: [
+              _input(controller: _phoneController, label: 'Mobile Number 1 *', icon: Icons.phone, isNumber: true, isRequired: true),
+              const SizedBox(height: 12),
+              _input(controller: _mobile2Controller, label: 'Mobile Number 2 (Optional)', icon: Icons.phone_android, isNumber: true),
+            ],
+          ),
+        ),
+      ),
+
+      // 7. Address Information
+      Step(
+        isActive: _currentStep >= 6,
+        title: Text('7. Address Info', style: GoogleFonts.outfit(fontWeight: FontWeight.bold, fontSize: _currentStep == 6 ? 14 : 12, color: _currentStep == 6 ? AppColors.primary(context) : AppColors.textSecondary(context))),
+        content: Form(
+          key: _formKeys[6],
+          child: Column(
+            children: [
+              _dropdown(
+                label: 'Government ID Type *', icon: Icons.badge,
+                value: _selectedGovIdType,
+                items: const [
+                  DropdownMenuItem<String>(value: 'Aadhar Card', child: Text('Aadhar Card')),
+                  DropdownMenuItem<String>(value: 'PAN Card', child: Text('PAN Card')),
+                  DropdownMenuItem<String>(value: 'Voter ID', child: Text('Voter ID')),
+                  DropdownMenuItem<String>(value: 'Driving License', child: Text('Driving License')),
+                  DropdownMenuItem<String>(value: 'Passport', child: Text('Passport')),
                 ],
+                onChanged: (v) => setState(() => _selectedGovIdType = v),
+                isRequired: true,
               ),
-              const SizedBox(height: 16),
-              _buildSectionCard(
-                title: 'Membership & Payment',
-                icon: Icons.verified_user_rounded,
-                children: [
-                  _dropdown(
-                    label: 'Package', icon: Icons.workspace_premium_rounded,
-                    value: _selectedPackage,
-                    items: _packages.map((p) => DropdownMenuItem<String>(value: p['id'], child: Text('${p['name']} (₹${p['price']})'))).toList(),
-                    onChanged: (v) => setState(() => _selectedPackage = v),
-                    isRequired: true,
+              const SizedBox(height: 12),
+              _input(controller: _govIdNumberController, label: 'Government ID Number *', icon: Icons.numbers, isRequired: true),
+              const SizedBox(height: 12),
+              _input(controller: _addressDetailsController, label: 'Full Address *', icon: Icons.home, isRequired: true),
+              const SizedBox(height: 12),
+              _dropdown(
+                label: 'State *', icon: Icons.map,
+                value: _selectedState,
+                items: _states.map((s) => DropdownMenuItem<String>(value: s['id'], child: Text(s['name'] ?? ''))).toList(),
+                onChanged: (v) => _onStateChanged(v),
+                isRequired: true,
+              ),
+              const SizedBox(height: 12),
+              _dropdown(
+                label: 'District *', icon: Icons.location_city,
+                value: _selectedCity,
+                items: _cities.map((c) => DropdownMenuItem<String>(value: c['id'], child: Text(c['name'] ?? ''))).toList(),
+                onChanged: (v) => setState(() => _selectedCity = v),
+                isRequired: true,
+              ),
+            ],
+          ),
+        ),
+      ),
+
+      // 8. Photo Upload
+      Step(
+        isActive: _currentStep >= 7,
+        title: Text('8. Photo Upload', style: GoogleFonts.outfit(fontWeight: FontWeight.bold, fontSize: _currentStep == 7 ? 14 : 12, color: _currentStep == 7 ? AppColors.primary(context) : AppColors.textSecondary(context))),
+        content: Form(
+          key: _formKeys[7],
+          child: Column(
+            children: [
+              const Text('Profile Photo (Optional but Recommended)', style: TextStyle(fontSize: 11, color: Colors.grey, fontWeight: FontWeight.bold)),
+              const SizedBox(height: 8),
+              GestureDetector(
+                onTap: _pickImage,
+                child: Container(
+                  height: 120,
+                  width: double.infinity,
+                  decoration: BoxDecoration(
+                    color: AppColors.background(context),
+                    borderRadius: BorderRadius.circular(16),
+                    border: Border.all(color: AppColors.primary(context).withValues(alpha: 0.1), width: 1.5),
                   ),
-                  const SizedBox(height: 12),
-                  _dropdown(
-                    label: 'Payment Method',
-                    icon: Icons.payment,
-                    value: _selectedPaymentMethod,
-                    items: _paymentMethods.map((p) => DropdownMenuItem<String>(value: p['id'], child: Text(p['name'] ?? ''))).toList(),
-                    onChanged: (val) => setState(() => _selectedPaymentMethod = val),
-                    isRequired: true,
-                  ),
-                ],
+                  child: _profileImage != null
+                      ? ClipRRect(
+                          borderRadius: BorderRadius.circular(16),
+                            child: Image.network(_profileImage!.path, fit: BoxFit.cover),
+                        )
+                      : Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Icon(Icons.person_add_rounded, size: 28, color: AppColors.primary(context)),
+                            const SizedBox(height: 8),
+                            Text('Select Profile Photo', style: GoogleFonts.inter(color: AppColors.primary(context), fontWeight: FontWeight.bold, fontSize: 13)),
+                          ],
+                        ),
+                ),
               ),
             ],
           ),
@@ -1165,68 +908,9 @@ class _FillBiodataScreenState extends State<FillBiodataScreen> {
     ];
   }
 
-  Widget _buildSectionCard({required String title, required IconData icon, required List<Widget> children}) {
-    return Container(
-      width: double.infinity,
-      padding: const EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        color: AppColors.surface(context),
-        borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: Colors.grey.withValues(alpha: 0.05)),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withValues(alpha: 0.02),
-            blurRadius: 10,
-            offset: const Offset(0, 4),
-          ),
-        ],
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
-            children: [
-              Icon(icon, size: 18, color: AppColors.primary(context)),
-              const SizedBox(width: 8),
-              Text(
-                title.toUpperCase(),
-                style: GoogleFonts.inter(
-                  fontSize: 11,
-                  fontWeight: FontWeight.w800,
-                  color: AppColors.primary(context),
-                  letterSpacing: 0.8,
-                ),
-              ),
-            ],
-          ),
-          const SizedBox(height: 16),
-          ...children,
-        ],
-      ),
-    );
-  }
-
-  Widget _sectionHeader(String title) {
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
-      decoration: BoxDecoration(
-        border: Border(left: BorderSide(color: AppColors.primary(context), width: 3)),
-      ),
-      child: Text(
-        title,
-        style: GoogleFonts.inter(
-          color: AppColors.textPrimary(context),
-          fontSize: 12,
-          fontWeight: FontWeight.w800,
-          letterSpacing: 0.5,
-        ),
-      ),
-    );
-  }
-
   void _nextStep() {
     if (_formKeys[_currentStep].currentState!.validate()) {
-      if (_currentStep < 3) {
+      if (_currentStep < 7) {
         setState(() => _currentStep += 1);
       } else {
         _submit();
@@ -1279,9 +963,22 @@ class _FillBiodataScreenState extends State<FillBiodataScreen> {
                 onStepCancel: _prevStep,
                 onStepTapped: (step) {
                   if (step < _currentStep) {
+                     // Can safely go back
                     setState(() => _currentStep = step);
-                  } else if (_formKeys[_currentStep].currentState!.validate()) {
-                    setState(() => _currentStep = step);
+                  } else {
+                    // Force them to fill up to the step they clicked sequentially
+                    bool canGoToStep = true;
+                    for (int i = 0; i < step; ++i) {
+                       if (!_formKeys[i].currentState!.validate()) {
+                          canGoToStep = false;
+                          setState(() => _currentStep = i);
+                          _showSnack('Please complete Step ${i+1} first', isError: true);
+                          break;
+                       }
+                    }
+                    if (canGoToStep) {
+                       setState(() => _currentStep = step);
+                    }
                   }
                 },
                 controlsBuilder: (context, details) {
@@ -1301,7 +998,7 @@ class _FillBiodataScreenState extends State<FillBiodataScreen> {
                             ),
                             child: _isSaving
                                 ? const SizedBox(height: 20, width: 20, child: CircularProgressIndicator(color: Colors.white, strokeWidth: 2))
-                                : Text(_currentStep == 3 ? 'SUBMIT BIODATA' : 'CONTINUE', style: GoogleFonts.inter(fontWeight: FontWeight.bold)),
+                                : Text(_currentStep == 7 ? 'CREATE BIODATA' : 'CONTINUE', style: GoogleFonts.inter(fontWeight: FontWeight.bold)),
                           ),
                         ),
                         if (_currentStep > 0) ...[

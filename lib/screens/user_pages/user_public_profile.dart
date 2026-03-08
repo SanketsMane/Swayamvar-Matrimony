@@ -643,7 +643,7 @@ class _UserPublicProfileState extends State<UserPublicProfile> {
                   borderRadius: BorderRadius.circular(12),
                   child:
                       images.length > index
-                          ? MyImages.normalImage(images[index].image)
+                          ? MyImages.normalImage(images[index].imagePath)
                           : Container(
                             color: MyTheme.border,
                             child: const Icon(
@@ -781,18 +781,20 @@ class _UserPublicProfileState extends State<UserPublicProfile> {
     );
   }
 
-  Widget _infoTile(String label, String value) {
+  Widget _infoTile(String label, dynamic value) {
+    String safeValue = (value == null || value.toString().isEmpty || value.toString() == 'null') ? "-" : value.toString();
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(label, style: Styles.regular_gull_grey_12.copyWith(fontSize: 11)),
         const SizedBox(height: 2),
-        Text(value, style: Styles.bold_arsenic_12.copyWith(fontSize: 14)),
+        Text(safeValue, style: Styles.bold_arsenic_12.copyWith(fontSize: 14)),
       ],
     );
   }
 
-  Widget _detailRow(String label, String value) {
+  Widget _detailRow(String label, dynamic value) {
+    String safeValue = (value == null || value.toString().isEmpty || value.toString() == 'null') ? "-" : value.toString();
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 8),
       child: Row(
@@ -806,7 +808,7 @@ class _UserPublicProfileState extends State<UserPublicProfile> {
           const SizedBox(width: 8), // Gap
           Expanded(
             child: Text(
-              value,
+              safeValue,
               textAlign: TextAlign.right,
               maxLines: 2,
               overflow: TextOverflow.ellipsis,

@@ -53,8 +53,8 @@ class PhysicalAttrData {
 
   factory PhysicalAttrData.fromJson(Map<String, dynamic> json) =>
       PhysicalAttrData(
-        height: json["height"]?.toDouble(),
-        weight: json["weight"],
+        height: json["height"] == null || json["height"].toString().isEmpty ? null : double.tryParse(json["height"].toString()),
+        weight: json["weight"] == null || json["weight"].toString().isEmpty ? null : int.tryParse(json["weight"].toString()),
         eyeColor: json["eye_color"],
         hairColor: json["hair_color"],
         complexion: json["complexion"],
