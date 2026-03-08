@@ -220,6 +220,7 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth', 'admin']], function 
 
     // State
     Route::resource('/states', StateController::class);
+    Route::post('/states/update_default', [StateController::class,'update_default'])->name('states.update_default');
     Route::get('/states/destroy/{id}', [StateController::class,'destroy'])->name('states.destroy_get');
 
     // City

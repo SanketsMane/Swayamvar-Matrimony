@@ -37,10 +37,16 @@ class ProfileDropdownController extends Controller
         $data['family_value_list'] = FamilyValuesResource::collection(FamilyValue::all());
         $data['country_list'] = CountryResource::collection(Country::where('status',1)->get());
         
-        // Sanket: Set Maharashtra (ID 22) as default state and pre-load its cities (Districts)
-        $default_state_id = 22; 
+        // Sanket: Set dynamic default state from DB
+        $default_state = State::where('is_default', 1)->first();
+        $default_state_id = $default_state ? $default_state->id : 22; // Fallback to Maharashtra if none set
+        
         $data['default_state_id'] = $default_state_id;
         $data['state_list'] = StateResource::collection(State::where('country_id', 101)->get()); // India states
+        
+        // Sanket: Load districts (cities) for the default state. 
+        // Note: The user wants to "remove City from filter", so we only provide the city_list 
+        // which the app likely uses for the "District" field now.
         $data['city_list'] = CityResource::collection(City::where('state_id', $default_state_id)->get());
         
         return $this->response_data($data);

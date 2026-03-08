@@ -29,6 +29,7 @@
                             <th>#</th>
                             <th>{{translate('Name')}}</th>
                             <th data-breakpoints="md">{{translate('Country')}}</th>
+                            <th data-breakpoints="md">{{translate('Default')}}</th>
                             <th class="text-right" width="20%">{{translate('Options')}}</th>
                         </tr>
                     </thead>
@@ -38,6 +39,12 @@
                                 <td>{{ ($key+1) + ($states->currentPage() - 1)*$states->perPage() }}</td>
                                 <td>{{$state->name}}</td>
                                 <td>{{$state->country->name}}</td>
+                                <td>
+                                    <label class="aiz-switch aiz-switch-success mb-0">
+                                        <input type="checkbox" onchange="update_default(this)" value="{{ $state->id }}" <?php if($state->is_default == 1) echo "checked";?>>
+                                        <span></span>
+                                    </label>
+                                </td>
                                 <td class="text-right">
                                     @can('edit_state')
                                         <a href="{{ route('states.edit', encrypt($state->id)) }}" class="btn btn-soft-info btn-icon btn-circle btn-sm" title="{{ translate('Edit') }}">
@@ -107,6 +114,24 @@
     <script>
       function sort_states(el){
           $('#sort_states').submit();
+      }
+
+      function update_default(el){
+          if(el.checked){
+              var status = 1;
+          }
+          else{
+              var status = 0;
+          }
+          $.post('{{ route('states.update_default') }}', {_token:'{{ csrf_token() }}', id:el.value, status:status}, function(data){
+              if(data == 1){
+                  AIZ.plugins.notify('success', '{{ translate('Default state updated successfully') }}');
+                  location.reload();
+              }
+              else{
+                  AIZ.plugins.notify('danger', '{{ translate('Something went wrong') }}');
+              }
+          });
       }
     </script>
 @endsection

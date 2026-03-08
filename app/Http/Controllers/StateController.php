@@ -171,4 +171,18 @@ class StateController extends Controller
         $states = State::where('country_id', $request->country_id)->get();
         return $states;
     }
+
+    public function update_default(Request $request)
+    {
+        $state = State::findOrFail($request->id);
+        
+        // Sanket: Ensure only one state is marked as default
+        State::where('is_default', 1)->update(['is_default' => 0]);
+        
+        $state->is_default = $request->status;
+        if($state->save()){
+            return 1;
+        }
+        return 0;
+    }
 }
