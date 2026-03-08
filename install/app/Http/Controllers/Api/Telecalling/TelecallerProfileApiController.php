@@ -193,24 +193,60 @@ class TelecallerProfileApiController extends Controller
     {
         $telecaller = Auth::user();
 
+        // New streamlined 8-step validation
         $validator = \Validator::make($request->all(), [
+            // 1. Personal
             'first_name' => 'required',
             'last_name' => 'required',
             'gender' => 'required',
             'date_of_birth' => 'required|date',
-            'on_behalf' => 'required',
-            'package' => 'required',
-            'phone' => 'required|unique:users',
-            'email' => 'nullable|email|unique:users',
-            // Basic fields from Phase 1
-            'marital_status' => 'required',
             'religion' => 'required',
             'caste' => 'required',
             'sub_caste' => 'nullable',
-            'language' => 'required',
+            'marital_status' => 'required',
+            
+            // 2. Physical
+            'height' => 'required',
+            'weight' => 'nullable',
+            'blood_group' => 'required',
+            'complexion' => 'required',
+            'physical_disability' => 'required',
+            'diet' => 'nullable',
+            'manglik' => 'required',
+            'intercaste_accepted' => 'required',
+
+            // 3. Family
+            'father_alive' => 'required',
+            'mother_alive' => 'required',
+            'no_of_brothers' => 'required|numeric',
+            'married_brothers' => 'nullable|numeric|lte:no_of_brothers',
+            'no_of_sisters' => 'required|numeric',
+            'married_sisters' => 'nullable|numeric|lte:no_of_sisters',
+            'parents_occupation' => 'nullable',
+            'property_details' => 'nullable',
+
+            // 4. Education
+            'education_level' => 'required',
+
+            // 5. Career
+            'occupation_type' => 'required',
+            'occupation_details' => 'required',
+            'annual_income' => 'required',
+
+            // 6. Contact
+            'phone' => 'required|digits:10|unique:users',
+            'mobile2' => 'nullable|digits:10',
+
+            // 7. Address
+            'gov_id_type' => 'required',
+            'gov_id_number' => 'required|unique:users',
+            'address' => 'required',
+            'state' => 'required',
+            'district' => 'required', // Mapped to City ID eventually
+            'city' => 'nullable',
+
+            // 8. Photo
             'photo' => 'nullable|image|mimes:jpg,jpeg,png,webp|max:2048',
-            'id_proof' => 'nullable|image|mimes:jpg,jpeg,png,webp|max:2048',
-            'other_photos.*' => 'nullable|image|mimes:jpg,jpeg,png,webp|max:2048',
         ]);
 
         if ($validator->fails()) {
@@ -232,211 +268,127 @@ class TelecallerProfileApiController extends Controller
             $user->first_name = $request->first_name;
             $user->middle_name = $request->middle_name ?? null;
             $user->last_name = $request->last_name;
-            $user->email = $request->email;
+            // Removed email requirement from UI, using placeholder or null
+            $user->email = $request->email ?? null;
             $user->phone = $request->phone;
             $user->mobile2 = $request->mobile2 ?? null;
-            $user->gov_id_type = $request->gov_id_type ?? null;
-            $user->gov_id_number = $request->gov_id_number ?? null;
+            $user->gov_id_type = $request->gov_id_type;
+            $user->gov_id_number = $request->gov_id_number;
             $user->password = \Hash::make($password);
             $user->telecaller_id = $telecaller->id; // Assign telecaller ID [Sanket]
+            $user->membership = 1; // Default Free Package
 
             $user->save();
 
-            // Handle optional profile picture [Sanket]
+            // Handle optional profile picture (Step 8) [Sanket]
             if ($request->hasFile('photo')) {
                 $user->photo = upload_api_file($request->file('photo'));
                 $user->save();
             }
 
-            // Handle ID Proof [Sanket]
-            if ($request->hasFile('id_proof')) {
-                $user->id_proof = upload_api_file($request->file('id_proof'));
-                $user->save();
-            }
-
-            // Handle Other Photos [Sanket]
-            if ($request->hasFile('other_photos')) {
-                foreach ($request->file('other_photos') as $photoFile) {
-                    $gallery = new \App\Models\GalleryImage();
-                    $gallery->user_id = $user->id;
-                    $gallery->image = upload_api_file($photoFile);
-                    $gallery->save();
-                }
-            }
-
-            $user->save();
-
-            $package = \App\Models\Package::find($request->package);
-
-            // Record Package Payment referencing the telecaller [Sanket]
-            $payment_status = 'Unpaid';
-            if ($package->price > 0) {
-                $payment = new \App\Models\PackagePayment;
-                $payment->payment_code = date('Ym') . rand(10, 99);
-                $payment->user_id = $user->id;
-                $payment->package_id = $package->id;
-                $payment->amount = $package->price;
-                
-                // Handle Manual Payment Method from Telecalling App [Sanket]
-                if ($request->has('payment_method_id') && $request->payment_method_id != '') {
-                    $pid = $request->payment_method_id;
-                    $customName = 'Manual';
-                    
-                    if (is_numeric($pid)) {
-                        $manual_method = \App\Models\ManualPaymentMethod::find($pid);
-                        $customName = $manual_method ? $manual_method->heading : 'Manual';
-                    } else if ($pid == 'manual_cash') {
-                        $customName = 'Cash Payment';
-                    } else if ($pid == 'manual_upi') {
-                        $customName = 'UPI (GPay / PhonePe)';
-                    } else if ($pid == 'manual_bank') {
-                        $customName = 'Bank Transfer / NEFT';
-                    }
-
-                    $payment->payment_method = 'manual_payment';
-                    $payment->custom_payment_name = $customName;
-                    $payment->payment_status = 'Paid'; // Telecaller collects payment
-                    $payment_status = 'Paid';
-                } else {
-                    $payment->payment_method = $request->payment_method ?? 'manual_cash';
-                    $payment->payment_status = 'Paid';
-                    $payment_status = 'Paid';
-                }
-                
-                $payment->telecaller_id = $telecaller->id;
-                $payment->save();
-            } else {
-                $payment_status = 'Paid'; // Free is always paid
-            }
+            // Default Free Package Implicit Logic
+            $package_id = 1; // ID 1 is typically the Free package
+            $package = \App\Models\Package::find($package_id);
+            
+            // Assume "Myself" for on_behalf (ID 1 usually)
+            $on_behalf_id = 1;
 
             // --- Members Table ---
             $member = new \App\Models\Member;
             $member->user_id = $user->id;
             $member->gender = $request->gender;
-            $member->on_behalves_id = $request->on_behalf;
+            $member->on_behalves_id = $on_behalf_id; // Implicit Default
             $member->marital_status_id = $request->marital_status; 
-            $member->mothere_tongue = $request->language; 
+            // Default Mother Tongue to generic if omitted from 8 steps
+            $member->mothere_tongue = $request->language ?? 1; 
             $member->birthday = date('Y-m-d', strtotime($request->date_of_birth));
-            $member->children = $request->children ?? 0;
-            $member->current_package_id = $package->id;
-            $member->remaining_interest = $package->express_interest;
-            $member->remaining_photo_gallery = $package->photo_gallery;
-            $member->remaining_contact_view = $package->contact;
-            $member->remaining_profile_image_view = $package->profile_image_view;
-            $member->remaining_gallery_image_view = $package->gallery_image_view;
-            $member->auto_profile_match = $package->auto_profile_match;
-            $member->package_validity = Date('Y-m-d', strtotime($package->validity . " days"));
+            $member->children = 0; // Default
+            
+            if ($package) {
+                $member->current_package_id = $package->id;
+                $member->remaining_interest = $package->express_interest;
+                $member->remaining_photo_gallery = $package->photo_gallery;
+                $member->remaining_contact_view = $package->contact;
+                $member->remaining_profile_image_view = $package->profile_image_view;
+                $member->remaining_gallery_image_view = $package->gallery_image_view;
+                $member->auto_profile_match = $package->auto_profile_match;
+                $member->package_validity = Date('Y-m-d', strtotime($package->validity . " days"));
+            }
             $member->save();
 
-            // Auto-activate membership [Sanket]
-            if ($payment_status == 'Paid') {
-                $user->membership = $package->id == 1 ? 1 : 2;
-            } else {
-                $user->membership = 1; 
-            }
-            $user->save();
-
-            // --- Physical Attributes ---
-            if ($request->has('height') || $request->has('weight') || $request->has('blood_group') || $request->has('complexion')) {
-                $physical = new \App\Models\PhysicalAttribute;
-                $physical->user_id = $user->id;
-                $physical->height = $request->height ?? null;
-                $physical->weight = $request->weight ?? null;
-                $physical->blood_group = $request->blood_group ?? null;
-                $physical->complexion = $request->complexion ?? null;
-                $physical->disability = $request->physical_disability ?? 'No';
-                $physical->disability_details = $request->disability_details ?? null;
-                $physical->save();
+            // --- Physical Attributes (Step 2) ---
+            $physical = new \App\Models\PhysicalAttribute;
+            $physical->user_id = $user->id;
+            $physical->height = $request->height;
+            $physical->weight = $request->weight ?? null;
+            $physical->blood_group = $request->blood_group;
+            $physical->complexion = $request->complexion;
+            $physical->disability = $request->physical_disability;
+            $physical->save();
+            
+            // Save Diet in Lifestyle table if provided
+            if ($request->has('diet') && !empty($request->diet)) {
+                $lifestyle = new \App\Models\Lifestyle;
+                $lifestyle->user_id = $user->id;
+                $lifestyle->diet = $request->diet;
+                $lifestyle->save();
             }
 
-            // --- Spiritual Background ---
-            if ($request->has('religion') || $request->has('caste') || $request->has('sub_caste') || $request->has('manglik') || $request->has('intercaste_accepted') || $request->has('family_value')) {
-                $spiritual = new \App\Models\SpiritualBackground;
-                $spiritual->user_id = $user->id;
-                $spiritual->religion_id = $request->religion ?? null;
-                $spiritual->caste_id = $request->caste ?? null;
-                $spiritual->sub_caste_id = $request->sub_caste ?? null;
-                $spiritual->family_value_id = $request->family_value ?? null;
-                if ($request->has('manglik')) {
-                    $spiritual->manglik = ($request->manglik == 'true' || $request->manglik == '1' || $request->manglik == 1) ? 1 : 0;
-                }
-                if ($request->has('intercaste_accepted')) {
-                    $spiritual->intercaste_accepted = ($request->intercaste_accepted == 'true' || $request->intercaste_accepted == '1' || $request->intercaste_accepted == 1) ? 1 : 0;
-                }
-                $spiritual->save();
-            }
+            // --- Spiritual Background (Step 1 & 2) ---
+            $spiritual = new \App\Models\SpiritualBackground;
+            $spiritual->user_id = $user->id;
+            $spiritual->religion_id = $request->religion;
+            $spiritual->caste_id = $request->caste;
+            $spiritual->sub_caste_id = $request->sub_caste ?? null;
+            $spiritual->manglik = ($request->manglik == 'Yes' || $request->manglik == 'true' || $request->manglik == '1' || $request->manglik == 1) ? 1 : 0;
+            $spiritual->intercaste_accepted = ($request->intercaste_accepted == 'Yes' || $request->intercaste_accepted == 'true' || $request->intercaste_accepted == '1' || $request->intercaste_accepted == 1) ? 1 : 0;
+            $spiritual->save();
 
-            // --- Family Info ---
-            if ($request->has('father_alive') || $request->has('mother_alive') || $request->has('parents_occupation') || $request->has('no_of_brothers') || $request->has('no_of_sisters') || $request->has('property_details')) {
-                $family = new \App\Models\Family;
-                $family->user_id = $user->id;
-                if ($request->has('father_alive')) {
-                    $status = ($request->father_alive == 'true' || $request->father_alive == '1' || $request->father_alive == 1);
-                    $family->father_alive = $status ? 1 : 0;
-                    $family->father = $status ? 'Alive' : 'Dead';
-                }
-                if ($request->has('mother_alive')) {
-                    $status = ($request->mother_alive == 'true' || $request->mother_alive == '1' || $request->mother_alive == 1);
-                    $family->mother_alive = $status ? 1 : 0;
-                    $family->mother = $status ? 'Alive' : 'Dead';
-                }
-                $family->no_of_brothers = $request->no_of_brothers ?? null;
-                $family->married_brothers = $request->married_brothers ?? null;
-                $family->no_of_sisters = $request->no_of_sisters ?? null;
-                $family->married_sisters = $request->married_sisters ?? null;
-                $family->property_details = $request->property_details ?? null;
-                $family->sibling = $request->parents_occupation ?? null; // using sibling for occupation details if that's where it goes
-                $family->save();
-            }
+            // --- Family Info (Step 3) ---
+            $family = new \App\Models\Family;
+            $family->user_id = $user->id;
+            $father_alive = ($request->father_alive == 'Yes' || $request->father_alive == 'true' || $request->father_alive == '1' || $request->father_alive == 1);
+            $family->father_alive = $father_alive ? 1 : 0;
+            $family->father = $father_alive ? 'Alive' : 'Dead';
+            
+            $mother_alive = ($request->mother_alive == 'Yes' || $request->mother_alive == 'true' || $request->mother_alive == '1' || $request->mother_alive == 1);
+            $family->mother_alive = $mother_alive ? 1 : 0;
+            $family->mother = $mother_alive ? 'Alive' : 'Dead';
+            
+            $family->no_of_brothers = $request->no_of_brothers;
+            $family->married_brothers = $request->married_brothers ?? 0;
+            $family->no_of_sisters = $request->no_of_sisters;
+            $family->married_sisters = $request->married_sisters ?? 0;
+            $family->property_details = $request->property_details ?? null;
+            $family->sibling = $request->parents_occupation ?? null; // using sibling for parent occupation as requested in simplified form
+            $family->save();
 
-            // --- Education & Career ---
-            if ($request->has('education_level')) {
-                $education = new \App\Models\Education;
-                $education->user_id = $user->id;
-                $education->degree = $request->education_level;
-                $education->present = 1;
-                $education->save();
-            }
+            // --- Education (Step 4) ---
+            $education = new \App\Models\Education;
+            $education->user_id = $user->id;
+            $education->degree = $request->education_level;
+            $education->present = 1;
+            $education->save();
 
-            if ($request->has('occupation_type') || $request->has('occupation_details') || $request->has('annual_income')) {
-                $career = new \App\Models\Career;
-                $career->user_id = $user->id;
-                $career->designation = $request->occupation_type ?? null;
-                $career->occupation_details = $request->occupation_details ?? null;
-                $career->income = $request->annual_income ?? null;
-                $career->present = 1;
-                $career->save();
-            }
+            // --- Career (Step 5) ---
+            $career = new \App\Models\Career;
+            $career->user_id = $user->id;
+            $career->designation = $request->occupation_type;
+            $career->occupation_details = $request->occupation_details;
+            $career->income = $request->annual_income;
+            $career->present = 1;
+            $career->save();
 
-            // --- Address ---
-            if ($request->has('address') || $request->has('city') || $request->has('country') || $request->has('state')) {
-                $address = new \App\Models\Address;
-                $address->user_id = $user->id;
-                $address->type = 'present';
-                $address->country_id = $request->country ?? (\App\Models\Country::where('name', 'India')->first()->id ?? 101);
-                $address->state_id = $request->state ?? (\App\Models\State::where('name', 'Maharashtra')->first()->id ?? 22);
-                $address->city_id = $request->city ?? null;
-                $address->postal_code = $request->address ?? null;
-                $address->save();
-            }
-
-            // --- Partner Expectations ---
-            if ($request->has('partner_manglik') || $request->has('expected_education') || $request->has('divorce_accepted') || $request->has('partner_intercaste') || $request->has('expected_income')) {
-                $partner = new \App\Models\PartnerExpectation;
-                $partner->user_id = $user->id;
-                if ($request->has('partner_manglik')) {
-                    $partner->manglik = ($request->partner_manglik == 'true' || $request->partner_manglik == 1);
-                }
-                $partner->education = $request->expected_education ?? null;
-                $partner->income = $request->expected_income ?? null;
-                if ($request->has('divorce_accepted')) {
-                    $partner->divorce_accepted = ($request->divorce_accepted == 'true' || $request->divorce_accepted == 1);
-                }
-                if ($request->has('partner_intercaste')) {
-                    $partner->intercaste_accepted = ($request->partner_intercaste == 'true' || $request->partner_intercaste == 1);
-                }
-                $partner->save();
-            }
+            // --- Address (Step 7) ---
+            $address = new \App\Models\Address;
+            $address->user_id = $user->id;
+            $address->type = 'present';
+            // Assuming India (101) by default for telecalling campaigns
+            $address->country_id = 101; 
+            $address->state_id = $request->state;
+            $address->city_id = $request->district; // Storing district in city_id or mapping it if needed
+            $address->postal_code = $request->address;
+            $address->save();
 
             // Notification
             try {
