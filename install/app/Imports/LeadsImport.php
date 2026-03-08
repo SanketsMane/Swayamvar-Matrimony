@@ -54,7 +54,6 @@ class LeadsImport implements OnEachRow, WithChunkReading, WithBatchInserts
         // 1. Validation: 10 digit mobile [Sanket]
         if (!$mobile || strlen($mobile) != 10) {
             $this->stats['invalid']++;
-            $this->updateUploadStats();
             return;
         }
 
@@ -70,7 +69,6 @@ class LeadsImport implements OnEachRow, WithChunkReading, WithBatchInserts
                 'data' => $rowArr,
                 'upload_id' => $this->upload_id,
             ]);
-            $this->updateUploadStats();
             return;
         }
 
@@ -89,22 +87,6 @@ class LeadsImport implements OnEachRow, WithChunkReading, WithBatchInserts
         ]);
 
         $this->stats['valid']++;
-        $this->updateUploadStats();
-    }
-
-    private function updateUploadStats()
-    {
-        // Periodic update to keep UI informed if needed, or just update at end [Sanket]
-        // Since it's within current request, we'll update it silently.
-        $upload = LeadUpload::find($this->upload_id);
-        if ($upload) {
-            $upload->update([
-                'total_leads' => $this->stats['total'],
-                'valid_leads' => $this->stats['valid'],
-                'duplicate_leads' => $this->stats['duplicate'],
-                'invalid_leads' => $this->stats['invalid'],
-            ]);
-        }
     }
 
     public function chunkSize(): int

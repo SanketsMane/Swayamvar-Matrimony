@@ -145,6 +145,15 @@ class LeadUploadController extends Controller
 
         $stats = $import->getStats();
         
+        // Final update for stats and status [Sanket]
+        $upload->update([
+            'total_leads' => $stats['total'],
+            'valid_leads' => $stats['valid'],
+            'duplicate_leads' => $stats['duplicate'],
+            'invalid_leads' => $stats['invalid'],
+            'status' => 'completed',
+        ]);
+
         // Clean up temp file
         @unlink($path);
 
