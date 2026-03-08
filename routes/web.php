@@ -215,7 +215,7 @@ Route::group(['middleware' => ['auth']], function () {
 // Contact Us page
 Route::controller(ContactUsController::class)->group(function () {
     Route::get('/contact-us/page', 'show_contact_us_page')->name('contact_us');
-    Route::post('/contact-us', 'store')->name('contact-us.store');
+    Route::post('/contact-us', 'store')->name('contact-us.store_manual');
 });
 
 // Payment gateway Redirect
