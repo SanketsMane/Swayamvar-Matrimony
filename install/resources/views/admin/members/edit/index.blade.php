@@ -432,7 +432,7 @@
     }
 
     function education_edit_modal(id){
-        $.post('{{ route('education.edit') }}',{_token:'{{ @csrf_token() }}', id:id}, function(data){
+        $.post('{{ route('education.edit_custom') }}',{_token:'{{ @csrf_token() }}', id:id}, function(data){
             $('.create_edit_modal_content').html(data);
             $('.create_edit_modal').modal('show');
         });
@@ -460,14 +460,14 @@
 
     //  Career Add edit , status change
     function career_add_modal(id){
-       $.post('{{ route('career.create') }}',{_token:'{{ @csrf_token() }}', id:id}, function(data){
+       $.post('{{ route('career.create_custom') }}',{_token:'{{ @csrf_token() }}', id:id}, function(data){
            $('.create_edit_modal_content').html(data);
            $('.create_edit_modal').modal('show');
        });
     }
 
     function career_edit_modal(id){
-        $.post('{{ route('career.edit') }}',{_token:'{{ @csrf_token() }}', id:id}, function(data){
+        $.post('{{ route('career.edit_custom') }}',{_token:'{{ @csrf_token() }}', id:id}, function(data){
             $('.create_edit_modal_content').html(data);
             $('.create_edit_modal').modal('show');
         });

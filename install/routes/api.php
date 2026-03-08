@@ -160,8 +160,8 @@ Route::group(['namespace' => 'Api', 'middleware' => ['app_language']], function 
         Route::post('/member/verification-info-store', 'MemberController@store_verification_info');
     });
 
-    Route::post('update-member-location', [\App\Http\Controllers\Api\MemberLocationController::class, 'update']);
-    Route::post('update-device-token', [\App\Http\Controllers\Api\MemberLocationController::class, 'updateDeviceToken']);
+    // Route::post('update-member-location', [\App\Http\Controllers\Api\MemberLocationController::class, 'update']);
+    // Route::post('update-device-token', [\App\Http\Controllers\Api\MemberLocationController::class, 'updateDeviceToken']);
 
     Route::get('/fix-lead-upload', function() {
         \Spatie\Permission\Models\Permission::firstOrCreate(['name' => 'lead_upload', 'guard_name' => 'web']);

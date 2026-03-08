@@ -17,6 +17,12 @@ class AppServiceProvider extends ServiceProvider
   {
       Schema::defaultStringLength(191);
       Paginator::useBootstrap();
+
+      // Sanket: Morph map for telecalling leads to support polymorphism
+      \Illuminate\Database\Eloquent\Relations\Relation::morphMap([
+          'active_lead' => 'App\Models\ActiveLead',
+          'inactive_lead' => 'App\Models\InactiveLead',
+      ]);
   }
 
   /**
