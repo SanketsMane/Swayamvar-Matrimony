@@ -238,7 +238,7 @@ Route::group(['namespace' => 'Api', 'middleware' => ['app_language']], function 
                 'gallery-image' => 'GalleryImageController',
                 'career' => 'CareerController',
                 'education' => 'EducationController',
-            ]);
+            ], ['as' => 'api']);
 
             // Gallery Image View Request
             Route::get('/gallery-image-view-request', 'GalleryImageController@image_view_request');
