@@ -238,9 +238,9 @@ class TelecallerProfileApiController extends Controller
             'father_alive' => 'required',
             'mother_alive' => 'required',
             'no_of_brothers' => 'required|numeric',
-            'married_brothers' => 'nullable|numeric|lte:no_of_brothers',
-            'no_of_sisters' => 'required|numeric',
-            'married_sisters' => 'nullable|numeric|lte:no_of_sisters',
+            'married_brothers'    => 'nullable|numeric',
+            'no_of_sisters'       => 'required|numeric',
+            'married_sisters'     => 'nullable|numeric',
             'parents_occupation' => 'nullable',
             'property_details' => 'nullable',
 
@@ -250,9 +250,9 @@ class TelecallerProfileApiController extends Controller
 
 
             // 5. Career
-            'occupation_type' => 'required',
-            'occupation_details' => 'required',
-            'annual_income' => 'required',
+            'occupation_type'     => 'required',
+            'occupation_details'  => 'nullable',
+            'annual_income'       => 'required',
 
             // 6. Contact
             'phone' => 'required|digits:10|unique:users',
@@ -307,12 +307,12 @@ class TelecallerProfileApiController extends Controller
                 $user->save();
             }
 
-            // Default Free Package Implicit Logic
-            $package_id = 1; // ID 1 is typically the Free package
-            $package = \App\Models\Package::find($package_id);
-            
-            // Assume "Myself" (usually ID 1) if not provided [Sanket]
-            $on_behalf_id = $request->on_behalf ?? 1;
+            // Sanket: Use the package submitted by the form; fallback to Free package (ID 1)
+            $package_id = !empty($request->package) ? (int)$request->package : 1;
+            $package    = \App\Models\Package::find($package_id) ?? \App\Models\Package::find(1);
+
+            // Sanket: Default "on behalf" to 1 (Self/Myself) if not provided
+            $on_behalf_id = !empty($request->on_behalf) ? (int)$request->on_behalf : 1;
 
             // --- Members Table ---
             $member = new \App\Models\Member;
@@ -320,8 +320,8 @@ class TelecallerProfileApiController extends Controller
             $member->gender = $request->gender;
             $member->on_behalves_id = $on_behalf_id; // Implicit Default
             $member->marital_status_id = $request->marital_status; 
-            // Default Mother Tongue to generic if omitted from 8 steps
-            $member->mothere_tongue = $request->language ?? 1; 
+            // Sanket: mothere_tongue is not collected in the telecalling form — default to null to avoid DB constraint errors
+            $member->mothere_tongue   = null;
             $member->birthday = date('Y-m-d', strtotime($request->date_of_birth));
             $member->children = 0; // Default
             
