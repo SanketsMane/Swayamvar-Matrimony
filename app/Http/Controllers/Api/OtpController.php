@@ -40,8 +40,8 @@ class OtpController extends Controller
 
         $text = "Your OTP for Swayamvar Matrimony is: " . $otp;
         
-        // This helper function uses Twilio if configured in .env and settings
-        sendSMS($user->phone, env('VALID_TWILLO_NUMBER'), $text, "");
+        // Send OTP via SMS using configured provider (Renflair)
+        sendSMS($user->phone, null, $text, $otp);
 
         return response()->json([
             'result' => true,

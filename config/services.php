@@ -56,4 +56,8 @@ return [
         'industry_type' => env('PAYTM_INDUSTRY_TYPE'),
     ],
 
+    'renflair' => [
+        'api_key' => env('RENFLAIR_API_KEY'),
+    ],
+
 ];

@@ -195,9 +195,9 @@ if (!function_exists('sendSMS')) {
     function sendSMS($to, $from, $text, $template_id)
     {
         \Log::info("Sanket: sendSMS call to: " . $to . " with code: " . $template_id);
-        if (env('RENFLAIR_API_KEY') != null) {
+        if (config('services.renflair.api_key') != null) {
             \Log::info("Sanket: Using Renflair SMS");
-            $api = env('RENFLAIR_API_KEY');
+            $api = config('services.renflair.api_key');
             if (strpos($to, '+91') !== false) {
                 $to = substr($to, 3); // Strip +91 for Renflair
             }
