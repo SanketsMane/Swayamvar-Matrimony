@@ -39,7 +39,10 @@ if (!function_exists('uploaded_asset')) {
     function uploaded_asset($id)
     {
         if (($asset = Upload::find($id)) != null) {
-            return static_asset($asset->file_name);
+            // Sanket: Robust check to ensure file exists on disk to avoid 404s
+            if (file_exists(public_path($asset->file_name))) {
+                return static_asset($asset->file_name);
+            }
         }
         return null;
     }
