@@ -99,11 +99,21 @@ class BiodataService {
       final streamedResponse = await request.send();
       final response = await http.Response.fromStream(streamedResponse);
 
+      // Sanket: Handle potential 422 errors or other non-200 responses gracefully
+      if (response.statusCode != 200 && response.statusCode != 201) {
+        final errorData = json.decode(response.body);
+        return {
+          'result': false, 
+          'message': errorData['message'] ?? 'Submission failed (${response.statusCode})'
+        };
+      }
+
       return json.decode(response.body);
     } catch (e) {
-      return {'result': false, 'message': e.toString()};
+      return {'result': false, 'message': 'Connection error: ${e.toString()}'};
     }
   }
+
 
   // Fetches previously submitted profiles by this telecaller
   Future<Map<String, dynamic>> getMyProfiles({int page = 1, String search = ''}) async {

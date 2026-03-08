@@ -75,26 +75,38 @@ class TelecallerProfileApiController extends Controller
 
     public function getDropdownData()
     {
-        $educations = \App\Models\Education::select('id', 'degree as name')->distinct()->get();
-        if ($educations->isEmpty()) {
-            $educations = [
-                ['id' => '10th Std', 'name' => '10th Std'],
-                ['id' => '12th Std (HSC)', 'name' => '12th Std (HSC)'],
-                ['id' => 'Diploma', 'name' => 'Diploma'],
-                ['id' => 'B.A', 'name' => 'B.A'],
-                ['id' => 'B.Com', 'name' => 'B.Com'],
-                ['id' => 'B.Sc', 'name' => 'B.Sc'],
-                ['id' => 'B.Tech / B.E', 'name' => 'B.Tech / B.E'],
-                ['id' => 'B.C.A', 'name' => 'B.C.A'],
-                ['id' => 'M.A', 'name' => 'M.A'],
-                ['id' => 'M.Com', 'name' => 'M.Com'],
-                ['id' => 'M.Sc', 'name' => 'M.Sc'],
-                ['id' => 'M.Tech / M.E', 'name' => 'M.Tech / M.E'],
-                ['id' => 'M.C.A', 'name' => 'M.C.A'],
-                ['id' => 'MBA', 'name' => 'MBA'],
-                ['id' => 'PhD', 'name' => 'PhD'],
-            ];
+        $db_educations = \App\Models\Education::select('id', 'degree as name')->distinct()->get()->toArray();
+        $fallback_educations = [
+            ['id' => '10th Std', 'name' => '10th Std'],
+            ['id' => '12th Std (HSC)', 'name' => '12th Std (HSC)'],
+            ['id' => 'Diploma', 'name' => 'Diploma'],
+            ['id' => 'B.A', 'name' => 'B.A'],
+            ['id' => 'B.Com', 'name' => 'B.Com'],
+            ['id' => 'B.Sc', 'name' => 'B.Sc'],
+            ['id' => 'B.Tech / B.E', 'name' => 'B.Tech / B.E'],
+            ['id' => 'B.C.A', 'name' => 'B.C.A'],
+            ['id' => 'M.A', 'name' => 'M.A'],
+            ['id' => 'M.Com', 'name' => 'M.Com'],
+            ['id' => 'M.Sc', 'name' => 'M.Sc'],
+            ['id' => 'M.Tech / M.E', 'name' => 'M.Tech / M.E'],
+            ['id' => 'M.C.A', 'name' => 'M.C.A'],
+            ['id' => 'MBA', 'name' => 'MBA'],
+            ['id' => 'PhD', 'name' => 'PhD'],
+        ];
+
+        // Sanket: Merge and unique by name
+        $merged = array_merge($db_educations, $fallback_educations);
+        $unique = [];
+        $seen = [];
+        foreach ($merged as $edu) {
+            $name = strtolower($edu['name']);
+            if (!in_array($name, $seen)) {
+                $seen[] = $name;
+                $unique[] = $edu;
+            }
         }
+        $educations = $unique;
+
 
         $payment_methods = \App\Models\ManualPaymentMethod::select('id', 'heading as name')->get();
         if ($payment_methods->isEmpty()) {

@@ -3,6 +3,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter/services.dart';
+import 'package:flutter/foundation.dart' show kIsWeb;
 import '../core/constants.dart';
 import '../services/biodata_service.dart';
 
@@ -23,6 +24,7 @@ class _FillBiodataScreenState extends State<FillBiodataScreen> {
   // Image Picker
   final ImagePicker _picker = ImagePicker();
   XFile? _profileImage;
+  Uint8List? _profileImageBytes;
 
   // Controllers
   final _firstNameController = TextEditingController();
@@ -31,7 +33,6 @@ class _FillBiodataScreenState extends State<FillBiodataScreen> {
   
   final _weightController = TextEditingController();
   final _disabilityDetailsController = TextEditingController(); // Just in case details are asked for Physical Disability
-  final _dietController = TextEditingController();
   
   final _noOfBrothersController = TextEditingController();
   final _marriedBrothersController = TextEditingController();
@@ -100,7 +101,6 @@ class _FillBiodataScreenState extends State<FillBiodataScreen> {
     _lastNameController.dispose();
     _weightController.dispose();
     _disabilityDetailsController.dispose();
-    _dietController.dispose();
     _noOfBrothersController.dispose();
     _marriedBrothersController.dispose();
     _noOfSistersController.dispose();
@@ -178,7 +178,8 @@ class _FillBiodataScreenState extends State<FillBiodataScreen> {
           {'id': '20', 'name': '6\' 0" (182 cm)'},
         ];
 
-        _educations = _educations.isNotEmpty ? _educations : [
+        final apiEducations = _toStringList(data['educations'] ?? []);
+        final fallbackEducations = [
            {'id': '1', 'name': '10th Std'},
            {'id': '2', 'name': '12th Std (HSC)'},
            {'id': '3', 'name': 'Diploma'},
@@ -195,6 +196,26 @@ class _FillBiodataScreenState extends State<FillBiodataScreen> {
            {'id': '14', 'name': 'MBA'},
            {'id': '15', 'name': 'PhD'},
         ];
+
+        // Sanket: Merge API educations with fallback to ensure full list
+        final Set<String> seenNames = {};
+        final List<Map<String, String>> mergedEducations = [];
+
+        for (var e in apiEducations) {
+          final name = e['name']?.toString().toLowerCase() ?? '';
+          if (name.isNotEmpty && !seenNames.contains(name)) {
+            seenNames.add(name);
+            mergedEducations.add(e);
+          }
+        }
+        for (var e in fallbackEducations) {
+          final name = e['name']?.toString().toLowerCase() ?? '';
+          if (name.isNotEmpty && !seenNames.contains(name)) {
+            seenNames.add(name);
+            mergedEducations.add(e);
+          }
+        }
+        _educations = mergedEducations;
 
         if (_genders.isNotEmpty) _selectedGender = _genders[0]['id'];
         _isLoadingDropdowns = false;
@@ -288,7 +309,11 @@ class _FillBiodataScreenState extends State<FillBiodataScreen> {
       imageQuality: 70,
     );
     if (image != null) {
-      setState(() => _profileImage = image);
+      final bytes = await image.readAsBytes();
+      setState(() {
+        _profileImage = image;
+        _profileImageBytes = bytes;
+      });
     }
   }
 
@@ -320,7 +345,6 @@ class _FillBiodataScreenState extends State<FillBiodataScreen> {
       'date_of_birth': '${_selectedDob!.year}-${_selectedDob!.month.toString().padLeft(2, '0')}-${_selectedDob!.day.toString().padLeft(2, '0')}',
       'religion': _selectedReligion ?? '',
       'caste': _selectedCaste ?? '',
-      'sub_caste': _selectedSubCaste ?? '',
       'marital_status': _selectedMaritalStatus ?? '',
 
       // 2. Physical
@@ -329,7 +353,6 @@ class _FillBiodataScreenState extends State<FillBiodataScreen> {
       'blood_group': _selectedBloodGroup ?? '',
       'complexion': _selectedComplexion ?? '',
       'physical_disability': _selectedPhysicalDisability ?? 'No',
-      'diet': _dietController.text.trim(),
       'manglik': _selectedManglik ?? 'No',
       'intercaste_accepted': _selectedIntercasteAccepted ?? 'No',
 
@@ -364,8 +387,17 @@ class _FillBiodataScreenState extends State<FillBiodataScreen> {
     };
 
     http.MultipartFile? imageFile;
-    if (_profileImage != null) {
-      imageFile = await http.MultipartFile.fromPath('photo', _profileImage!.path);
+    if (_profileImage != null && _profileImageBytes != null) {
+      // Sanket: Fix for Flutter Web support - fromPath is IO only
+      if (kIsWeb) {
+        imageFile = http.MultipartFile.fromBytes(
+          'photo',
+          _profileImageBytes!,
+          filename: _profileImage!.name,
+        );
+      } else {
+        imageFile = await http.MultipartFile.fromPath('photo', _profileImage!.path);
+      }
     }
 
     final response = await _biodataService.submitBiodata(
@@ -621,13 +653,6 @@ class _FillBiodataScreenState extends State<FillBiodataScreen> {
               ),
               const SizedBox(height: 12),
               _dropdown(
-                label: 'Sub-Caste', icon: Icons.group_work_outlined,
-                value: _selectedSubCaste,
-                items: _filteredSubCastes.map((s) => DropdownMenuItem<String>(value: s['id'], child: Text(s['name'] ?? ''))).toList(),
-                onChanged: (v) => setState(() => _selectedSubCaste = v),
-              ),
-              const SizedBox(height: 12),
-              _dropdown(
                 label: 'Marital Status *', icon: Icons.favorite_border,
                 value: _selectedMaritalStatus,
                 items: _maritalStatuses.map((m) => DropdownMenuItem<String>(value: m['id'], child: Text(m['name'] ?? ''))).toList(),
@@ -683,8 +708,6 @@ class _FillBiodataScreenState extends State<FillBiodataScreen> {
                 onChanged: (v) => setState(() => _selectedPhysicalDisability = v),
                 isRequired: true,
               ),
-              const SizedBox(height: 12),
-              _input(controller: _dietController, label: 'Diet (Vegetarian, Non-Veg, etc.)', icon: Icons.restaurant),
               const SizedBox(height: 12),
               _dropdown(
                 label: 'Manglik *', icon: Icons.star_border,
@@ -886,11 +909,12 @@ class _FillBiodataScreenState extends State<FillBiodataScreen> {
                     borderRadius: BorderRadius.circular(16),
                     border: Border.all(color: AppColors.primary(context).withValues(alpha: 0.1), width: 1.5),
                   ),
-                  child: _profileImage != null
-                      ? ClipRRect(
-                          borderRadius: BorderRadius.circular(16),
-                            child: Image.network(_profileImage!.path, fit: BoxFit.cover),
-                        )
+                        ? ClipRRect(
+                            borderRadius: BorderRadius.circular(16),
+                            child: Image.memory(_profileImageBytes!, fit: BoxFit.cover),
+                          )
+
+
                       : Column(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
