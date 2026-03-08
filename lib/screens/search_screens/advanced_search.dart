@@ -64,6 +64,9 @@ class _AdvancedSearchState extends State<AdvancedSearch> {
     _isDisabled = searchState.isDisabled ?? false;
     _hasPhoto = searchState.hasPhoto ?? false;
     _recentlyJoined = searchState.recentlyJoined ?? false;
+    
+    // Sanket: Set default state if not selected
+    _state_value = _state_value ?? store.state.manageProfileCombineState?.profiledropdownResponseData?.data?.defaultStateId ?? 22;
 
     // Sanket: Ensure initial data is fetched (Religions and States for India/99)
     if (store.state.manageProfileCombineState?.profiledropdownResponseData?.data?.religionList == null || 
@@ -81,7 +84,7 @@ class _AdvancedSearchState extends State<AdvancedSearch> {
     if (_religion_id != null) {
       store.dispatch(casteMiddleware(_religion_id, state: AppStates.advancedSearch));
     }
-    if (_state_value != null) {
+    if (_state_value != null && (store.state.basicSearchState?.cityResponse?.data == null || store.state.basicSearchState!.cityResponse!.data!.isEmpty)) {
       store.dispatch(cityMiddleware(_state_value, AppStates.advancedSearch));
     }
   }
@@ -320,33 +323,20 @@ class _AdvancedSearchState extends State<AdvancedSearch> {
             context,
             AppLocalizations.of(context)!.filter_caste,
             _caste_value,
-            state.basicSearchState?.casteResponse?.data ?? [],
+            store.state.basicSearchState?.casteResponse?.data ?? [],
             (id) => setState(() => _caste_value = id),
           ),
           const SizedBox(height: 12),
 
-          // State -> District (जिल्हा)
+          // Sanket: Optimized location filters. 
+          // Default State is managed from admin. Show only District (Cities of default state).
           _dropdownWithId(
             context,
             "जिल्हा (District)",
-            _state_value,
-            state.basicSearchState?.stateResponse?.data ?? [],
-            (id) {
-              setState(() {
-                _state_value = id;
-                _city_value = null;
-              });
-              store.dispatch(cityMiddleware(id, AppStates.advancedSearch));
-            },
-          ),
-          const SizedBox(height: 12),
-
-          // City
-          _dropdownWithId(
-            context,
-            AppLocalizations.of(context)!.filter_city,
             _city_value,
-            state.basicSearchState?.cityResponse?.data ?? [],
+            (store.state.basicSearchState?.cityResponse?.data?.isNotEmpty ?? false) 
+                ? store.state.basicSearchState!.cityResponse!.data! 
+                : (manageData?.cityList ?? []),
             (id) => setState(() => _city_value = id),
           ),
         ],
@@ -450,8 +440,18 @@ class _AdvancedSearchState extends State<AdvancedSearch> {
             context,
             AppLocalizations.of(context)!.filter_income,
             _income_value,
-            ["० – २ लाख", "२ – ५ लाख", "५ – १० लाख", "१०+ लाख"],
-            (val) => setState(() => _income_value = val),
+            ["०–२ लाख", "२–५ लाख", "५–१० लाख", "१० ते २० लाख", "२० ते ५० लाख", "५० लाख+"],
+            (val) {
+              const incomeMap = {
+                '०–२ लाख': '0-2 Lakh',
+                '२–५ लाख': '2-5 Lakh',
+                '५–१० लाख': '5-10 Lakh',
+                '१० ते २० लाख': '10-20 Lakh',
+                '२० ते ५० लाख': '20-50 Lakh',
+                '५० लाख+': '50 Lakh+',
+              };
+              setState(() => _income_value = incomeMap[val] ?? val);
+            },
           ),
         ],
       ),

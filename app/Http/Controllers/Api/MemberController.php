@@ -215,7 +215,9 @@ class MemberController extends Controller
 
         // Income Sort
         if (!empty($income_id)) {
-            $user_ids = Career::where('income_id', $income_id)->pluck('user_id')->toArray();
+            $user_ids = Career::where('income_id', $income_id)
+                ->orWhere('income', $income_id) // Sanket: Also check 'income' column as ProfileController saves there
+                ->pluck('user_id')->toArray();
             $users_query->whereIn('id', $user_ids);
         }
 

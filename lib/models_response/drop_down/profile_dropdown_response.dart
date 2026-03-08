@@ -41,7 +41,9 @@ class ProfiledropdownResponseData {
       languageList = [],
       religionList = [],
       familyValueList = [],
-      countryList = [];
+      countryList = [],
+      defaultStateId = null,
+      cityList = [];
 
   ProfiledropdownResponseData({
     this.onbehalfList,
@@ -50,6 +52,8 @@ class ProfiledropdownResponseData {
     this.religionList,
     this.familyValueList,
     this.countryList,
+    this.defaultStateId,
+    this.cityList,
   });
 
   List<DDown>? onbehalfList = [];
@@ -58,6 +62,8 @@ class ProfiledropdownResponseData {
   List<DDown>? religionList = [];
   List<DDown>? familyValueList = [];
   List<DDown>? countryList = <DDown>[];
+  dynamic defaultStateId;
+  List<DDown>? cityList = [];
 
   factory ProfiledropdownResponseData.fromJson(Map<String, dynamic> json) =>
       ProfiledropdownResponseData(
@@ -97,6 +103,13 @@ class ProfiledropdownResponseData {
                 : List<DDown>.from(
                   json["country_list"].map((x) => DDown.fromJson(x)),
                 ),
+        defaultStateId: json["default_state_id"],
+        cityList:
+            json["city_list"] == null
+                ? null
+                : List<DDown>.from(
+                  json["city_list"].map((x) => DDown.fromJson(x)),
+                ),
       );
 
   Map<String, dynamic> toJson() => {
@@ -124,5 +137,10 @@ class ProfiledropdownResponseData {
         countryList == null
             ? null
             : List<dynamic>.from(countryList!.map((x) => x.toJson())),
+    "default_state_id": defaultStateId,
+    "city_list":
+        cityList == null
+            ? null
+            : List<dynamic>.from(cityList!.map((x) => x.toJson())),
   };
 }

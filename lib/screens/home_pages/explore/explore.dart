@@ -65,7 +65,7 @@ class _ExploreState extends State<Explore> {
     'Nashik',
   ];
   final List<String> _mockReasons = [
-    '✔ Same Religion\n✔ Same City\n✔ Similar Education',
+    '✔ Same Religion\n✔ Same District\n✔ Similar Education',
     '✔ Same Caste\n✔ Highly Compatible Profession',
     '✔ Same Religion\n✔ Matches Partner Preferences',
   ];
@@ -88,7 +88,7 @@ class _ExploreState extends State<Explore> {
     return m.name!;
   }
 
-  String _getCity(MemberData m, int index) {
+  String _getDistrict(MemberData m, int index) {
     if (m.country == null ||
         m.country!.trim().isEmpty ||
         m.country!.toLowerCase().contains('dummy')) {
@@ -438,7 +438,7 @@ class _ExploreState extends State<Explore> {
                 ),
                 const SizedBox(height: 4),
                 Text(
-                  _getCity(m, idx),
+                  _getDistrict(m, idx),
                   style: Styles.regular_gull_grey_12.copyWith(
                     color: MyTheme.text_secondary,
                     fontSize: 13,

@@ -44,6 +44,7 @@ class _MyProfileState extends State<MyProfile> {
   int? _selectedReligionId;
   int? _selectedCasteId;
   int? _selectedSubCasteId;
+  List<DDown> _districtList = []; // Added by Sanket
   static const Map<String, String> _maritalOptions = {
     'अविवाहित': 'Unmarried',
     'घटस्फोटित पुरुष': 'Divorced (M)',
@@ -141,44 +142,7 @@ class _MyProfileState extends State<MyProfile> {
     'पासपोर्ट': 'passport',
     'मतदान कार्ड': 'voter_id',
   };
-  static const Map<String, String> _districtOptions = {
-    'अहमदनगर': 'Ahilyanagar',
-    'अकोला': 'Akola',
-    'अमरावती': 'Amravati',
-    'छत्रपती संभाजीनगर': 'Chhatrapati Sambhajinagar',
-    'बीड': 'Beed',
-    'भंडारा': 'Bhandara',
-    'बुलढाणा': 'Buldhana',
-    'चंद्रपूर': 'Chandrapur',
-    'धुळे': 'Dhule',
-    'गडचिरोली': 'Gadchiroli',
-    'गोंदिया': 'Gondia',
-    'हिंगोली': 'Hingoli',
-    'जळगाव': 'Jalgaon',
-    'जालना': 'Jalna',
-    'कोल्हापूर': 'Kolhapur',
-    'लातूर': 'Latur',
-    'मुंबई शहर': 'Mumbai City',
-    'मुंबई उपनगर': 'Mumbai Suburban',
-    'नागपूर': 'Nagpur',
-    'नांदेड': 'Nanded',
-    'नंदुरबार': 'Nandurbar',
-    'नाशिक': 'Nashik',
-    'धाराशिव': 'Dharashiv',
-    'पालघर': 'Palghar',
-    'परभणी': 'Parbhani',
-    'पुणे': 'Pune',
-    'रायगड': 'Raigad',
-    'रत्नागिरी': 'Ratnagiri',
-    'सांगली': 'Sangli',
-    'सातारा': 'Satara',
-    'सिंधुदुर्ग': 'Sindhudurg',
-    'सोलापूर': 'Solapur',
-    'ठाणे': 'Thane',
-    'वर्धा': 'Wardha',
-    'वाशीम': 'Washim',
-    'यवतमाळ': 'Yavatmal',
-  };
+  // Sanket: Removed hardcoded _districtOptions; now fetched from API
   String? _govIdTypeDisplay;
   final TextEditingController _govIdNumber = TextEditingController();
   final TextEditingController _address = TextEditingController();
@@ -241,6 +205,7 @@ class _MyProfileState extends State<MyProfile> {
       if (res.result == true && res.data != null) {
         setState(() {
           _religionList = res.data!.religionList ?? [];
+          _districtList = res.data!.cityList ?? []; // Added by Sanket
         });
       }
     } catch (e) {
@@ -429,9 +394,9 @@ class _MyProfileState extends State<MyProfile> {
           final a = addrRes.data!;
           _address.text = a.address ?? '';
           if (a.city != null) {
-            _districtDisplay = _districtOptions.entries
-                .where((e) => e.value == a.city)
-                .map((e) => e.key)
+            _districtDisplay = _districtList
+                .where((e) => e.name == a.city || e.id.toString() == a.city)
+                .map((e) => e.name)
                 .firstOrNull ?? a.city;
           }
           // Assuming country/state are fixed for Maharashtra/India
@@ -578,22 +543,20 @@ class _MyProfileState extends State<MyProfile> {
         if (_noOfBrothers == null || _marriedBrothers == null || _noOfSisters == null || _marriedSisters == null) {
           return "Please provide Siblings count.";
         }
-        // Excluded: _parentsOccupation, _propertyDetails
+        // Sanket: Occupation details is no longer mandatory
         if (_educationDisplay == null) {
           return "Please select your Education level.";
         }
         if (_educationDetails.text.trim().isEmpty) {
           return "Please provide Education details.";
         }
-        if (_occupationDisplay == null || _annualIncomeDisplay == null || _occupationDetails.text.trim().isEmpty) {
-          return "Please fill all Career and Income details.";
+        if (_occupationDisplay == null || _annualIncomeDisplay == null) {
+          return "Please fill Career and Income details.";
         }
         return null;
 
       case 2:
-        if (_govIdTypeDisplay == null || _govIdNumber.text.trim().isEmpty) {
-          return "Please provide Govt ID Type and Number.";
-        }
+        // Sanket: Govt ID is no longer mandatory
         if (_address.text.trim().isEmpty || _districtDisplay == null) {
           return "Please fill address and select District.";
         }
@@ -609,8 +572,9 @@ class _MyProfileState extends State<MyProfile> {
         if (_partnerManglik == null || _divorceAccepted == null || _partnerIntercaste == null) {
           return "Please answer all Partner Expectations Yes/No questions.";
         }
-        if (_expectedEducationDisplay == null || _expectedIncomeDisplay == null) {
-          return "Please select Expected Education and Income.";
+        // Sanket: Partner religion is mandatory, but caste and education/income are no longer mandatory
+        if (_partnerReligionDisplay == null) {
+           return "Please select Partner Religion.";
         }
         return null;
 
@@ -674,7 +638,7 @@ class _MyProfileState extends State<MyProfile> {
         gov_id_type: _apiVal(_govIdOptions, _govIdTypeDisplay),
         gov_id_number: _govIdNumber.text.trim(),
         address: _address.text.trim(),
-        district: _apiVal(_districtOptions, _districtDisplay),
+        district: _districtList.where((e) => e.name == _districtDisplay).map((e) => e.id).firstOrNull,
         phone2: _mobile2.text.trim(),
         general_info: preferredCitiesText.isNotEmpty ? preferredCitiesText : null,
         manglik: _partnerManglik != null ? (_partnerManglik! ? '1' : '0') : null,
@@ -972,15 +936,6 @@ class _MyProfileState extends State<MyProfile> {
         _onCasteChanged,
         isRequired: true,
       ),
-      _buildDDown(
-        "पोट-जात (Sub-Caste)",
-        _subCasteList,
-        _subCasteDisplay,
-        (v) => setState(() {
-          _subCasteDisplay = v?.name;
-          _selectedSubCasteId = v?.id;
-        }),
-      ),
       _buildMappedDropdown(
         AppLocalizations.of(context)!.profile_label_marital_status,
         _maritalOptions,
@@ -1160,7 +1115,7 @@ class _MyProfileState extends State<MyProfile> {
         AppLocalizations.of(context)!.profile_label_occ_details,
         _occupationDetails,
         maxLines: 2,
-        isRequired: true,
+        isRequired: false, // Sanket: Not mandatory
       ),
       _buildMappedDropdown(
         AppLocalizations.of(context)!.profile_label_income,
@@ -1183,12 +1138,12 @@ class _MyProfileState extends State<MyProfile> {
         _govIdOptions,
         _govIdTypeDisplay,
         (v) => setState(() => _govIdTypeDisplay = v),
-        isRequired: true,
+        isRequired: false, // Sanket: Not mandatory
       ),
       _buildTextField(
         AppLocalizations.of(context)!.profile_label_gov_id_number,
         _govIdNumber,
-        isRequired: true,
+        isRequired: false, // Sanket: Not mandatory
       ),
       _buildTextField(
         AppLocalizations.of(context)!.profile_label_address,
@@ -1201,11 +1156,12 @@ class _MyProfileState extends State<MyProfile> {
         TextEditingController(text: "Maharashtra"),
         isRequired: true,
       ),
-      _buildMappedDropdown(
+      // Sanket: Use dynamic district list from API
+      _buildDDown(
         "जिल्हा (District)",
-        _districtOptions,
+        _districtList,
         _districtDisplay,
-        (v) => setState(() => _districtDisplay = v),
+        (v) => setState(() => _districtDisplay = v?.name),
         isRequired: true,
       ),
       _buildTextField(
@@ -1341,30 +1297,21 @@ class _MyProfileState extends State<MyProfile> {
         _partnerCasteList,
         _partnerCasteDisplay,
         _onPartnerCasteChanged,
-        isRequired: true,
-      ),
-      _buildDDown(
-        "अपेक्षित पोट-जात (Partner Sub-Caste)",
-        _partnerSubCasteList,
-        _partnerSubCasteDisplay,
-        (v) => setState(() {
-          _partnerSubCasteDisplay = v?.name;
-          _partnerSubCasteId = v?.id;
-        }),
+        isRequired: false, // Sanket: Not mandatory
       ),
       _buildMappedDropdown(
         AppLocalizations.of(context)!.profile_label_expected_edu,
         _educationOptions,
         _expectedEducationDisplay,
         (v) => setState(() => _expectedEducationDisplay = v),
-        isRequired: true,
+        isRequired: false, // Sanket: Not mandatory
       ),
       _buildMappedDropdown(
         AppLocalizations.of(context)!.profile_label_expected_income,
         _incomeOptions,
         _expectedIncomeDisplay,
         (v) => setState(() => _expectedIncomeDisplay = v),
-        isRequired: true,
+        isRequired: false, // Sanket: Not mandatory
       ),
       _buildNullableRadioOption(
         AppLocalizations.of(context)!.profile_label_divorce_accepted,

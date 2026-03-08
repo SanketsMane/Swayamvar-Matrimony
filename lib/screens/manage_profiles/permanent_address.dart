@@ -112,7 +112,7 @@ class _PermanentAddressState extends State<PermanentAddress> {
           build_title(context, state),
           build_country(context, state),
           build_state(context, state),
-          build_city(context, state),
+          build_district(context, state),
           build_postal_code(context, state),
           InkWell(
             onTap: () {
@@ -357,7 +357,7 @@ class _PermanentAddressState extends State<PermanentAddress> {
     );
   }
 
-  Column build_city(BuildContext context, AppState state) {
+  Column build_district(BuildContext context, AppState state) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [

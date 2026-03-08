@@ -365,60 +365,55 @@ class _FillBiodataScreenState extends State<FillBiodataScreen> {
     if (!_formKeys[3].currentState!.validate()) return;
     
     // Explicit Validation for Stage 1 & 2 specifics
-    if (_selectedDob == null) { _showSnack('Please select Date of Birth', isError: true); return; }
-    if (_selectedReligion == null) { _showSnack('Religion is mandatory', isError: true); return; }
     if (_selectedCaste == null) { _showSnack('Caste is mandatory', isError: true); return; }
     if (_selectedPackage == null) { _showSnack('Please select a Package', isError: true); return; }
 
     setState(() => _isSaving = true);
 
     final data = {
-      // Stage 1: Basic
+      // Stage 1: Basic & Physical
       'first_name': _firstNameController.text.trim(),
       'middle_name': _middleNameController.text.trim(),
       'last_name': _lastNameController.text.trim(),
-      'phone': _phoneController.text.trim(),
-      'mobile2': _mobile2Controller.text.trim(),
-      'email': _emailController.text.trim(),
       'gender': _selectedGender ?? 'Male',
       'date_of_birth': '${_selectedDob!.year}-${_selectedDob!.month.toString().padLeft(2, '0')}-${_selectedDob!.day.toString().padLeft(2, '0')}',
+      'religion': _selectedReligion ?? '',
+      'caste': _selectedCaste ?? '',
       'on_behalf': _selectedOnBehalf ?? '',
       'marital_status': _selectedMaritalStatus ?? '',
       'language': _selectedLanguage ?? '',
-      
-      // Stage 2: Spiritual & Physical
-      'religion': _selectedReligion ?? '',
-      'caste': _selectedCaste ?? '',
-      'sub_caste': _selectedSubCaste ?? '',
-      'manglik': _selectedManglik ?? 'false',
-      'intercaste_accepted': _selectedIntercasteAccepted ?? 'false',
-      'family_value': _selectedFamilyValue ?? '',
       'height': _selectedHeight ?? '',
       'weight': _weightController.text.trim(),
       'blood_group': _selectedBloodGroup ?? '',
       'complexion': _selectedComplexion ?? '',
       'physical_disability': _selectedPhysicalDisability ?? 'false',
       'disability_details': _disabilityDetailsController.text.trim(),
+      'manglik_personal': _selectedManglik ?? 'false',
+      'intercaste_accepted': _selectedIntercasteAccepted ?? 'false',
       
-      // Stage 3: Education & Career
-      'education_level': _selectedEducation ?? '',
-      'occupation_type': _occupationTypeController.text.trim(),
-      'occupation_details': _occupationDetailsController.text.trim(),
-       'annual_income': _annualIncomeController.text.trim(),
-      'country': _selectedCountry ?? '101',
-      'state': _selectedState ?? '',
-      'city': _selectedCity ?? '',
-      'address': _addressDetailsController.text.trim(),
-      
-      // Stage 4: Family & Expectations
+      // Stage 2: Family & Career
       'father_alive': _selectedFatherAlive ?? 'true',
       'mother_alive': _selectedMotherAlive ?? 'true',
       'parents_occupation': _parentsOccupationController.text.trim(),
+      'property_details': _propertyDetailsController.text.trim(),
       'no_of_brothers': _noOfBrothersController.text.trim(),
       'married_brothers': _marriedBrothersController.text.trim(),
       'no_of_sisters': _noOfSistersController.text.trim(),
       'married_sisters': _marriedSistersController.text.trim(),
-      'property_details': _propertyDetailsController.text.trim(),
+      'education_level': _selectedEducation ?? '',
+      'occupation_type': _occupationTypeController.text.trim(),
+      'occupation_details': _occupationDetailsController.text.trim(),
+      'annual_income': _annualIncomeController.text.trim(),
+      
+      // Stage 3: Contact & Photos
+      'phone': _phoneController.text.trim(),
+      'mobile2': _mobile2Controller.text.trim(),
+      'email': _emailController.text.trim(),
+      'state': _selectedState ?? '',
+      'city': _selectedCity ?? '',
+      'address': _addressDetailsController.text.trim(),
+      
+      // Stage 4: Expectations & Finish
       'partner_manglik': _selectedPartnerManglik ?? 'false',
       'expected_education': _expectedEducationController.text.trim(),
       'expected_income': _expectedIncomeController.text.trim(),
@@ -650,9 +645,10 @@ class _FillBiodataScreenState extends State<FillBiodataScreen> {
 
   List<Step> _buildSteps() {
     return [
+      // STEP 0: Basic & Physical
       Step(
         isActive: _currentStep >= 0,
-        title: Text('Basic Info', style: GoogleFonts.outfit(fontWeight: FontWeight.bold, fontSize: _currentStep == 0 ? 14 : 12, color: _currentStep == 0 ? AppColors.primary(context) : AppColors.textSecondary(context))),
+        title: Text('Basic & Physical', style: GoogleFonts.outfit(fontWeight: FontWeight.bold, fontSize: _currentStep == 0 ? 14 : 12, color: _currentStep == 0 ? AppColors.primary(context) : AppColors.textSecondary(context))),
         content: Form(
           key: _formKeys[0],
           child: Column(
@@ -663,6 +659,8 @@ class _FillBiodataScreenState extends State<FillBiodataScreen> {
                 icon: Icons.person_rounded,
                 children: [
                   _input(controller: _firstNameController, label: 'First Name', icon: Icons.person_rounded, isRequired: true),
+                  const SizedBox(height: 12),
+                  _input(controller: _middleNameController, label: 'Middle Name', icon: Icons.person_outline_rounded, isRequired: true),
                   const SizedBox(height: 12),
                   _input(controller: _lastNameController, label: 'Last Name', icon: Icons.person_outline_rounded, isRequired: true),
                   const SizedBox(height: 12),
@@ -702,63 +700,8 @@ class _FillBiodataScreenState extends State<FillBiodataScreen> {
                 ],
               ),
               const SizedBox(height: 16),
-
               _buildSectionCard(
-                title: 'Contact Details',
-                icon: Icons.contact_phone_rounded,
-                children: [
-                  _input(controller: _phoneController, label: 'Mobile Number', icon: Icons.phone_rounded, isNumber: true, isRequired: true),
-                  const SizedBox(height: 12),
-                  _input(controller: _mobile2Controller, label: 'Alternate Mobile', icon: Icons.phone_android_rounded, isNumber: true),
-                  const SizedBox(height: 12),
-                  _input(controller: _emailController, label: 'Email Address', icon: Icons.email_rounded),
-                ],
-              ),
-              const SizedBox(height: 16),
-
-              _buildSectionCard(
-                title: 'Profile Attributes',
-                icon: Icons.settings_accessibility_rounded,
-                children: [
-                  _dropdown(
-                    label: 'Profile Created By', icon: Icons.family_restroom_rounded,
-                    value: _selectedOnBehalf,
-                    items: _onBehalves.map((o) => DropdownMenuItem<String>(value: o['id'], child: Text(o['name'] ?? ''))).toList(),
-                    onChanged: (v) => setState(() => _selectedOnBehalf = v),
-                    isRequired: true,
-                  ),
-                  const SizedBox(height: 12),
-                  _dropdown(
-                    label: 'Marital Status', icon: Icons.favorite_border_rounded,
-                    value: _selectedMaritalStatus,
-                    items: _maritalStatuses.map((m) => DropdownMenuItem<String>(value: m['id'], child: Text(m['name'] ?? ''))).toList(),
-                    onChanged: (v) => setState(() => _selectedMaritalStatus = v),
-                    isRequired: true,
-                  ),
-                  const SizedBox(height: 12),
-                  _dropdown(
-                    label: 'Mother Tongue', icon: Icons.translate_rounded,
-                    value: _selectedLanguage,
-                    items: _languages.map((l) => DropdownMenuItem<String>(value: l['id'], child: Text(l['name'] ?? ''))).toList(),
-                    onChanged: (v) => setState(() => _selectedLanguage = v),
-                    isRequired: true,
-                  ),
-                ],
-              ),
-            ],
-          ),
-        ),
-      ),
-      Step(
-        isActive: _currentStep >= 1,
-        title: Text('Spiritual & Physical', style: GoogleFonts.outfit(fontWeight: FontWeight.bold, fontSize: _currentStep == 1 ? 14 : 12, color: _currentStep == 1 ? AppColors.primary(context) : AppColors.textSecondary(context))),
-        content: Form(
-          key: _formKeys[1],
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              _buildSectionCard(
-                title: 'Spiritual Identity',
+                title: 'Religious & Status',
                 icon: Icons.temple_hindu_rounded,
                 children: [
                   _dropdown(
@@ -778,59 +721,41 @@ class _FillBiodataScreenState extends State<FillBiodataScreen> {
                   ),
                   const SizedBox(height: 12),
                   _dropdown(
-                    label: 'Sub-Caste', icon: Icons.account_tree_rounded,
-                    value: _selectedSubCaste,
-                    items: _filteredSubCastes.map((s) => DropdownMenuItem<String>(value: s['id'], child: Text(s['name'] ?? ''))).toList(),
-                    onChanged: (v) => setState(() => _selectedSubCaste = v),
+                    label: 'Profile Created By', icon: Icons.family_restroom_rounded,
+                    value: _selectedOnBehalf,
+                    items: _onBehalves.map((o) => DropdownMenuItem<String>(value: o['id'], child: Text(o['name'] ?? ''))).toList(),
+                    onChanged: (v) => setState(() => _selectedOnBehalf = v),
+                    isRequired: true,
                   ),
                   const SizedBox(height: 12),
                   _dropdown(
-                    label: 'Family Value', icon: Icons.volunteer_activism_rounded,
-                    value: _selectedFamilyValue,
-                    items: _familyValues.map((f) => DropdownMenuItem<String>(value: f['id'], child: Text(f['name'] ?? ''))).toList(),
-                    onChanged: (v) => setState(() => _selectedFamilyValue = v),
+                    label: 'Marital Status', icon: Icons.favourite_border_rounded,
+                    value: _selectedMaritalStatus,
+                    items: _maritalStatuses.map((m) => DropdownMenuItem<String>(value: m['id'], child: Text(m['name'] ?? ''))).toList(),
+                    onChanged: (v) => setState(() => _selectedMaritalStatus = v),
+                    isRequired: true,
                   ),
                   const SizedBox(height: 12),
-                  Row(
-                    children: [
-                      Expanded(
-                        child: _dropdown(
-                          label: 'Manglik', icon: Icons.star_border_rounded,
-                          value: _selectedManglik,
-                          items: const [
-                            DropdownMenuItem<String>(value: 'true', child: Text('Yes')),
-                            DropdownMenuItem<String>(value: 'false', child: Text('No')),
-                          ],
-                          onChanged: (v) => setState(() => _selectedManglik = v),
-                        ),
-                      ),
-                      const SizedBox(width: 12),
-                      Expanded(
-                        child: _dropdown(
-                          label: 'Intercaste', icon: Icons.diversity_1_rounded,
-                          value: _selectedIntercasteAccepted,
-                          items: const [
-                            DropdownMenuItem<String>(value: 'true', child: Text('Accepted')),
-                            DropdownMenuItem<String>(value: 'false', child: Text('Not Accepted')),
-                          ],
-                          onChanged: (v) => setState(() => _selectedIntercasteAccepted = v),
-                        ),
-                      ),
-                    ],
+                  _dropdown(
+                    label: 'Mother Tongue', icon: Icons.translate_rounded,
+                    value: _selectedLanguage,
+                    items: _languages.map((l) => DropdownMenuItem<String>(value: l['id'], child: Text(l['name'] ?? ''))).toList(),
+                    onChanged: (v) => setState(() => _selectedLanguage = v),
+                    isRequired: true,
                   ),
                 ],
               ),
               const SizedBox(height: 16),
-
               _buildSectionCard(
-                title: 'Physical Characteristics',
-                icon: Icons.monitor_weight_rounded,
+                title: 'Physical & Health',
+                icon: Icons.health_and_safety_rounded,
                 children: [
                   _dropdown(
                     label: 'Height', icon: Icons.height_rounded,
                     value: _selectedHeight,
                     items: _heights.map((h) => DropdownMenuItem<String>(value: h['id'], child: Text(h['name'] ?? ''))).toList(),
                     onChanged: (v) => setState(() => _selectedHeight = v),
+                    isRequired: true,
                   ),
                   const SizedBox(height: 12),
                   _input(controller: _weightController, label: 'Weight (kg)', icon: Icons.scale_rounded, isNumber: true),
@@ -856,14 +781,7 @@ class _FillBiodataScreenState extends State<FillBiodataScreen> {
                       ),
                     ],
                   ),
-                ],
-              ),
-              const SizedBox(height: 16),
-
-              _buildSectionCard(
-                title: 'Health status',
-                icon: Icons.health_and_safety_rounded,
-                children: [
+                  const SizedBox(height: 12),
                   _dropdown(
                     label: 'Physical Disability', icon: Icons.accessible_rounded,
                     value: _selectedPhysicalDisability,
@@ -877,72 +795,39 @@ class _FillBiodataScreenState extends State<FillBiodataScreen> {
                     const SizedBox(height: 12),
                     _input(controller: _disabilityDetailsController, label: 'Disability Details', icon: Icons.description_rounded),
                   ],
+                  const SizedBox(height: 12),
+                  _dropdown(
+                    label: 'Manglik', icon: Icons.star_border_rounded,
+                    value: _selectedManglik,
+                    items: const [
+                      DropdownMenuItem<String>(value: 'true', child: Text('Yes')),
+                      DropdownMenuItem<String>(value: 'false', child: Text('No')),
+                    ],
+                    onChanged: (v) => setState(() => _selectedManglik = v),
+                  ),
+                  const SizedBox(height: 12),
+                  _dropdown(
+                    label: 'Intercaste Accepted', icon: Icons.diversity_1_rounded,
+                    value: _selectedIntercasteAccepted,
+                    items: const [
+                      DropdownMenuItem<String>(value: 'true', child: Text('Accepted')),
+                      DropdownMenuItem<String>(value: 'false', child: Text('Not Accepted')),
+                    ],
+                    onChanged: (v) => setState(() => _selectedIntercasteAccepted = v),
+                  ),
                 ],
               ),
             ],
           ),
         ),
       ),
-      Step(
-        isActive: _currentStep >= 2,
-        title: Text('Education & Location', style: GoogleFonts.outfit(fontWeight: FontWeight.bold, fontSize: _currentStep == 2 ? 14 : 12, color: _currentStep == 2 ? AppColors.primary(context) : AppColors.textSecondary(context))),
-        content: Form(
-          key: _formKeys[2],
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              _buildSectionCard(
-                title: 'Career & Academics',
-                icon: Icons.school_rounded,
-                children: [
-                  _dropdown(
-                    label: 'Education Level', icon: Icons.school_rounded,
-                    value: _selectedEducation,
-                    items: _educations.map((e) => DropdownMenuItem<String>(value: e['id'], child: Text(e['name'] ?? ''))).toList(),
-                    onChanged: (v) => setState(() => _selectedEducation = v),
-                  ),
-                  const SizedBox(height: 12),
-                  _input(controller: _occupationTypeController, label: 'Occupation/Designation', icon: Icons.work_outline_rounded),
-                  const SizedBox(height: 12),
-                  _input(controller: _occupationDetailsController, label: 'Occupation Details/Company', icon: Icons.business_rounded),
-                  const SizedBox(height: 12),
-                  _input(controller: _annualIncomeController, label: 'Annual Income', icon: Icons.currency_rupee_rounded, isNumber: true),
-                ],
-              ),
-              const SizedBox(height: 16),
 
-              _buildSectionCard(
-                title: 'Current Location',
-                icon: Icons.location_on_rounded,
-                children: [
-                  _dropdown(
-                    label: 'State', icon: Icons.map_rounded,
-                    value: _selectedState,
-                    items: _states.map((s) => DropdownMenuItem<String>(value: s['id'], child: Text(s['name'] ?? ''))).toList(),
-                    onChanged: (v) => _onStateChanged(v),
-                  ),
-                  if (_isLoadingStates) const Padding(padding: EdgeInsets.only(top: 8), child: LinearProgressIndicator()),
-                  const SizedBox(height: 12),
-                  _dropdown(
-                    label: 'District', icon: Icons.location_city_rounded,
-                    value: _selectedCity,
-                    items: _cities.map((c) => DropdownMenuItem<String>(value: c['id'], child: Text(c['name'] ?? ''))).toList(),
-                    onChanged: (v) => setState(() => _selectedCity = v),
-                  ),
-                  if (_isLoadingCities) const Padding(padding: EdgeInsets.only(top: 8), child: LinearProgressIndicator()),
-                  const SizedBox(height: 12),
-                  _input(controller: _addressDetailsController, label: 'Full Location Details', icon: Icons.home_rounded),
-                ],
-              ),
-            ],
-          ),
-        ),
-      ),
+      // STEP 1: Family & Career
       Step(
-        isActive: _currentStep >= 3,
-        title: Text('Family & Finish', style: GoogleFonts.outfit(fontWeight: FontWeight.bold, fontSize: _currentStep == 3 ? 14 : 12, color: _currentStep == 3 ? AppColors.primary(context) : AppColors.textSecondary(context))),
+        isActive: _currentStep >= 1,
+        title: Text('Family & Career', style: GoogleFonts.outfit(fontWeight: FontWeight.bold, fontSize: _currentStep == 1 ? 14 : 12, color: _currentStep == 1 ? AppColors.primary(context) : AppColors.textSecondary(context))),
         content: Form(
-          key: _formKeys[3],
+          key: _formKeys[1],
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -979,10 +864,11 @@ class _FillBiodataScreenState extends State<FillBiodataScreen> {
                   ),
                   const SizedBox(height: 12),
                   _input(controller: _parentsOccupationController, label: 'Parents Occupation', icon: Icons.group_work_outlined),
+                  const SizedBox(height: 12),
+                  _input(controller: _propertyDetailsController, label: 'Property Details', icon: Icons.house_rounded),
                 ],
               ),
               const SizedBox(height: 16),
-
               _buildSectionCard(
                 title: 'Siblings Information',
                 icon: Icons.groups_rounded,
@@ -1005,61 +891,99 @@ class _FillBiodataScreenState extends State<FillBiodataScreen> {
                 ],
               ),
               const SizedBox(height: 16),
-
               _buildSectionCard(
-                title: 'Partner Expectations',
-                icon: Icons.favorite_rounded,
+                title: 'Career & Academics',
+                icon: Icons.school_rounded,
                 children: [
                   _dropdown(
-                    label: 'Expect Partner Manglik?', icon: Icons.stars_rounded,
-                    value: _selectedPartnerManglik,
-                    items: const [
-                      DropdownMenuItem<String>(value: 'false', child: Text('Not Mandatory')),
-                      DropdownMenuItem<String>(value: 'true', child: Text('Yes, Required')),
-                    ],
-                    onChanged: (v) => setState(() => _selectedPartnerManglik = v),
+                    label: 'Education Level', icon: Icons.school_rounded,
+                    value: _selectedEducation,
+                    items: _educations.map((e) => DropdownMenuItem<String>(value: e['id'], child: Text(e['name'] ?? ''))).toList(),
+                    onChanged: (v) => setState(() => _selectedEducation = v),
+                    isRequired: true,
                   ),
                   const SizedBox(height: 12),
-                  _dropdown(
-                    label: 'Intercaste Accepted?', icon: Icons.diversity_3_rounded,
-                    value: _selectedPartnerIntercaste,
-                    items: const [
-                      DropdownMenuItem<String>(value: 'false', child: Text('Not Accepted')),
-                      DropdownMenuItem<String>(value: 'true', child: Text('Accepted')),
-                    ],
-                    onChanged: (v) => setState(() => _selectedPartnerIntercaste = v),
-                  ),
+                  _input(controller: _occupationTypeController, label: 'Occupation/Designation', icon: Icons.work_outline_rounded, isRequired: true),
                   const SizedBox(height: 12),
-                  _input(controller: _expectedEducationController, label: 'Min. Education Expected', icon: Icons.school_outlined),
+                  _input(controller: _occupationDetailsController, label: 'Occupation Details/Company', icon: Icons.business_rounded),
                   const SizedBox(height: 12),
-                  _input(controller: _expectedIncomeController, label: 'Expected Annual Income', icon: Icons.currency_rupee_rounded, isNumber: true),
-                ],
-              ),
-              const SizedBox(height: 16),
-
-              _buildSectionCard(
-                title: 'Additional Family Info',
-                icon: Icons.info_outline_rounded,
-                children: [
-                  _input(controller: _propertyDetailsController, label: 'Property Details', icon: Icons.house_rounded),
+                  _input(controller: _annualIncomeController, label: 'Annual Income', icon: Icons.currency_rupee_rounded, isNumber: true, isRequired: true),
                 ],
               ),
             ],
           ),
         ),
       ),
+
+      // STEP 2: Contact & Photos
       Step(
-        isActive: _currentStep >= 4,
-        title: Text('Uploads & Finish', style: GoogleFonts.outfit(fontWeight: FontWeight.bold, fontSize: _currentStep == 4 ? 14 : 12, color: _currentStep == 4 ? AppColors.primary(context) : AppColors.textSecondary(context))),
+        isActive: _currentStep >= 2,
+        title: Text('Contact & Photos', style: GoogleFonts.outfit(fontWeight: FontWeight.bold, fontSize: _currentStep == 2 ? 14 : 12, color: _currentStep == 2 ? AppColors.primary(context) : AppColors.textSecondary(context))),
         content: Form(
-          key: _formKeys[4],
+          key: _formKeys[2],
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               _buildSectionCard(
-                title: 'Official Identity',
-                icon: Icons.badge_rounded,
+                title: 'Current Location',
+                icon: Icons.location_on_rounded,
                 children: [
+                  _input(controller: _phoneController, label: 'Primary Mobile', icon: Icons.phone_rounded, isNumber: true, isRequired: true),
+                  const SizedBox(height: 12),
+                  _input(controller: _mobile2Controller, label: 'Alternate Mobile', icon: Icons.phone_android_rounded, isNumber: true),
+                  const SizedBox(height: 12),
+                  _dropdown(
+                    label: 'State', icon: Icons.map_rounded,
+                    value: _selectedState,
+                    items: _states.map((s) => DropdownMenuItem<String>(value: s['id'], child: Text(s['name'] ?? ''))).toList(),
+                    onChanged: (v) => _onStateChanged(v),
+                    isRequired: true,
+                  ),
+                  const SizedBox(height: 12),
+                  _dropdown(
+                    label: 'District', icon: Icons.location_city_rounded,
+                    value: _selectedCity,
+                    items: _cities.map((c) => DropdownMenuItem<String>(value: c['id'], child: Text(c['name'] ?? ''))).toList(),
+                    onChanged: (v) => setState(() => _selectedCity = v),
+                    isRequired: true,
+                  ),
+                  const SizedBox(height: 12),
+                  _input(controller: _addressDetailsController, label: 'Full Address', icon: Icons.home_rounded, isRequired: true),
+                ],
+              ),
+              const SizedBox(height: 16),
+              _buildSectionCard(
+                title: 'Security & Photos',
+                icon: Icons.collections_rounded,
+                children: [
+                  GestureDetector(
+                    onTap: _pickImage,
+                    child: Container(
+                      height: 120,
+                      width: double.infinity,
+                      decoration: BoxDecoration(
+                        color: AppColors.background(context),
+                        borderRadius: BorderRadius.circular(16),
+                        border: Border.all(color: AppColors.primary(context).withValues(alpha: 0.1), width: 1.5),
+                      ),
+                      child: _profileImage != null
+                          ? ClipRRect(
+                              borderRadius: BorderRadius.circular(16),
+                               child: Image.network(_profileImage!.path, fit: BoxFit.cover),
+                            )
+                          : Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Icon(Icons.person_add_rounded, size: 28, color: AppColors.primary(context)),
+                                const SizedBox(height: 8),
+                                Text('Profile Photo *', style: GoogleFonts.inter(color: AppColors.primary(context), fontWeight: FontWeight.bold, fontSize: 13)),
+                              ],
+                            ),
+                    ),
+                  ),
+                  const SizedBox(height: 16),
+                  const Text('ID Proof (Optional)', style: TextStyle(fontSize: 11, color: Colors.grey, fontWeight: FontWeight.bold)),
+                  const SizedBox(height: 8),
                   GestureDetector(
                     onTap: _pickIdProof,
                     child: Container(
@@ -1085,14 +1009,7 @@ class _FillBiodataScreenState extends State<FillBiodataScreen> {
                             ),
                     ),
                   ),
-                ],
-              ),
-              const SizedBox(height: 16),
-
-              _buildSectionCard(
-                title: 'Photo Gallery',
-                icon: Icons.collections_rounded,
-                children: [
+                  const SizedBox(height: 16),
                   GestureDetector(
                     onTap: _pickGalleryImages,
                     child: Container(
@@ -1147,57 +1064,96 @@ class _FillBiodataScreenState extends State<FillBiodataScreen> {
                   ],
                 ],
               ),
+            ],
+          ),
+        ),
+      ),
+
+      // STEP 3: Expectations & Membership
+      Step(
+        isActive: _currentStep >= 3,
+        title: Text('Expectations & Finish', style: GoogleFonts.outfit(fontWeight: FontWeight.bold, fontSize: _currentStep == 3 ? 14 : 12, color: _currentStep == 3 ? AppColors.primary(context) : AppColors.textSecondary(context))),
+        content: Form(
+          key: _formKeys[3],
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
               _buildSectionCard(
-                title: 'Payment Details',
-                icon: Icons.payments_rounded,
+                title: 'Partner Expectations',
+                icon: Icons.favorite_rounded,
                 children: [
+                   _dropdown(
+                    label: 'Expect Partner Manglik?', icon: Icons.stars_rounded,
+                    value: _selectedPartnerManglik,
+                    items: const [
+                      DropdownMenuItem<String>(value: 'false', child: Text('Not Mandatory')),
+                      DropdownMenuItem<String>(value: 'true', child: Text('Yes, Required')),
+                    ],
+                    onChanged: (v) => setState(() => _selectedPartnerManglik = v),
+                    isRequired: true,
+                  ),
+                  const SizedBox(height: 12),
+                  _dropdown(
+                    label: 'Partner Religion', icon: Icons.temple_hindu_rounded,
+                    value: null,
+                    items: _religions.map((r) => DropdownMenuItem<String>(value: r['id'], child: Text(r['name'] ?? ''))).toList(),
+                    onChanged: (v) => {},
+                    isRequired: true,
+                  ),
+                  const SizedBox(height: 12),
+                  _dropdown(
+                    label: 'Partner Caste (Optional)', icon: Icons.group_work_rounded,
+                    value: null,
+                    items: _filteredCastes.map((c) => DropdownMenuItem<String>(value: c['id'], child: Text(c['name'] ?? ''))).toList(),
+                    onChanged: (v) => {},
+                  ),
+                  const SizedBox(height: 12),
+                  _input(controller: _expectedEducationController, label: 'Min. Education Expected', icon: Icons.school_outlined),
+                  const SizedBox(height: 12),
+                  _input(controller: _expectedIncomeController, label: 'Expected Annual Income', icon: Icons.currency_rupee_rounded, isNumber: true),
+                   const SizedBox(height: 12),
+                  _dropdown(
+                    label: 'Divorce Accepted?', icon: Icons.heart_broken_rounded,
+                    value: _selectedDivorceAccepted,
+                    items: const [
+                       DropdownMenuItem<String>(value: 'false', child: Text('No')),
+                       DropdownMenuItem<String>(value: 'true', child: Text('Yes')),
+                    ],
+                    onChanged: (v) => setState(() => _selectedDivorceAccepted = v),
+                    isRequired: true,
+                  ),
+                  const SizedBox(height: 12),
+                  _dropdown(
+                    label: 'Intercaste Accepted?', icon: Icons.diversity_3_rounded,
+                    value: _selectedPartnerIntercaste,
+                    items: const [
+                      DropdownMenuItem<String>(value: 'false', child: Text('Not Accepted')),
+                      DropdownMenuItem<String>(value: 'true', child: Text('Accepted')),
+                    ],
+                    onChanged: (v) => setState(() => _selectedPartnerIntercaste = v),
+                    isRequired: true,
+                  ),
+                ],
+              ),
+              const SizedBox(height: 16),
+              _buildSectionCard(
+                title: 'Membership & Payment',
+                icon: Icons.verified_user_rounded,
+                children: [
+                  _dropdown(
+                    label: 'Package', icon: Icons.workspace_premium_rounded,
+                    value: _selectedPackage,
+                    items: _packages.map((p) => DropdownMenuItem<String>(value: p['id'], child: Text('${p['name']} (₹${p['price']})'))).toList(),
+                    onChanged: (v) => setState(() => _selectedPackage = v),
+                    isRequired: true,
+                  ),
+                  const SizedBox(height: 12),
                   _dropdown(
                     label: 'Payment Method',
                     icon: Icons.payment,
                     value: _selectedPaymentMethod,
                     items: _paymentMethods.map((p) => DropdownMenuItem<String>(value: p['id'], child: Text(p['name'] ?? ''))).toList(),
                     onChanged: (val) => setState(() => _selectedPaymentMethod = val),
-                    isRequired: true,
-                  ),
-                ],
-              ),
-              const SizedBox(height: 16),
-
-              _buildSectionCard(
-                title: 'Member Profile & Package',
-                icon: Icons.verified_user_rounded,
-                children: [
-                  GestureDetector(
-                    onTap: _pickImage,
-                    child: Container(
-                      height: 120,
-                      width: double.infinity,
-                      decoration: BoxDecoration(
-                        color: AppColors.background(context),
-                        borderRadius: BorderRadius.circular(16),
-                        border: Border.all(color: AppColors.primary(context).withValues(alpha: 0.1), width: 1.5),
-                      ),
-                      child: _profileImage != null
-                          ? ClipRRect(
-                              borderRadius: BorderRadius.circular(16),
-                              child: Image.network(_profileImage!.path, fit: BoxFit.cover),
-                            )
-                          : Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Icon(Icons.person_add_rounded, size: 28, color: AppColors.primary(context)),
-                                const SizedBox(height: 8),
-                                Text('Profile Photo *', style: GoogleFonts.inter(color: AppColors.primary(context), fontWeight: FontWeight.bold, fontSize: 13)),
-                              ],
-                            ),
-                    ),
-                  ),
-                  const SizedBox(height: 16),
-                  _dropdown(
-                    label: 'Membership Package', icon: Icons.workspace_premium_rounded,
-                    value: _selectedPackage,
-                    items: _packages.map((p) => DropdownMenuItem<String>(value: p['id'], child: Text('${p['name']} (₹${p['price']})'))).toList(),
-                    onChanged: (v) => setState(() => _selectedPackage = v),
                     isRequired: true,
                   ),
                 ],
@@ -1270,7 +1226,7 @@ class _FillBiodataScreenState extends State<FillBiodataScreen> {
 
   void _nextStep() {
     if (_formKeys[_currentStep].currentState!.validate()) {
-      if (_currentStep < 4) {
+      if (_currentStep < 3) {
         setState(() => _currentStep += 1);
       } else {
         _submit();
