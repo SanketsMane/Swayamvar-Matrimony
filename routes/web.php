@@ -179,17 +179,17 @@ Route::group(['middleware' => ['auth']], function () {
 
     // Member education
     Route::resource('/education', 'EducationController');
-    Route::post('/education/create', 'EducationController@create')->name('education.create');
-    Route::post('/education/edit', 'EducationController@edit')->name('education.edit');
+    Route::post('/education/create', 'EducationController@create')->name('education.create_manual');
+    Route::post('/education/edit', 'EducationController@edit')->name('education.edit_manual');
     Route::post('/education/update_education_present_status', 'EducationController@update_education_present_status')->name('education.update_education_present_status');
-    Route::get('/education/destroy/{id}', 'EducationController@destroy')->name('education.destroy');
+    Route::get('/education/destroy/{id}', 'EducationController@destroy')->name('education.destroy_manual');
 
     // Member Career
     Route::resource('/career', 'CareerController');
-    Route::post('/career/create', 'CareerController@create')->name('career.create');
-    Route::post('/career/edit', 'CareerController@edit')->name('career.edit');
+    Route::post('/career/create', 'CareerController@create')->name('career.create_manual');
+    Route::post('/career/edit', 'CareerController@edit')->name('career.edit_manual');
     Route::post('/career/update_career_present_status', 'CareerController@update_career_present_status')->name('career.update_career_present_status');
-    Route::get('/career/destroy/{id}', 'CareerController@destroy')->name('career.destroy');
+    Route::get('/career/destroy/{id}', 'CareerController@destroy')->name('career.destroy_manual');
 
     Route::resource('/physical-attribute', 'PhysicalAttributeController');
     Route::resource('/hobbies', 'HobbyController');
