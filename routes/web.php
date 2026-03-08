@@ -263,7 +263,7 @@ Route::controller(PhonepeController::class)->group(function () {
     Route::any('/phonepe/callbackUrl', 'phonepe_callbackUrl')->name('phonepe.callbackUrl');
 });
 
-Route::get('/customer-products/admin', 'HomeController@profile_edit')->name('profile.edit');
+Route::get('/customer-products/admin', 'HomeController@profile_edit')->name('profile.edit_manual');
 Route::get('/check_for_package_invalid', 'PackageController@check_for_package_invalid')->name('member.check_for_package_invalid');
 
 Route::get('/match_profiles', 'ProfileMatchController@match_profiles')->name('match_profiles');
