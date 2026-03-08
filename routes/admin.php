@@ -94,6 +94,64 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth', 'admin']], function 
         Route::post('/bulk-member-upload', 'bulk_upload')->name('bulk_member_upload');
     });
 
+    // Telecalling Module [Sanket]
+    Route::group(['prefix' => 'telecalling'], function () {
+        // Sanket: Admin biodata tracking — view all member profiles filled by telecallers
+        Route::get('/telecallers/biodata-tracking', [\App\Http\Controllers\Admin\TelecallerController::class, 'biodataTracking'])->name('telecallers.biodata_tracking');
+        
+        Route::resource('telecallers', \App\Http\Controllers\Admin\TelecallerController::class);
+        Route::post('/telecallers/status', [\App\Http\Controllers\Admin\TelecallerController::class, 'update_status'])->name('telecallers.update_status');
+        Route::post('/telecallers/reset-password', [\App\Http\Controllers\Admin\TelecallerController::class, 'reset_password'])->name('telecallers.reset_password');
+        Route::get('/telecallers/{id}/performance', [\App\Http\Controllers\Admin\TelecallerController::class, 'performance'])->name('telecallers.performance');
+
+        Route::resource('campaigns', \App\Http\Controllers\Admin\TelecallingCampaignController::class);
+        Route::resource('lead-upload', \App\Http\Controllers\Admin\LeadUploadController::class);
+        // Sanket: Smart Lead Upload Mapping
+        Route::get('/lead-upload/{id}/map', [\App\Http\Controllers\Admin\LeadUploadController::class, 'map'])->name('lead-upload.map');
+        Route::post('/lead-upload/{id}/process', [\App\Http\Controllers\Admin\LeadUploadController::class, 'processImport'])->name('lead-upload.process');
+
+        // Lead Distribution [Sanket]
+        Route::get('/lead-distribution', [\App\Http\Controllers\Admin\LeadDistributionController::class, 'index'])->name('lead-distribution.index');
+        Route::post('/lead-distribution/equal', [\App\Http\Controllers\Admin\LeadDistributionController::class, 'distribute_equal'])->name('lead-distribution.equal');
+        Route::post('/lead-distribution/pincode', [\App\Http\Controllers\Admin\LeadDistributionController::class, 'distribute_pincode'])->name('lead-distribution.pincode');
+        Route::post('/lead-distribution/manual', [\App\Http\Controllers\Admin\LeadDistributionController::class, 'manual_assignment'])->name('lead-distribution.manual');
+        Route::get('/lead-distribution/get-leads', [\App\Http\Controllers\Admin\LeadDistributionController::class, 'get_unassigned_leads'])->name('lead-distribution.get_leads');
+
+        // Lead Management [Sanket]
+        Route::resource('active-leads', \App\Http\Controllers\Admin\ActiveLeadController::class);
+        Route::post('/active-leads/mark-inactive/{id}', [\App\Http\Controllers\Admin\ActiveLeadController::class, 'mark_inactive'])->name('active-leads.mark_inactive');
+        
+        Route::resource('inactive-leads', \App\Http\Controllers\Admin\InactiveLeadController::class);
+        Route::post('/inactive-leads/restore/{id}', [\App\Http\Controllers\Admin\InactiveLeadController::class, 'restore'])->name('inactive-leads.restore');
+
+        Route::resource('duplicate-leads', \App\Http\Controllers\Admin\DuplicateLeadController::class);
+
+        Route::get('/reassignment', [\App\Http\Controllers\Admin\ReassignmentController::class, 'index'])->name('reassignment.index');
+        Route::get('/reassignment/get-leads', [\App\Http\Controllers\Admin\ReassignmentController::class, 'get_telecaller_leads'])->name('reassignment.get_leads');
+        Route::post('/reassignment/process', [\App\Http\Controllers\Admin\ReassignmentController::class, 'reassign'])->name('reassignment.process');
+
+        // Agent Dashboard & Workflow [Sanket]
+        Route::get('/dashboard', [\App\Http\Controllers\Admin\TelecallingDashboardController::class, 'index'])->name('telecalling.dashboard');
+        
+        // Sanket: Web Panel Fill Biodata
+        Route::get('/fill-biodata', [\App\Http\Controllers\Admin\TelecallingDashboardController::class, 'fillBiodata'])->name('telecalling.fill_biodata');
+        Route::post('/fill-biodata', [\App\Http\Controllers\Admin\TelecallingDashboardController::class, 'storeBiodata'])->name('telecalling.store_biodata');
+
+        Route::get('/assigned-leads', [\App\Http\Controllers\Admin\TelecallingDashboardController::class, 'assigned_leads'])->name('telecalling.assigned_leads');
+        Route::post('/lead/update-action', [\App\Http\Controllers\Admin\TelecallingDashboardController::class, 'update_lead_action'])->name('telecalling.lead_action');
+
+        Route::get('/call-history', [\App\Http\Controllers\Admin\CallHistoryController::class, 'index'])->name('call-history.index');
+        Route::get('/call-history/lead/{id}', [\App\Http\Controllers\Admin\CallHistoryController::class, 'lead_history'])->name('call-history.lead');
+
+        Route::get('/reports', [\App\Http\Controllers\Admin\TelecallingReportController::class, 'index'])->name('telecalling.reports');
+        Route::get('/commissions', [\App\Http\Controllers\Admin\TelecallerCommissionController::class, 'index'])->name('telecalling.commissions');
+        Route::get('/my-commissions', [\App\Http\Controllers\Admin\TelecallerCommissionController::class, 'my_commissions'])->name('telecalling.my_commissions');
+        Route::get('/meta-leads', [\App\Http\Controllers\Admin\MetaLeadIntegrationController::class, 'index'])->name('telecalling.meta_leads');
+
+        Route::get('/settings', [\App\Http\Controllers\Admin\TelecallingSettingsController::class, 'index'])->name('telecalling.settings');
+        Route::post('/settings/update', [\App\Http\Controllers\Admin\TelecallingSettingsController::class, 'store'])->name('telecalling.settings_update');
+    });
+
     // Premium Packages
     Route::resource('/packages', 'PackageController');
     Route::controller(PackageController::class)->group(function () {

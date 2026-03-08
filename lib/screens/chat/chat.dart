@@ -76,27 +76,29 @@ class _ChatState extends State<Chat> {
   }
 
   void _sendReply({String? text, File? attachment}) {
+    // Sanket: Supply receiverId to handle null chatId creation gracefully
     store.dispatch(
       chatReplyMiddleware(
         id: widget.chatId,
+        receiverId: widget.userId,
         text: text ?? _msgController.text,
         attachment: attachment,
       ),
     );
     _msgController.clear();
     FocusManager.instance.primaryFocus?.unfocus();
-    
+
     // Optimistic refresh
     Timer(const Duration(milliseconds: 500), () {
       if (mounted) {
-        store.dispatch(chatDetailsMiddleware(chatId: widget.chatId));
+        store.dispatch(chatDetailsMiddleware(chatId: widget.chatId, userId: widget.userId));
       }
     });
   }
 
   void _fetchAll() {
     store.dispatch(Reset.chatDetailsList);
-    store.dispatch(chatDetailsMiddleware(chatId: widget.chatId));
+    store.dispatch(chatDetailsMiddleware(chatId: widget.chatId, userId: widget.userId));
   }
 
   @override
@@ -106,7 +108,7 @@ class _ChatState extends State<Chat> {
     _fetchAll();
     _timer = Timer.periodic(const Duration(seconds: 5), (timer) {
       if (mounted) {
-        store.dispatch(chatDetailsMiddleware(chatId: widget.chatId));
+        store.dispatch(chatDetailsMiddleware(chatId: widget.chatId, userId: widget.userId));
       }
     });
   }

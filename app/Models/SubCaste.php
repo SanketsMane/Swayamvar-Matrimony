@@ -9,6 +9,8 @@ class SubCaste extends Model
 {
     use SoftDeletes;
 
+    protected $fillable = ['caste_id', 'name'];
+
     public function caste()
     {
         return $this->belongsTo(Caste::class)->withTrashed();

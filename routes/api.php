@@ -2,6 +2,8 @@
 
 use App\Http\Controllers\Api\Payment\PhonepeController;
 use App\Http\Controllers\Api\Payment\RazorpayController;
+use App\Http\Controllers\Api\Telecalling\TelecallerProfileApiController;
+use App\Http\Controllers\Api\Telecalling\TelecallerDashboardApiController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -18,6 +20,57 @@ use Illuminate\Support\Facades\Route;
 // Route::middleware('auth:api')->get('/user', function (Request $request) {
 //     return $request->user();
 // });
+
+// Telecaller App APIs [Sanket]
+Route::group(['prefix' => 'telecaller', 'namespace' => 'Api\Telecalling', 'middleware' => ['app_language']], function () {
+    Route::post('/login', 'TelecallerAuthController@login');
+    Route::post('/send-otp', 'TelecallerAuthController@sendOtp');
+    Route::post('/verify-otp', 'TelecallerAuthController@verifyOtp');
+
+    Route::group(['middleware' => ['auth:sanctum']], function () {
+        // Telecaller Dashboard API
+        Route::get('dashboard', 'TelecallerDashboardApiController@getDashboardStats');
+        Route::get('stats', 'TelecallerDashboardApiController@index'); // Renamed internal duplicate to avoid conflict
+        Route::get('commissions', 'TelecallerCommissionApiController@getCommissionStats'); // New: Commissions
+
+        // Telecaller Biodata submission APIs (Stay protected) [Sanket]
+        Route::post('biodata/create', 'TelecallerProfileApiController@storeProfile');
+        Route::get('biodata/my-profiles', 'TelecallerProfileApiController@getMyProfiles');
+        
+        // Leads
+        Route::get('/leads', 'TelecallerLeadsApiController@getAssignedLeads');
+        Route::get('/leads/active', 'TelecallerLeadsApiController@getActiveCustomers');
+        Route::get('/leads/inactive', 'TelecallerLeadsApiController@getInactiveCustomers');
+        Route::post('/leads/store', 'TelecallerLeadsApiController@store'); // New: Manual Entry
+        Route::get('/campaigns', 'TelecallerLeadsApiController@getCampaigns'); // New: Campaigns for Entry
+        Route::post('/leads/{id}/update-status', 'TelecallerLeadsApiController@updateStatus');
+        
+        // Followups
+        Route::get('/followups', 'TelecallerFollowupApiController@getFollowups');
+        
+        // Profile & Commissions
+        Route::get('profile', 'TelecallerProfileApiController@getProfile');
+        Route::post('logout', 'TelecallerProfileApiController@logout');
+        // Sanket: Password change endpoint for the Telecaller mobile app
+        Route::post('change-password', 'TelecallerProfileApiController@changePassword');
+        
+        // Call History
+        Route::get('/call-history', 'TelecallerCallHistoryApiController@getCallHistory');
+        Route::get('/call-history/lead/{id}', 'TelecallerCallHistoryApiController@getLeadCallHistory');
+
+        // Support Tickets (New)
+        Route::get('/support-tickets', 'TelecallerSupportApiController@getTickets');
+        Route::post('/support-tickets/{id}/reply', 'TelecallerSupportApiController@reply');
+
+        // Notifications for telecaller [Sanket]
+        Route::get('/notifications', 'TelecallerProfileApiController@getNotifications');
+    });
+
+    // Public/Semi-public Biodata APIs moved outside auth group relative to telecaller [Sanket]
+    Route::get('biodata/dropdowns', 'TelecallerProfileApiController@getDropdownData');
+    Route::get('biodata/get-states/{country_id}', 'TelecallerProfileApiController@getStates');
+    Route::get('biodata/get-cities/{state_id}', 'TelecallerProfileApiController@getCities');
+});
 
 Route::group(['namespace' => 'Api', 'middleware' => ['app_language']], function () {
     // Authentication

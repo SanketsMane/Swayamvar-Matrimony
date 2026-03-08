@@ -7,8 +7,9 @@ use Illuminate\Http\Request;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
+use Carbon\Carbon;
 
-class OtpController extends AuthController
+class OtpController extends Controller
 {
     public function sendOtp(Request $request)
     {
@@ -24,11 +25,7 @@ class OtpController extends AuthController
         }
 
         $phone = $request->phone;
-        $clean_phone = ltrim($phone, '0'); // Remove leading zero if any
-
-        $user = User::where('phone', $phone)
-                    ->orWhere('phone', 'like', '%' . $clean_phone)
-                    ->first();
+        $user = User::where('phone', $phone)->first();
 
         if (!$user) {
             return response()->json([
@@ -43,17 +40,12 @@ class OtpController extends AuthController
 
         $text = "Your OTP for Swayamvar Matrimony is: " . $otp;
         
-        // This helper function uses the active SMS provider configured in settings
-        $sms_response = sendSMS($user->phone, env('VALID_TWILLO_NUMBER'), $text, $otp);
-
-        // Debug log for local development since SMS gateway isn't configured
-        \Illuminate\Support\Facades\Log::info("DEBUG - OTP generated for {$user->phone}: {$otp}");
+        // Send OTP via SMS using configured provider (Renflair)
+        sendSMS($user->phone, null, $text, $otp);
 
         return response()->json([
             'result' => true,
-            'message' => 'OTP sent successfully',
-            'debug_otp' => env('APP_DEBUG') ? $otp : null, // Provide OTP in response during debug
-            'sms_response' => $sms_response
+            'message' => 'OTP sent successfully'
         ]);
     }
 
@@ -71,20 +63,31 @@ class OtpController extends AuthController
             ]);
         }
 
-        $phone = $request->phone;
-        $clean_phone = ltrim($phone, '0');
-
-        $user = User::where(function($query) use ($phone, $clean_phone) {
-            $query->where('phone', $phone)
-                  ->orWhere('phone', 'like', '%' . $clean_phone);
-        })->where('verification_code', $request->otp)->first();
+        $user = User::where('phone', $request->phone)->where('verification_code', $request->otp)->first();
 
         if ($user) {
+            $user->email_verified_at = Carbon::now();
             $user->verification_code = null; // Clear OTP after success
             $user->save();
 
             // Return success and user info for login
-            return $this->authResponse($user);
+            $token = $user->createToken('auth_token')->plainTextToken;
+
+            return response()->json([
+                'result' => true,
+                'message' => 'OTP verified successfully',
+                'access_token' => $token,
+                'token_type' => 'Bearer',
+                'user' => [
+                    'id' => $user->id,
+                    'type' => $user->user_type,
+                    'name' => $user->name,
+                    'email' => $user->email,
+                    'avatar' => uploaded_asset($user->photo),
+                    'avatar_original' => static_asset($user->photo),
+                    'phone' => $user->phone
+                ]
+            ]);
         }
 
         return response()->json([

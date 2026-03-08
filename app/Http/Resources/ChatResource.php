@@ -15,7 +15,8 @@ class ChatResource extends JsonResource
      */
     public function toArray($request)
     {
-        $chats = $this->chats()->latest()->get();
+        // Sanket: Limit the chats loaded into memory to prevent server crashes on long threads
+        $chats = $this->chats()->latest()->limit(20)->get();
         $user_to_show = auth()->id() !== $this->sender->id ? 'receiver' : 'sender';
         return [
             'receiver_name' => $this->receiver->first_name . ' ' . $this->receiver->last_name,

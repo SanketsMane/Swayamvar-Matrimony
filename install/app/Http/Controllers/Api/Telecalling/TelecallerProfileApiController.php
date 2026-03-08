@@ -75,6 +75,36 @@ class TelecallerProfileApiController extends Controller
 
     public function getDropdownData()
     {
+        $educations = \App\Models\Education::select('id', 'degree as name')->distinct()->get();
+        if ($educations->isEmpty()) {
+            $educations = [
+                ['id' => '10th Std', 'name' => '10th Std'],
+                ['id' => '12th Std (HSC)', 'name' => '12th Std (HSC)'],
+                ['id' => 'Diploma', 'name' => 'Diploma'],
+                ['id' => 'B.A', 'name' => 'B.A'],
+                ['id' => 'B.Com', 'name' => 'B.Com'],
+                ['id' => 'B.Sc', 'name' => 'B.Sc'],
+                ['id' => 'B.Tech / B.E', 'name' => 'B.Tech / B.E'],
+                ['id' => 'B.C.A', 'name' => 'B.C.A'],
+                ['id' => 'M.A', 'name' => 'M.A'],
+                ['id' => 'M.Com', 'name' => 'M.Com'],
+                ['id' => 'M.Sc', 'name' => 'M.Sc'],
+                ['id' => 'M.Tech / M.E', 'name' => 'M.Tech / M.E'],
+                ['id' => 'M.C.A', 'name' => 'M.C.A'],
+                ['id' => 'MBA', 'name' => 'MBA'],
+                ['id' => 'PhD', 'name' => 'PhD'],
+            ];
+        }
+
+        $payment_methods = \App\Models\ManualPaymentMethod::select('id', 'heading as name')->get();
+        if ($payment_methods->isEmpty()) {
+            $payment_methods = [
+                ['id' => 'manual_cash', 'name' => 'Cash Payment'],
+                ['id' => 'manual_bank', 'name' => 'Bank Transfer / NEFT'],
+                ['id' => 'manual_upi', 'name' => 'UPI (GPay / PhonePe)'],
+            ];
+        }
+
         return response()->json([
             'result' => true,
             'data' => [
@@ -111,7 +141,7 @@ class TelecallerProfileApiController extends Controller
                     ['id' => 'Vegetarian', 'name' => 'Vegetarian'], ['id' => 'Non-Vegetarian', 'name' => 'Non-Vegetarian'],
                     ['id' => 'Eggetarian', 'name' => 'Eggetarian'], ['id' => 'Vegan', 'name' => 'Vegan'],
                 ],
-                'educations' => \App\Models\Education::select('id', 'degree as name')->distinct()->get(), // Fetch from actual data if possible
+                'educations' => $educations,
                 'occupations' => \App\Models\Career::select('id', 'designation as name')->distinct()->get(),
                 'heights' => [
                     ['id' => '4.5', 'name' => '4 ft 5 in'],
@@ -136,7 +166,7 @@ class TelecallerProfileApiController extends Controller
                     ['id' => '6.4', 'name' => '6 ft 4 in'],
                     ['id' => '6.5', 'name' => '6 ft 5 in'],
                 ],
-                'manual_payment_methods' => \App\Models\ManualPaymentMethod::select('id', 'heading as name')->get(),
+                'manual_payment_methods' => $payment_methods,
             ]
         ]);
     }
@@ -248,10 +278,23 @@ class TelecallerProfileApiController extends Controller
                 $payment->amount = $package->price;
                 
                 // Handle Manual Payment Method from Telecalling App [Sanket]
-                if ($request->has('payment_method_id')) {
-                    $manual_method = \App\Models\ManualPaymentMethod::find($request->payment_method_id);
+                if ($request->has('payment_method_id') && $request->payment_method_id != '') {
+                    $pid = $request->payment_method_id;
+                    $customName = 'Manual';
+                    
+                    if (is_numeric($pid)) {
+                        $manual_method = \App\Models\ManualPaymentMethod::find($pid);
+                        $customName = $manual_method ? $manual_method->heading : 'Manual';
+                    } else if ($pid == 'manual_cash') {
+                        $customName = 'Cash Payment';
+                    } else if ($pid == 'manual_upi') {
+                        $customName = 'UPI (GPay / PhonePe)';
+                    } else if ($pid == 'manual_bank') {
+                        $customName = 'Bank Transfer / NEFT';
+                    }
+
                     $payment->payment_method = 'manual_payment';
-                    $payment->custom_payment_name = $manual_method ? $manual_method->heading : 'Manual';
+                    $payment->custom_payment_name = $customName;
                     $payment->payment_status = 'Paid'; // Telecaller collects payment
                     $payment_status = 'Paid';
                 } else {

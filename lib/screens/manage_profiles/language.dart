@@ -29,6 +29,18 @@ class _LanguageState extends State<Language> {
   void setInitData(LanguageState data) {
     data.saveChangesLoader = false;
     List<DDown> knownLanguage = [];
+    
+    // Default mother tongue to Marathi (assuming ID 48 is Marathi based on common patterns in this app)
+    // Sanket: If no mother tongue is selected, default to Marathi
+    if (data.selectedMotherTongue == null) {
+      for (var element in store.state.manageProfileCombineState!.profiledropdownResponseData!.data!.languageList!) {
+        if (element.name == "Marathi") {
+          data.selectedMotherTongue = element;
+          break;
+        }
+      }
+    }
+
     if (data.languageGetResponse!.result != null &&
         data.languageGetResponse!.result!) {
       data.selectedKnowLanguage.clear();

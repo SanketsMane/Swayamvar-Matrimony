@@ -17,6 +17,12 @@ class AppServiceProvider extends ServiceProvider
   {
       Schema::defaultStringLength(191);
       Paginator::useBootstrap();
+
+      \Illuminate\Database\Eloquent\Relations\Relation::morphMap([
+          'active_lead' => \App\Models\ActiveLead::class,
+          'inactive_lead' => \App\Models\InactiveLead::class,
+          'duplicate_lead' => \App\Models\DuplicateLead::class,
+      ]);
   }
 
   /**

@@ -24,20 +24,25 @@ class ChatThreadResource extends JsonResource
         $user = auth()->user();
         if ($this->receiver != null && $this->sender != null) {
             $user_to_show = $user->id == $this->sender->id ? 'receiver' : 'sender';
-            $member = Member::where('user_id', $this->$user_to_show->id)->first();
-            $member_package = Package::find($member->current_package_id);
+            $other_user = $this->$user_to_show;
+            $member = $other_user->member;
+            $member_package = $member ? $member->package : null;
+
+            // Sanket: Fetch the last chat securely without loading all history
+            $last_chat = $this->chats()->latest()->first();
 
             return [
                 'id' => $this->id,
-                'user_id' => $this->$user_to_show->id,
+                'user_id' => $other_user->id,
                 // 'active' => $this->active,
-                'active' => Cache::has('user-is-online-' . $this->$user_to_show->id) ? 1 : 0,
+                'active' => Cache::has('user-is-online-' . $other_user->id) ? 1 : 0,
                 'blocked_by_user' => $this->blocked_by_user,
-                'unseen_message_count' => $this->chats->where('seen', 0)->whereNotIn('sender_user_id', $user->id)->count(),
-                'member_photo' => $this->$user_to_show->photo != null ? uploaded_asset($this->$user_to_show->photo) : static_asset('assets/frontend/default/img/avatar-place.png'),
-                'member_name' => $this->$user_to_show->first_name . ' ' . $this->$user_to_show->last_name,
-                'last_message_time' => $this->chats->last() != null ? Carbon::parse($this->chats->last()->created_at)->diffForHumans() : '',
-                'last_message' => $this->chats->last() ? $this->chats->last()->message  : '',
+                // Sanket: Optimize unseen count query to run securely on DB directly
+                'unseen_message_count' => $this->chats()->where('seen', 0)->where('sender_user_id', '!=', $user->id)->count(),
+                'member_photo' => $other_user->photo != null ? uploaded_asset($other_user->photo) : static_asset('assets/frontend/default/img/avatar-place.png'),
+                'member_name' => $other_user->first_name . ' ' . $other_user->last_name,
+                'last_message_time' => $last_chat != null ? Carbon::parse($last_chat->created_at)->diffForHumans() : '',
+                'last_message' => $last_chat ? $last_chat->message  : '',
                 'member_package' => $member_package ? new PackageResource($member_package) : '',
             ];
         }

@@ -8,6 +8,7 @@ import 'package:redux_thunk/redux_thunk.dart';
 
 ThunkAction<AppState> chatReplyMiddleware({
   int? id,
+  int? receiverId,
   String? text,
   dynamic attachment,
 }) {
@@ -15,12 +16,14 @@ ThunkAction<AppState> chatReplyMiddleware({
     try {
       var data = await ChatRepository().postChatReply(
         id: id,
+        receiverId: receiverId,
         attachment: attachment,
         text: text,
       );
 
       if (data.result == true) {
-        store.dispatch(chatDetailsMiddleware(chatId: id));
+        // Sanket: Send userId fallback for null chat refresh
+        store.dispatch(chatDetailsMiddleware(chatId: id, userId: receiverId));
         store.dispatch(chatMiddleware());
       }
     } catch (e) {

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:http/http.dart' as http;
+import 'package:flutter/services.dart';
 import '../core/constants.dart';
 import '../services/biodata_service.dart';
 
@@ -1150,12 +1151,13 @@ class _FillBiodataScreenState extends State<FillBiodataScreen> {
                 title: 'Payment Details',
                 icon: Icons.payments_rounded,
                 children: [
-                  _buildDropdown(
+                  _dropdown(
                     label: 'Payment Method',
+                    icon: Icons.payment,
                     value: _selectedPaymentMethod,
-                    items: _paymentMethods,
+                    items: _paymentMethods.map((p) => DropdownMenuItem<String>(value: p['id'], child: Text(p['name'] ?? ''))).toList(),
                     onChanged: (val) => setState(() => _selectedPaymentMethod = val),
-                    required: true,
+                    isRequired: true,
                   ),
                 ],
               ),

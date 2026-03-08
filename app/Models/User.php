@@ -183,4 +183,24 @@ class User extends Authenticatable implements MustVerifyEmail
     public function uploads(){
         return $this->hasMany(Upload::class);
     }
+    public function telecaller_detail()
+    {
+        return $this->hasOne(TelecallerDetail::class);
+    }
+
+    // Sanket: Inverse — get the telecaller who filled this member's biodata
+    public function telecaller()
+    {
+        return $this->belongsTo(User::class, 'telecaller_id');
+    }
+
+    public function assigned_leads()
+    {
+        return $this->hasMany(ActiveLead::class, 'assigned_to');
+    }
+
+    public function call_logs()
+    {
+        return $this->hasMany(TelecallingCallLog::class, 'agent_id');
+    }
 }

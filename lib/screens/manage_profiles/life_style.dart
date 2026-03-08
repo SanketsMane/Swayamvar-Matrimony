@@ -141,9 +141,6 @@ class _LifeStyleState extends State<LifeStyle> {
           padding: EdgeInsets.symmetric(horizontal: 10),
           child: DropdownButtonFormField(
             validator: (dynamic val) {
-              if (val == null || val.isEmpty) {
-                return "Required field";
-              }
               return null;
             },
             iconSize: 0.0,

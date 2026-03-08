@@ -9,6 +9,8 @@ class Caste extends Model
 {
     use SoftDeletes;
 
+    protected $fillable = ['religion_id', 'name'];
+
     public function religion()
     {
         return $this->belongsTo(Religion::class)->withTrashed();

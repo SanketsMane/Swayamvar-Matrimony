@@ -70,6 +70,7 @@ class _MyProfileState extends State<MyProfile> {
   static const Map<String, String> _bloodGroupOptions = {
     'A+': 'A+', 'A-': 'A-', 'B+': 'B+', 'B-': 'B-',
     'O+': 'O+', 'O-': 'O-', 'AB+': 'AB+', 'AB-': 'AB-',
+    'उपलब्ध नाही': 'NA',
   };
 
   // Sanket: Display label held in state; apiValue() converts on submit
@@ -556,11 +557,11 @@ class _MyProfileState extends State<MyProfile> {
         if (_religionDisplay == null || _casteDisplay == null || _maritalStatusDisplay == null) {
           return "Please select Religion, Caste, and Marital Status.";
         }
-        if (_heightDisplay == null || _weight.text.trim().isEmpty) {
-          return "Please fill Height and Weight.";
+        if (_heightDisplay == null) {
+          return "Please select Height.";
         }
-        if (_bloodGroupDisplay == null || _complexionDisplay == null || _dietDisplay == null) {
-          return "Please select Blood Group, Complexion, and Diet.";
+        if (_bloodGroupDisplay == null || _complexionDisplay == null) {
+          return "Please select Blood Group and Complexion.";
         }
         if (_physicalDisability == null || _manglik == null || _intercasteAccepted == null) {
           return "Please answer all Yes/No questions.";
@@ -1001,7 +1002,7 @@ class _MyProfileState extends State<MyProfile> {
         AppLocalizations.of(context)!.profile_label_weight,
         _weight,
         isNumber: true,
-        isRequired: true,
+        isRequired: false,
       ),
       _buildMappedDropdown(
         AppLocalizations.of(context)!.profile_label_blood_group,
@@ -1053,7 +1054,7 @@ class _MyProfileState extends State<MyProfile> {
         _dietOptions,
         _dietDisplay,
         (v) => setState(() => _dietDisplay = v),
-        isRequired: true,
+        isRequired: false,
       ),
       _buildNullableRadioOption(
         AppLocalizations.of(context)!.profile_label_manglik,

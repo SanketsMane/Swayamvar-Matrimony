@@ -84,9 +84,6 @@ class _PhysicalAtrributesState extends State<PhysicalAtrributes> {
                   .weightController,
           hint: "112.6 pounds (51.2 kilograms",
           validator: (value) {
-            if (value == null || value.isEmpty) {
-              return "Enter weight";
-            }
             return null;
           },
         ),
@@ -199,9 +196,6 @@ class _PhysicalAtrributesState extends State<PhysicalAtrributes> {
           validator: (value) {
             if (value == null || value.isEmpty) {
               return "Enter blood group";
-            }
-            if (value.length > 3) {
-              return "Max 3 characters";
             }
             return null;
           },

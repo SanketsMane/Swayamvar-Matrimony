@@ -171,7 +171,7 @@ if (!function_exists('get_email_template')) {
 if (!function_exists('get_sms_template')) {
     function get_sms_template($identifier, $colmn_name = null)
     {
-        $value = \App\Models\SmsTemplate::where('identifier', $identifier)->first()->$colmn_name;
+        $value = SmsTemplate::where('identifier', $identifier)->first()->$colmn_name;
         return $value;
     }
 }
@@ -194,24 +194,199 @@ if (!function_exists('addon_activation')) {
 if (!function_exists('sendSMS')) {
     function sendSMS($to, $from, $text, $template_id)
     {
-        if (env('RENFLAIR_API_KEY') != null) {
-            $api = env('RENFLAIR_API_KEY');
+        \Log::info("Sanket: sendSMS call to: " . $to . " with code: " . $template_id);
+        if (config('services.renflair.api_key') != null) {
+            \Log::info("Sanket: Using Renflair SMS");
+            $api = config('services.renflair.api_key');
             if (strpos($to, '+91') !== false) {
                 $to = substr($to, 3); // Strip +91 for Renflair
             }
 
             $url = "https://sms.renflair.in/V1.php?API=" . urlencode($api) . "&PHONE=" . urlencode($to) . "&OTP=" . urlencode($template_id);
+            \Log::info("Sanket: Renflair URL: " . $url);
             $ch = curl_init();
             curl_setopt($ch, CURLOPT_URL, $url);
             curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
             curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
-            
+
+            $response = curl_exec($ch);
+            \Log::info("Sanket: Renflair Response: " . $response);
+            curl_close($ch);
+
+            return $response;
+        }
+
+        \Log::info("Sanket: Renflair API key missing, checking other providers");
+        if (get_setting('nexmo_activation') == 1) {
+            \Log::info("Sanket: Using Nexmo");
+            $api_key = env("NEXMO_KEY"); //put ssl provided api_token here
+            $api_secret = env("NEXMO_SECRET"); // put ssl provided sid here
+
+            $params = [
+                "api_key" => $api_key,
+                "api_secret" => $api_secret,
+                "from" =>  env("NEXMO_SENDER_ID"),
+                "text" => $text,
+                "to" => $to
+            ];
+
+            $url = "https://rest.nexmo.com/sms/json";
+            $params = json_encode($params);
+
+            $ch = curl_init(); // Initialize cURL
+            curl_setopt($ch, CURLOPT_URL, $url);
+            curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, FALSE);
+            curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 2);
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+            curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "POST");
+            curl_setopt($ch, CURLOPT_POSTFIELDS, $params);
+            curl_setopt($ch, CURLOPT_HTTPHEADER, array(
+                'Content-Type: application/json',
+                'Content-Length: ' . strlen($params),
+                'accept:application/json'
+            ));
             $response = curl_exec($ch);
             curl_close($ch);
-            
+
+            return $response;
+
+        } elseif (get_setting('twillo_activation') == 1) {
+            \Log::info("Sanket: Using Twilio");
+            $sid = env("TWILIO_SID"); 
+            $token = env("TWILIO_AUTH_TOKEN"); 
+
+            $client = new \Twilio\Rest\Client($sid, $token);
+            try {
+                $message = $client->messages->create(
+                    $to, 
+                    array(
+                        'from' => env('VALID_TWILLO_NUMBER'), 
+                        'body' => $text
+                    )
+                );
+                \Log::info("Sanket: Twilio Response SID: " . $message->sid);
+            } catch (\Exception $e) {
+                \Log::error("Sanket: Twilio Error: " . $e->getMessage());
+            }
+        } elseif (get_setting('ssl_wireless_activation') == 1) {
+            \Log::info("Sanket: Using SSL Wireless");
+            $token = env("SSL_SMS_API_TOKEN"); //put ssl provided api_token here
+            $sid = env("SSL_SMS_SID"); // put ssl provided sid here
+
+            $params = [
+                "api_token" => $token,
+                "sid" => $sid,
+                "msisdn" => $to,
+                "sms" => $text,
+                "csms_id" => date('dmYhhmi') . rand(10000, 99999)
+            ];
+
+            $url = env("SSL_SMS_URL");
+            $params = json_encode($params);
+
+            $ch = curl_init(); // Initialize cURL
+            curl_setopt($ch, CURLOPT_URL, $url);
+            curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, FALSE);
+            curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 2);
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+            curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "POST");
+            curl_setopt($ch, CURLOPT_POSTFIELDS, $params);
+            curl_setopt($ch, CURLOPT_HTTPHEADER, array(
+                'Content-Type: application/json',
+                'Content-Length: ' . strlen($params),
+                'accept:application/json'
+            ));
+
+            $response = curl_exec($ch);
+
+            curl_close($ch);
+
+            return $response;
+        } elseif (get_setting('fast2sms_activation') == 1) {
+            \Log::info("Sanket: Using Fast2SMS");
+            if (strpos($to, '+91') !== false) {
+                $to = substr($to, 3);
+            }
+
+            if (env("ROUTE") == 'dlt_manual') {
+                $fields = array(
+                    "sender_id" => env("SENDER_ID"),
+                    "message" => $text,
+                    "template_id" => $template_id,
+                    "entity_id" => env("ENTITY_ID"),
+                    "language" => env("LANGUAGE"),
+                    "route" => env("ROUTE"),
+                    "numbers" => $to,
+                );
+            } else {
+                $fields = array(
+                    "sender_id" => env("SENDER_ID"),
+                    "message" => $text,
+                    "language" => env("LANGUAGE"),
+                    "route" => env("ROUTE"),
+                    "numbers" => $to,
+                );
+            }
+
+
+            $auth_key = env('AUTH_KEY');
+
+            $curl = curl_init();
+
+            curl_setopt_array($curl, array(
+                CURLOPT_URL => "https://www.fast2sms.com/dev/bulkV2",
+                CURLOPT_RETURNTRANSFER => true,
+                CURLOPT_ENCODING => "",
+                CURLOPT_MAXREDIRS => 10,
+                CURLOPT_TIMEOUT => 30,
+                CURLOPT_SSL_VERIFYHOST => 0,
+                CURLOPT_SSL_VERIFYPEER => 0,
+                CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+                CURLOPT_CUSTOMREQUEST => "POST",
+                CURLOPT_POSTFIELDS => json_encode($fields),
+                CURLOPT_HTTPHEADER => array(
+                    "authorization: $auth_key",
+                    "accept: */*",
+                    "cache-control: no-cache",
+                    "content-type: application/json"
+                ),
+            ));
+
+            $response = curl_exec($curl);
+            $err = curl_error($curl);
+            \Log::info("Sanket: Fast2SMS Response: " . $response);
+            curl_close($curl);
+
+            return $response;
+        } elseif (get_setting('mimo_activation') == 1) {
+            \Log::info("Sanket: Using Mimo");
+            $token = MimoUtility::getToken();
+
+            MimoUtility::sendMessage($text, $to, $token);
+            MimoUtility::logout($token);
+        } elseif (get_setting('mimsms_activation') == 1) {
+            \Log::info("Sanket: Using MimSMS");
+            $url = "https://esms.mimsms.com/smsapi";
+            $data = [
+                "api_key" => env('MIM_API_KEY'),
+                "type" => "text",
+                "contacts" => $to,
+                "senderid" => env('MIM_SENDER_ID'),
+                "msg" => $text,
+            ];
+            $ch = curl_init();
+            curl_setopt($ch, CURLOPT_URL, $url);
+            curl_setopt($ch, CURLOPT_POST, 1);
+            curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+            curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+            $response = curl_exec($ch);
+            \Log::info("Sanket: MimSMS Response: " . $response);
+            curl_close($ch);
             return $response;
         }
         
+        \Log::warning("Sanket: No SMS provider activated or configured");
         return false;
     }
 }
@@ -220,8 +395,12 @@ if (!function_exists('sendSMS')) {
 if (!function_exists('get_remaining_package_value')) {
     function get_remaining_package_value($id, $colmn_name)
     {
-        $value = Member::where('user_id', $id)->first()->$colmn_name;
-        return $value;
+        // Sanket: Added null check for member record to prevent "Attempt to read property on null"
+        $member = Member::where('user_id', $id)->first();
+        if ($member) {
+            return $member->$colmn_name;
+        }
+        return 0;
     }
 }
 
@@ -229,7 +408,12 @@ if (!function_exists('get_remaining_package_value')) {
 if (!function_exists('package_validity')) {
     function package_validity($id)
     {
-        $package_validity = Member::where('user_id', $id)->first()->package_validity;
+        // Sanket: Added null check for member record to prevent "Attempt to read property on null"
+        $member = Member::where('user_id', $id)->first();
+        if (!$member) {
+            return false;
+        }
+        $package_validity = $member->package_validity;
         if ($package_validity == null || ($package_validity < date('Y-m-d'))) {
             return false;
         } else {
@@ -520,29 +704,19 @@ if (!function_exists('show_profile_picture')) {
     function show_profile_picture($user)
     {
         $profile_picture_privacy = get_setting('profile_picture_privacy');
-        $auth_user = null;
         if (Auth::check()) {
-            $auth_user = Auth::user();
-        } elseif (request()->bearerToken()) {
-            $token = \Laravel\Sanctum\PersonalAccessToken::findToken(request()->bearerToken());
-            if ($token && $token->tokenable) {
-                $auth_user = $token->tokenable;
-            }
-        }
-
-        if ($auth_user) {
             $profile_picture_show = true;
 
-            if ($auth_user->id != $user->id) {
+            if (Auth::user()->id != $user->id) {
                 if ($user->photo != null && $user->photo_approved == 1) {
                     if ($profile_picture_privacy == 'only_me') {
                         $profile_picture_show = false;
-                        $photo_view_request = \App\Models\ViewProfilePicture::where('user_id', $user->id)->where('requested_by', $auth_user->id)->first();
+                        $photo_view_request = \App\Models\ViewProfilePicture::where('user_id', $user->id)->where('requested_by', Auth::user()->id)->first();
                         if ($photo_view_request != null && $photo_view_request->status == 1) {
                             $profile_picture_show = true;
                         }
                     } elseif ($profile_picture_privacy == 'premium_members') {
-                        if ($auth_user->membership == 1) {
+                        if (Auth::user()->membership == 1) {
                             $profile_picture_show = false;
                         }
                     }

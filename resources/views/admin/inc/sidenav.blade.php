@@ -22,6 +22,94 @@
                     </a>
                 </li>
 
+                <!-- Telecalling Module -->
+                <li class="aiz-side-nav-item">
+                    <a href="#" class="aiz-side-nav-link">
+                        <i class="las la-phone-volume aiz-side-nav-icon"></i>
+                        <span class="aiz-side-nav-text">{{ translate('Telecalling Module') }}</span>
+                        <span class="aiz-side-nav-arrow"></span>
+                    </a>
+                    <ul class="aiz-side-nav-list level-2">
+                        @can('telecalling_dashboard')
+                        <li class="aiz-side-nav-item">
+                            <a href="{{ route('telecalling.dashboard') ?? '#' }}" class="aiz-side-nav-link">
+                                <span class="aiz-side-nav-text">{{ translate('Dashboard') }}</span>
+                            </a>
+                        </li>
+                        @endcan
+                        @can('manage_telecallers')
+                        <li class="aiz-side-nav-item">
+                            <a href="{{ route('telecallers.index') ?? '#' }}" class="aiz-side-nav-link">
+                                <span class="aiz-side-nav-text">{{ translate('Telecallers') }}</span>
+                            </a>
+                        </li>
+                        @endcan
+                        @can('lead_upload')
+                        <li class="aiz-side-nav-item">
+                            <a href="{{ route('lead-upload.index') ?? '#' }}" class="aiz-side-nav-link">
+                                <span class="aiz-side-nav-text">{{ translate('Lead Upload') }}</span>
+                            </a>
+                        </li>
+                        @endcan
+                        @can('lead_distribution')
+                        <li class="aiz-side-nav-item">
+                            <a href="{{ route('lead-distribution.index') ?? '#' }}" class="aiz-side-nav-link">
+                                <span class="aiz-side-nav-text">{{ translate('Lead Distribution') }}</span>
+                            </a>
+                        </li>
+                        @endcan
+                        @can('active_leads_view')
+                        <li class="aiz-side-nav-item">
+                            <a href="{{ route('active-leads.index') ?? '#' }}" class="aiz-side-nav-link">
+                                <span class="aiz-side-nav-text">{{ translate('Active Leads') }}</span>
+                            </a>
+                        </li>
+                        @endcan
+                        @can('inactive_leads_view')
+                        <li class="aiz-side-nav-item">
+                            <a href="{{ route('inactive-leads.index') ?? '#' }}" class="aiz-side-nav-link">
+                                <span class="aiz-side-nav-text">{{ translate('Inactive Leads') }}</span>
+                            </a>
+                        </li>
+                        @endcan
+                        @can('call_history')
+                        <li class="aiz-side-nav-item">
+                            <a href="{{ route('call-history.index') ?? '#' }}" class="aiz-side-nav-link">
+                                <span class="aiz-side-nav-text">{{ translate('Call History') }}</span>
+                            </a>
+                        </li>
+                        @endcan
+                        @can('duplicate_leads')
+                        <li class="aiz-side-nav-item">
+                            <a href="{{ route('duplicate-leads.index') ?? '#' }}" class="aiz-side-nav-link">
+                                <span class="aiz-side-nav-text">{{ translate('Duplicate Leads') }}</span>
+                            </a>
+                        </li>
+                        @endcan
+                        @can('reassignment')
+                        <li class="aiz-side-nav-item">
+                            <a href="{{ route('reassignment.index') ?? '#' }}" class="aiz-side-nav-link">
+                                <span class="aiz-side-nav-text">{{ translate('Reassignment') }}</span>
+                            </a>
+                        </li>
+                        @endcan
+                        @can('telecalling_reports')
+                        <li class="aiz-side-nav-item">
+                            <a href="{{ route('telecalling.reports') ?? '#' }}" class="aiz-side-nav-link">
+                                <span class="aiz-side-nav-text">{{ translate('Reports') }}</span>
+                            </a>
+                        </li>
+                        @endcan
+                        @can('telecalling_settings')
+                        <li class="aiz-side-nav-item">
+                            <a href="{{ route('telecalling.settings') ?? '#' }}" class="aiz-side-nav-link">
+                                <span class="aiz-side-nav-text">{{ translate('Settings') }}</span>
+                            </a>
+                        </li>
+                        @endcan
+                    </ul>
+                </li>
+
                 <!-- Member Manage -->
                 <li class="aiz-side-nav-item">
                     <a href="#" class="aiz-side-nav-link">

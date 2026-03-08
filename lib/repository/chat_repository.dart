@@ -25,9 +25,12 @@ class ChatRepository {
     return data;
   }
 
-  Future<ChatDetailsResponse> fetchChatDetails({chatId}) async {
+  Future<ChatDetailsResponse> fetchChatDetails({chatId, int? userId}) async {
     // print(userId);
     var baseUrl = "${AppConfig.BASE_URL}/member/chat-view/$chatId";
+    if (userId != null) {
+      baseUrl += "?user_id=$userId";
+    }
     var accessToken = SharedPref().accessToken;
 
     var response = await http.get(
@@ -43,6 +46,7 @@ class ChatRepository {
 
   Future<CommonResponse> postChatReply({
     int? id,
+    int? receiverId,
     String? text,
     dynamic attachment,
   }) async {
@@ -53,6 +57,9 @@ class ChatRepository {
     var request = http.MultipartRequest('POST', uri);
 
     request.fields["chat_thread_id"] = id.toString();
+    if (receiverId != null) {
+      request.fields["receiver_user_id"] = receiverId.toString();
+    }
     request.fields["message"] = text ?? "";
 
     if (attachment != null) {
