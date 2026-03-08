@@ -530,15 +530,15 @@ class HomeController extends Controller
         $data['member_name'] = $user->first_name . ' ' . $user->last_name;
         $data['member_email'] = $user->email;
         $data['member_photo'] = uploaded_asset($user->photo) !== null ? uploaded_asset($user->photo) : static_asset('assets/img/avatar-place.png');
-        $data['remaining_interest'] = get_remaining_package_value($user->id, 'remaining_interest');
-        $data['remaining_contact_view'] = get_remaining_package_value($user->id, 'remaining_contact_view');
-        $data['remaining_photo_gallery'] = get_remaining_package_value($user->id, 'remaining_photo_gallery');
-        $data['remaining_profile_image_view'] = (get_setting('profile_picture_privacy') == 'only_me') ? get_remaining_package_value($user->id, 'remaining_profile_image_view') : 0;
-        $data['remaining_gallery_image_view'] = (get_setting('gallery_image_privacy') == 'only_me') ? get_remaining_package_value($user->id, 'remaining_gallery_image_view') : 0;
+        $data['remaining_interest'] = (int) get_remaining_package_value($user->id, 'remaining_interest');
+        $data['remaining_contact_view'] = (int) get_remaining_package_value($user->id, 'remaining_contact_view');
+        $data['remaining_photo_gallery'] = (int) get_remaining_package_value($user->id, 'remaining_photo_gallery');
+        $data['remaining_profile_image_view'] = (get_setting('profile_picture_privacy') == 'only_me') ? (int) get_remaining_package_value($user->id, 'remaining_profile_image_view') : 0;
+        $data['remaining_gallery_image_view'] = (get_setting('gallery_image_privacy') == 'only_me') ? (int) get_remaining_package_value($user->id, 'remaining_gallery_image_view') : 0;
 
         // Sanket: Added robust null checks for member detail and package
         $current_package_info = [
-            'package_id' => 0,
+            'package_id' => (int) ($user?->member?->package_id ?? 0),
             'package_name' => translate('No Package'),
             'package_expiry' => translate('Expired'),
         ];
