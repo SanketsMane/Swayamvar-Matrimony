@@ -39,15 +39,20 @@ class LeadUploadController extends Controller
             $file->move(storage_path('app/temp_lead_uploads'), $file_name);
             $full_path = storage_path('app/temp_lead_uploads/' . $file_name);
             
-            // Read ONLY the first row (headers) to show in the mapping UI [Sanket]
+            // Read ONLY the first row (headers) using PhpSpreadsheet directly to avoid memory exhaustion [Sanket]
             $headers = [];
             try {
-                $data = Excel::toArray(new \stdClass(), $full_path);
-                if (isset($data[0]) && count($data[0]) > 0) {
-                    $headers = $data[0][0]; // First sheet, first row
-                }
+                $reader = \PhpOffice\PhpSpreadsheet\IOFactory::createReaderForFile($full_path);
+                $reader->setReadDataOnly(true);
+                $spreadsheet = $reader->load($full_path);
+                $worksheet = $spreadsheet->getActiveSheet();
+                $highestColumn = $worksheet->getHighestColumn();
+                $range = 'A1:' . $highestColumn . '1';
+                $headers = $worksheet->rangeToArray($range, NULL, TRUE, FALSE)[0];
+                $spreadsheet->disconnectWorksheets();
+                unset($spreadsheet);
             } catch (\Exception $e) {
-                \Log::error('Lead Upload Error: ' . $e->getMessage());
+                \Log::error('Lead Upload Header Reading Error: ' . $e->getMessage());
                 flash(translate('Failed to read Excel file headers.'))->error();
                 return back();
             }
@@ -79,12 +84,25 @@ class LeadUploadController extends Controller
         $path = storage_path('app/temp_lead_uploads/' . $upload->file_name);
         
         if (file_exists($path)) {
-            $data = Excel::toArray(new \stdClass(), $path);
-            if (isset($data[0]) && count($data[0]) > 0) {
-                // Ensure headers are non-empty strings for dropdown labels
-                foreach($data[0][0] as $index => $col) {
+            try {
+                // Sanket: Efficiently read only the first row (headers)
+                $reader = \PhpOffice\PhpSpreadsheet\IOFactory::createReaderForFile($path);
+                $reader->setReadDataOnly(true);
+                $spreadsheet = $reader->load($path);
+                $worksheet = $spreadsheet->getActiveSheet();
+                $highestColumn = $worksheet->getHighestColumn();
+                $range = 'A1:' . $highestColumn . '1';
+                $rowData = $worksheet->rangeToArray($range, NULL, TRUE, FALSE)[0];
+                
+                foreach($rowData as $index => $col) {
                     $headers[$index] = $col ?: "Column " . ($index + 1);
                 }
+                
+                $spreadsheet->disconnectWorksheets();
+                unset($spreadsheet);
+            } catch (\Exception $e) {
+                flash(translate('Error reading file headers: ' . $e->getMessage()))->error();
+                return redirect()->route('lead-upload.index');
             }
         } else {
             flash(translate('Upload file missing.'))->error();
