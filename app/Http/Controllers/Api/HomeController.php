@@ -533,12 +533,12 @@ class HomeController extends Controller
         $data['remaining_interest'] = get_remaining_package_value($user->id, 'remaining_interest');
         $data['remaining_contact_view'] = get_remaining_package_value($user->id, 'remaining_contact_view');
         $data['remaining_photo_gallery'] = get_remaining_package_value($user->id, 'remaining_photo_gallery');
-        $data['remaining_profile_image_view'] = (get_setting('profile_picture_privacy') == 'only_me') ? get_remaining_package_value($user->id, 'remaining_profile_image_view') : '';
-        $data['remaining_gallery_image_view'] = (get_setting('gallery_image_privacy') == 'only_me') ? get_remaining_package_value($user->id, 'remaining_gallery_image_view') : '';
+        $data['remaining_profile_image_view'] = (get_setting('profile_picture_privacy') == 'only_me') ? get_remaining_package_value($user->id, 'remaining_profile_image_view') : 0;
+        $data['remaining_gallery_image_view'] = (get_setting('gallery_image_privacy') == 'only_me') ? get_remaining_package_value($user->id, 'remaining_gallery_image_view') : 0;
 
         // Sanket: Added robust null checks for member detail and package
         $current_package_info = [
-            'package_id' => '',
+            'package_id' => 0,
             'package_name' => translate('No Package'),
             'package_expiry' => translate('Expired'),
         ];
