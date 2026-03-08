@@ -102,11 +102,25 @@ class BiodataService {
       // Sanket: Handle potential 422 errors or other non-200 responses gracefully
       if (response.statusCode != 200 && response.statusCode != 201) {
         final errorData = json.decode(response.body);
+        String errorMessage = errorData['message'] ?? 'Submission failed (${response.statusCode})';
+        
+        // Sanket: Extract specific validation errors if available
+        if (errorData['errors'] != null && errorData['errors'] is Map) {
+          final errors = errorData['errors'] as Map<String, dynamic>;
+          if (errors.isNotEmpty) {
+            final firstError = errors.values.first;
+            if (firstError is List && firstError.isNotEmpty) {
+              errorMessage = firstError.first.toString();
+            }
+          }
+        }
+        
         return {
           'result': false, 
-          'message': errorData['message'] ?? 'Submission failed (${response.statusCode})'
+          'message': errorMessage
         };
       }
+
 
       return json.decode(response.body);
     } catch (e) {

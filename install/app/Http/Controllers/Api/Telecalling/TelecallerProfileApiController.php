@@ -78,21 +78,14 @@ class TelecallerProfileApiController extends Controller
         $db_educations = \App\Models\Education::select('id', 'degree as name')->distinct()->get()->toArray();
         $fallback_educations = [
             ['id' => '10th Std', 'name' => '10th Std'],
-            ['id' => '12th Std (HSC)', 'name' => '12th Std (HSC)'],
+            ['id' => '12th Std', 'name' => '12th Std'],
             ['id' => 'Diploma', 'name' => 'Diploma'],
-            ['id' => 'B.A', 'name' => 'B.A'],
-            ['id' => 'B.Com', 'name' => 'B.Com'],
-            ['id' => 'B.Sc', 'name' => 'B.Sc'],
-            ['id' => 'B.Tech / B.E', 'name' => 'B.Tech / B.E'],
-            ['id' => 'B.C.A', 'name' => 'B.C.A'],
-            ['id' => 'M.A', 'name' => 'M.A'],
-            ['id' => 'M.Com', 'name' => 'M.Com'],
-            ['id' => 'M.Sc', 'name' => 'M.Sc'],
-            ['id' => 'M.Tech / M.E', 'name' => 'M.Tech / M.E'],
-            ['id' => 'M.C.A', 'name' => 'M.C.A'],
-            ['id' => 'MBA', 'name' => 'MBA'],
-            ['id' => 'PhD', 'name' => 'PhD'],
+            ['id' => 'Graduate', 'name' => 'Graduate'],
+            ['id' => 'Post Graduate', 'name' => 'Post Graduate'],
+            ['id' => 'Doctorate', 'name' => 'Doctorate'],
+            ['id' => 'Professional', 'name' => 'Professional'],
         ];
+
 
         // Sanket: Merge and unique by name
         $merged = array_merge($db_educations, $fallback_educations);
@@ -124,6 +117,14 @@ class TelecallerProfileApiController extends Controller
                     ['id' => 'Male', 'name' => 'Male'],
                     ['id' => 'Female', 'name' => 'Female']
                 ],
+                'occupation_types' => [
+                    ['id' => 'Government', 'name' => 'Government'],
+                    ['id' => 'Private Sector', 'name' => 'Private Sector'],
+                    ['id' => 'Business / Self Employed', 'name' => 'Business / Self Employed'],
+                    ['id' => 'Professional', 'name' => 'Professional'],
+                    ['id' => 'Not Working', 'name' => 'Not Working'],
+                ],
+
                 'on_behalves' => \App\Models\OnBehalf::select('id', 'name')->get(),
                 'marital_statuses' => \App\Models\MaritalStatus::select('id', 'name')->get(),
                 'religions' => \App\Models\Religion::select('id', 'name')->get(),
@@ -139,6 +140,15 @@ class TelecallerProfileApiController extends Controller
                     ['id' => 'B+', 'name' => 'B+'], ['id' => 'B-', 'name' => 'B-'],
                     ['id' => 'AB+', 'name' => 'AB+'], ['id' => 'AB-', 'name' => 'AB-'],
                     ['id' => 'O+', 'name' => 'O+'], ['id' => 'O-', 'name' => 'O-'],
+                    ['id' => 'NA', 'name' => 'NA'],
+                ],
+                'income_slabs' => [
+                    ['id' => 'Below 2 Lakhs', 'name' => 'Below 2 Lakhs'],
+                    ['id' => '2 Lakhs - 5 Lakhs', 'name' => '2 Lakhs - 5 Lakhs'],
+                    ['id' => '5 Lakhs - 10 Lakhs', 'name' => '5 Lakhs - 10 Lakhs'],
+                    ['id' => '10 Lakhs - 15 Lakhs', 'name' => '10 Lakhs - 15 Lakhs'],
+                    ['id' => '15 Lakhs - 25 Lakhs', 'name' => '15 Lakhs - 25 Lakhs'],
+                    ['id' => 'Above 25 Lakhs', 'name' => 'Above 25 Lakhs'],
                 ],
                 'complexions' => [
                     ['id' => 'Very Fair', 'name' => 'Very Fair'], ['id' => 'Fair', 'name' => 'Fair'],
@@ -214,16 +224,13 @@ class TelecallerProfileApiController extends Controller
             'date_of_birth' => 'required|date',
             'religion' => 'required',
             'caste' => 'required',
-            'sub_caste' => 'nullable',
+            'on_behalf' => 'nullable',
             'marital_status' => 'required',
-            
-            // 2. Physical
             'height' => 'required',
             'weight' => 'nullable',
             'blood_group' => 'required',
             'complexion' => 'required',
             'physical_disability' => 'required',
-            'diet' => 'nullable',
             'manglik' => 'required',
             'intercaste_accepted' => 'required',
 
@@ -239,6 +246,8 @@ class TelecallerProfileApiController extends Controller
 
             // 4. Education
             'education_level' => 'required',
+            'education_detail' => 'nullable',
+
 
             // 5. Career
             'occupation_type' => 'required',
@@ -250,15 +259,15 @@ class TelecallerProfileApiController extends Controller
             'mobile2' => 'nullable|digits:10',
 
             // 7. Address
-            'gov_id_type' => 'required',
-            'gov_id_number' => 'required|unique:users',
+            'gov_id_type' => 'nullable',
+            'gov_id_number' => 'nullable',
             'address' => 'required',
             'state' => 'required',
             'district' => 'required', // Mapped to City ID eventually
             'city' => 'nullable',
 
             // 8. Photo
-            'photo' => 'nullable|image|mimes:jpg,jpeg,png,webp|max:2048',
+            'photo' => 'required|image|mimes:jpg,jpeg,png,webp|max:2048',
         ]);
 
         if ($validator->fails()) {
@@ -302,8 +311,8 @@ class TelecallerProfileApiController extends Controller
             $package_id = 1; // ID 1 is typically the Free package
             $package = \App\Models\Package::find($package_id);
             
-            // Assume "Myself" for on_behalf (ID 1 usually)
-            $on_behalf_id = 1;
+            // Assume "Myself" (usually ID 1) if not provided [Sanket]
+            $on_behalf_id = $request->on_behalf ?? 1;
 
             // --- Members Table ---
             $member = new \App\Models\Member;
@@ -338,20 +347,11 @@ class TelecallerProfileApiController extends Controller
             $physical->disability = $request->physical_disability;
             $physical->save();
             
-            // Save Diet in Lifestyle table if provided
-            if ($request->has('diet') && !empty($request->diet)) {
-                $lifestyle = new \App\Models\Lifestyle;
-                $lifestyle->user_id = $user->id;
-                $lifestyle->diet = $request->diet;
-                $lifestyle->save();
-            }
-
             // --- Spiritual Background (Step 1 & 2) ---
             $spiritual = new \App\Models\SpiritualBackground;
             $spiritual->user_id = $user->id;
             $spiritual->religion_id = $request->religion;
             $spiritual->caste_id = $request->caste;
-            $spiritual->sub_caste_id = $request->sub_caste ?? null;
             $spiritual->manglik = ($request->manglik == 'Yes' || $request->manglik == 'true' || $request->manglik == '1' || $request->manglik == 1) ? 1 : 0;
             $spiritual->intercaste_accepted = ($request->intercaste_accepted == 'Yes' || $request->intercaste_accepted == 'true' || $request->intercaste_accepted == '1' || $request->intercaste_accepted == 1) ? 1 : 0;
             $spiritual->save();
@@ -379,8 +379,10 @@ class TelecallerProfileApiController extends Controller
             $education = new \App\Models\Education;
             $education->user_id = $user->id;
             $education->degree = $request->education_level;
+            $education->institution = $request->education_detail ?? null; // Store specialization here [Sanket]
             $education->present = 1;
             $education->save();
+
 
             // --- Career (Step 5) ---
             $career = new \App\Models\Career;
