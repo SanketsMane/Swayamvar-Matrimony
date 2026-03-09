@@ -301,6 +301,7 @@ class TelecallerProfileApiController extends Controller
             $user->gov_id_type = $request->gov_id_type;
             $user->gov_id_number = $request->gov_id_number;
             $user->password = \Hash::make($password);
+            $user->approved = 0; // Sanket: Default to Pending for admin approval
             $user->telecaller_id = $telecaller->id; // Assign telecaller ID [Sanket]
             $user->membership = 1; // Default Free Package
 
