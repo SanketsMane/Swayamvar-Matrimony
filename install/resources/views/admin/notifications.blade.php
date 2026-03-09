@@ -30,30 +30,34 @@
                                             $notify_data = json_decode($notification->data);
                                             $user_data = isset($notify_data->notify_by) ? \App\Models\User::where('id',$notify_data->notify_by)->first() : null;
                                         @endphp
-                                        @if(!empty($user_data))
-                                          <li class="list-group-item d-flex justify-content-between align-items-start hov-bg-soft-primary">
-                                              <a href="{{ route('notification_view', $notification->id) }}" class="media text-inherit">
-                                                  <span class="avatar avatar-sm mr-3">
-                                                      @if(!empty(uploaded_asset($user_data->photo)))
-                                                          <img src="{{ uploaded_asset($user_data->photo) }}">
-                                                      @else
-                                                          <img src="{{ static_asset('assets/img/avatar-place.png') }}">
-                                                      @endif
-                                                  </span>
-                                                  <div class="media-body">
-                                                      <p class="mb-1">{{ $user_data->first_name.' '.$user_data->last_name }}</p>
-                                                      <small class="text-muted">{{ $notify_data->message }}</small>
-                                                      <br>
-                                                      <small class="text-muted">{{ Carbon\Carbon::parse($notification->created_at)->diffForHumans() }}</small>
-                                                  </div>
-                                              </a>
-                                              @if($notification->read_at == null)
-                                                  <button class="btn p-0" data-toggle="tooltip" data-title="{{ translate('New') }}">
-                                                      <span class="badge badge-md  badge-dot badge-circle badge-primary"></span>
-                                                  </button>
-                                              @endif
-                                          </li>
-                                        @endif
+                                        <li class="list-group-item d-flex justify-content-between align-items-start hov-bg-soft-primary">
+                                            <a href="{{ route('notification_view', $notification->id) }}" class="media text-inherit">
+                                                <span class="avatar avatar-sm mr-3">
+                                                    @if(!empty($user_data) && !empty(uploaded_asset($user_data->photo)))
+                                                        <img src="{{ uploaded_asset($user_data->photo) }}">
+                                                    @else
+                                                        <img src="{{ static_asset('assets/img/avatar-place.png') }}">
+                                                    @endif
+                                                </span>
+                                                <div class="media-body">
+                                                    <p class="mb-1">
+                                                        @if(!empty($user_data))
+                                                            {{ $user_data->first_name.' '.$user_data->last_name }}
+                                                        @else
+                                                            {{ translate('System Notification') }}
+                                                        @endif
+                                                    </p>
+                                                    <small class="text-muted">{{ $notify_data->message ?? ($notify_data->title ?? '') }}</small>
+                                                    <br>
+                                                    <small class="text-muted">{{ Carbon\Carbon::parse($notification->created_at)->diffForHumans() }}</small>
+                                                </div>
+                                            </a>
+                                            @if($notification->read_at == null)
+                                                <button class="btn p-0" data-toggle="tooltip" data-title="{{ translate('New') }}">
+                                                    <span class="badge badge-md  badge-dot badge-circle badge-primary"></span>
+                                                </button>
+                                            @endif
+                                        </li>
                                     @endforeach
                                 @endif
                             </ul>

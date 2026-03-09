@@ -36,6 +36,8 @@ class TelecallerBiodataCreated extends Notification
             'type' => 'telecaller_biodata_created',
             'title' => 'New Biodata Entry',
             'message' => $this->telecaller->first_name . ' created a new profile for: ' . $this->user->first_name,
+            'notify_by' => $this->telecaller->id,
+            'route' => 'members.index', // Added route for notification_view compatibility [Sanket]
             'url' => route('members.show', encrypt($this->user->id))
         ];
     }

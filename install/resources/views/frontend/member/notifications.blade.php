@@ -37,18 +37,21 @@
                                 }
                             @endphp
                         @endif
-                        @if($check && $user != null)
+                        @if($check)
                             <li class="list-group-item d-flex justify-content-between align-items-start hov-bg-soft-primary">
                                 <a href="{{ route('notification_view', $notification->id) }}" class="media text-inherit">
                                     @php
-                                        if($user->user_type == 'member'){
-                                            $avatar_image = $user->member->gender == 1 ? 'assets/img/avatar-place.png' : 'assets/img/female-avatar-place.png';
+                                        $avatar_image = 'assets/img/avatar-place.png';
+                                        if(!empty($user)){
+                                            if($user->user_type == 'member'){
+                                                $avatar_image = $user->member->gender == 1 ? 'assets/img/avatar-place.png' : 'assets/img/female-avatar-place.png';
+                                            }
+                                            $profile_picture_show = show_profile_picture($user);
                                         }
-                                        $profile_picture_show = show_profile_picture($user);
                                     @endphp
                                     <span class="avatar avatar-sm mr-3">
                                         <img 
-                                            @if ($profile_picture_show || $user->user_type == 'admin')
+                                            @if (!empty($user) && ($profile_picture_show || $user->user_type == 'admin'))
                                             src="{{ uploaded_asset($user->photo) }}"
                                             @else
                                             src="{{ static_asset($avatar_image) }}"
@@ -56,7 +59,7 @@
                                         >
                                     </span>
                                     <div class="media-body">
-                                        <p class="mb-1">{{ $notify_data->message }}</p>
+                                        <p class="mb-1">{{ $notify_data->message ?? ($notify_data->title ?? '') }}</p>
                                         <small class="text-muted">{{ Carbon\Carbon::parse($notification->created_at)->diffForHumans() }}</small>
                                     </div>
                                 </a>
