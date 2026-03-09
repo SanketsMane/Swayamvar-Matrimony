@@ -112,6 +112,7 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth', 'admin']], function 
         // Sanket: Smart Lead Upload Mapping
         Route::get('/lead-upload/{id}/map', [\App\Http\Controllers\Admin\LeadUploadController::class, 'map'])->name('lead-upload.map');
         Route::post('/lead-upload/{id}/process', [\App\Http\Controllers\Admin\LeadUploadController::class, 'processImport'])->name('lead-upload.process');
+        Route::get('/lead-upload/{id}/progress', [\App\Http\Controllers\Admin\LeadImportProgressController::class, 'getProgress'])->name('lead-upload.progress_api');
 
         // Lead Distribution [Sanket]
         Route::get('/lead-distribution', [\App\Http\Controllers\Admin\LeadDistributionController::class, 'index'])->name('lead-distribution.index');

@@ -14,7 +14,7 @@
                     <strong>{{ translate('Campaign:') }}</strong> {{ $campaign->name }}
                 </div>
 
-                <form action="{{ route('lead-upload.process', $upload->id) }}" method="POST">
+                <form id="import-form" action="{{ route('lead-upload.process', $upload->id) }}" method="POST">
                     @csrf
                     <table class="table table-bordered">
                         <thead>
@@ -59,9 +59,87 @@
 
                     <div class="form-group mb-0 text-right mt-4">
                         <a href="{{ route('lead-upload.index') }}" class="btn btn-light mr-2">{{ translate('Cancel') }}</a>
-                        <button type="submit" class="btn btn-primary">{{ translate('Process Import') }}</button>
+                        <button type="submit" class="btn btn-primary" id="submit-btn">{{ translate('Process Import') }}</button>
                     </div>
                 </form>
+
+                <!-- Sanket: Progress Bar UI -->
+                <div id="progress-container" class="d-none mt-4 text-center">
+                    <div class="alert alert-info py-3">
+                        <h6 class="mb-3"><i class="las la-spinner la-spin mr-2"></i>{{ translate('Processing Leads... Please do not close this window.') }}</h6>
+                        <div class="progress mb-2" style="height: 25px;">
+                            <div id="progress-bar" class="progress-bar progress-bar-striped progress-bar-animated bg-success" role="progressbar" style="width: 0%;" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">0%</div>
+                        </div>
+                        <div id="progress-text" class="text-secondary small mt-2">
+                            {{ translate('Initializing...') }}
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+@endsection
+
+@section('script')
+<script type="text/javascript">
+    $(document).ready(function() {
+        $('#import-form').on('submit', function(e) {
+            e.preventDefault();
+            
+            // UI Switch [Sanket]
+            $('#import-form').addClass('d-none');
+            $('#progress-container').removeClass('d-none');
+            $('#submit-btn').prop('disabled', true);
+
+            var formData = $(this).serialize();
+            var uploadId = "{{ $upload->id }}";
+            
+            // Start the actual processing [Sanket]
+            $.ajax({
+                url: $(this).attr('action'),
+                type: 'POST',
+                data: formData,
+                success: function(response) {
+                    // Success will eventually be handled by polling or final redirect
+                },
+                error: function(xhr) {
+                    alert('An error occurred during processing. Please check logs.');
+                    location.reload();
+                }
+            });
+
+            // Start Polling for Progress [Sanket]
+            var pollInterval = setInterval(function() {
+                $.ajax({
+                    url: "{{ route('lead-upload.progress_api', $upload->id) }}",
+                    type: 'GET',
+                    success: function(data) {
+                        var percent = data.percentage;
+                        $('#progress-bar').css('width', percent + '%').attr('aria-valuenow', percent).text(percent + '%');
+                        
+                        var text = 'Processed ' + data.processed + ' of ' + data.total + ' rows...';
+                        if(data.valid > 0) text += ' (Valid: ' + data.valid + ')';
+                        $('#progress-text').text(text);
+
+                        if (percent >= 100 || data.status == 'completed') {
+                            clearInterval(pollInterval);
+                            AIZ.plugins.notify('success', '{{ translate("Import Completed!") }}');
+                            setTimeout(function() {
+                                window.location.href = "{{ route('lead-upload.index') }}";
+                            }, 2000);
+                        }
+                    },
+                    error: function() {
+                        // Keep polling silently or handle error
+                    }
+                });
+            }, 2000);
+        });
+    });
+</script>
+@endsection
             </div>
         </div>
     </div>
