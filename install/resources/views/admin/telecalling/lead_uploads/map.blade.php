@@ -40,13 +40,15 @@
                                                 @php
                                                     $selected = '';
                                                     $headerLower = strtolower($header);
-                                                    if ($key == 'mobile' && (strpos($headerLower, 'mobile') !== false || strpos($headerLower, 'phone') !== false || strpos($headerLower, 'contact') !== false)) $selected = 'selected';
-                                                    if ($key == 'name' && (strpos($headerLower, 'name') !== false)) $selected = 'selected';
-                                                    if ($key == 'email' && (strpos($headerLower, 'email') !== false)) $selected = 'selected';
-                                                    if ($key == 'city' && (strpos($headerLower, 'city') !== false || strpos($headerLower, 'location') !== false)) $selected = 'selected';
-                                                    if ($key == 'pincode' && (strpos($headerLower, 'pin') !== false || strpos($headerLower, 'zip') !== false)) $selected = 'selected';
-                                                    if ($key == 'source' && (strpos($headerLower, 'source') !== false)) $selected = 'selected';
-                                                    if ($key == 'business_type' && (strpos($headerLower, 'business') !== false || strpos($headerLower, 'type') !== false)) $selected = 'selected';
+                                                    $keyLower = strtolower($key);
+                                                    
+                                                    if ($key == 'mobile' && (strpos($headerLower, 'mobile') !== false || strpos($headerLower, 'phone') !== false || strpos($headerLower, 'contact') !== false || strpos($headerLower, 'num') !== false)) $selected = 'selected';
+                                                    if ($key == 'name' && (strpos($headerLower, 'name') !== false || strpos($headerLower, 'full') !== false)) $selected = 'selected';
+                                                    if ($key == 'email' && (strpos($headerLower, 'email') !== false || strpos($headerLower, 'mail') !== false)) $selected = 'selected';
+                                                    if ($key == 'city' && (strpos($headerLower, 'city') !== false || strpos($headerLower, 'location') !== false || strpos($headerLower, 'address') !== false || strpos($headerLower, 'permanent') !== false || strpos($headerLower, 'state') !== false || strpos($headerLower, 'district') !== false)) $selected = 'selected';
+                                                    if ($key == 'pincode' && (strpos($headerLower, 'pin') !== false || strpos($headerLower, 'zip') !== false || strpos($headerLower, 'code') !== false)) $selected = 'selected';
+                                                    if ($key == 'source' && (strpos($headerLower, 'source') !== false || strpos($headerLower, 'from') !== false)) $selected = 'selected';
+                                                    if ($key == 'business_type' && (strpos($headerLower, 'business') !== false || strpos($headerLower, 'type') !== false || strpos($headerLower, 'cat') !== false)) $selected = 'selected';
                                                 @endphp
                                                 <option value="{{ $index }}" {{ $selected }}>{{ $header }}</option>
                                             @endforeach
