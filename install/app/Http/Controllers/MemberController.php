@@ -811,7 +811,11 @@ class MemberController extends Controller
     // Login by admin as a Member
     public function login($id)
     {
-        $user = User::findOrFail(decrypt($id));
+        try {
+            $id = decrypt($id);
+        } catch (\Exception $e) {
+        }
+        $user = User::findOrFail($id);
         auth()->login($user, true);
 
         return redirect()->route('dashboard');
