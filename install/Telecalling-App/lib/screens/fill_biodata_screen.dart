@@ -234,16 +234,20 @@ class _FillBiodataScreenState extends State<FillBiodataScreen> {
         final List<Map<String, String>> mergedEducations = [];
 
         for (var e in apiEducations) {
-          final name = e['name']?.toString().toLowerCase() ?? '';
-          if (name.isNotEmpty && !seenNames.contains(name)) {
-            seenNames.add(name);
+          final name = e['name']?.toString() ?? '';
+          if (name.trim() == "- 2") continue; // Sanket: Filter out erroneous data
+          final nameLower = name.toLowerCase();
+          if (nameLower.isNotEmpty && !seenNames.contains(nameLower)) {
+            seenNames.add(nameLower);
             mergedEducations.add(e);
           }
         }
         for (var e in fallbackEducations) {
-          final name = e['name']?.toString().toLowerCase() ?? '';
-          if (name.isNotEmpty && !seenNames.contains(name)) {
-            seenNames.add(name);
+          final name = e['name']?.toString() ?? '';
+          if (name.trim() == "- 2") continue; // Sanket: Filter out erroneous data
+          final nameLower = name.toLowerCase();
+          if (nameLower.isNotEmpty && !seenNames.contains(nameLower)) {
+            seenNames.add(nameLower);
             mergedEducations.add(e);
           }
         }
@@ -990,15 +994,29 @@ class _FillBiodataScreenState extends State<FillBiodataScreen> {
   Widget _step4Education() {
     return Column(
       children: [
-        _dropdown(
-          label: 'Education Level *', icon: Icons.school,
-          value: _selectedEducation,
-          items: (_educations ?? []).map((e) => DropdownMenuItem<String>(value: e['id'], child: Text(e['name'] ?? ''))).toList(),
-          onChanged: (v) => setState(() => _selectedEducation = v),
-          isRequired: true,
+        Row(
+          children: [
+            Expanded(
+              flex: 2,
+              child: _dropdown(
+                label: 'Education Level *', icon: Icons.school,
+                value: _selectedEducation,
+                items: (_educations ?? []).map((e) => DropdownMenuItem<String>(value: e['id'], child: Text(e['name'] ?? ''))).toList(),
+                onChanged: (v) => setState(() => _selectedEducation = v),
+                isRequired: true,
+              ),
+            ),
+            const SizedBox(width: 8),
+            Expanded(
+              flex: 3,
+              child: _input(
+                controller: _educationDetailController, 
+                label: 'Degree / Specialization', 
+                icon: Icons.workspace_premium_outlined
+              ),
+            ),
+          ],
         ),
-        const SizedBox(height: 12),
-        _input(controller: _educationDetailController, label: 'Degree / Specialization', icon: Icons.workspace_premium_outlined),
       ],
     );
   }

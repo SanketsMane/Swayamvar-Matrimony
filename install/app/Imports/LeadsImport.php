@@ -33,7 +33,7 @@ class LeadsImport implements OnEachRow, WithChunkReading, WithBatchInserts, With
         $this->mapping = $mapping;
     }
 
-    public function filter(): IReadFilter
+    public function readFilter(): IReadFilter
     {
         return new class implements IReadFilter {
             public function readCell($columnAddress, $row, $worksheetName = '') {

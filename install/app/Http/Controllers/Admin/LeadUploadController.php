@@ -170,6 +170,22 @@ class LeadUploadController extends Controller
         return redirect()->route('lead-upload.index')->with('import_stats', $stats);
     }
 
+    public function show($id)
+    {
+        $upload = LeadUpload::findOrFail($id);
+        if ($upload->status == 'pending_mapping') {
+            return redirect()->route('lead-upload.map', ['id' => $upload->id]);
+        }
+        return redirect()->route('lead-upload.index');
+    }
+
+    public function update(Request $request, $id)
+    {
+        // Placeholder to prevent 500 on accidental PUT requests
+        flash(translate('Update not supported for this record type.'))->info();
+        return back();
+    }
+
     public function destroy($id)
     {
         if (LeadUpload::destroy($id)) {

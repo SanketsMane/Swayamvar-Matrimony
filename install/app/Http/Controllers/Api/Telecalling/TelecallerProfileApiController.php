@@ -87,14 +87,17 @@ class TelecallerProfileApiController extends Controller
         ];
 
 
-        // Sanket: Merge and unique by name
+        // Sanket: Merge and unique by name, also filter out any garbage like "- 2"
         $merged = array_merge($db_educations, $fallback_educations);
         $unique = [];
         $seen = [];
         foreach ($merged as $edu) {
-            $name = strtolower($edu['name']);
-            if (!in_array($name, $seen)) {
-                $seen[] = $name;
+            $name_trimmed = trim($edu['name']);
+            if ($name_trimmed == "- 2") continue;
+            
+            $name_lower = strtolower($name_trimmed);
+            if (!in_array($name_lower, $seen)) {
+                $seen[] = $name_lower;
                 $unique[] = $edu;
             }
         }
