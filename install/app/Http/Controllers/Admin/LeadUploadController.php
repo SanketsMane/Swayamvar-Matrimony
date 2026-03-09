@@ -152,6 +152,19 @@ class LeadUploadController extends Controller
         // Pass the mapping to the Import class
         $mapping = $request->mapping; // ['name' => 0, 'mobile' => 2, ...]
         
+        // Sanket: Calculate total rows for progress bar (memory-efficient)
+        try {
+            $reader = \PhpOffice\PhpSpreadsheet\IOFactory::createReaderForFile($path);
+            $info = $reader->listWorksheetInfo($path);
+            $totalRows = $info[0]['totalRows'] - 1; // Exclude header row
+            $upload->update([
+                'total_rows' => $totalRows,
+                'processed_rows' => 0,
+            ]);
+        } catch (\Exception $e) {
+            \Log::error('Lead Progress Init Error: ' . $e->getMessage());
+        }
+
         // Sanket: Disable query log to save memory during bulk inserts
         DB::disableQueryLog();
         
