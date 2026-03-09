@@ -2,7 +2,7 @@ import 'package:active_matrimonial_flutter_app/helpers/shared_pref.dart';
 import 'package:active_matrimonial_flutter_app/models_response/auth/signin_response.dart';
 import 'package:active_matrimonial_flutter_app/services/auth_service.dart';
 
-void setUserData(SignInResponse request) {
+Future<void> setUserData(SignInResponse request) async {
   if (request.result == true) {
     SharedPref().isLoggedIn = true;
     SharedPref().accessToken = request.accessToken ?? '';
@@ -11,13 +11,13 @@ void setUserData(SignInResponse request) {
 
     // Sanket: Synchronize with AuthService for login persistence across restarts
     if (request.accessToken != null) {
-      AuthService().login(request.accessToken!);
+      await AuthService().login(request.accessToken!);
     }
   }
 }
 
-void clearUserData() {
+Future<void> clearUserData() async {
   SharedPref().clear();
   // Sanket: Clear secure storage session
-  AuthService().logout();
+  await AuthService().logout();
 }

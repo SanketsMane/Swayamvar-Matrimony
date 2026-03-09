@@ -21,8 +21,7 @@ ThunkAction<AppState> accountDeletionMiddleware() {
           ShowMessageAction(msg: data.message, color: MyTheme.success),
         );
         store.dispatch(ClearAuthData());
-
-        clearUserData();
+        await clearUserData();
 
         NavigatorPush.push_remove_untill(page: const AppNavigation());
       } else {

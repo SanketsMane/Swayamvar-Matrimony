@@ -48,7 +48,7 @@ ThunkAction<AppState> socialLoginMiddleware({
       if (data.result == true) {
         /// setting auth user data
         /// into shared pref
-        setUserData(data);
+        await setUserData(data);
         NavigatorPush.push_remove_untill(page: AppNavigation());
       }
     } catch (e) {

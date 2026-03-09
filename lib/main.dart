@@ -10,8 +10,6 @@ import 'package:active_matrimonial_flutter_app/redux/store.dart';
 import 'package:active_matrimonial_flutter_app/redux/store_init.dart';
 import 'helpers/shared_pref.dart';
 
-import 'helpers/shared_pref.dart';
-
 import 'package:active_matrimonial_flutter_app/providers/language_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter/foundation.dart';
@@ -21,9 +19,9 @@ void main() async {
   runZonedGuarded(
     () async {
       WidgetsFlutterBinding.ensureInitialized();
-      print("Sanket: Calling initStore()");
+      debugPrint("Sanket: Calling initStore()");
       initStore();
-      print("Sanket: initStore() completed");
+      debugPrint("Sanket: initStore() completed");
 
       FlutterError.onError = (FlutterErrorDetails details) {
         FlutterError.presentError(details);
@@ -109,7 +107,12 @@ class _MyAppState extends State<MyApp> {
                   languageProvider.appLocale.languageCode == 'mr'
                       ? "Noto Sans Devanagari"
                       : "Poppins",
-              fontFamilyFallback: const ["Noto Sans Devanagari"],
+              fontFamilyFallback: const [
+                "Noto Sans Devanagari",
+                "Noto Sans",
+                "Apple Color Emoji",
+                "Segoe UI Emoji",
+              ],
               appBarTheme: const AppBarTheme(backgroundColor: Colors.white),
             ),
             debugShowCheckedModeBanner: false,

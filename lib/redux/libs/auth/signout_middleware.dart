@@ -23,7 +23,7 @@ ThunkAction<AppState> signOutMiddleware(ctx) {
         );
 
         /// cleaning auth data after logout
-        clearUserData();
+        await clearUserData();
 
         NavigatorPush.push_remove_untill(page: const LandingPage());
         SystemHelper.isBlockScreenShown = false;

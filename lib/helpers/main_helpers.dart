@@ -1,6 +1,7 @@
 import 'package:active_matrimonial_flutter_app/helpers/shared_pref.dart';
 import 'package:active_matrimonial_flutter_app/redux/store.dart';
 import 'package:active_matrimonial_flutter_app/redux/libs/drop_down/profile_dropdown_middleware.dart';
+import 'package:active_matrimonial_flutter_app/services/auth_service.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:intl/intl.dart';
 
@@ -8,11 +9,18 @@ bool isNumber(String text) {
   return RegExp('^[0-9]+\$').hasMatch(text);
 }
 
+bool isEmail(String text) {
+  return RegExp(
+    r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+",
+  ).hasMatch(text);
+}
+
 String capitalize(String text) {
   return toBeginningOfSentenceCase(text) ?? text;
 }
 
-String? get getToken => SharedPref().accessToken;
+/// Sanket: Get token from AuthService (Secure Storage) or fallback to SharedPref
+String? get getToken => AuthService().token ?? SharedPref().accessToken;
 
 bool settingIsActive(String key, String value) {
   return store.state.systemSettingState!.settingResponse?.data![key] == value;

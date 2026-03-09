@@ -15,7 +15,7 @@ ThunkAction<AppState> signInMiddleware({email, password, from, context}) {
         (await AuthRepository().signIn(email: email, password: password))!;
 
     if (data.result == true) {
-      setUserData(data);
+      await setUserData(data);
       store.dispatch(
         ShowMessageAction(msg: data.message, color: MyTheme.success),
       );

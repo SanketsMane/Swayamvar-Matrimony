@@ -517,43 +517,56 @@ class HomeController extends Controller
     //Member Dashboard 
     public function member_dashboard()
     {
-        $user = auth()->user();
+        try {
+            $user = auth()->user();
 
-        if($user->blocked == 1){
+            if($user->blocked == 1){
+                return response()->json([
+                    'result' => false,
+                    'status' => 'blocked',
+                    'message' => translate('user is banned')
+                ]);
+            }
+
+            $data['member_name'] = $user->first_name . ' ' . $user->last_name;
+            $data['member_email'] = $user->email;
+            $data['member_photo'] = uploaded_asset($user->photo) !== null ? uploaded_asset($user->photo) : static_asset('assets/img/avatar-place.png');
+            $data['remaining_interest'] = (int) get_remaining_package_value($user->id, 'remaining_interest');
+            $data['remaining_contact_view'] = (int) get_remaining_package_value($user->id, 'remaining_contact_view');
+            $data['remaining_photo_gallery'] = (int) get_remaining_package_value($user->id, 'remaining_photo_gallery');
+            $data['remaining_profile_image_view'] = (get_setting('profile_picture_privacy') == 'only_me') ? (int) get_remaining_package_value($user->id, 'remaining_profile_image_view') : 0;
+            $data['remaining_gallery_image_view'] = (get_setting('gallery_image_privacy') == 'only_me') ? (int) get_remaining_package_value($user->id, 'remaining_gallery_image_view') : 0;
+
+            // Sanket: Added robust null checks for member detail and package
+            $current_package_info = [
+                'package_id' => (int) ($user?->member?->package_id ?? 0),
+                'package_name' => translate('No Package'),
+                'package_expiry' => translate('Expired'),
+            ];
+
+            if ($user->member) {
+                if ($user->member->package) {
+                    $current_package_info['package_id'] = $user->member->package->id;
+                    $current_package_info['package_name'] = $user->member->package->name;
+                }
+                // Sanket: Ensure package_validity check is safe
+                try {
+                    $current_package_info['package_expiry'] = package_validity($user->id) ? date('d.m.Y', strtotime($user->member->package_validity)) : translate('Expired');
+                } catch (\Exception $e) {
+                    $current_package_info['package_expiry'] = translate('Expired');
+                }
+            }
+            
+            $data['current_package_info'] = $current_package_info;
+
+            return $this->response_data($data);
+        } catch (\Exception $e) {
             return response()->json([
                 'result' => false,
-                'status' => 'blocked',
-                'message' => translate('user is banned')
-            ]);
+                'message' => translate('Something went wrong'),
+                'error' => $e->getMessage()
+            ], 500);
         }
-
-        $data['member_name'] = $user->first_name . ' ' . $user->last_name;
-        $data['member_email'] = $user->email;
-        $data['member_photo'] = uploaded_asset($user->photo) !== null ? uploaded_asset($user->photo) : static_asset('assets/img/avatar-place.png');
-        $data['remaining_interest'] = (int) get_remaining_package_value($user->id, 'remaining_interest');
-        $data['remaining_contact_view'] = (int) get_remaining_package_value($user->id, 'remaining_contact_view');
-        $data['remaining_photo_gallery'] = (int) get_remaining_package_value($user->id, 'remaining_photo_gallery');
-        $data['remaining_profile_image_view'] = (get_setting('profile_picture_privacy') == 'only_me') ? (int) get_remaining_package_value($user->id, 'remaining_profile_image_view') : 0;
-        $data['remaining_gallery_image_view'] = (get_setting('gallery_image_privacy') == 'only_me') ? (int) get_remaining_package_value($user->id, 'remaining_gallery_image_view') : 0;
-
-        // Sanket: Added robust null checks for member detail and package
-        $current_package_info = [
-            'package_id' => (int) ($user?->member?->package_id ?? 0),
-            'package_name' => translate('No Package'),
-            'package_expiry' => translate('Expired'),
-        ];
-
-        if ($user->member) {
-            if ($user->member->package) {
-                $current_package_info['package_id'] = $user->member->package->id;
-                $current_package_info['package_name'] = $user->member->package->name;
-            }
-            $current_package_info['package_expiry'] = package_validity($user->id) ? date('d.m.Y', strtotime($user->member->package_validity)) : translate('Expired');
-        }
-        
-        $data['current_package_info'] = $current_package_info;
-
-        return $this->response_data($data);
     }
 
     public function addon_check()

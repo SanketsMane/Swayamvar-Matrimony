@@ -80,7 +80,7 @@ ThunkAction<AppState> verifyOtpAction({
       var data = await AuthRepository().verifyOtp(phone: phoneNumber, otp: smsCode);
 
       if (data.result == true) {
-        setUserData(data);
+        await setUserData(data);
         store.dispatch(ShowMessageAction(msg: data.message, color: MyTheme.success));
         store.dispatch(getUserIsApproveAction());
         
