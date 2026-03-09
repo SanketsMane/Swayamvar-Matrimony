@@ -160,6 +160,7 @@ class LeadUploadController extends Controller
             $upload->update([
                 'total_rows' => $totalRows,
                 'processed_rows' => 0,
+                'column_mapping' => $mapping, // Sanket: Store mapping for resolution
             ]);
         } catch (\Exception $e) {
             \Log::error('Lead Progress Init Error: ' . $e->getMessage());

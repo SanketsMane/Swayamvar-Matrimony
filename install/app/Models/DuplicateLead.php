@@ -20,6 +20,21 @@ class DuplicateLead extends Model
         'data' => 'array'
     ];
 
+    public function getMappingValue($field)
+    {
+        $mapping = $this->upload->column_mapping or [];
+        if (isset($mapping[$field])) {
+            $index = $mapping[$field];
+            return $this->data[$index] ?? null;
+        }
+        return null;
+    }
+
+    public function getExistingLead()
+    {
+        return ActiveLead::where('mobile', $this->mobile)->first();
+    }
+
     public function upload()
     {
         return $this->belongsTo(LeadUpload::class, 'upload_id');

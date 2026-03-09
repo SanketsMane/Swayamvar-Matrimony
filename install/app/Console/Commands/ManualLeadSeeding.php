@@ -43,12 +43,21 @@ class ManualLeadSeeding extends Command
 
         $this->info("Starting manual seeding for file: $filePath, Campaign: $campaignId");
 
+        // Headers: ["Name","Mobile Number","Permanent Address","PINCODE"]
+        $mapping = [
+            'name' => 0,
+            'mobile' => 1,
+            'city' => 2,
+            'pincode' => 3
+        ];
+
         // 1. Create a LeadUpload record to track progress [Sanket]
         $upload = LeadUpload::create([
             'file_name' => $filePath,
             'campaign_id' => $campaignId,
             'user_id' => 2, // Assuming Admin ID is 2 from previous logs
             'status' => 'processing',
+            'column_mapping' => $mapping, // Sanket: Store mapping for resolution
         ]);
 
         // 2. Initialize progress tracking [Sanket]
@@ -64,15 +73,6 @@ class ManualLeadSeeding extends Command
         } catch (\Exception $e) {
             $this->warn("Progress Init Warning: " . $e->getMessage());
         }
-
-        // 3. Define the mapping manually for this specific file [Sanket]
-        // Headers: ["Name","Mobile Number","Permanent Address","PINCODE"]
-        $mapping = [
-            'name' => 0,
-            'mobile' => 1,
-            'city' => 2,
-            'pincode' => 3
-        ];
 
         // 4. Run Import [Sanket]
         DB::disableQueryLog();

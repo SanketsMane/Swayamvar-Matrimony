@@ -16,7 +16,15 @@ class LeadUpload extends Model
         'duplicate_leads',
         'invalid_leads',
         'campaign_id',
-        'user_id'
+        'user_id',
+        'total_rows',
+        'processed_rows',
+        'column_mapping',
+        'status'
+    ];
+
+    protected $casts = [
+        'column_mapping' => 'array'
     ];
 
     public function campaign()
