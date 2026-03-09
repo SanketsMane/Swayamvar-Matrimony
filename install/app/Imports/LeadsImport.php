@@ -28,6 +28,7 @@ class LeadsImport implements OnEachRow, WithChunkReading, WithBatchInserts, With
 
     public function __construct($upload_id, $campaign_id, $mapping = [])
     {
+        \Log::info("LeadsImport started for upload_id: $upload_id");
         $this->upload_id = $upload_id;
         $this->campaign_id = $campaign_id;
         $this->mapping = $mapping;

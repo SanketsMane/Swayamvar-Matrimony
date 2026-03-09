@@ -11,6 +11,7 @@ use Maatwebsite\Excel\Facades\Excel;
 use Auth;
 use PhpOffice\PhpSpreadsheet\IOFactory;
 use PhpOffice\PhpSpreadsheet\Reader\IReadFilter;
+use DB;
 
 class HeaderReadFilter implements IReadFilter
 {
@@ -133,6 +134,9 @@ class LeadUploadController extends Controller
     // Sanket: Final Processing
     public function processImport(Request $request, $id)
     {
+        // Sanket: Allow infinite execution for large file imports
+        set_time_limit(0);
+        
         $upload = LeadUpload::findOrFail($id);
         
         $request->validate([
@@ -147,6 +151,9 @@ class LeadUploadController extends Controller
 
         // Pass the mapping to the Import class
         $mapping = $request->mapping; // ['name' => 0, 'mobile' => 2, ...]
+        
+        // Sanket: Disable query log to save memory during bulk inserts
+        DB::disableQueryLog();
         
         $import = new LeadsImport($upload->id, $upload->campaign_id, $mapping);
         Excel::import($import, $path);
