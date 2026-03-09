@@ -5,16 +5,15 @@ namespace App\Imports;
 use App\Models\ActiveLead;
 use App\Models\InactiveLead;
 use App\Models\DuplicateLead;
-use App\Models\LeadUpload;
-use Maatwebsite\Excel\Concerns\OnEachRow;
+use Illuminate\Support\Collection;
+use Maatwebsite\Excel\Concerns\ToCollection;
 use Maatwebsite\Excel\Concerns\WithChunkReading;
-use Maatwebsite\Excel\Concerns\WithBatchInserts;
 use Maatwebsite\Excel\Concerns\WithReadFilter;
 use PhpOffice\PhpSpreadsheet\Reader\IReadFilter;
-use Maatwebsite\Excel\Row;
 use Auth;
+use Carbon\Carbon;
 
-class LeadsImport implements OnEachRow, WithChunkReading, WithBatchInserts, WithReadFilter
+class LeadsImport implements ToCollection, WithChunkReading, WithReadFilter
 {
     private $upload_id;
     private $campaign_id;
@@ -38,77 +37,102 @@ class LeadsImport implements OnEachRow, WithChunkReading, WithBatchInserts, With
     {
         return new class implements IReadFilter {
             public function readCell($columnAddress, $row, $worksheetName = '') {
-                // Maatwebsite handles chunked reading by setting the row range,
-                // but we can add extra safety here if needed.
                 return true; 
             }
         };
     }
 
-    public function onRow(Row $row)
+    public function collection(Collection $rows)
     {
-        $rowIndex = $row->getIndex();
-        if ($rowIndex == 1) return; // Skip header [Sanket]
+        $now = Carbon::now();
+        $chunkLeads = [];
+        $chunkDuplicates = [];
+        $mobilesInChunk = [];
+        $rowIndices = [];
 
-        $rowArr = $row->toArray();
-        $this->stats['total']++;
+        // 1. Extract and validate mobiles from the chunk
+        foreach ($rows as $index => $row) {
+            // Skip header only in the very first row of the very first chunk
+            if ($this->stats['total'] == 0 && $index == 0) continue; 
 
-        // Sanket: Extract data using dynamic mapping
-        $name   = isset($this->mapping['name']) ? ($rowArr[$this->mapping['name']] ?? null) : null;
-        $email  = isset($this->mapping['email']) ? ($rowArr[$this->mapping['email']] ?? null) : null;
-        $mobile = isset($this->mapping['mobile']) ? ($rowArr[$this->mapping['mobile']] ?? null) : null;
-        $city   = isset($this->mapping['city']) ? ($rowArr[$this->mapping['city']] ?? null) : null;
-        $pincode = isset($this->mapping['pincode']) ? ($rowArr[$this->mapping['pincode']] ?? null) : null;
-        $source = isset($this->mapping['source']) ? ($rowArr[$this->mapping['source']] ?? null) : null;
-        $business_type = isset($this->mapping['business_type']) ? ($rowArr[$this->mapping['business_type']] ?? null) : null;
+            $rowArr = $row->toArray();
+            $mobile = isset($this->mapping['mobile']) ? ($rowArr[$this->mapping['mobile']] ?? null) : null;
+            $mobile = $mobile ? preg_replace('/[^0-9]/', '', (string)$mobile) : null;
 
-        // Clean mobile
-        $mobile = $mobile ? preg_replace('/[^0-9]/', '', (string)$mobile) : null;
+            $this->stats['total']++;
 
-        // 1. Validation: 10 digit mobile [Sanket]
-        if (!$mobile || strlen($mobile) != 10) {
-            $this->stats['invalid']++;
-            return;
+            if (!$mobile || strlen($mobile) != 10) {
+                $this->stats['invalid']++;
+                continue;
+            }
+
+            $mobilesInChunk[$index] = $mobile;
+            $rowIndices[] = $index;
         }
 
-        // 2. Duplicate Detection [Sanket]
-        $is_duplicate = ActiveLead::where('mobile', $mobile)->exists() || 
-                       InactiveLead::where('mobile', $mobile)->exists();
+        if (empty($mobilesInChunk)) return;
 
-        if ($is_duplicate) {
-            $this->stats['duplicate']++;
-            DuplicateLead::create([
-                'mobile' => $mobile,
-                'name' => $name,
-                'data' => $rowArr,
-                'upload_id' => $this->upload_id,
-            ]);
-            return;
+        // 2. Perform ONE bulk existence check for all 500 rows
+        $mobileValues = array_values($mobilesInChunk);
+        $existingActive = ActiveLead::whereIn('mobile', $mobileValues)->pluck('mobile')->toArray();
+        $existingInactive = InactiveLead::whereIn('mobile', $mobileValues)->pluck('mobile')->toArray();
+        $allExisting = array_flip(array_merge($existingActive, $existingInactive));
+
+        // 3. Process the chunk data
+        foreach ($mobilesInChunk as $index => $mobile) {
+            $rowArr = $rows[$index]->toArray();
+            
+            $name   = isset($this->mapping['name']) ? ($rowArr[$this->mapping['name']] ?? null) : null;
+            $email  = isset($this->mapping['email']) ? ($rowArr[$this->mapping['email']] ?? null) : null;
+            $city   = isset($this->mapping['city']) ? ($rowArr[$this->mapping['city']] ?? null) : null;
+            $pincode = isset($this->mapping['pincode']) ? ($rowArr[$this->mapping['pincode']] ?? null) : null;
+            $source = isset($this->mapping['source']) ? ($rowArr[$this->mapping['source']] ?? null) : null;
+            $business_type = isset($this->mapping['business_type']) ? ($rowArr[$this->mapping['business_type']] ?? null) : null;
+
+            if (isset($allExisting[$mobile])) {
+                $this->stats['duplicate']++;
+                $chunkDuplicates[] = [
+                    'mobile' => $mobile,
+                    'name' => $name,
+                    'data' => json_encode($rowArr),
+                    'upload_id' => $this->upload_id,
+                    'created_at' => $now,
+                    'updated_at' => $now,
+                ];
+            } else {
+                $this->stats['valid']++;
+                $chunkLeads[] = [
+                    'name' => $name,
+                    'mobile' => $mobile,
+                    'email' => $email,
+                    'city' => $city,
+                    'pincode' => $pincode,
+                    'source' => $source,
+                    'business_type' => $business_type,
+                    'campaign_id' => $this->campaign_id,
+                    'upload_id' => $this->upload_id,
+                    'status' => 'New',
+                    'created_at' => $now,
+                    'updated_at' => $now,
+                ];
+            }
         }
 
-        // 3. Valid Lead Creation [Sanket]
-        ActiveLead::create([
-            'name' => $name,
-            'mobile' => $mobile,
-            'email' => $email,
-            'city' => $city,
-            'pincode' => $pincode,
-            'source' => $source,
-            'business_type' => $business_type,
-            'campaign_id' => $this->campaign_id,
-            'upload_id' => $this->upload_id,
-            'status' => 'New',
-        ]);
+        // 4. Batch Insert Valid and Duplicates
+        if (!empty($chunkLeads)) {
+            ActiveLead::insert($chunkLeads);
+        }
+        if (!empty($chunkDuplicates)) {
+            DuplicateLead::insert($chunkDuplicates);
+        }
 
-        $this->stats['valid']++;
+        // 5. Update Progress in DB for Progress Bar [Sanket]
+        \DB::table('lead_uploads')->where('id', $this->upload_id)->increment('processed_rows', count($rows));
+        
+        \Log::info("LeadsImport processed chunk. Current total: {$this->stats['total']}");
     }
 
     public function chunkSize(): int
-    {
-        return 500; // Sanket: Process 500 rows at a time to save memory
-    }
-
-    public function batchSize(): int
     {
         return 500;
     }
