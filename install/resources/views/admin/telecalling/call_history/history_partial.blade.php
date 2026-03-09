@@ -1,8 +1,8 @@
 @forelse($logs as $log)
     <div class="border-bottom p-2 mb-2">
         <div class="d-flex justify-content-between">
-            <span class="badge badge-inline badge-info">{{$log->call_status}}</span>
-            <small class="text-muted">{{$log->call_datetime->format('Y-m-d H:i')}}</small>
+            <span class="badge badge-inline badge-info">{{$log->status}}</span>
+            <small class="text-muted">{{ $log->call_time ? $log->call_time->format('Y-m-d H:i') : '' }}</small>
         </div>
         <div class="mt-1">
             <strong>{{translate('Agent')}}:</strong> {{$log->agent->first_name ?? ''}}
