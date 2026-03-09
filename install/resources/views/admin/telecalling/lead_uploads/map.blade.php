@@ -140,9 +140,4 @@
     });
 </script>
 @endsection
-            </div>
-        </div>
-    </div>
-</div>
-@endsection
 {{-- Sanket: Smart Lead Upload Column Mapping View --}}
