@@ -34,10 +34,18 @@ class ManualLeadSeeding extends Command
     {
         $filePath = $this->argument('file');
         $campaignId = $this->argument('campaign_id');
-        $fullPath = storage_path('app/temp_lead_uploads/' . $filePath);
+        
+        // Sanket: Check common locations
+        $fullPath = $filePath;
+        if (!file_exists($fullPath)) {
+            $fullPath = base_path($filePath);
+        }
+        if (!file_exists($fullPath)) {
+            $fullPath = storage_path('app/temp_lead_uploads/' . $filePath);
+        }
 
         if (!file_exists($fullPath)) {
-            $this->error("File not found: $fullPath");
+            $this->error("File not found: $filePath (Checked absolute, base, and temp storage)");
             return 1;
         }
 
