@@ -3,7 +3,7 @@
 @section('content')
 
 <div class="row">
-    <div class="col-xl-8 col-lg-12">
+    <div class="col-xxl-8 col-xl-12">
         <div class="card">
             <div class="card-header">
                 <h5 class="mb-0 h6">{{translate('Previous Lead Uploads')}}</h5>
@@ -13,14 +13,14 @@
                     <table class="table aiz-table mb-0">
                     <thead>
                         <tr>
-                            <th data-breakpoints="lg">#</th>
-                            <th width="30%">{{translate('File Name')}}</th>
-                            <th data-breakpoints="lg">{{translate('Campaign')}}</th>
+                            <th data-breakpoints="xl">#</th>
+                            <th width="35%">{{translate('File Name')}}</th>
+                            <th data-breakpoints="xl">{{translate('Campaign')}}</th>
                             <th data-breakpoints="lg">{{translate('Total')}}</th>
                             <th data-breakpoints="lg">{{translate('Valid')}}</th>
-                            <th data-breakpoints="lg">{{translate('Duplicate')}}</th>
-                            <th data-breakpoints="lg">{{translate('Invalid')}}</th>
-                            <th class="text-right">{{translate('Options')}}</th>
+                            <th data-breakpoints="xl">{{translate('Duplicate')}}</th>
+                            <th data-breakpoints="xl">{{translate('Invalid')}}</th>
+                            <th class="text-right" width="10%">{{translate('Options')}}</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -51,7 +51,7 @@
             </div>
         </div>
     </div>
-    <div class="col-xl-4 col-lg-12">
+    <div class="col-xxl-4 col-xl-12">
         @if(session('import_stats'))
             <div class="card bg-soft-info mb-3">
                 <div class="card-header">
