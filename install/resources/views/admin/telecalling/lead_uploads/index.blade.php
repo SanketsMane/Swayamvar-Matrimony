@@ -34,7 +34,7 @@
                                 <td><span class="text-warning">{{$upload->duplicate_leads}}</span></td>
                                 <td><span class="text-danger">{{$upload->invalid_leads}}</span></td>
                                 <td class="text-right">
-                                    <a href="#" class="btn btn-soft-danger btn-icon btn-circle btn-sm confirm-delete" data-href="{{route('lead-upload.destroy', $upload->id)}}" title="{{ translate('Delete') }}">
+                                    <a href="#" class="btn btn-soft-danger btn-icon btn-circle btn-sm confirm-delete" data-href="{{route('lead-upload.destroy_get', $upload->id)}}" title="{{ translate('Delete') }}">
                                         <i class="las la-trash"></i>
                                     </a>
                                 </td>

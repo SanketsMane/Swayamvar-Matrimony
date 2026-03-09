@@ -108,6 +108,7 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth', 'admin']], function 
 
         Route::resource('campaigns', \App\Http\Controllers\Admin\TelecallingCampaignController::class);
         Route::resource('lead-upload', \App\Http\Controllers\Admin\LeadUploadController::class);
+        Route::get('/lead-upload/destroy/{id}', [\App\Http\Controllers\Admin\LeadUploadController::class, 'destroy'])->name('lead-upload.destroy_get');
         // Sanket: Smart Lead Upload Mapping
         Route::get('/lead-upload/{id}/map', [\App\Http\Controllers\Admin\LeadUploadController::class, 'map'])->name('lead-upload.map');
         Route::post('/lead-upload/{id}/process', [\App\Http\Controllers\Admin\LeadUploadController::class, 'processImport'])->name('lead-upload.process');
