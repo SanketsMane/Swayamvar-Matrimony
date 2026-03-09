@@ -135,7 +135,7 @@
                                                     <a href="{{ route('members.login', encrypt($member->id)) }}" class="dropdown-item">{{translate('Log in as this Member')}}</a>
                                                 @endcan
                                                 @can ('delete_member')
-                                                    <a class="dropdown-item confirm-delete" data-href="{{route('members.destroy', $member->id)}}">{{translate('Delete')}}</a>
+                                                    <a class="dropdown-item confirm-delete" data-href="{{route('members.destroy_get', $member->id)}}">{{translate('Delete')}}</a>
                                                 @endcan
                                             </div>
                                         </div>

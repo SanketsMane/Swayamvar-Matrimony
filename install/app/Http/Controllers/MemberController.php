@@ -301,7 +301,11 @@ class MemberController extends Controller
      */
     public function show($id)
     {
-        $member = User::findOrFail(decrypt($id));
+        try {
+            $id = decrypt($id);
+        } catch (\Exception $e) {
+        }
+        $member = User::findOrFail($id);
         return view('admin.members.view', compact('member'));
     }
 
@@ -313,7 +317,11 @@ class MemberController extends Controller
      */
     public function edit($id)
     {
-        $member             = User::findOrFail(decrypt($id));
+        try {
+            $id = decrypt($id);
+        } catch (\Exception $e) {
+        }
+        $member             = User::findOrFail($id);
         $countries          = Country::where('status', 1)->get();
         $states             = State::all();
         $cities             = City::all();
@@ -423,10 +431,27 @@ class MemberController extends Controller
         return back();
     }
 
-    public function show_verification_info ($id)
+    public function show_verification_info($id)
     {
-        $user = User::findOrFail(decrypt($id));
+        try {
+            $id = decrypt($id);
+        } catch (\Exception $e) {
+        }
+        $user = User::findOrFail($id);
         return view('admin.members.verification_info', compact('user'));
+    }
+
+    // Sanket: Toggles basic member approval status (Approved/Unapproved)
+    public function approve_member($id)
+    {
+        $user = User::findOrFail($id);
+        $user->approved = $user->approved == 1 ? 0 : 1;
+        if ($user->save()) {
+            flash(translate('Member status updated successfully'))->success();
+        } else {
+            flash(translate('Sorry! Something went wrong.'))->error();
+        }
+        return back();
     }
 
     // Sanket: Approve member verification — sets approved=1, sends FCM + in-app + email
