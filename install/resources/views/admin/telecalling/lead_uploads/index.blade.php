@@ -3,7 +3,7 @@
 @section('content')
 
 <div class="row">
-    <div class="col-lg-8">
+    <div class="col-xl-8 col-lg-12">
         <div class="card">
             <div class="card-header">
                 <h5 class="mb-0 h6">{{translate('Previous Lead Uploads')}}</h5>
@@ -13,13 +13,13 @@
                     <table class="table aiz-table mb-0">
                     <thead>
                         <tr>
-                            <th>#</th>
-                            <th>{{translate('File Name')}}</th>
-                            <th>{{translate('Campaign')}}</th>
-                            <th data-breakpoints="md">{{translate('Total')}}</th>
-                            <th data-breakpoints="md">{{translate('Valid')}}</th>
-                            <th data-breakpoints="md">{{translate('Duplicate')}}</th>
-                            <th data-breakpoints="md">{{translate('Invalid')}}</th>
+                            <th data-breakpoints="lg">#</th>
+                            <th width="30%">{{translate('File Name')}}</th>
+                            <th data-breakpoints="lg">{{translate('Campaign')}}</th>
+                            <th data-breakpoints="lg">{{translate('Total')}}</th>
+                            <th data-breakpoints="lg">{{translate('Valid')}}</th>
+                            <th data-breakpoints="lg">{{translate('Duplicate')}}</th>
+                            <th data-breakpoints="lg">{{translate('Invalid')}}</th>
                             <th class="text-right">{{translate('Options')}}</th>
                         </tr>
                     </thead>
@@ -27,7 +27,9 @@
                         @foreach($uploads as $key => $upload)
                             <tr>
                                 <td>{{ ($key+1) + ($uploads->currentPage() - 1)*$uploads->perPage() }}</td>
-                                <td>{{$upload->file_name}}</td>
+                                <td class="text-truncate" style="max-width: 250px;" title="{{$upload->file_name}}">
+                                    {{$upload->file_name}}
+                                </td>
                                 <td>{{$upload->campaign->name ?? ''}}</td>
                                 <td>{{$upload->total_leads}}</td>
                                 <td><span class="text-success">{{$upload->valid_leads}}</span></td>
@@ -49,7 +51,7 @@
             </div>
         </div>
     </div>
-    <div class="col-lg-4">
+    <div class="col-xl-4 col-lg-12">
         @if(session('import_stats'))
             <div class="card bg-soft-info mb-3">
                 <div class="card-header">
