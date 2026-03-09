@@ -3,13 +3,14 @@
 @section('content')
 
 <div class="row">
-    <div class="col-md-8">
+    <div class="col-lg-8">
         <div class="card">
             <div class="card-header">
                 <h5 class="mb-0 h6">{{translate('Previous Lead Uploads')}}</h5>
             </div>
             <div class="card-body">
-                <table class="table aiz-table mb-0">
+                <div class="table-responsive">
+                    <table class="table aiz-table mb-0">
                     <thead>
                         <tr>
                             <th>#</th>
@@ -40,14 +41,15 @@
                             </tr>
                         @endforeach
                     </tbody>
-                </table>
+                    </table>
+                </div>
                 <div class="aiz-pagination">
                     {{ $uploads->appends(request()->input())->links() }}
                 </div>
             </div>
         </div>
     </div>
-    <div class="col-md-4">
+    <div class="col-lg-4">
         @if(session('import_stats'))
             <div class="card bg-soft-info mb-3">
                 <div class="card-header">
@@ -123,4 +125,15 @@
 
 @section('modal')
     @include('modals.delete_modal')
+@endsection
+
+@section('script')
+    <script type="text/javascript">
+        $(document).on('click', '.confirm-delete', function(e){
+            e.preventDefault();
+            var url = $(this).data('href');
+            $('#delete-link').attr('href', url);
+            $('#delete-modal').modal('show');
+        });
+    </script>
 @endsection
