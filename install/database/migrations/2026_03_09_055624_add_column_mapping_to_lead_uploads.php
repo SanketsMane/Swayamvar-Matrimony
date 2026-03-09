@@ -17,6 +17,9 @@ return new class extends Migration
             if (!Schema::hasColumn('lead_uploads', 'column_mapping')) {
                 $table->json('column_mapping')->nullable()->after('campaign_id');
             }
+            if (!Schema::hasColumn('lead_uploads', 'status')) {
+                $table->string('status')->default('pending')->after('column_mapping');
+            }
         });
     }
 
@@ -28,7 +31,7 @@ return new class extends Migration
     public function down()
     {
         Schema::table('lead_uploads', function (Blueprint $table) {
-            $table->dropColumn('column_mapping');
+            $table->dropColumn(['column_mapping', 'status']);
         });
     }
 };
