@@ -2379,6 +2379,39 @@ class AppLocalizationsEn extends AppLocalizations {
   String get occupation_retired => 'Retired';
 
   @override
+  String get income_0_2 => '0-2 Lakh';
+
+  @override
+  String get income_2_5 => '2-5 Lakh';
+
+  @override
+  String get income_5_10 => '5-10 Lakh';
+
+  @override
+  String get income_10_20 => '10-20 Lakh';
+
+  @override
+  String get income_20_50 => '20-50 Lakh';
+
+  @override
+  String get income_50_plus => '50 Lakh+';
+
+  @override
+  String get gov_id_aadhaar => 'Aadhaar';
+
+  @override
+  String get gov_id_pan => 'PAN';
+
+  @override
+  String get gov_id_dl => 'Driving License';
+
+  @override
+  String get gov_id_passport => 'Passport';
+
+  @override
+  String get gov_id_voter => 'Voter ID';
+
+  @override
   String get occupation_not_working => 'Not Working';
 
   @override

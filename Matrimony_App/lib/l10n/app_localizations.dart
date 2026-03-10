@@ -4823,6 +4823,72 @@ abstract class AppLocalizations {
   /// **'Retired'**
   String get occupation_retired;
 
+  /// No description provided for @income_0_2.
+  ///
+  /// In en, this message translates to:
+  /// **'0-2 Lakh'**
+  String get income_0_2;
+
+  /// No description provided for @income_2_5.
+  ///
+  /// In en, this message translates to:
+  /// **'2-5 Lakh'**
+  String get income_2_5;
+
+  /// No description provided for @income_5_10.
+  ///
+  /// In en, this message translates to:
+  /// **'5-10 Lakh'**
+  String get income_5_10;
+
+  /// No description provided for @income_10_20.
+  ///
+  /// In en, this message translates to:
+  /// **'10-20 Lakh'**
+  String get income_10_20;
+
+  /// No description provided for @income_20_50.
+  ///
+  /// In en, this message translates to:
+  /// **'20-50 Lakh'**
+  String get income_20_50;
+
+  /// No description provided for @income_50_plus.
+  ///
+  /// In en, this message translates to:
+  /// **'50 Lakh+'**
+  String get income_50_plus;
+
+  /// No description provided for @gov_id_aadhaar.
+  ///
+  /// In en, this message translates to:
+  /// **'Aadhaar'**
+  String get gov_id_aadhaar;
+
+  /// No description provided for @gov_id_pan.
+  ///
+  /// In en, this message translates to:
+  /// **'PAN'**
+  String get gov_id_pan;
+
+  /// No description provided for @gov_id_dl.
+  ///
+  /// In en, this message translates to:
+  /// **'Driving License'**
+  String get gov_id_dl;
+
+  /// No description provided for @gov_id_passport.
+  ///
+  /// In en, this message translates to:
+  /// **'Passport'**
+  String get gov_id_passport;
+
+  /// No description provided for @gov_id_voter.
+  ///
+  /// In en, this message translates to:
+  /// **'Voter ID'**
+  String get gov_id_voter;
+
   /// No description provided for @occupation_not_working.
   ///
   /// In en, this message translates to:
