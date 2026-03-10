@@ -111,9 +111,12 @@ class ProfileController extends Controller
     public function introduction_update(Request $request)
     {
         $member = Member::where('user_id', auth()->id())->first();
-        $member->introduction = $request->introduction;
-        $member->save();
-        return $this->success_message('Introduction updated successfully!');
+        if ($member) {
+            $member->introduction = $request->introduction;
+            $member->save();
+            return $this->success_message('Introduction updated successfully!');
+        }
+        return $this->failure_message('Member not found');
     }
 
     public function get_basic_info()
@@ -150,12 +153,14 @@ class ProfileController extends Controller
         $user->phone        = $request->phone;
         $user->save();
         $member                     = Member::where('user_id', $user->id)->first();
-        $member->gender             = $request->gender;
-        $member->on_behalves_id     = $request->on_behalf;
-        $member->birthday           = date('Y-m-d', strtotime($request->date_of_birth));
-        $member->marital_status_id  = $request->marital_status;
-        $member->children           = $request->children;
-        $member->save();
+        if ($member) {
+            $member->gender             = $request->gender;
+            $member->on_behalves_id     = $request->on_behalf;
+            $member->birthday           = date('Y-m-d', strtotime($request->date_of_birth));
+            $member->marital_status_id  = $request->marital_status;
+            $member->children           = $request->children;
+            $member->save();
+        }
         return $this->success_message('Member basic info  has been updated successfully.');
     }
 
@@ -212,14 +217,24 @@ class ProfileController extends Controller
 
         // --- Spiritual Background (Religion, Caste, Manglik, Intercaste) ---
         $spiritual = SpiritualBackground::firstOrNew(['user_id' => $user->id]);
-        if ($request->religion) {
+        if ($request->religion_id) {
+            $spiritual->religion_id = $request->religion_id;
+        } elseif ($request->religion) {
             $religionObj = Religion::where('name', $request->religion)->first();
             if ($religionObj) $spiritual->religion_id = $religionObj->id;
         }
-        if ($request->caste) {
+
+        if ($request->caste_id) {
+            $spiritual->caste_id = $request->caste_id;
+        } elseif ($request->caste) {
             $casteObj = Caste::where('name', $request->caste)->first();
             if ($casteObj) $spiritual->caste_id = $casteObj->id;
         }
+
+        if ($request->sub_caste_id) {
+            $spiritual->sub_caste_id = $request->sub_caste_id;
+        }
+
         if ($request->has('manglik')) {
             $spiritual->manglik = $request->manglik == 'true' || $request->manglik == 1;
         }
@@ -227,6 +242,7 @@ class ProfileController extends Controller
             $spiritual->intercaste_accepted = $request->intercaste_accepted == 'true' || $request->intercaste_accepted == 1;
         }
         $spiritual->save();
+
 
         // --- Lifestyle (Diet) ---
         $lifestyle = Lifestyle::firstOrNew(['user_id' => $user->id]);
@@ -251,9 +267,10 @@ class ProfileController extends Controller
             $education->degree = $request->education_level;
             $education->save();
         }
-        if ($request->occupation_type || $request->occupation_details) {
+        if ($request->occupation_type || $request->annual_income || $request->occupation_details) {
             $career = Career::firstOrNew(['user_id' => $user->id]);
             $career->designation = $request->occupation_type ?? $career->designation;
+            $career->income = $request->annual_income ?? $career->income;
             $career->occupation_details = $request->occupation_details ?? $career->occupation_details;
             $career->save();
         }
@@ -273,6 +290,7 @@ class ProfileController extends Controller
         $partner = PartnerExpectation::firstOrNew(['user_id' => $user->id]);
         if ($request->has('partner_manglik')) $partner->manglik = ($request->partner_manglik == 'true' || $request->partner_manglik == 1);
         $partner->education = $request->expected_education ?? $partner->education;
+        $partner->income = $request->expected_income ?? $partner->income;
         if ($request->has('divorce_accepted')) $partner->divorce_accepted = ($request->divorce_accepted == 'true' || $request->divorce_accepted == 1);
         if ($request->has('partner_intercaste')) $partner->intercaste_accepted = ($request->partner_intercaste == 'true' || $request->partner_intercaste == 1);
         $partner->save();
@@ -295,23 +313,23 @@ class ProfileController extends Controller
 
     public function profile_picture_update(Request $request)
     {
-        $user = User::findOrFail(auth()->id());
-        if ($request->hasFile('photo')) {
-            $user->photo = upload_api_file($request->file('photo'));
-            if (Setting::where('type', 'profile_picture_approval_by_admin')->first()->value && auth()->user()->user_type == 'member') {
-                $user->photo_approved = 0;
-            }
-            $user->save();
-            return response()->json([
-                'result' => true,
-                'message' => 'Profile picture has been updated successfully',
-                'photo' => $user->photo
-            ]);
-        }
-        return response()->json([
-            'result' => false,
-            'message' => 'No photo found'
+        $this->validate($request, [
+            'photo' => ['required', 'mimes:jpeg,jpg,png,gif,webp', 'image'],
         ]);
+
+        $user = User::findOrFail(auth()->id());
+        $photo = upload_api_file($request->file('photo'));
+        $user->photo = $photo;
+
+        if (
+            Setting::where('type', 'profile_picture_approval_by_admin')->first()->value &&
+            auth()->user()->user_type == 'member'
+        ) {
+            $user->photo_approved = 0;
+        }
+
+        $user->save();
+        return $this->success_message('Profile picture has been updated successfully.');
     }
 
     public function present_address()
@@ -364,13 +382,10 @@ class ProfileController extends Controller
 
     public function physical_attributes()
     {
-        if (auth()->user()->physical_attributes) {
-            return (new PhysicalAttributes(auth()->user()->physical_attributes))->additional([
-                'result' => true
-            ]);
-        } else {
-            return $this->failure_message('No Data Found!!');
-        }
+        $attributes = auth()->user()->physical_attributes ?? new PhysicalAttribute();
+        return (new PhysicalAttributes($attributes))->additional([
+            'result' => true
+        ]);
     }
     public function physical_attributes_update(Request $request)
     {
@@ -407,14 +422,19 @@ class ProfileController extends Controller
     {
         $member_known_languages = null;
         $member_mother_tongue = null;
-        $known_languages = json_decode(auth()->user()->member->known_languages);
-        $mother_tongue = auth()->user()->member->mothere_tongue;
-        if ($known_languages != null) {
-            $member_known_languages = LanguageResource::collection(MemberLanguage::whereIn('id', $known_languages)->get());
+        
+        $user = auth()->user();
+        if ($user->member) {
+            $known_languages = json_decode($user->member->known_languages);
+            $mother_tongue = $user->member->mothere_tongue;
+            if ($known_languages != null) {
+                $member_known_languages = LanguageResource::collection(MemberLanguage::whereIn('id', $known_languages)->get());
+            }
+            if ($mother_tongue != null) {
+                $member_mother_tongue =  new LanguageResource(MemberLanguage::where('id', $mother_tongue)->first());
+            }
         }
-        if ($mother_tongue != null) {
-            $member_mother_tongue =  new LanguageResource(MemberLanguage::where('id', $mother_tongue)->first());
-        }
+        
         $data['mother_tongue'] = $member_mother_tongue;
         $data['known_languages'] = $member_known_languages;
         return $this->response_data($data);
@@ -434,13 +454,10 @@ class ProfileController extends Controller
     }
     public function hobbies_interest()
     {
-        if (auth()->user()->hobbies) {
-            return (new HobbiesInterests(auth()->user()->hobbies))->additional([
-                'result' => true
-            ]);
-        } else {
-            return $this->failure_message('No Data Found!!');
-        }
+        $hobbies = auth()->user()->hobbies ?? new Hobby();
+        return (new HobbiesInterests($hobbies))->additional([
+            'result' => true
+        ]);
     }
     public function hobbies_interest_update(Request $request)
     {
@@ -464,13 +481,10 @@ class ProfileController extends Controller
     }
     public function attitude_behavior()
     {
-        if (auth()->user()->attitude) {
-            return (new AttitudesBehaviors(auth()->user()->attitude))->additional([
-                'result' => true
-            ]);
-        } else {
-            return $this->failure_message('No Data Found!!');
-        }
+        $attitude = auth()->user()->attitude ?? new Attitude();
+        return (new AttitudesBehaviors($attitude))->additional([
+            'result' => true
+        ]);
     }
     public function attitude_behavior_update(Request $request)
     {
@@ -488,13 +502,10 @@ class ProfileController extends Controller
     }
     public function residency_info()
     {
-        if (auth()->user()->recidency) {
-            return (new ResidenceInformation(auth()->user()->recidency))->additional([
-                'result' => true
-            ]);
-        } else {
-            return $this->failure_message('No Data Found!!');
-        }
+        $residency = auth()->user()->recidency ?? new Recidency();
+        return (new ResidenceInformation($residency))->additional([
+            'result' => true
+        ]);
     }
     public function residency_info_update(Request $request)
     {
@@ -512,13 +523,10 @@ class ProfileController extends Controller
     }
     public function spiritual_background()
     {
-        if (auth()->user()->spiritual_backgrounds) {
-            return (new SpiritualSocialBackground(auth()->user()->spiritual_backgrounds))->additional([
-                'result' => true
-            ]);
-        } else {
-            return $this->failure_message('No Data Found!!');
-        }
+        $spiritual = auth()->user()->spiritual_backgrounds ?? new SpiritualBackground();
+        return (new SpiritualSocialBackground($spiritual))->additional([
+            'result' => true
+        ]);
     }
 
     public function spiritual_background_update(Request $request)
@@ -540,13 +548,10 @@ class ProfileController extends Controller
     }
     public function life_style()
     {
-        if (auth()->user()->lifestyles) {
-            return (new LifeStyleResource(auth()->user()->lifestyles))->additional([
-                'result' => true
-            ]);
-        } else {
-            return $this->failure_message('No Data Found!!');
-        }
+        $lifestyle = auth()->user()->lifestyles ?? new Lifestyle();
+        return (new LifeStyleResource($lifestyle))->additional([
+            'result' => true
+        ]);
     }
     public function life_style_update(Request $request)
     {
@@ -564,14 +569,10 @@ class ProfileController extends Controller
     }
     public function astronomic_info()
     {
-        if (auth()->user()->astrologies) {
-            return (new AstronomicInformation(auth()->user()->astrologies))->additional([
-                'result' => true
-            ]);
-        } else {
-            // return $this->failure_message('No Data Found!!');
-            return $this->failure_data(auth()->user()->astrologies);
-        }
+        $astronomies = auth()->user()->astrologies ?? new Astrology();
+        return (new AstronomicInformation($astronomies))->additional([
+            'result' => true
+        ]);
     }
 
     public function astronomic_info_update(AstrologyRequest $request)
@@ -592,13 +593,10 @@ class ProfileController extends Controller
 
     public function family_info()
     {
-        if (auth()->user()->families) {
-            return (new FamilyInformation(auth()->user()->families))->additional([
-                'result' => true
-            ]);
-        } else {
-            return $this->failure_message('No Data Found!!');
-        }
+        $families = auth()->user()->families ?? new Family();
+        return (new FamilyInformation($families))->additional([
+            'result' => true
+        ]);
     }
 
     public function family_info_update(Request $request)
@@ -617,13 +615,10 @@ class ProfileController extends Controller
 
     public function partner_expectation()
     {
-        if (auth()->user()->partner_expectations) {
-            return (new PartnerExpectationResource(auth()->user()->partner_expectations))->additional([
-                'result' => true
-            ]);
-        } else {
-            return $this->failure_message('No Data Found!!');
-        }
+        $partner = auth()->user()->partner_expectations ?? new PartnerExpectation();
+        return (new PartnerExpectationResource($partner))->additional([
+            'result' => true
+        ]);
     }
 
     public function partner_expectation_update(PartnerExpectationRequest $request)
@@ -705,14 +700,18 @@ class ProfileController extends Controller
         if ($user) {
             $member_known_languages = null;
             $member_mother_tongue = null;
-            $known_languages = json_decode($user->member->known_languages);
-            $mother_tongue = json_decode($user->member->mothere_tongue);
-            if ($known_languages != null) {
-                $member_known_languages = LanguageResource::collection(MemberLanguage::whereIn('id', $known_languages)->get());
+            
+            if ($user->member) {
+                $known_languages = json_decode($user->member->known_languages);
+                $mother_tongue = json_decode($user->member->mothere_tongue);
+                if ($known_languages != null) {
+                    $member_known_languages = LanguageResource::collection(MemberLanguage::whereIn('id', $known_languages)->get());
+                }
+                if ($mother_tongue != null) {
+                    $member_mother_tongue = new LanguageResource(MemberLanguage::where('id', $mother_tongue)->first());
+                }
             }
-            if ($mother_tongue != null) {
-                $member_mother_tongue = new LanguageResource(MemberLanguage::where('id', $mother_tongue)->first());
-            }
+            
             $data['intoduction'] = new AboutUser($user);
             $data['basic_info'] = new BasicInformation($user);
 
@@ -762,7 +761,7 @@ class ProfileController extends Controller
             $profile_match = ProfileMatch::where('user_id', auth()->user()->id)
                 ->where('match_id', $user->id)
                 ->first();
-            if (!empty($profile_match) && auth()->user()->member->auto_profile_match == 1) {
+            if (!empty($profile_match) && auth()->user()->member && auth()->user()->member->auto_profile_match == 1) {
                 $data['profile_match'] = $profile_match->match_percentage;
             }
             $data['view_contact_check'] = ViewContact::where('user_id', $user->id)->where('viewed_by', auth()->id())->first() ? true : false;
@@ -819,22 +818,16 @@ class ProfileController extends Controller
         $matched_profiles = [];
         $user = auth()->user();
         if ($user->member->auto_profile_match == 1) {
-            $matched_profiles = ProfileMatch::join('users', 'profile_matches.match_id', '=', 'users.id')
-                ->where('users.approved', 1)
-                ->where('users.blocked', 0)
-                ->where('users.deactivated', 0)
-                ->where('profile_matches.user_id', $user->id)
-                ->where('profile_matches.match_percentage', '>=', 50)
-                ->orderBy('profile_matches.match_percentage', 'desc')
-                ->select('profile_matches.*');
-
+            $matched_profiles = ProfileMatch::orderBy('match_percentage', 'desc')
+                ->where('user_id', $user->id)
+                ->where('match_percentage', '>=', 50);
             $ignored_to = IgnoredUser::where('ignored_by', $user->id)->pluck('user_id')->toArray();
             if (count($ignored_to) > 0) {
-                $matched_profiles = $matched_profiles->whereNotIn('profile_matches.match_id', $ignored_to);
+                $matched_profiles = $matched_profiles->whereNotIn('match_id', $ignored_to);
             }
             $ignored_by_ids = IgnoredUser::where('user_id', $user->id)->pluck('ignored_by')->toArray();
             if (count($ignored_by_ids) > 0) {
-                $matched_profiles = $matched_profiles->whereNotIn('profile_matches.match_id', $ignored_by_ids);
+                $matched_profiles = $matched_profiles->whereNotIn('match_id', $ignored_by_ids);
             }
             $matched_profiles = $matched_profiles->limit(20)->get();
         }

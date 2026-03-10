@@ -115,6 +115,7 @@ class ManageProfileRepository {
         "mobile1": phone,
         "mobile2": phone2,
         "marital_status": m_status,
+        "maritial_status": m_status, // Redundant key for compatibility
         "height": height,
         "weight": weight,
         "complexion": complexion,
@@ -122,8 +123,10 @@ class ManageProfileRepository {
         "physical_disability": disability,
         "religion": religion,
         "religion_id": religion_id,
+        "member_religion_id": religion_id, // Redundant key for compatibility
         "caste": caste,
         "caste_id": caste_id,
+        "member_caste_id": caste_id, // Redundant key for compatibility
         "sub_caste_id": sub_caste_id,
         "no_of_children": no_of_children,
         "children": no_of_children, // Redundant key for compatibility
@@ -153,16 +156,26 @@ class ManageProfileRepository {
         "gov_id_type": gov_id_type,
         "gov_id_number": gov_id_number,
         "address": address,
+        "present_address": address, // Redundant key for compatibility
         "city": district,
+        "city_id": district, // Redundant key for compatibility
+        "present_city_id": district, // Redundant key for compatibility
+        
         "general_info": general_info,
+        "general": general_info, // Redundant key for compatibility
         "partner_manglik": manglik,
+        "manglik": manglik, // Redundant key for compatibility
         "partner_religion_id": partner_religion_id,
         "partner_caste_id": partner_caste_id,
         "partner_sub_caste_id": partner_sub_caste_id,
         "expected_education": education_expectation,
+        "pertner_education": education_expectation, // Redundant key for compatibility
         "expected_income": expected_income,
+        "partner_income": expected_income, // Redundant key for compatibility
         "children_acceptable": children_acceptable,
+        "partner_children_acceptable": children_acceptable, // Redundant key for compatibility
         "partner_intercaste": partner_intercaste,
+        "intercaste": partner_intercaste, // Redundant key for compatibility
       }),
     );
 

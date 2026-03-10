@@ -15,6 +15,8 @@ import '../../../../models_response/manage_profile/get_manage_profile/partner_ex
 import '../../../../models_response/manage_profile/get_manage_profile/permanent_address_get_response.dart';
 import '../../../../models_response/manage_profile/get_manage_profile/residency_get_response.dart';
 import '../../../../models_response/manage_profile/get_manage_profile/spiritual_social_get_response.dart';
+import '../../../../models_response/manage_profile/get_manage_profile/career_get_response.dart';
+import '../../../../models_response/manage_profile/get_manage_profile/education_get_response.dart';
 import 'package:active_matrimonial_flutter_app/enums/enums.dart';
 import 'package:active_matrimonial_flutter_app/redux/libs/auth/auth_middleware.dart';
 import 'package:active_matrimonial_flutter_app/redux/libs/drop_down/caste_middleware.dart';
@@ -122,7 +124,7 @@ ThunkAction<AppState> careerGetMiddleware() {
         );
       }
 
-      // store.dispatch(CareerGetResponse(data: data.data, result: data.result));
+      store.dispatch(CareerGetResponse(data: data.data, result: data.result));
     } catch (e) {
       debugPrint(e.toString());
 
@@ -169,8 +171,8 @@ ThunkAction<AppState> educationGetMiddleware() {
           ),
         );
       }
-      // store
-      //     .dispatch(EducationGetResponse(data: data.data, result: data.result));
+      store
+          .dispatch(EducationGetResponse(data: data.data, result: data.result));
     } catch (e) {
       debugPrint(e.toString());
       debugPrint("Fetching education data...");

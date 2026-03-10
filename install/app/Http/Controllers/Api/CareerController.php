@@ -20,6 +20,9 @@ class CareerController extends Controller
     public function index()
     {
         $career = Career::where('user_id',auth()->id())->get();
+        if ($career->isEmpty()) {
+            $career->push(new Career());
+        }
         return  CareerResource::collection($career)->additional([
             'result' => true
         ]);

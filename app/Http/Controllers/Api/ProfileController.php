@@ -382,13 +382,10 @@ class ProfileController extends Controller
 
     public function physical_attributes()
     {
-        if (auth()->user()->physical_attributes) {
-            return (new PhysicalAttributes(auth()->user()->physical_attributes))->additional([
-                'result' => true
-            ]);
-        } else {
-            return $this->failure_message('No Data Found!!');
-        }
+        $attributes = auth()->user()->physical_attributes ?? new PhysicalAttribute();
+        return (new PhysicalAttributes($attributes))->additional([
+            'result' => true
+        ]);
     }
     public function physical_attributes_update(Request $request)
     {
@@ -457,13 +454,10 @@ class ProfileController extends Controller
     }
     public function hobbies_interest()
     {
-        if (auth()->user()->hobbies) {
-            return (new HobbiesInterests(auth()->user()->hobbies))->additional([
-                'result' => true
-            ]);
-        } else {
-            return $this->failure_message('No Data Found!!');
-        }
+        $hobbies = auth()->user()->hobbies ?? new Hobby();
+        return (new HobbiesInterests($hobbies))->additional([
+            'result' => true
+        ]);
     }
     public function hobbies_interest_update(Request $request)
     {
@@ -487,13 +481,10 @@ class ProfileController extends Controller
     }
     public function attitude_behavior()
     {
-        if (auth()->user()->attitude) {
-            return (new AttitudesBehaviors(auth()->user()->attitude))->additional([
-                'result' => true
-            ]);
-        } else {
-            return $this->failure_message('No Data Found!!');
-        }
+        $attitude = auth()->user()->attitude ?? new Attitude();
+        return (new AttitudesBehaviors($attitude))->additional([
+            'result' => true
+        ]);
     }
     public function attitude_behavior_update(Request $request)
     {
@@ -511,13 +502,10 @@ class ProfileController extends Controller
     }
     public function residency_info()
     {
-        if (auth()->user()->recidency) {
-            return (new ResidenceInformation(auth()->user()->recidency))->additional([
-                'result' => true
-            ]);
-        } else {
-            return $this->failure_message('No Data Found!!');
-        }
+        $residency = auth()->user()->recidency ?? new Recidency();
+        return (new ResidenceInformation($residency))->additional([
+            'result' => true
+        ]);
     }
     public function residency_info_update(Request $request)
     {
@@ -535,13 +523,10 @@ class ProfileController extends Controller
     }
     public function spiritual_background()
     {
-        if (auth()->user()->spiritual_backgrounds) {
-            return (new SpiritualSocialBackground(auth()->user()->spiritual_backgrounds))->additional([
-                'result' => true
-            ]);
-        } else {
-            return $this->failure_message('No Data Found!!');
-        }
+        $spiritual = auth()->user()->spiritual_backgrounds ?? new SpiritualBackground();
+        return (new SpiritualSocialBackground($spiritual))->additional([
+            'result' => true
+        ]);
     }
 
     public function spiritual_background_update(Request $request)
@@ -563,13 +548,10 @@ class ProfileController extends Controller
     }
     public function life_style()
     {
-        if (auth()->user()->lifestyles) {
-            return (new LifeStyleResource(auth()->user()->lifestyles))->additional([
-                'result' => true
-            ]);
-        } else {
-            return $this->failure_message('No Data Found!!');
-        }
+        $lifestyle = auth()->user()->lifestyles ?? new Lifestyle();
+        return (new LifeStyleResource($lifestyle))->additional([
+            'result' => true
+        ]);
     }
     public function life_style_update(Request $request)
     {
@@ -587,14 +569,10 @@ class ProfileController extends Controller
     }
     public function astronomic_info()
     {
-        if (auth()->user()->astrologies) {
-            return (new AstronomicInformation(auth()->user()->astrologies))->additional([
-                'result' => true
-            ]);
-        } else {
-            // return $this->failure_message('No Data Found!!');
-            return $this->failure_data(auth()->user()->astrologies);
-        }
+        $astronomies = auth()->user()->astrologies ?? new Astrology();
+        return (new AstronomicInformation($astronomies))->additional([
+            'result' => true
+        ]);
     }
 
     public function astronomic_info_update(AstrologyRequest $request)
@@ -615,13 +593,10 @@ class ProfileController extends Controller
 
     public function family_info()
     {
-        if (auth()->user()->families) {
-            return (new FamilyInformation(auth()->user()->families))->additional([
-                'result' => true
-            ]);
-        } else {
-            return $this->failure_message('No Data Found!!');
-        }
+        $families = auth()->user()->families ?? new Family();
+        return (new FamilyInformation($families))->additional([
+            'result' => true
+        ]);
     }
 
     public function family_info_update(Request $request)
@@ -640,13 +615,10 @@ class ProfileController extends Controller
 
     public function partner_expectation()
     {
-        if (auth()->user()->partner_expectations) {
-            return (new PartnerExpectationResource(auth()->user()->partner_expectations))->additional([
-                'result' => true
-            ]);
-        } else {
-            return $this->failure_message('No Data Found!!');
-        }
+        $partner = auth()->user()->partner_expectations ?? new PartnerExpectation();
+        return (new PartnerExpectationResource($partner))->additional([
+            'result' => true
+        ]);
     }
 
     public function partner_expectation_update(PartnerExpectationRequest $request)

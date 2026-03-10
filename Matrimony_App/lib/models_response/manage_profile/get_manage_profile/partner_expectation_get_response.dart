@@ -56,6 +56,8 @@ class Data {
     this.preferredCountryId,
     this.preferredStateId,
     this.complexion,
+    this.expectedIncome,
+    this.partnerIntercaste,
   });
 
   String? general;
@@ -83,33 +85,37 @@ class Data {
   String? preferredCountryId;
   String? preferredStateId;
   dynamic complexion;
+  dynamic expectedIncome;
+  dynamic partnerIntercaste;
 
   factory Data.fromJson(Map<String, dynamic> json) => Data(
-    general: json["general"],
+    general: json["general"] ?? json["general_info"],
     height: json["height"],
     weight: json["weight"],
-    maritalStatusId: json["marital_status"],
-    childrenAcceptable: json["children_acceptable"],
+    maritalStatusId: json["marital_status"] ?? json["partner_marital_status"],
+    childrenAcceptable: json["children_acceptable"] ?? json["partner_children_acceptable"],
     residenceCountryId: json["residence_country_id"],
-    religionId: json["religion_id"]?.toString(),
+    religionId: json["religion_id"]?.toString() ?? json["partner_religion_id"]?.toString(),
     religion: json["religion"],
-    casteId: json["caste_id"]?.toString(),
+    casteId: json["caste_id"]?.toString() ?? json["partner_caste_id"]?.toString(),
     caste: json["caste"],
-    subCasteId: json["sub_caste_id"]?.toString(),
+    subCasteId: json["sub_caste_id"]?.toString() ?? json["partner_sub_caste_id"]?.toString(),
     subCaste: json["sub_caste"],
-    education: json["education"],
+    education: json["education"] ?? json["expected_education"] ?? json["pertner_education"],
     profession: json["profession"],
     smokingAcceptable: json["smoking_acceptable"],
     drinkingAcceptable: json["drinking_acceptable"],
     diet: json["diet"],
     bodyType: json["body_type"],
     personalValue: json["personal_value"],
-    manglik: json["manglik"],
+    manglik: json["manglik"] ?? json["partner_manglik"],
     languageId: json["language"],
     familyValueId: json["family_value_id"],
     preferredCountryId: json["preferred_country_id"],
     preferredStateId: json["preferred_state_id"],
     complexion: json["complexion"],
+    expectedIncome: json["expected_income"] ?? json["partner_income"],
+    partnerIntercaste: json["partner_intercaste"] ?? json["intercaste"],
   );
 
   Map<String, dynamic> toJson() => {
@@ -138,6 +144,8 @@ class Data {
     "preferred_country_id": preferredCountryId,
     "preferred_state_id": preferredStateId,
     "complexion": complexion,
+    "expected_income": expectedIncome,
+    "partner_intercaste": partnerIntercaste,
   };
 
   Data.initialState()
@@ -164,5 +172,7 @@ class Data {
       languageId = '',
       preferredCountryId = '',
       preferredStateId = '',
-      complexion = '';
+      complexion = '',
+      expectedIncome = '',
+      partnerIntercaste = '';
 }

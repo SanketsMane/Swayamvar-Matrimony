@@ -18,6 +18,9 @@ class EducationController extends Controller
     public function index()
     {
         $education = Education::where('user_id',auth()->id())->get();
+        if ($education->isEmpty()) {
+            $education->push(new Education());
+        }
         return EducationResource::collection($education)->additional([
             'result' => true
         ]);
