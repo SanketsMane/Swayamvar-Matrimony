@@ -31,8 +31,9 @@ class SpiritualSocialBackground extends JsonResource
             'family_value_id'=> $family_value ? $family_value->name : '',
             'community_value'=> $this->community_value,
             // Sanket: Newly added 44-field profile columns
-            'manglik'            => $this->manglik,
-            'intercaste_accepted'=> $this->intercaste_accepted,
+            'manglik'            => $this->manglik ? 1 : 0,
+            'intercaste_accepted'=> $this->intercaste_accepted ? 1 : 0,
+            'intercaste'         => $this->intercaste_accepted ? 1 : 0, // Alias for frontend
         ];
     }
 }

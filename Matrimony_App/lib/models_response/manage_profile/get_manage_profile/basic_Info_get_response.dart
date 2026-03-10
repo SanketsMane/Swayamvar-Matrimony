@@ -31,6 +31,7 @@ class BasicInfoGetResponse {
 class BasicInfoData {
   BasicInfoData({
     this.firstName,
+    this.middleName,
     this.lastName,
     this.dateOfBirth,
     this.onbehalf,
@@ -46,6 +47,7 @@ class BasicInfoData {
   });
 
   String? firstName;
+  String? middleName;
   String? lastName;
   DateTime? dateOfBirth;
   dynamic onbehalf;
@@ -60,37 +62,45 @@ class BasicInfoData {
   dynamic photo;
 
   factory BasicInfoData.fromJson(Map<String, dynamic> json) => BasicInfoData(
-    firstName: json["first_name"] ?? json["firs_name"],
-    lastName: json["last_name"],
-    dateOfBirth: json["date_of_birth"] == null ? null : DateTime.tryParse(json["date_of_birth"]),
-    onbehalf: json["onbehalf"] == null ? null : Onbehalf.fromJson(json["onbehalf"]),
-    noOfChildren: json["no_of_children"],
-    gender: json["gender"],
-    phone: json["phone"],
-    maritialStatus: json["maritial_status"],
-    religionId: json["religion_id"] == null || json["religion_id"].toString().isEmpty ? null : int.tryParse(json["religion_id"].toString()),
-    religion: json["religion"],
-    casteId: json["caste_id"] == null || json["caste_id"].toString().isEmpty ? null : int.tryParse(json["caste_id"].toString()),
-    caste: json["caste"],
-    photo: json["photo"],
-  );
+        firstName: json["first_name"] ?? json["firs_name"],
+        middleName: json["middle_name"],
+        lastName: json["last_name"],
+        dateOfBirth: json["date_of_birth"] == null
+            ? null
+            : DateTime.tryParse(json["date_of_birth"]),
+        onbehalf: json["onbehalf"] == null ? null : Onbehalf.fromJson(json["onbehalf"]),
+        noOfChildren: json["no_of_children"],
+        gender: json["gender"],
+        phone: json["phone"],
+        maritialStatus: json["maritial_status"],
+        religionId: json["religion_id"] == null || json["religion_id"].toString().isEmpty
+            ? null
+            : int.tryParse(json["religion_id"].toString()),
+        religion: json["religion"],
+        casteId: json["caste_id"] == null || json["caste_id"].toString().isEmpty
+            ? null
+            : int.tryParse(json["caste_id"].toString()),
+        caste: json["caste"],
+        photo: json["photo"],
+      );
 
   Map<String, dynamic> toJson() => {
-    "first_name": firstName,
-    "firs_name": firstName,
-    "last_name": lastName,
-    "date_of_birth": dateOfBirth?.toIso8601String(),
-    "onbehalf": onbehalf?.toJson(),
-    "no_of_children": noOfChildren,
-    "gender": gender,
-    "phone": phone,
-    "maritial_status": maritialStatus,
-    "religion_id": religionId,
-    "religion": religion,
-    "caste_id": casteId,
-    "caste": caste,
-    "photo": photo,
-  };
+        "first_name": firstName,
+        "firs_name": firstName,
+        "middle_name": middleName,
+        "last_name": lastName,
+        "date_of_birth": dateOfBirth?.toIso8601String(),
+        "onbehalf": onbehalf?.toJson(),
+        "no_of_children": noOfChildren,
+        "gender": gender,
+        "phone": phone,
+        "maritial_status": maritialStatus,
+        "religion_id": religionId,
+        "religion": religion,
+        "caste_id": casteId,
+        "caste": caste,
+        "photo": photo,
+      };
 }
 
 class Onbehalf {

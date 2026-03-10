@@ -33,21 +33,49 @@ class FamilyGetResponse {
 }
 
 class FamilyData {
-  FamilyData({this.father, this.mother, this.sibling});
+  FamilyData({
+    this.father,
+    this.mother,
+    this.sibling,
+    this.noOfBrothers,
+    this.marriedBrothers,
+    this.noOfSisters,
+    this.marriedSisters,
+    this.parentsOccupation,
+    this.propertyDetails,
+  });
 
   String? father;
   String? mother;
   String? sibling;
+  dynamic noOfBrothers;
+  dynamic marriedBrothers;
+  dynamic noOfSisters;
+  dynamic marriedSisters;
+  String? parentsOccupation;
+  String? propertyDetails;
 
   factory FamilyData.fromJson(Map<String, dynamic> json) => FamilyData(
-    father: json["father"],
-    mother: json["mother"],
-    sibling: json["sibling"],
-  );
+        father: json["father"],
+        mother: json["mother"],
+        sibling: json["sibling"],
+        noOfBrothers: json["no_of_brothers"],
+        marriedBrothers: json["married_brothers"],
+        noOfSisters: json["no_of_sisters"],
+        marriedSisters: json["married_sisters"],
+        parentsOccupation: json["parents_occupation"],
+        propertyDetails: json["property_details"],
+      );
 
   Map<String, dynamic> toJson() => {
-    "father": father,
-    "mother": mother,
-    "sibling": sibling,
-  };
+        "father": father,
+        "mother": mother,
+        "sibling": sibling,
+        "no_of_brothers": noOfBrothers,
+        "married_brothers": marriedBrothers,
+        "no_of_sisters": noOfSisters,
+        "married_sisters": marriedSisters,
+        "parents_occupation": parentsOccupation,
+        "property_details": propertyDetails,
+      };
 }

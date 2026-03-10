@@ -23,6 +23,7 @@ class CareerResource extends JsonResource
             'present' => $this->present == 1 ? true : false,
             // Sanket: Newly added 44-field profile columns
             'income' => $this->income ?? '',
+            'annual_income' => $this->income ?? '', // Alias for frontend
             'occupation_details' => $this->occupation_details ?? '',
         ];
     }

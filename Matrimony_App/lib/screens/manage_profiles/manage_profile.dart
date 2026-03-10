@@ -10,6 +10,10 @@ import 'package:active_matrimonial_flutter_app/repository/drop_down_repository.d
 import 'package:active_matrimonial_flutter_app/models_response/common_models/ddown.dart';
 import 'package:active_matrimonial_flutter_app/repository/manage_profile_repository.dart';
 import 'package:intl/intl.dart';
+import 'package:active_matrimonial_flutter_app/screens/account/account_middleware.dart';
+import 'package:active_matrimonial_flutter_app/redux/libs/manage_profile/manage_profile_middleware/manage_profile_get_middlewares.dart';
+import 'package:active_matrimonial_flutter_app/redux/store.dart';
+import 'package:active_matrimonial_flutter_app/redux/app/app_state.dart';
 
 class MyProfile extends StatefulWidget {
   final int initialStep;
@@ -334,6 +338,7 @@ class _MyProfileState extends State<MyProfile> {
       final addrFuture = repo.fetchPresentAddress();
       final partnerFuture = repo.fetchPartnerExpectation();
       final lifeStyleFuture = repo.fetchLifeStyle(); // Sanket: For diet
+      final spiFuture = repo.fetchSpiritualBackground(); // Added by Sanket for manglik/intercaste
 
       await Future.wait([
         basicFuture,
@@ -343,7 +348,8 @@ class _MyProfileState extends State<MyProfile> {
         careerFuture,
         addrFuture,
         partnerFuture,
-        lifeStyleFuture
+        lifeStyleFuture,
+        spiFuture // Added by Sanket
       ]);
 
       if (!mounted) return;
@@ -356,6 +362,7 @@ class _MyProfileState extends State<MyProfile> {
       final addrRes = await addrFuture;
       final partnerRes = await partnerFuture;
       final lifeStyleRes = await lifeStyleFuture; // Sanket: For diet
+      final spiRes = await spiFuture; // Added by Sanket
 
       debugPrint('Sanket: BasicInfo trace: ${basicRes.result}, data: ${basicRes.data?.firstName}');
 
@@ -364,6 +371,7 @@ class _MyProfileState extends State<MyProfile> {
         if (basicRes.result == true && basicRes.data != null) {
           final d = basicRes.data!;
           _firstName.text = d.firstName ?? '';
+          _middleName.text = d.middleName ?? '';
           _surname.text = d.lastName ?? '';
           if (d.dateOfBirth != null) {
             _dob = d.dateOfBirth;
@@ -414,6 +422,12 @@ class _MyProfileState extends State<MyProfile> {
           final f = famRes.data!;
           _fatherAlive = f.father?.toLowerCase() == 'alive';
           _motherAlive = f.mother?.toLowerCase() == 'alive';
+          _noOfBrothers = f.noOfBrothers?.toString();
+          _marriedBrothers = f.marriedBrothers?.toString();
+          _noOfSisters = f.noOfSisters?.toString();
+          _marriedSisters = f.marriedSisters?.toString();
+          _parentsOccupation.text = f.parentsOccupation ?? '';
+          _propertyDetails.text = f.propertyDetails ?? '';
         }
 
         // ---- Education ----
@@ -482,6 +496,17 @@ class _MyProfileState extends State<MyProfile> {
               .where((e) => e.value.toLowerCase() == target || e.key.toLowerCase() == target)
               .map((e) => e.value)
               .firstOrNull ?? lifeStyleRes.data!.diet;
+        }
+
+        // ---- Spiritual & Social (Manglik/Intercaste) ----
+        if (spiRes.result == true && spiRes.data != null) {
+          final s = spiRes.data!;
+          if (s.manglik != null) {
+            _manglik = s.manglik == '1' || s.manglik.toString().toLowerCase() == 'yes';
+          }
+          if (s.intercaste != null) {
+            _intercasteAccepted = s.intercaste == '1' || s.intercaste.toString().toLowerCase() == 'yes';
+          }
         }
 
         // ---- Expectations Additional ----
@@ -748,6 +773,21 @@ class _MyProfileState extends State<MyProfile> {
 
         setState(() => _isSubmitting = false);
         if (!mounted) return;
+
+        if (!mounted) return;
+
+        // Sanket: Refresh Redux state to update completion score (Bug fix)
+        // This ensures the Account screen shows the new score immediately
+        store.dispatch(accountMiddleware());
+        store.dispatch(basicInfoGetMiddleware());
+        store.dispatch(physicalAttributesGetMiddleware());
+        store.dispatch(familyGetMiddleware());
+        store.dispatch(educationGetMiddleware());
+        store.dispatch(careerGetMiddleware());
+        store.dispatch(presentAddressGetMiddleware());
+        store.dispatch(partnerExpectationGetMiddleware());
+        store.dispatch(lifeStyleGetMiddleware());
+        store.dispatch(spiritualSocialGetMiddleware());
 
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(

@@ -38,6 +38,8 @@ class Data {
     this.personalValue,
     this.familyValueId,
     this.communityValue,
+    this.manglik,
+    this.intercaste,
   });
 
   String? religionId;
@@ -47,33 +49,41 @@ class Data {
   dynamic personalValue;
   String? familyValueId;
   dynamic communityValue;
+  dynamic manglik;
+  dynamic intercaste;
 
   factory Data.fromJson(Map<String, dynamic> json) => Data(
-    religionId: json["religion_id"],
-    casteId: json["caste_id"],
-    subCasteId: json["sub_caste_id"],
-    ethnicity: json["ethnicity"],
-    personalValue: json["personal_value"],
-    familyValueId: json["family_value_id"],
-    communityValue: json["community_value"],
-  );
+        religionId: json["religion_id"],
+        casteId: json["caste_id"],
+        subCasteId: json["sub_caste_id"],
+        ethnicity: json["ethnicity"],
+        personalValue: json["personal_value"],
+        familyValueId: json["family_value_id"],
+        communityValue: json["community_value"],
+        manglik: json["manglik"],
+        intercaste: json["intercaste"],
+      );
 
   Map<String, dynamic> toJson() => {
-    "religion_id": religionId,
-    "caste_id": casteId,
-    "sub_caste_id": subCasteId,
-    "ethnicity": ethnicity,
-    "personal_value": personalValue,
-    "family_value_id": familyValueId,
-    "community_value": communityValue,
-  };
+        "religion_id": religionId,
+        "caste_id": casteId,
+        "sub_caste_id": subCasteId,
+        "ethnicity": ethnicity,
+        "personal_value": personalValue,
+        "family_value_id": familyValueId,
+        "community_value": communityValue,
+        "manglik": manglik,
+        "intercaste": intercaste,
+      };
 
   Data.initialState()
-    : religionId = '',
-      casteId = '',
-      subCasteId = '',
-      ethnicity = '',
-      personalValue = '',
-      familyValueId = '',
-      communityValue = '';
+      : religionId = '',
+        casteId = '',
+        subCasteId = '',
+        ethnicity = '',
+        personalValue = '',
+        familyValueId = '',
+        manglik = '',
+        intercaste = '',
+        communityValue = '';
 }
