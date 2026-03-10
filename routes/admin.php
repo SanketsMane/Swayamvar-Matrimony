@@ -125,6 +125,8 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth', 'admin']], function 
         Route::post('/inactive-leads/restore/{id}', [\App\Http\Controllers\Admin\InactiveLeadController::class, 'restore'])->name('inactive-leads.restore');
 
         Route::resource('duplicate-leads', \App\Http\Controllers\Admin\DuplicateLeadController::class);
+        Route::post('/duplicate-leads/bulk-action', [\App\Http\Controllers\Admin\DuplicateLeadController::class, 'bulk_action'])->name('duplicate-leads.bulk_action');
+        Route::get('/duplicate-leads/export', [\App\Http\Controllers\Admin\DuplicateLeadController::class, 'export'])->name('duplicate-leads.export');
 
         Route::get('/reassignment', [\App\Http\Controllers\Admin\ReassignmentController::class, 'index'])->name('reassignment.index');
         Route::get('/reassignment/get-leads', [\App\Http\Controllers\Admin\ReassignmentController::class, 'get_telecaller_leads'])->name('reassignment.get_leads');
