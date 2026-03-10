@@ -61,7 +61,7 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth', 'admin']], function 
         Route::get('/members/login/{id}', 'login')->name('members.login');
 
         Route::get('/deleted_members', 'deleted_members')->name('deleted_members');
-        Route::get('/members/destroy/{id}', 'destroy')->name('members.destroy_get');
+        Route::get('/members/destroy/{id}', 'destroy')->name('members.destroy');
         Route::get('/restore_deleted_member/{id}', 'restore_deleted_member')->name('restore_deleted_member');
         Route::get('/members/permanently_delete/{id}', 'member_permanemtly_delete')->name('members.permanently_delete');
 
@@ -124,6 +124,7 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth', 'admin']], function 
         Route::resource('inactive-leads', \App\Http\Controllers\Admin\InactiveLeadController::class);
         Route::post('/inactive-leads/restore/{id}', [\App\Http\Controllers\Admin\InactiveLeadController::class, 'restore'])->name('inactive-leads.restore');
 
+        Route::get('/duplicate-leads/destroy/{id}', [\App\Http\Controllers\Admin\DuplicateLeadController::class, 'destroy'])->name('duplicate-leads.destroy');
         Route::resource('duplicate-leads', \App\Http\Controllers\Admin\DuplicateLeadController::class);
         Route::post('/duplicate-leads/bulk-action', [\App\Http\Controllers\Admin\DuplicateLeadController::class, 'bulk_action'])->name('duplicate-leads.bulk_action');
         Route::get('/duplicate-leads/export', [\App\Http\Controllers\Admin\DuplicateLeadController::class, 'export'])->name('duplicate-leads.export');
