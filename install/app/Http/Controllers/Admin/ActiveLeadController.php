@@ -72,25 +72,27 @@ class ActiveLeadController extends Controller
     {
         $lead = ActiveLead::findOrFail($id);
         
-        InactiveLead::create([
-            'name' => $lead->name,
-            'mobile' => $lead->mobile,
-            'email' => $lead->email,
-            'city' => $lead->city,
-            'pincode' => $lead->pincode,
-            'source' => $lead->source,
-            'business_type' => $lead->business_type,
-            'campaign_id' => $lead->campaign_id,
-            'upload_id' => $lead->upload_id,
-            'marked_by' => \Auth::id(),
-            'previous_agent_id' => $lead->assigned_to,
-            'reason' => $request->reason,
-            'notes' => $request->notes,
-        ]);
+        return \DB::transaction(function () use ($lead, $request) {
+            InactiveLead::create([
+                'name' => $lead->name,
+                'mobile' => $lead->mobile,
+                'email' => $lead->email,
+                'city' => $lead->city,
+                'pincode' => $lead->pincode,
+                'source' => $lead->source,
+                'business_type' => $lead->business_type,
+                'campaign_id' => $lead->campaign_id,
+                'upload_id' => $lead->upload_id,
+                'marked_by' => \Auth::id(),
+                'previous_agent_id' => $lead->assigned_to,
+                'reason' => $request->reason,
+                'notes' => $request->notes,
+            ]);
 
-        $lead->delete(); // Soft delete [Sanket]
+            $lead->delete(); // Soft delete [Sanket]
 
-        flash(translate('Lead marked as inactive'))->dark();
-        return back();
+            flash(translate('Lead marked as inactive'))->dark();
+            return back();
+        });
     }
 }

@@ -167,6 +167,21 @@ class TelecallerLeadsApiController extends Controller
             'business_type' => 'nullable|string|max:255',
         ]);
 
+        // Sanket: Check for duplicate lead before creating
+        $existing = ActiveLead::where('mobile', $request->mobile)
+                            ->orWhere(function($q) use ($request) {
+                                if ($request->email) {
+                                    $q->where('email', $request->email);
+                                }
+                            })->first();
+
+        if ($existing) {
+            return response()->json([
+                'result' => false,
+                'message' => 'A lead with this mobile or email already exists.'
+            ], 422);
+        }
+
         $user_id = Auth::id();
 
         $lead = new ActiveLead();

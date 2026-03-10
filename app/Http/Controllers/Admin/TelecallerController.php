@@ -84,7 +84,7 @@ class TelecallerController extends Controller
                 \Log::error("Failed to send telecaller creation mail: " . $e->getMessage());
             }
 
-            flash(translate('Telecaller has been created successfully. Password: ') . $password)->success();
+            flash(translate('Telecaller has been created successfully. Credentials have been sent to their email.'))->success();
             return redirect()->route('telecallers.index');
         }
 
@@ -174,7 +174,7 @@ class TelecallerController extends Controller
                 \Log::error("Failed to send telecaller password reset mail: " . $e->getMessage());
             }
 
-            flash(translate('Password reset successfully. New Password: ') . $password)->success();
+            flash(translate('Password reset successfully. New credentials have been sent to their email.'))->success();
             return back();
         }
 

@@ -212,16 +212,22 @@ class TelecallerProfileApiController extends Controller
 
             $user->save();
 
+            $package = \App\Models\Package::find($request->package);
+            if (!$package) {
+                return response()->json([
+                    'result' => false,
+                    'message' => 'Selected package not found'
+                ], 404);
+            }
+
             // Handle optional profile picture [Sanket]
             if ($request->hasFile('photo')) {
                 $user->photo = upload_api_file($request->file('photo'));
-                $user->save();
             }
 
             // Handle ID Proof [Sanket]
             if ($request->hasFile('id_proof')) {
                 $user->id_proof = upload_api_file($request->file('id_proof'));
-                $user->save();
             }
 
             // Handle Other Photos [Sanket]
@@ -233,10 +239,6 @@ class TelecallerProfileApiController extends Controller
                     $gallery->save();
                 }
             }
-
-            $user->save();
-
-            $package = \App\Models\Package::find($request->package);
 
             // Record Package Payment referencing the telecaller [Sanket]
             $payment_status = 'Unpaid';
@@ -370,8 +372,13 @@ class TelecallerProfileApiController extends Controller
                 $address = new \App\Models\Address;
                 $address->user_id = $user->id;
                 $address->type = 'present';
-                $address->country_id = $request->country ?? (\App\Models\Country::where('name', 'India')->first()->id ?? 101);
-                $address->state_id = $request->state ?? (\App\Models\State::where('name', 'Maharashtra')->first()->id ?? 22);
+                
+                // Sanket: Use dynamic lookups for fallback if IDs aren't provided
+                $india = \App\Models\Country::where('name', 'India')->first();
+                $maharashtra = \App\Models\State::where('name', 'Maharashtra')->first();
+                
+                $address->country_id = $request->country ?? ($india ? $india->id : 101);
+                $address->state_id = $request->state ?? ($maharashtra ? $maharashtra->id : 22);
                 $address->city_id = $request->city ?? null;
                 $address->postal_code = $request->address ?? null;
                 $address->save();

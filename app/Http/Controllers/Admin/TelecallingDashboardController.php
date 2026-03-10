@@ -157,96 +157,104 @@ class TelecallingDashboardController extends Controller
             'package' => 'required'
         ]);
 
-        $user_id = Auth::id(); // Telecaller ID
-
-        // 1. Create User
-        $user = new User;
-        $user->user_type = 'member';
-        // Unique code generator logic from project
-        $user->code = unique_code();
-        $user->first_name = $request->first_name;
-        $user->last_name = $request->last_name;
-        $user->password = \Hash::make('12345678');
-        $user->phone = $request->phone;
-        $user->email = $request->email;
-        $user->telecaller_id = $user_id; // Tag with telecaller who filled it
-        $user->save();
-
-        // 2. Create Member Profile
-        $member = new \App\Models\Member;
-        $member->user_id = $user->id;
-        $member->gender = $request->gender;
-        $member->on_behalves_id = $request->on_behalf;
-        $member->marital_status_id = $request->marital_status; // Sanket: added marital status
-        $member->mothere_tongue = $request->language; // Sanket: added language
-        $member->birthday = $request->date_of_birth;
-        $member->save();
-
-        // 3. Optional Sub-Models [Sanket]
-        if ($request->has('religion') || $request->has('caste')) {
-            $spiritual = new \App\Models\SpiritualBackground;
-            $spiritual->user_id = $user->id;
-            $spiritual->religion_id = $request->religion;
-            $spiritual->caste_id = $request->caste;
-            $spiritual->sub_caste_id = $request->sub_caste;
-            $spiritual->save();
+        $package = \App\Models\Package::find($request->package);
+        if (!$package) {
+            flash(translate('Invalid package selected.'))->error();
+            return back();
         }
 
-        if ($request->has('height')) {
-            $physical = new \App\Models\PhysicalAttribute;
-            $physical->user_id = $user->id;
-            $physical->height = $request->height;
-            $physical->save();
-        }
+        return \DB::transaction(function () use ($request, $package) {
+            $user_id = Auth::id(); // Telecaller ID
 
-        if ($request->has('education')) {
-            $education = new \App\Models\Education;
-            $education->user_id = $user->id;
-            $education->degree = $request->education;
-            $education->present = 1;
-            $education->save();
-        }
+            // 1. Create User
+            $user = new User;
+            $user->user_type = 'member';
+            // Unique code generator logic from project
+            $user->code = unique_code();
+            $user->first_name = $request->first_name;
+            $user->last_name = $request->last_name;
+            $user->password = \Hash::make('12345678');
+            $user->phone = $request->phone;
+            $user->email = $request->email;
+            $user->telecaller_id = $user_id; // Tag with telecaller who filled it
+            $user->save();
 
-        if ($request->has('occupation')) {
-            $career = new \App\Models\Career;
-            $career->user_id = $user->id;
-            $career->designation = $request->occupation;
-            $career->present = 1;
-            $career->save();
-        }
+            // 2. Create Member Profile
+            $member = new \App\Models\Member;
+            $member->user_id = $user->id;
+            $member->gender = $request->gender;
+            $member->on_behalves_id = $request->on_behalf;
+            $member->marital_status_id = $request->marital_status; // Sanket: added marital status
+            $member->mothere_tongue = $request->language; // Sanket: added language
+            $member->birthday = $request->date_of_birth;
+            $member->save();
 
-        if ($request->has('country')) {
-            $address = new \App\Models\Address;
-            $address->user_id = $user->id;
-            $address->type = 'present';
-            $address->country_id = $request->country;
-            $address->state_id = $request->state;
-            $address->city_id = $request->city;
-            $address->save();
-        }
+            // 3. Optional Sub-Models [Sanket]
+            if ($request->has('religion') || $request->has('caste')) {
+                $spiritual = new \App\Models\SpiritualBackground;
+                $spiritual->user_id = $user->id;
+                $spiritual->religion_id = $request->religion;
+                $spiritual->caste_id = $request->caste;
+                $spiritual->sub_caste_id = $request->sub_caste;
+                $spiritual->save();
+            }
 
-        // 3. Record Package Payment
-        if ($package && $package->price > 0) {
-            $payment = new \App\Models\PackagePayment;
-            $payment->user_id = $user->id;
-            $payment->package_id = $package->id;
-            $payment->amount = $package->price;
-            $payment->payment_method = 'manual_cash';
-            $payment->payment_status = 'Paid';
-            $payment->telecaller_id = $user_id;
-            $payment->save();
-        }
+            if ($request->has('height')) {
+                $physical = new \App\Models\PhysicalAttribute;
+                $physical->user_id = $user->id;
+                $physical->height = $request->height;
+                $physical->save();
+            }
 
-        // 4. Notify admin
-        $admin = User::where('user_type', 'admin')->first();
-        if ($admin) {
-            try {
-                \Notification::send($admin, new \App\Notifications\TelecallerBiodataCreated($user));
-            } catch (\Exception $e) { }
-        }
+            if ($request->has('education')) {
+                $education = new \App\Models\Education;
+                $education->user_id = $user->id;
+                $education->degree = $request->education;
+                $education->present = 1;
+                $education->save();
+            }
 
-        flash(translate('Biodata profile created successfully.'))->success();
-        return redirect()->route('telecalling.dashboard');
+            if ($request->has('occupation')) {
+                $career = new \App\Models\Career;
+                $career->user_id = $user->id;
+                $career->designation = $request->occupation;
+                $career->present = 1;
+                $career->save();
+            }
+
+            if ($request->has('country')) {
+                $address = new \App\Models\Address;
+                $address->user_id = $user->id;
+                $address->type = 'present';
+                $address->country_id = $request->country;
+                $address->state_id = $request->state;
+                $address->city_id = $request->city;
+                $address->save();
+            }
+
+            // 3. Record Package Payment
+            if ($package && $package->price > 0) {
+                $payment = new \App\Models\PackagePayment;
+                $payment->user_id = $user->id;
+                $payment->package_id = $package->id;
+                $payment->amount = $package->price;
+                $payment->payment_method = 'manual_cash';
+                $payment->payment_status = 'Paid';
+                $payment->telecaller_id = $user_id;
+                $payment->save();
+            }
+
+            // 4. Notify admin
+            $admin = User::where('user_type', 'admin')->first();
+            if ($admin) {
+                try {
+                    \Notification::send($admin, new \App\Notifications\TelecallerBiodataCreated($user));
+                } catch (\Exception $e) { }
+            }
+
+            flash(translate('Biodata profile created successfully.'))->success();
+            return redirect()->route('telecalling.dashboard');
+        });
     }
 
     public function admin_index()
