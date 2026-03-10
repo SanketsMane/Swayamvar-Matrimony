@@ -75,7 +75,7 @@ BasicInfoState setBasicInfo(BasicInfoState state) {
     state.no_childController!.text = state.basicInfo!.noOfChildren?.toString() ?? '0';
     state.phoneController!.text = state.basicInfo!.phone ?? '';
     state.gendervalue = state.basicInfo!.gender ?? '';
-    if (state.basicInfo!.dateOfBirth != null) {
+    if (state.basicInfo?.dateOfBirth != null) {
       state.date = state.basicInfo!.dateOfBirth!;
     }
   }

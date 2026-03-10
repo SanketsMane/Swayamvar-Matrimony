@@ -28,11 +28,11 @@ class BasicInformation extends JsonResource
             'surname'        => $this->last_name, // Alias for last_name
             'code'           => $this->code,
             'age'            => $age,
-            'religion_id'    => $this->spiritual_backgrounds?->religion_id ?? '',
+            'religion_id'    => $this->spiritual_backgrounds?->religion_id ? (int)$this->spiritual_backgrounds->religion_id : '',
             'religion'       => $this->spiritual_backgrounds->religion->name ?? '',
-            'caste_id'       => $this->spiritual_backgrounds?->caste_id ?? '',
+            'caste_id'       => $this->spiritual_backgrounds?->caste_id ? (int)$this->spiritual_backgrounds->caste_id : '',
             'caste'          => $this->spiritual_backgrounds->caste->name ?? '',
-            'sub_caste_id'   => $this->spiritual_backgrounds?->sub_caste_id ?? '',
+            'sub_caste_id'   => $this->spiritual_backgrounds?->sub_caste_id ? (int)$this->spiritual_backgrounds->sub_caste_id : '',
             'date_of_birth'  => !empty($this->member?->birthday) ? Carbon::parse($this->member->birthday)->format('Y-m-d') : '',
             'onbehalf'       => new OnBehalfResource(OnBehalf::find($this->member->on_behalves_id)),
             'no_of_children' => $this->member->children ?? '',
@@ -51,9 +51,9 @@ class BasicInformation extends JsonResource
             'weight'         => $this->physical_attributes?->weight ?? '',
             'complexion'     => $this->physical_attributes?->complexion ?? '',
             'blood_group'    => $this->physical_attributes?->blood_group ?? '',
-            'disability'     => $this->physical_attributes?->disability ?? '',
+            'disability'     => $this->physical_attributes?->disability ? 1 : 0,
             'diet'           => $this->lifestyles?->diet ?? '',
-            'manglik'        => $this->spiritual_backgrounds?->manglik ?? '',
+            'manglik'        => $this->spiritual_backgrounds?->manglik ? 1 : 0,
         ];
     }
 }

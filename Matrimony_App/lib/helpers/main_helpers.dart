@@ -31,9 +31,10 @@ dynamic getSettingValue(String key) {
 }
 
 void setProfileDropdownValues() {
-  !store.state.manageProfileCombineState!.profiledropdownResponseData!.result!
-      ? store.dispatch(profiledropdownMiddleware())
-      : null;
+  final dropdownData = store.state.manageProfileCombineState?.profiledropdownResponseData;
+  if (dropdownData != null && dropdownData.result != true) {
+    store.dispatch(profiledropdownMiddleware());
+  }
 }
 
 Map<String, String> get commonHeader => {

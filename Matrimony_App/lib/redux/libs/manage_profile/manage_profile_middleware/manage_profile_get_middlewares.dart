@@ -61,6 +61,21 @@ ThunkAction<AppState> attitudeInterestsGetMiddleware() {
   };
 }
 
+
+ThunkAction<AppState> profile_full_metrics_middleware() {
+  return (Store<AppState> store) async {
+    store.dispatch(basicInfoGetMiddleware());
+    store.dispatch(physicalAttributesGetMiddleware());
+    store.dispatch(familyGetMiddleware());
+    store.dispatch(educationGetMiddleware());
+    store.dispatch(careerGetMiddleware());
+    store.dispatch(presentAddressGetMiddleware());
+    store.dispatch(partnerExpectationGetMiddleware());
+    store.dispatch(lifeStyleGetMiddleware());
+    store.dispatch(spiritualSocialGetMiddleware());
+  };
+}
+
 ThunkAction<AppState> basicInfoGetMiddleware() {
   return (Store<AppState> store) async {
     try {
@@ -77,16 +92,20 @@ ThunkAction<AppState> basicInfoGetMiddleware() {
 
       if (basicState != null && dropdownData != null) {
         // Map on behalf
-        for (var element in dropdownData.onbehalfList!) {
-          if (basicState.basicInfo?.onbehalf.id == element.id) {
-            basicState.on_behalves_value = element;
+        if (dropdownData.onbehalfList != null) {
+          for (var element in dropdownData.onbehalfList!) {
+            if (basicState.basicInfo?.onbehalf?.id == element.id) {
+              basicState.on_behalves_value = element;
+            }
           }
         }
 
         // Map marital status
-        for (var element in dropdownData.maritialStatus!) {
-          if (basicState.basicInfo?.maritialStatus == element.name) {
-            basicState.marital_status_value = element;
+        if (dropdownData.maritialStatus != null) {
+          for (var element in dropdownData.maritialStatus!) {
+            if (basicState.basicInfo?.maritialStatus == element.name) {
+              basicState.marital_status_value = element;
+            }
           }
         }
       }
@@ -103,25 +122,30 @@ ThunkAction<AppState> careerGetMiddleware() {
       var data = await ManageProfileRepository().fetchCareer();
       store.dispatch(CareerReset.careeer_list);
 
-      for (var element in data.data!) {
-        store.state.manageProfileCombineState!.careerState!.list.add(
-          CareerViewModel(
-            designation_text: 'Designation',
-            id: element.id,
-            present: element.present,
-            company_text: 'Company',
-            start: '2016',
-            end: '2023',
-            designation_controller: TextEditingController(
-              text: element.designation,
-            ),
-            company_controller: TextEditingController(text: element.company),
-            start_controller: TextEditingController(
-              text: element.start.toString(),
-            ),
-            end_controller: TextEditingController(text: element.end.toString()),
-          ),
-        );
+      if (data.data != null) {
+        for (var element in data.data!) {
+          final careerState = store.state.manageProfileCombineState?.careerState;
+          if (careerState != null) {
+            careerState.list.add(
+              CareerViewModel(
+                designation_text: 'Designation',
+                id: element.id,
+                present: element.present,
+                company_text: 'Company',
+                start: '2016',
+                end: '2023',
+                designation_controller: TextEditingController(
+                  text: element.designation,
+                ),
+                company_controller: TextEditingController(text: element.company),
+                start_controller: TextEditingController(
+                  text: element.start.toString(),
+                ),
+                end_controller: TextEditingController(text: element.end.toString()),
+              ),
+            );
+          }
+        }
       }
 
       store.dispatch(CareerGetResponse(data: data.data, result: data.result));
@@ -151,25 +175,30 @@ ThunkAction<AppState> educationGetMiddleware() {
       var data = await ManageProfileRepository().fetchEducation();
       store.dispatch(EducationReset.list);
 
-      for (var element in data.data!) {
-        store.state.manageProfileCombineState!.educationState!.list.add(
-          EducationViewModel(
-            id: element.id,
-            degree_hint: 'Bachelor of Arts',
-            institute_hint: 'Middlebury College',
-            start_hint: '2016',
-            end_hint: '2023',
-            present: element.present,
-            degree_controller: TextEditingController(text: element.degree),
-            institute_controller: TextEditingController(
-              text: element.institution,
-            ),
-            start_controller: TextEditingController(
-              text: element.start.toString(),
-            ),
-            end_controller: TextEditingController(text: element.end.toString()),
-          ),
-        );
+      if (data.data != null) {
+        for (var element in data.data!) {
+          final eduState = store.state.manageProfileCombineState?.educationState;
+          if (eduState != null) {
+            eduState.list.add(
+              EducationViewModel(
+                id: element.id,
+                degree_hint: 'Bachelor of Arts',
+                institute_hint: 'Middlebury College',
+                start_hint: '2016',
+                end_hint: '2023',
+                present: element.present,
+                degree_controller: TextEditingController(text: element.degree),
+                institute_controller: TextEditingController(
+                  text: element.institution,
+                ),
+                start_controller: TextEditingController(
+                  text: element.start.toString(),
+                ),
+                end_controller: TextEditingController(text: element.end.toString()),
+              ),
+            );
+          }
+        }
       }
       store
           .dispatch(EducationGetResponse(data: data.data, result: data.result));

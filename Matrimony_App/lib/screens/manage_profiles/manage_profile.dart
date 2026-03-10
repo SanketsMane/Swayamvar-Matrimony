@@ -241,8 +241,7 @@ class _MyProfileState extends State<MyProfile> {
     super.initState();
     _currentStep = widget.initialStep;
     _pageController = PageController(initialPage: widget.initialStep);
-    _loadInitialDropdowns();
-    _loadProfileData();
+    _loadProfileData(); // This now internally awaits dropdowns
   }
 
   Future<void> _loadInitialDropdowns() async {
@@ -327,6 +326,7 @@ class _MyProfileState extends State<MyProfile> {
   // =========================================================================
   Future<void> _loadProfileData() async {
     debugPrint('Sanket: Starting profile data load...');
+    await _loadInitialDropdowns(); // Sanket: Ensure lists are ready before mapping
     try {
       final repo = ManageProfileRepository();
       // Parallel fetch for speed
@@ -380,9 +380,13 @@ class _MyProfileState extends State<MyProfile> {
           // Sanket: Map marital status id/name back to a stable API value
           if (d.maritialStatus != null) {
             final apiVal = d.maritialStatus.toString().toLowerCase();
+            debugPrint('Sanket: Marital Status from API: $apiVal');
             _maritalStatusDisplay = _maritalOptions.entries
-                .where((e) => e.value.toLowerCase() == apiVal || e.key.toLowerCase() == apiVal)
-                .map((e) => e.value) // Store stable API value
+                .where((e) =>
+                    e.value.toLowerCase() == apiVal ||
+                    e.key.toLowerCase() == apiVal ||
+                    (apiVal == 'divorced' && e.value.toLowerCase().contains('divorced')))
+                .map((e) => e.value)
                 .firstOrNull;
           }
           _mobile1.text = d.phone ?? '';
@@ -462,15 +466,18 @@ class _MyProfileState extends State<MyProfile> {
         }
 
         // ---- Address & District ----
-        if (addrRes.result == true && addrRes.data != null) {
+        if (addrRes.data != null) {
           final a = addrRes.data!;
+          debugPrint('Sanket: Address from API: ${a.address}');
           _address.text = a.address ?? '';
           if (a.city != null) {
-            final targetCity = a.city!.toLowerCase();
+            final targetCity = a.city!.toString().toLowerCase();
+            debugPrint('Sanket: City/District from API: $targetCity');
             _districtDisplay = _districtList
                 .where((e) => e.name?.toLowerCase() == targetCity || e.id.toString() == targetCity)
                 .map((e) => e.name)
                 .firstOrNull ?? a.city;
+            debugPrint('Sanket: Mapped District Display: $_districtDisplay');
           }
           if (a.govIdType != null) {
             final target = a.govIdType!.toLowerCase();
@@ -483,50 +490,47 @@ class _MyProfileState extends State<MyProfile> {
         }
 
         // ---- Expectations ----
-        if (partnerRes.result == true && partnerRes.data != null) {
-          final ex = partnerRes.data!;
-          _preferredCitiesCtrl.text = ex.general ?? '';
-          if (ex.manglik != null) _partnerManglik = ex.manglik == '1' || ex.manglik!.toLowerCase() == 'yes';
-          if (ex.childrenAcceptable != null)
-            _divorceAccepted = ex.childrenAcceptable?.toLowerCase() == 'yes';
-        // ---- Diet (from LifeStyle) ----
-        if (lifeStyleRes.result == true && lifeStyleRes.data != null) {
-          final target = lifeStyleRes.data!.diet?.toLowerCase();
-          _dietDisplay = _dietOptions.entries
-              .where((e) => e.value.toLowerCase() == target || e.key.toLowerCase() == target)
-              .map((e) => e.value)
-              .firstOrNull ?? lifeStyleRes.data!.diet;
-        }
-
-        // ---- Spiritual & Social (Manglik/Intercaste) ----
-        if (spiRes.result == true && spiRes.data != null) {
-          final s = spiRes.data!;
-          if (s.manglik != null) {
-            _manglik = s.manglik == '1' || s.manglik.toString().toLowerCase() == 'yes';
-          }
-          if (s.intercaste != null) {
-            _intercasteAccepted = s.intercaste == '1' || s.intercaste.toString().toLowerCase() == 'yes';
-          }
-        }
-
-        // ---- Expectations Additional ----
         if (partnerRes.data != null) {
           final ex = partnerRes.data!;
+          _preferredCitiesCtrl.text = ex.general ?? '';
+          debugPrint('Sanket: Preferred Cities from API: ${ex.general}');
+          
+          if (ex.manglik != null) {
+            _partnerManglik = ex.manglik.toString() == '1' || ex.manglik.toString().toLowerCase() == 'yes';
+          }
+          if (ex.childrenAcceptable != null) {
+            _divorceAccepted = ex.childrenAcceptable.toString().toLowerCase() == 'yes' || ex.childrenAcceptable.toString() == '1';
+          }
+          
           if (ex.education != null) {
-            final target = ex.education!.toLowerCase();
+            final target = ex.education.toString().toLowerCase();
             _expectedEducationDisplay = _educationOptions.entries
                 .where((e) => e.value.toLowerCase() == target || e.key.toLowerCase() == target)
                 .map((e) => e.value)
-                .firstOrNull ?? ex.education;
+                .firstOrNull ?? ex.education.toString();
           }
-        }
+          
+          if (ex.expectedIncome != null) {
+            final target = ex.expectedIncome!.toString().toLowerCase();
+            debugPrint('Sanket: Expected Income from API: $target');
+            _expectedIncomeDisplay = _incomeOptions.entries
+                .where((e) => e.value.toLowerCase() == target || e.key.toLowerCase() == target)
+                .map((e) => e.value)
+                .firstOrNull ?? ex.expectedIncome.toString();
+          }
+          if (ex.partnerIntercaste != null) {
+            final ic = ex.partnerIntercaste.toString().toLowerCase();
+            debugPrint('Sanket: Partner Intercaste from API: $ic');
+            _partnerIntercaste = ic == '1' || ic == 'yes';
+          }
 
+          debugPrint('Sanket: Partner Religion from API: ${ex.religion}');
           // Sanket: Load partner religion/caste IDs
-          _partnerReligionId = int.tryParse(ex.religionId ?? '');
+          _partnerReligionId = int.tryParse(ex.religionId?.toString() ?? '');
           _partnerReligionDisplay = ex.religion;
-          _partnerCasteId = int.tryParse(ex.casteId ?? '');
+          _partnerCasteId = int.tryParse(ex.casteId?.toString() ?? '');
           _partnerCasteDisplay = ex.caste;
-          _partnerSubCasteId = int.tryParse(ex.subCasteId ?? '');
+          _partnerSubCasteId = int.tryParse(ex.subCasteId?.toString() ?? '');
           _partnerSubCasteDisplay = ex.subCaste;
 
           // If IDs exist, pre-fetch their dependent lists
@@ -536,6 +540,33 @@ class _MyProfileState extends State<MyProfile> {
                 setState(() => _partnerCasteList = res.data ?? []);
               }
             });
+          }
+          if (_partnerCasteId != null) {
+             DropDownRepository().fetchSubCaste(_partnerCasteId!).then((res) {
+              if (res.data != null && mounted) {
+                setState(() => _partnerSubCasteList = res.data ?? []);
+              }
+            });
+          }
+        }
+
+        // ---- Diet (from LifeStyle) ----
+        if (lifeStyleRes.data != null) {
+          final target = lifeStyleRes.data!.diet?.toLowerCase();
+          _dietDisplay = _dietOptions.entries
+              .where((e) => e.value.toLowerCase() == target || e.key.toLowerCase() == target)
+              .map((e) => e.value)
+              .firstOrNull ?? lifeStyleRes.data!.diet;
+        }
+
+        // ---- Spiritual & Social (Manglik/Intercaste) ----
+        if (spiRes.data != null) {
+          final s = spiRes.data!;
+          if (s.manglik != null) {
+            _manglik = s.manglik == '1' || s.manglik.toString().toLowerCase() == 'yes';
+          }
+          if (s.intercaste != null) {
+            _intercasteAccepted = s.intercaste == '1' || s.intercaste.toString().toLowerCase() == 'yes';
           }
         }
 
@@ -748,7 +779,53 @@ class _MyProfileState extends State<MyProfile> {
         gov_id_type: _govIdTypeDisplay,
         gov_id_number: _govIdNumber.text.trim(),
         address: _address.text.trim(),
-        district: _districtList.where((e) => e.name == _districtDisplay).map((e) => e.id).firstOrNull,
+      final distId = _districtList.where((e) => e.name == _districtDisplay).map((e) => e.id).firstOrNull;
+      debugPrint('Sanket: Submitting form with District ID: $distId for name: $_districtDisplay');
+
+      // Sanket: Use Atomic Update (B-001) - send all text data in one request
+      final response = await repo.fullProfileUpdate(
+        f_name: _firstName.text.trim(),
+        middle_name: _middleName.text.trim(),
+        l_name: _surname.text.trim(),
+        dob: _dob != null ? DateFormat('yyyy-MM-dd').format(_dob!) : '',
+        phone: _mobile1.text.trim(),
+        m_status: _maritalStatusDisplay,
+        height: _heightDisplay,
+        weight: _weight.text.isNotEmpty ? _weight.text : null,
+        complexion: _complexionDisplay,
+        blood_group: _bloodGroupDisplay,
+        disability: _physicalDisability == true ? _disabilityDetails.text : "None",
+        religion: _religionDisplay,
+        religion_id: _selectedReligionId,
+        caste: _casteDisplay,
+        caste_id: _selectedCasteId,
+        sub_caste_id: _selectedSubCasteId,
+        diet: _dietDisplay,
+        personal_manglik: _manglik != null ? (_manglik! ? '1' : '0') : null,
+        intercaste_accepted: _intercasteAccepted != null ? (_intercasteAccepted! ? '1' : '0') : null,
+        father: _fatherAlive == true ? 'Alive' : 'Deceased',
+        mother: _motherAlive == true ? 'Alive' : 'Deceased',
+        brothers: _noOfBrothers ?? '0',
+        married_brothers: _marriedBrothers ?? '0',
+        sisters: _noOfSisters ?? '0',
+        married_sisters: _marriedSisters ?? '0',
+        parents_occupation: _parentsOccupation.text.isNotEmpty ? _parentsOccupation.text : null,
+        property_details: _propertyDetails.text.isNotEmpty ? _propertyDetails.text : null,
+        degree: _educationDisplay,
+        institution: _educationDetails.text.isNotEmpty
+            ? _educationDetails.text
+            : "N/A",
+        education_start: _eduStart ?? "2000",
+        designation: _occupationDisplay,
+        company: _occupationDetails.text.isNotEmpty
+            ? _occupationDetails.text
+            : "N/A",
+        career_start: _careerStart ?? "2010",
+        annual_income: _annualIncomeDisplay,
+        gov_id_type: _govIdTypeDisplay,
+        gov_id_number: _govIdNumber.text.trim(),
+        address: _address.text.trim(),
+        district: distId,
         phone2: _mobile2.text.trim(),
         general_info: preferredCitiesText.isNotEmpty ? preferredCitiesText : null,
         manglik: _partnerManglik != null ? (_partnerManglik! ? '1' : '0') : null,

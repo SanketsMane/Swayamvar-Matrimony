@@ -188,31 +188,49 @@ class ProfileController extends Controller
         $user->mobile2 = $request->mobile2 ?? $user->mobile2;
         $user->save();
 
-        // --- Members Table (DOB, Marital Status) ---
+        // --- Members Table (DOB, Marital Status, Language, Introduction) ---
         $member = Member::where('user_id', $user->id)->first();
         if ($member) {
             if ($request->dob) {
                 $member->birthday = date('Y-m-d', strtotime($request->dob));
             }
             if ($request->marital_status) {
-                $maritalStatusObj = MaritalStatus::where('name', $request->marital_status)->first();
-                if ($maritalStatusObj) {
-                    $member->marital_status_id = $maritalStatusObj->id;
+                // Check if it's an ID (numeric) or a name
+                if (is_numeric($request->marital_status)) {
+                    $member->marital_status_id = $request->marital_status;
+                } else {
+                    $maritalStatusObj = MaritalStatus::where('name', $request->marital_status)->first();
+                    if ($maritalStatusObj) {
+                        $member->marital_status_id = $maritalStatusObj->id;
+                    }
                 }
             }
+            
+            // Sanket: Added Mother Tongue, Languages and Introduction for completeness
+            if ($request->mothere_tongue) {
+                $member->mothere_tongue = $request->mothere_tongue;
+            }
+            if ($request->known_languages) {
+                // Expected format: JSON array string or PHP array
+                $member->known_languages = is_array($request->known_languages) ? json_encode($request->known_languages) : $request->known_languages;
+            }
+            if ($request->introduction) {
+                $member->introduction = $request->introduction;
+            }
+            
             $member->save();
         }
 
         // --- Physical Attributes (Height, Weight, Blood Group, Complexion, Disability) ---
         $physical = PhysicalAttribute::firstOrNew(['user_id' => $user->id]);
-        $physical->height = $request->height ?? $physical->height;
-        $physical->weight = $request->weight ?? $physical->weight;
-        $physical->blood_group = $request->blood_group ?? $physical->blood_group;
-        $physical->complexion = $request->complexion ?? $physical->complexion;
+        if ($request->height) $physical->height = $request->height;
+        if ($request->weight) $physical->weight = $request->weight;
+        if ($request->blood_group) $physical->blood_group = $request->blood_group;
+        if ($request->complexion) $physical->complexion = $request->complexion;
         if ($request->has('physical_disability')) {
-            $physical->disability = $request->physical_disability;
+            $physical->disability = $request->physical_disability == 'true' || $request->physical_disability == 1;
         }
-        $physical->disability_details = $request->disability_details ?? $physical->disability_details;
+        if ($request->disability_details) $physical->disability_details = $request->disability_details;
         $physical->save();
 
         // --- Spiritual Background (Religion, Caste, Manglik, Intercaste) ---
@@ -246,19 +264,19 @@ class ProfileController extends Controller
 
         // --- Lifestyle (Diet) ---
         $lifestyle = Lifestyle::firstOrNew(['user_id' => $user->id]);
-        $lifestyle->diet = $request->diet ?? $lifestyle->diet;
+        if ($request->diet) $lifestyle->diet = $request->diet;
         $lifestyle->save();
 
         // --- Family Details ---
         $family = Family::firstOrNew(['user_id' => $user->id]);
         if ($request->has('father_alive')) $family->father_alive = ($request->father_alive == 'true' || $request->father_alive == 1);
         if ($request->has('mother_alive')) $family->mother_alive = ($request->mother_alive == 'true' || $request->mother_alive == 1);
-        $family->no_of_brothers = $request->no_of_brothers ?? $family->no_of_brothers;
-        $family->married_brothers = $request->married_brothers ?? $family->married_brothers;
-        $family->no_of_sisters = $request->no_of_sisters ?? $family->no_of_sisters;
-        $family->married_sisters = $request->married_sisters ?? $family->married_sisters;
-        $family->father = $request->parents_occupation ?? $family->father;
-        $family->property_details = $request->property_details ?? $family->property_details;
+        if ($request->no_of_brothers !== null) $family->no_of_brothers = $request->no_of_brothers;
+        if ($request->married_brothers !== null) $family->married_brothers = $request->married_brothers;
+        if ($request->no_of_sisters !== null) $family->no_of_sisters = $request->no_of_sisters;
+        if ($request->married_sisters !== null) $family->married_sisters = $request->married_sisters;
+        if ($request->parents_occupation) $family->father = $request->parents_occupation;
+        if ($request->property_details) $family->property_details = $request->property_details;
         $family->save();
 
         // --- Education & Occupation ---
@@ -276,10 +294,12 @@ class ProfileController extends Controller
         }
 
         // --- Address ---
-        if ($request->address || $request->city) {
+        if ($request->address || $request->city || $request->city_id) {
             $address = Address::firstOrNew(['user_id' => $user->id, 'type' => 'present']);
-            $address->postal_code = $request->address ?? $address->postal_code;
-            if ($request->city) {
+            if ($request->address) $address->postal_code = $request->address;
+            if ($request->city_id) {
+                $address->city_id = $request->city_id;
+            } elseif ($request->city) {
                 $cityObj = City::where('name', $request->city)->first();
                 if ($cityObj) $address->city_id = $cityObj->id;
             }
@@ -289,8 +309,8 @@ class ProfileController extends Controller
         // --- Partner Expectations ---
         $partner = PartnerExpectation::firstOrNew(['user_id' => $user->id]);
         if ($request->has('partner_manglik')) $partner->manglik = ($request->partner_manglik == 'true' || $request->partner_manglik == 1);
-        $partner->education = $request->expected_education ?? $partner->education;
-        $partner->income = $request->expected_income ?? $partner->income;
+        if ($request->expected_education) $partner->education = $request->expected_education;
+        if ($request->expected_income) $partner->income = $request->expected_income;
         if ($request->has('divorce_accepted')) $partner->divorce_accepted = ($request->divorce_accepted == 'true' || $request->divorce_accepted == 1);
         if ($request->has('partner_intercaste')) $partner->intercaste_accepted = ($request->partner_intercaste == 'true' || $request->partner_intercaste == 1);
         $partner->save();

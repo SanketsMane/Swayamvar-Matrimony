@@ -23,7 +23,7 @@ class PhysicalAttributes extends JsonResource
             'blood_group' => $this->blood_group,
             'body_type' => $this->body_type,
             'body_art' => $this->body_art,
-            'disability' => $this->disability,
+            'disability' => $this->disability ? 1 : 0,
         ];
     }
 }

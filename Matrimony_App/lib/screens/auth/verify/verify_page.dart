@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:flutter/foundation.dart';
 import 'package:active_matrimonial_flutter_app/l10n/app_localizations.dart';
 import 'package:active_matrimonial_flutter_app/const/my_theme.dart';
 import 'package:active_matrimonial_flutter_app/screens/core.dart';
@@ -403,7 +404,9 @@ class _VerifyPageState extends State<VerifyPage> {
                             )
                             : ClipRRect(
                               borderRadius: BorderRadius.circular(100),
-                              child: Image.file(v.selfie!, fit: BoxFit.cover),
+                              child: kIsWeb
+                                  ? Image.network(v.selfie!.path, fit: BoxFit.cover)
+                                  : Image.file(v.selfie!, fit: BoxFit.cover),
                             ),
                   ),
                 ),
@@ -495,7 +498,9 @@ class _VerifyPageState extends State<VerifyPage> {
                     )
                     : ClipRRect(
                       borderRadius: BorderRadius.circular(12),
-                      child: Image.file(file, fit: BoxFit.cover),
+                      child: kIsWeb
+                          ? Image.network(file.path, fit: BoxFit.cover)
+                          : Image.file(file, fit: BoxFit.cover),
                     ),
           ),
         ),
