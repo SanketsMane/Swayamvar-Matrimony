@@ -34,10 +34,10 @@
                         <td>{{$log->lead->name ?? ''}}</td>
                         <td>{{$log->agent->first_name ?? ''}}</td>
                         <td>
-                            <span class="badge badge-inline badge-info">{{$log->call_status}}</span>
+                            <span class="badge badge-inline badge-info">{{$log->status}}</span>
                         </td>
                         <td>{{$log->duration}}s</td>
-                        <td>{{$log->call_datetime->format('Y-m-d H:i')}}</td>
+                        <td>{{$log->call_time->format('Y-m-d H:i')}}</td>
                         <td>{{$log->notes}}</td>
                     </tr>
                 @endforeach
