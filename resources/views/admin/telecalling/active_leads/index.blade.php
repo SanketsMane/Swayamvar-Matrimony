@@ -36,6 +36,7 @@
                     <th>{{translate('Name')}}</th>
                     <th data-breakpoints="md">{{translate('Email')}}</th>
 					<th data-breakpoints="md">{{translate('Phone')}}</th>
+                    <th>{{translate('Campaign')}}</th>
                     <th>{{translate('Assigned To')}}</th>
                     <th>{{translate('Status')}}</th>
                     <th class="text-right">{{translate('Options')}}</th>
@@ -48,6 +49,7 @@
                         <td>{{$lead->name}}</td>
                         <td>{{$lead->email}}</td>
                         <td>{{$lead->mobile}}</td>
+                        <td>{{$lead->campaign->name ?? translate('No Campaign')}}</td>
                         <td>{{$lead->assigned_agent->first_name ?? translate('Unassigned')}}</td>
                         <td>
                             <span class="badge badge-inline badge-info">{{$lead->status}}</span>
