@@ -14,6 +14,7 @@ use App\Models\State;
 use App\Models\City;
 use App\Models\Religion;
 use App\Models\Caste;
+use App\Models\Chat;
 use App\Models\ChatThread;
 use App\Models\Education;
 use App\Models\ExpressInterest;
