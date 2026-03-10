@@ -43,6 +43,7 @@ class PartnerExpectationResource extends JsonResource
             'caste_id' =>  $caste ?  $caste->name : '',
             'sub_caste_id' => $sub_caste ? $sub_caste->name : '',
             'education' => $this->education,
+            'expected_education' => $this->education, // Alias for expected_education
             'profession' => $this->profession,
             'smoking_acceptable' => ($this->smoking_acceptable),
             'drinking_acceptable' => ($this->drinking_acceptable),
@@ -50,11 +51,16 @@ class PartnerExpectationResource extends JsonResource
             'body_type' => $this->body_type,
             'personal_value' => $this->personal_value,
             'manglik' => ($this->manglik),
+            'partner_manglik' => ($this->manglik), // Alias for partner_manglik
             'language' => $language ? $language->name : null,
             'family_value_id' => $family_value ? $family_value->name : '',
             'preferred_country_id' => $preferred_country ? $preferred_country->name : '',
             'preferred_state_id' => $preferred_state ? $preferred_state->name : '',
             'complexion' => $this->complexion,
+            // Sanket: Newly added 44-field profile columns
+            'expected_income' => $this->income,
+            'divorce_accepted' => $this->divorce_accepted,
+            'intercaste_accepted' => $this->intercaste_accepted,
         ];
     }
 }

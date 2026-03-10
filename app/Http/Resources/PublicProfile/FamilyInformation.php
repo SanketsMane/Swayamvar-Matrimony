@@ -19,6 +19,13 @@ class FamilyInformation extends JsonResource
             'mother'            => $this->mother,
             'sibling'           => $this->sibling,
             // Sanket: Newly added 44-field profile columns for family section
+            'father_alive'      => $this->father_alive,
+            'mother_alive'      => $this->mother_alive,
+            'no_of_brothers'    => $this->no_of_brothers,
+            'married_brothers'  => $this->married_brothers,
+            'no_of_sisters'     => $this->no_of_sisters,
+            'married_sisters'   => $this->married_sisters,
+            'property_details'  => $this->property_details,
             'father_occupation' => $this->father_occupation,
             'mother_occupation' => $this->mother_occupation,
             'family_income'     => $this->family_income,

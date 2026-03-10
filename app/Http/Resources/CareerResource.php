@@ -21,6 +21,9 @@ class CareerResource extends JsonResource
             'start' => $this->start ? $this->start : '',
             'end' => $this->end ? $this->end : '',
             'present' => $this->present == 1 ? true : false,
+            // Sanket: Newly added 44-field profile columns
+            'income' => $this->income ?? '',
+            'occupation_details' => $this->occupation_details ?? '',
         ];
     }
 }
