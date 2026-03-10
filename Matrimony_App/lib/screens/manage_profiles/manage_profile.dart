@@ -107,6 +107,9 @@ class _MyProfileState extends State<MyProfile> {
   String? _dietDisplay;
   bool? _manglik; // null = not answered
   bool? _intercasteAccepted; // null = not answered
+  String? _noOfChildren; // Added by Sanket for married/divorced/widow
+  String? _eduStart; // Added by Sanket to avoid hardcoded 0
+  String? _careerStart; // Added by Sanket to avoid hardcoded 0
 
   // =========================================================================
   // STEP 2: Family, Education, Occupation
@@ -153,13 +156,14 @@ class _MyProfileState extends State<MyProfile> {
   }
 
   Map<String, String> get _incomeOptions {
+    final loc = AppLocalizations.of(context)!;
     return {
-      '0–2 लाख': '0-2 Lakh',
-      '2–5 लाख': '2-5 Lakh',
-      '5–10 लाख': '5-10 Lakh',
-      '10-20 लाख': '10-20 Lakh',
-      '20-50 लाख': '20-50 Lakh',
-      '50 लाख+': '50 Lakh+',
+      loc.income_0_2: '0-2 Lakh',
+      loc.income_2_5: '2-5 Lakh',
+      loc.income_5_10: '5-10 Lakh',
+      loc.income_10_20: '10-20 Lakh',
+      loc.income_20_50: '20-50 Lakh',
+      loc.income_50_plus: '50 Lakh+',
     };
   }
 
@@ -173,12 +177,13 @@ class _MyProfileState extends State<MyProfile> {
   // STEP 3: Contact & Photos
   // =========================================================================
   Map<String, String> get _govIdOptions {
+    final loc = AppLocalizations.of(context)!;
     return {
-      'आधार': 'aadhaar',
-      'PAN': 'pan',
-      'ड्रायव्हिंग लायसन्स': 'driving_license',
-      'पासपोर्ट': 'passport',
-      'मतदान कार्ड': 'voter_id',
+      loc.gov_id_aadhaar: 'aadhaar',
+      loc.gov_id_pan: 'pan',
+      loc.gov_id_dl: 'driving_license',
+      loc.gov_id_passport: 'passport',
+      loc.gov_id_voter: 'voter_id',
     };
   }
   // Sanket: Removed hardcoded _districtOptions; now fetched from API
@@ -373,6 +378,9 @@ class _MyProfileState extends State<MyProfile> {
                 .firstOrNull;
           }
           _mobile1.text = d.phone ?? '';
+          if (d.noOfChildren != null) {
+            _noOfChildren = d.noOfChildren.toString();
+          }
         }
 
         // ---- Physical attributes ----
@@ -417,6 +425,7 @@ class _MyProfileState extends State<MyProfile> {
               .map((item) => item.value) // Store stable API value
               .firstOrNull ?? e.degree;
           _educationDetails.text = e.institution ?? '';
+          _eduStart = e.start;
         }
 
         // ---- Career ----
@@ -428,6 +437,14 @@ class _MyProfileState extends State<MyProfile> {
               .map((item) => item.value) // Store stable API value
               .firstOrNull ?? c.designation;
           _occupationDetails.text = c.company ?? '';
+          _careerStart = c.start;
+          if (c.annualIncome != null) {
+            final target = c.annualIncome!.toLowerCase();
+             _annualIncomeDisplay = _incomeOptions.entries
+                .where((e) => e.value.toLowerCase() == target || e.key.toLowerCase() == target)
+                .map((e) => e.value)
+                .firstOrNull ?? c.annualIncome;
+          }
         }
 
         // ---- Address & District ----
@@ -440,6 +457,14 @@ class _MyProfileState extends State<MyProfile> {
                 .where((e) => e.name?.toLowerCase() == targetCity || e.id.toString() == targetCity)
                 .map((e) => e.name)
                 .firstOrNull ?? a.city;
+          }
+          if (a.govIdType != null) {
+            final target = a.govIdType!.toLowerCase();
+            _govIdTypeDisplay = _govIdOptions.entries
+                .where((e) => e.value.toLowerCase() == target || e.key.toLowerCase() == target)
+                .map((e) => e.value)
+                .firstOrNull ?? a.govIdType;
+            _govIdNumber.text = a.govIdNumber ?? '';
           }
         }
 
@@ -688,12 +713,12 @@ class _MyProfileState extends State<MyProfile> {
         institution: _educationDetails.text.isNotEmpty
             ? _educationDetails.text
             : "N/A",
-        education_start: 0,
+        education_start: _eduStart ?? "2000",
         designation: _occupationDisplay,
         company: _occupationDetails.text.isNotEmpty
             ? _occupationDetails.text
             : "N/A",
-        career_start: 0,
+        career_start: _careerStart ?? "2010",
         annual_income: _annualIncomeDisplay,
         gov_id_type: _govIdTypeDisplay,
         gov_id_number: _govIdNumber.text.trim(),
@@ -705,6 +730,7 @@ class _MyProfileState extends State<MyProfile> {
         partner_religion_id: _partnerReligionId,
         partner_caste_id: _partnerCasteId,
         partner_sub_caste_id: _partnerSubCasteId,
+        no_of_children: (_maritalStatusDisplay != null && _maritalStatusDisplay != "Unmarried") ? _noOfChildren : null,
         education_expectation: _expectedEducationDisplay,
         expected_income: _expectedIncomeDisplay,
         children_acceptable: _divorceAccepted != null ? (_divorceAccepted! ? '1' : '0') : null,
@@ -1009,6 +1035,14 @@ class _MyProfileState extends State<MyProfile> {
         (v) => setState(() => _maritalStatusDisplay = v),
         isRequired: true,
       ),
+      if (_maritalStatusDisplay != null && _maritalStatusDisplay != "Unmarried")
+        _buildMappedDropdown(
+          "Number of Children",
+          Map.fromEntries(List.generate(11, (i) => MapEntry(i.toString(), i.toString()))),
+          _noOfChildren,
+          (v) => setState(() => _noOfChildren = v),
+          isRequired: true,
+        ),
 
       const SizedBox(height: 16),
       _sectionTitle(AppLocalizations.of(context)!.profile_section_physical),

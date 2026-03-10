@@ -500,6 +500,17 @@
   "occupation_engineer": "इंजिनिअर",
   "occupation_defense": "संरक्षण सेवा",
   "occupation_retired": "निवृत्त",
+  "income_0_2": "०-२ लाख",
+  "income_2_5": "२-५ लाख",
+  "income_5_10": "५-१० लाख",
+  "income_10_20": "१०-२० लाख",
+  "income_20_50": "२०-५० लाख",
+  "income_50_plus": "५० लाख+",
+  "gov_id_aadhaar": "आधार",
+  "gov_id_pan": "PAN",
+  "gov_id_dl": "ड्रायव्हिंग लायसन्स",
+  "gov_id_passport": "पासपोर्ट",
+  "gov_id_voter": "मतदान कार्ड",
   "occupation_not_working": "नोकरी नाही",
   "occupation_other_occ": "इतर"
 }

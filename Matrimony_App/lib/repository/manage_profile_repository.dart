@@ -63,6 +63,7 @@ class ManageProfileRepository {
     dynamic caste,
     dynamic caste_id,
     dynamic sub_caste_id,
+    dynamic no_of_children,
     dynamic diet,
     dynamic personal_manglik,
     dynamic intercaste_accepted,
@@ -124,6 +125,8 @@ class ManageProfileRepository {
         "caste": caste,
         "caste_id": caste_id,
         "sub_caste_id": sub_caste_id,
+        "no_of_children": no_of_children,
+        "children": no_of_children, // Redundant key for compatibility
         "diet": diet,
         "manglik_personal": personal_manglik,
         "intercaste_accepted": intercaste_accepted,
@@ -138,9 +141,11 @@ class ManageProfileRepository {
         "property_details": property_details,
 
         "education_level": degree,
+        "degree": degree, // Redundant key for compatibility
         "institution": institution,
         "education_start": education_start,
         "occupation_type": designation,
+        "designation": designation, // Redundant key for compatibility
         "company": company,
         "career_start": career_start,
         "annual_income": annual_income,

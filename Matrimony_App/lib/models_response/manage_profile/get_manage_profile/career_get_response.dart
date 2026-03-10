@@ -106,6 +106,7 @@ class Data {
     this.start,
     this.end,
     this.present,
+    this.annualIncome,
   });
 
   int? id;
@@ -114,6 +115,7 @@ class Data {
   String? start;
   dynamic end;
   bool? present;
+  String? annualIncome;
 
   factory Data.fromJson(Map<String, dynamic> json) => Data(
     id:
@@ -135,6 +137,7 @@ class Data {
             : json["start"]?.toString() ?? "",
     end: json["end"] is String ? json["end"] : json["end"]?.toString() ?? "",
     present: json["present"] ?? false,
+    annualIncome: json["annual_income"]?.toString(),
   );
 
   Map<String, dynamic> toJson() => {
@@ -144,5 +147,6 @@ class Data {
     "start": start,
     "end": end,
     "present": present,
+    "annual_income": annualIncome,
   };
 }
