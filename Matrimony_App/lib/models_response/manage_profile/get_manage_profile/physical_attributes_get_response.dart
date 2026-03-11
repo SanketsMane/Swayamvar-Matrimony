@@ -61,7 +61,7 @@ class PhysicalAttrData {
         bloodGroup: json["blood_group"],
         bodyType: json["body_type"],
         bodyArt: json["body_art"],
-        disability: json["disability"],
+        disability: json["disability"]?.toString(),
       );
 
   Map<String, dynamic> toJson() => {

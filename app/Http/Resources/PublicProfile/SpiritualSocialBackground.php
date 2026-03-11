@@ -23,15 +23,15 @@ class SpiritualSocialBackground extends JsonResource
         $sub_caste = SubCaste::find($this->sub_caste_id);
         $family_value = FamilyValue::find($this->family_value_id);
         return [
-            'religion_id'    => $this->religion_id ? (int)$this->religion_id : '',
+            'religion_id'    => $this->religion_id ? (int)$this->religion_id : null,
             'religion'       => $religion ? $religion->name : '',
-            'caste_id'       => $this->caste_id ? (int)$this->caste_id : '',
+            'caste_id'       => $this->caste_id ? (int)$this->caste_id : null,
             'caste'          => $caste ? $caste->name : '',
-            'sub_caste_id'   => $this->sub_caste_id ? (int)$this->sub_caste_id : '',
+            'sub_caste_id'   => $this->sub_caste_id ? (int)$this->sub_caste_id : null,
             'sub_caste'      => $sub_caste ? $sub_caste->name : '',
             'ethnicity'      => $this->ethnicity,
             'personal_value' => $this->personal_value,
-            'family_value_id'=> $this->family_value_id ? (int)$this->family_value_id : '',
+            'family_value_id'=> $this->family_value_id ? (int)$this->family_value_id : null,
             'family_value'   => $family_value ? $family_value->name : '',
             'community_value'=> $this->community_value,
             // Sanket: Newly added 44-field profile columns

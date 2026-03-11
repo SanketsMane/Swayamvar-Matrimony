@@ -53,12 +53,12 @@ class Data {
   dynamic intercaste;
 
   factory Data.fromJson(Map<String, dynamic> json) => Data(
-        religionId: json["religion_id"],
-        casteId: json["caste_id"],
-        subCasteId: json["sub_caste_id"],
+        religionId: json["religion_id"]?.toString(),
+        casteId: json["caste_id"]?.toString(),
+        subCasteId: json["sub_caste_id"]?.toString(),
         ethnicity: json["ethnicity"],
         personalValue: json["personal_value"],
-        familyValueId: json["family_value_id"],
+        familyValueId: json["family_value_id"]?.toString(),
         communityValue: json["community_value"],
         manglik: json["manglik"],
         intercaste: json["intercaste"],

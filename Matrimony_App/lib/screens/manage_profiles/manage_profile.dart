@@ -563,10 +563,10 @@ class _MyProfileState extends State<MyProfile> {
         if (spiRes.data != null) {
           final s = spiRes.data!;
           if (s.manglik != null) {
-            _manglik = s.manglik == '1' || s.manglik.toString().toLowerCase() == 'yes';
+            _manglik = s.manglik.toString() == '1' || s.manglik.toString().toLowerCase() == 'yes';
           }
           if (s.intercaste != null) {
-            _intercasteAccepted = s.intercaste == '1' || s.intercaste.toString().toLowerCase() == 'yes';
+            _intercasteAccepted = s.intercaste.toString() == '1' || s.intercaste.toString().toLowerCase() == 'yes';
           }
         }
 
@@ -736,49 +736,6 @@ class _MyProfileState extends State<MyProfile> {
     try {
       final preferredCitiesText = _preferredCitiesCtrl.text.trim();
 
-      // Sanket: Use Atomic Update (B-001) - send all text data in one request
-      final response = await repo.fullProfileUpdate(
-        f_name: _firstName.text.trim(),
-        middle_name: _middleName.text.trim(),
-        l_name: _surname.text.trim(),
-        dob: _dob != null ? DateFormat('yyyy-MM-dd').format(_dob!) : '',
-        phone: _mobile1.text.trim(),
-        m_status: _maritalStatusDisplay,
-        height: _heightDisplay,
-        weight: _weight.text.isNotEmpty ? _weight.text : null,
-        complexion: _complexionDisplay,
-        blood_group: _bloodGroupDisplay,
-        disability: _physicalDisability == true ? _disabilityDetails.text : "None",
-        religion: _religionDisplay,
-        religion_id: _selectedReligionId,
-        caste: _casteDisplay,
-        caste_id: _selectedCasteId,
-        sub_caste_id: _selectedSubCasteId,
-        diet: _dietDisplay,
-        personal_manglik: _manglik != null ? (_manglik! ? '1' : '0') : null,
-        intercaste_accepted: _intercasteAccepted != null ? (_intercasteAccepted! ? '1' : '0') : null,
-        father: _fatherAlive == true ? 'Alive' : 'Deceased',
-        mother: _motherAlive == true ? 'Alive' : 'Deceased',
-        brothers: _noOfBrothers ?? '0',
-        married_brothers: _marriedBrothers ?? '0',
-        sisters: _noOfSisters ?? '0',
-        married_sisters: _marriedSisters ?? '0',
-        parents_occupation: _parentsOccupation.text.isNotEmpty ? _parentsOccupation.text : null,
-        property_details: _propertyDetails.text.isNotEmpty ? _propertyDetails.text : null,
-        degree: _educationDisplay,
-        institution: _educationDetails.text.isNotEmpty
-            ? _educationDetails.text
-            : "N/A",
-        education_start: _eduStart ?? "2000",
-        designation: _occupationDisplay,
-        company: _occupationDetails.text.isNotEmpty
-            ? _occupationDetails.text
-            : "N/A",
-        career_start: _careerStart ?? "2010",
-        annual_income: _annualIncomeDisplay,
-        gov_id_type: _govIdTypeDisplay,
-        gov_id_number: _govIdNumber.text.trim(),
-        address: _address.text.trim(),
       final distId = _districtList.where((e) => e.name == _districtDisplay).map((e) => e.id).firstOrNull;
       debugPrint('Sanket: Submitting form with District ID: $distId for name: $_districtDisplay');
 

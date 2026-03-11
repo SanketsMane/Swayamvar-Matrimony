@@ -21,11 +21,11 @@ class AddressResource extends JsonResource
         $state = State::find($this->state_id);
         $city = City::find($this->city_id);
         return [
-            'country_id' => $this->country_id ? (int)$this->country_id : '',
+            'country_id' => $this->country_id ? (int)$this->country_id : null,
             'country'=> $country ? $country->name : '',
-            'state_id' => $this->state_id ? (int)$this->state_id : '',
+            'state_id' => $this->state_id ? (int)$this->state_id : null,
             'state'=> $state ? $state->name : '',
-            'city_id' => $this->city_id ? (int)$this->city_id : '',
+            'city_id' => $this->city_id ? (int)$this->city_id : null,
             'city'=> $city ? $city->name : '',
             'postal_code'=> $this->postal_code,
             'gov_id_type' => $this->user ? $this->user->gov_id_type : '',
