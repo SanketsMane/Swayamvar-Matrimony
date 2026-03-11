@@ -24,19 +24,10 @@ class _VerifyPageState extends State<VerifyPage> {
     final v = state.userVerifyState!;
 
     if (_currentPage == 0) {
-      // Sanket: Bug 6 — Step 1 validation: ID number and front image required
+      // Sanket: Step 1 — only ID type and ID number are required; documents are optional
       if (v.idNumber.trim().isEmpty) {
         store.dispatch(
           ShowMessageAction(msg: l.verify_error_id_number, color: MyTheme.failure),
-        );
-        return;
-      }
-      if (v.idFront == null && v.idFrontBytes == null) {
-        store.dispatch(
-          ShowMessageAction(
-            msg: "Please upload the front side of your ID.",
-            color: MyTheme.failure,
-          ),
         );
         return;
       }
