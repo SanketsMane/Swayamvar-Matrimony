@@ -1,5 +1,8 @@
 import 'dart:io';
+import 'dart:typed_data';
+import 'package:flutter/material.dart';
 
+// Sanket: UserVerifyState holds all 3-step verification data
 class UserVerifyState {
   bool? isFetching;
   bool? isApprove;
@@ -11,13 +14,22 @@ class UserVerifyState {
   String? adminMessage;
 
   // 3-Step Verification Data
-  String idType = 'Aadhaar';
-  String idNumber = '';
+  String idType;
+  String idNumber;
+
+  // Sanket: Controller keeps TextFormField in sync with Redux state across re-navigations (Bug 2)
+  TextEditingController idNumberController;
+
   File? idFront;
   File? idBack;
   File? selfie;
 
-  bool isSubmitting = false;
+  // Sanket: Byte buffers for Web rendering — Flutter Web cannot render File via Image.file (Bug 3)
+  Uint8List? idFrontBytes;
+  Uint8List? idBackBytes;
+  Uint8List? selfieBytes;
+
+  bool isSubmitting;
 
   UserVerifyState({
     this.isFetching,
@@ -27,19 +39,26 @@ class UserVerifyState {
     this.adminMessage,
     this.idType = 'Aadhaar',
     this.idNumber = '',
+    TextEditingController? idNumberController,
     this.idFront,
     this.idBack,
     this.selfie,
+    this.idFrontBytes,
+    this.idBackBytes,
+    this.selfieBytes,
     this.isSubmitting = false,
-  });
+  }) : idNumberController = idNumberController ?? TextEditingController();
 
   UserVerifyState.initialState()
-    : isApprove = false,
-      verificationInfo = false,
-      isFetching = false,
-      verificationStatus = null,
-      adminMessage = null,
-      isSubmitting = false;
+      : isApprove = false,
+        verificationInfo = false,
+        isFetching = false,
+        verificationStatus = null,
+        adminMessage = null,
+        idType = 'Aadhaar',
+        idNumber = '',
+        idNumberController = TextEditingController(),
+        isSubmitting = false;
 
   @override
   String toString() {
@@ -61,5 +80,3 @@ class VerificationModel<T> {
     this.options,
   });
 }
-
-

@@ -1,3 +1,4 @@
+import 'dart:typed_data';
 import 'package:active_matrimonial_flutter_app/app_config.dart';
 import 'package:active_matrimonial_flutter_app/helpers/main_helpers.dart';
 import 'package:active_matrimonial_flutter_app/models_response/others/common_response.dart';
@@ -23,12 +24,16 @@ class VerifyRepository {
     }
   }
 
+  // Sanket: Bug 3 — accepts both File paths (mobile) and bytes (Web)
   Future<CommonResponse> submitVerifyForm({
     required String idType,
     required String idNumber,
     dynamic idFront,
     dynamic idBack,
     dynamic selfie,
+    Uint8List? idFrontBytes,
+    Uint8List? idBackBytes,
+    Uint8List? selfieBytes,
   }) async {
     try {
       var url = Uri.parse(
@@ -44,40 +49,41 @@ class VerifyRepository {
       request.fields['id_type'] = idType;
       request.fields['id_number'] = idNumber;
 
-      if (idFront != null) {
-        if (kIsWeb) {
+      // Sanket: Web uses bytes; mobile uses file path
+      if (kIsWeb) {
+        if (idFrontBytes != null) {
           request.files.add(http.MultipartFile.fromBytes(
             'id_front',
-            await idFront.readAsBytes(),
-            filename: idFront.name,
+            idFrontBytes,
+            filename: 'id_front.jpg',
           ));
-        } else {
+        }
+        if (idBackBytes != null) {
+          request.files.add(http.MultipartFile.fromBytes(
+            'id_back',
+            idBackBytes,
+            filename: 'id_back.jpg',
+          ));
+        }
+        if (selfieBytes != null) {
+          request.files.add(http.MultipartFile.fromBytes(
+            'selfie',
+            selfieBytes,
+            filename: 'selfie.jpg',
+          ));
+        }
+      } else {
+        if (idFront != null) {
           request.files.add(
             await http.MultipartFile.fromPath('id_front', idFront.path),
           );
         }
-      }
-      if (idBack != null) {
-        if (kIsWeb) {
-          request.files.add(http.MultipartFile.fromBytes(
-            'id_back',
-            await idBack.readAsBytes(),
-            filename: idBack.name,
-          ));
-        } else {
+        if (idBack != null) {
           request.files.add(
             await http.MultipartFile.fromPath('id_back', idBack.path),
           );
         }
-      }
-      if (selfie != null) {
-        if (kIsWeb) {
-          request.files.add(http.MultipartFile.fromBytes(
-            'selfie',
-            await selfie.readAsBytes(),
-            filename: selfie.name,
-          ));
-        } else {
+        if (selfie != null) {
           request.files.add(
             await http.MultipartFile.fromPath('selfie', selfie.path),
           );

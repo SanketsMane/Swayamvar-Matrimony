@@ -1,4 +1,6 @@
 import 'dart:io';
+import 'dart:typed_data';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:image_picker/image_picker.dart';
@@ -22,17 +24,20 @@ class SetVerifyIdNumber {
 
 class SetVerifyIdFront {
   File? payload;
-  SetVerifyIdFront({this.payload});
+  Uint8List? bytes; // Sanket: Web bytes for Image.memory rendering (Bug 3)
+  SetVerifyIdFront({this.payload, this.bytes});
 }
 
 class SetVerifyIdBack {
   File? payload;
-  SetVerifyIdBack({this.payload});
+  Uint8List? bytes; // Sanket: Web bytes for Image.memory rendering (Bug 3)
+  SetVerifyIdBack({this.payload, this.bytes});
 }
 
 class SetVerifySelfie {
   File? payload;
-  SetVerifySelfie({this.payload});
+  Uint8List? bytes; // Sanket: Web bytes for Image.memory rendering (Bug 3)
+  SetVerifySelfie({this.payload, this.bytes});
 }
 
 class SetVerifySubmitting {
@@ -50,23 +55,33 @@ class SetVerifyIsFetching {
   SetVerifyIsFetching(this.payload);
 }
 
+// Sanket: Bug 8 — Use gallery on Web (camera unsupported), and store bytes for Web rendering (Bug 3)
 ThunkAction<AppState> pickVerifyImage(String type) {
   return (Store<AppState> store) async {
     final ImagePicker picker = ImagePicker();
+
+    // Sanket: On Web, camera is not supported — always use gallery
+    final ImageSource source =
+        (!kIsWeb && type == 'selfie') ? ImageSource.camera : ImageSource.gallery;
+
     final XFile? image = await picker.pickImage(
-      source: type == 'selfie' ? ImageSource.camera : ImageSource.gallery,
+      source: source,
       maxWidth: 1000,
       maxHeight: 1000,
       imageQuality: 85,
     );
+
     if (image != null) {
-      File file = File(image.path);
+      // Sanket: On Web, read bytes for Image.memory; on mobile use File (Bug 3)
+      final Uint8List? bytes = kIsWeb ? await image.readAsBytes() : null;
+      final File file = File(image.path);
+
       if (type == 'front') {
-        store.dispatch(SetVerifyIdFront(payload: file));
+        store.dispatch(SetVerifyIdFront(payload: file, bytes: bytes));
       } else if (type == 'back') {
-        store.dispatch(SetVerifyIdBack(payload: file));
+        store.dispatch(SetVerifyIdBack(payload: file, bytes: bytes));
       } else if (type == 'selfie') {
-        store.dispatch(SetVerifySelfie(payload: file));
+        store.dispatch(SetVerifySelfie(payload: file, bytes: bytes));
       }
     }
   };
@@ -77,7 +92,8 @@ ThunkAction<AppState> submitVerifyFormAction(BuildContext context) {
     final l = AppLocalizations.of(context)!;
     final state = store.state.userVerifyState!;
 
-    if (state.idNumber.isEmpty) {
+    // Sanket: Validate ID number before submitting (Bug 6 — validation at submit level)
+    if (state.idNumber.trim().isEmpty) {
       store.dispatch(
         ShowMessageAction(
           msg: l.verify_error_id_number,
@@ -87,17 +103,18 @@ ThunkAction<AppState> submitVerifyFormAction(BuildContext context) {
       return;
     }
 
-    // Sanket: Images (idFront, idBack, selfie) are optional — submit whatever the user provides
-
     store.dispatch(SetVerifySubmitting(true));
 
     try {
       var res = await VerifyRepository().submitVerifyForm(
         idType: state.idType,
-        idNumber: state.idNumber,
-        idFront: state.idFront,
-        idBack: state.idBack,
-        selfie: state.selfie,
+        idNumber: state.idNumber.trim(),
+        idFront: kIsWeb ? null : state.idFront,
+        idBack: kIsWeb ? null : state.idBack,
+        selfie: kIsWeb ? null : state.selfie,
+        idFrontBytes: kIsWeb ? state.idFrontBytes : null,
+        idBackBytes: kIsWeb ? state.idBackBytes : null,
+        selfieBytes: kIsWeb ? state.selfieBytes : null,
       );
 
       store.dispatch(
@@ -108,7 +125,10 @@ ThunkAction<AppState> submitVerifyFormAction(BuildContext context) {
       );
 
       if (res.result) {
-        store.dispatch(getUserIsApproveAction());
+        // Sanket: Bug 9 — Guard before is-approved call
+        if (getToken != null && getToken!.isNotEmpty) {
+          store.dispatch(getUserIsApproveAction());
+        }
         if (context.mounted) {
           Navigator.pop(context);
         }
@@ -128,6 +148,11 @@ ThunkAction<AppState> submitVerifyFormAction(BuildContext context) {
 
 ThunkAction<AppState> getUserIsApproveAction() {
   return (Store<AppState> store) async {
+    // Sanket: Bug 9 — Guard against missing token
+    if (getToken == null || getToken!.isEmpty) {
+      debugPrint("Sanket: getUserIsApproveAction — token is empty, skipping.");
+      return;
+    }
     store.dispatch(SetVerifyIsFetching(true));
     try {
       var baseUrl = "${AppConfig.BASE_URL}/member/is-approved";
@@ -139,8 +164,12 @@ ThunkAction<AppState> getUserIsApproveAction() {
           "Authorization": "Bearer $getToken",
         },
       );
-      var data = isApprovedResponseFromJson(response.body);
-      store.dispatch(IsApprovedAction(payload: data));
+      if (response.statusCode == 200) {
+        var data = isApprovedResponseFromJson(response.body);
+        store.dispatch(IsApprovedAction(payload: data));
+      } else {
+        debugPrint("Sanket: getUserIsApproveAction — HTTP ${response.statusCode}");
+      }
     } catch (e) {
       debugPrint(e.toString());
     } finally {

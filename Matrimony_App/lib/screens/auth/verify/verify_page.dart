@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'dart:typed_data';
 import 'package:flutter/foundation.dart';
 import 'package:active_matrimonial_flutter_app/l10n/app_localizations.dart';
 import 'package:active_matrimonial_flutter_app/const/my_theme.dart';
@@ -18,7 +19,40 @@ class _VerifyPageState extends State<VerifyPage> {
   final PageController _pageController = PageController();
   int _currentPage = 0;
 
-  void _nextPage() {
+  // Sanket: Bug 6 & 7 — validate before advancing to next step
+  void _handleNext(AppState state, AppLocalizations l) {
+    final v = state.userVerifyState!;
+
+    if (_currentPage == 0) {
+      // Sanket: Bug 6 — Step 1 validation: ID number and front image required
+      if (v.idNumber.trim().isEmpty) {
+        store.dispatch(
+          ShowMessageAction(msg: l.verify_error_id_number, color: MyTheme.failure),
+        );
+        return;
+      }
+      if (v.idFront == null && v.idFrontBytes == null) {
+        store.dispatch(
+          ShowMessageAction(
+            msg: "Please upload the front side of your ID.",
+            color: MyTheme.failure,
+          ),
+        );
+        return;
+      }
+    } else if (_currentPage == 1) {
+      // Sanket: Bug 7 — Step 2 validation: selfie required
+      if (v.selfie == null && v.selfieBytes == null) {
+        store.dispatch(
+          ShowMessageAction(
+            msg: "Please take a selfie to continue.",
+            color: MyTheme.failure,
+          ),
+        );
+        return;
+      }
+    }
+
     if (_currentPage < 2) {
       _pageController.nextPage(
         duration: const Duration(milliseconds: 300),
@@ -47,12 +81,12 @@ class _VerifyPageState extends State<VerifyPage> {
       },
       builder: (_, state) {
         final v = state.userVerifyState!;
-        
-        // Define colors and icons based on status
+
+        // Sanket: Resolve status display properties
         Color statusColor = MyTheme.app_accent_color;
         IconData statusIcon = Icons.info_outline;
         String statusText = "Pending Review";
-        
+
         if (v.verificationStatus == 'approved') {
           statusColor = Colors.green;
           statusIcon = Icons.check_circle;
@@ -72,7 +106,7 @@ class _VerifyPageState extends State<VerifyPage> {
           appBar: _buildHeader(context, l),
           body: Column(
             children: [
-              // Sanket: Status Banner
+              // Sanket: Status banner shown when verification has been submitted
               if (v.verificationInfo == true || v.verificationStatus != null)
                 Container(
                   width: double.infinity,
@@ -96,8 +130,10 @@ class _VerifyPageState extends State<VerifyPage> {
                   ),
                 ),
 
-              // Sanket: Admin Message Banner
-              if (v.adminMessage != null && v.adminMessage!.isNotEmpty && (v.verificationStatus == 'rejected' || v.verificationStatus == 'query'))
+              // Sanket: Admin message for rejected or query status
+              if (v.adminMessage != null &&
+                  v.adminMessage!.isNotEmpty &&
+                  (v.verificationStatus == 'rejected' || v.verificationStatus == 'query'))
                 Container(
                   width: double.infinity,
                   padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
@@ -141,47 +177,47 @@ class _VerifyPageState extends State<VerifyPage> {
                 ),
                 _buildBottomNav(context, state, l),
               ] else if (v.verificationStatus == 'approved') ...[
-                 Expanded(
-                    child: Center(
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Icon(Icons.verified, size: 80, color: Colors.green),
-                          SizedBox(height: 16),
-                          Text(
-                            "Your profile is fully verified!",
-                            style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-                          ),
-                          SizedBox(height: 8),
-                          Text(
-                            "You are now visible to other members.",
-                            style: TextStyle(color: MyTheme.text_secondary),
-                          ),
-                        ],
-                      ),
+                Expanded(
+                  child: Center(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        const Icon(Icons.verified, size: 80, color: Colors.green),
+                        const SizedBox(height: 16),
+                        const Text(
+                          "Your profile is fully verified!",
+                          style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                        ),
+                        const SizedBox(height: 8),
+                        Text(
+                          "You are now visible to other members.",
+                          style: TextStyle(color: MyTheme.text_secondary),
+                        ),
+                      ],
                     ),
-                  )
+                  ),
+                ),
               ] else if (v.verificationStatus == 'pending' || v.verificationInfo == true) ...[
-                  Expanded(
-                    child: Center(
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Icon(Icons.hourglass_empty, size: 80, color: MyTheme.app_accent_color),
-                          SizedBox(height: 16),
-                          Text(
-                            "Verification in Progress",
-                            style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-                          ),
-                          SizedBox(height: 8),
-                          Text(
-                            "Our team is reviewing your documents.",
-                            style: TextStyle(color: MyTheme.text_secondary),
-                          ),
-                        ],
-                      ),
+                Expanded(
+                  child: Center(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Icon(Icons.hourglass_empty, size: 80, color: MyTheme.app_accent_color),
+                        const SizedBox(height: 16),
+                        const Text(
+                          "Verification in Progress",
+                          style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                        ),
+                        const SizedBox(height: 8),
+                        Text(
+                          "Our team is reviewing your documents.",
+                          style: TextStyle(color: MyTheme.text_secondary),
+                        ),
+                      ],
                     ),
-                  )
+                  ),
+                ),
               ],
             ],
           ),
@@ -227,6 +263,9 @@ class _VerifyPageState extends State<VerifyPage> {
   }
 
   Widget _stepIndicator(int step, String label, bool isActive) {
+    // Sanket: Bug 4 — only show checkmark for COMPLETED steps (step < currentPage + 1), not the current step
+    final bool isCompleted = _currentPage >= step;
+
     return Column(
       children: [
         AnimatedContainer(
@@ -236,28 +275,26 @@ class _VerifyPageState extends State<VerifyPage> {
           decoration: BoxDecoration(
             color: isActive ? MyTheme.primary : MyTheme.solitude,
             shape: BoxShape.circle,
-            boxShadow:
-                isActive
-                    ? [
-                      BoxShadow(
-                        color: MyTheme.primary.withOpacity(0.3),
-                        blurRadius: 8,
-                        offset: const Offset(0, 4),
-                      ),
-                    ]
-                    : [],
+            boxShadow: isActive
+                ? [
+                    BoxShadow(
+                      color: MyTheme.primary.withOpacity(0.3),
+                      blurRadius: 8,
+                      offset: const Offset(0, 4),
+                    ),
+                  ]
+                : [],
           ),
           child: Center(
-            child:
-                isActive && _currentPage > step - 1
-                    ? const Icon(Icons.check, color: Colors.white, size: 16)
-                    : Text(
-                      "$step",
-                      style: TextStyle(
-                        color: isActive ? Colors.white : MyTheme.text_secondary,
-                        fontWeight: FontWeight.bold,
-                      ),
+            child: isCompleted
+                ? const Icon(Icons.check, color: Colors.white, size: 16) // Sanket: Bug 4 fixed
+                : Text(
+                    "$step",
+                    style: TextStyle(
+                      color: isActive ? Colors.white : MyTheme.text_secondary,
+                      fontWeight: FontWeight.bold,
                     ),
+                  ),
           ),
         ),
         const SizedBox(height: 4),
@@ -301,17 +338,15 @@ class _VerifyPageState extends State<VerifyPage> {
                   style: const TextStyle(fontWeight: FontWeight.bold),
                 ),
                 const SizedBox(height: 10),
+                // Sanket: Bug 1 — use `value:` not `initialValue:` for DropdownButtonFormField
                 DropdownButtonFormField<String>(
-                  initialValue: v.idType,
+                  value: v.idType,
                   decoration: _inputDecoration(),
-                  items:
-                      ["Aadhaar", "PAN Card", "Passport", "Voter ID"]
-                          .map(
-                            (e) => DropdownMenuItem(value: e, child: Text(e)),
-                          )
-                          .toList(),
-                  onChanged:
-                      (val) => store.dispatch(SetVerifyIdType(payload: val!)),
+                  items: ["Aadhaar", "PAN Card", "Passport", "Voter ID"]
+                      .map((e) => DropdownMenuItem(value: e, child: Text(e)))
+                      .toList(),
+                  onChanged: (val) =>
+                      store.dispatch(SetVerifyIdType(payload: val!)),
                 ),
                 const SizedBox(height: 20),
                 Text(
@@ -319,11 +354,12 @@ class _VerifyPageState extends State<VerifyPage> {
                   style: const TextStyle(fontWeight: FontWeight.bold),
                 ),
                 const SizedBox(height: 10),
+                // Sanket: Bug 2 — use controller (not initialValue) so field stays in sync with Redux state
                 TextFormField(
-                  initialValue: v.idNumber,
+                  controller: v.idNumberController,
                   decoration: _inputDecoration(hint: l.verify_id_hint),
-                  onChanged:
-                      (val) => store.dispatch(SetVerifyIdNumber(payload: val)),
+                  onChanged: (val) =>
+                      store.dispatch(SetVerifyIdNumber(payload: val)),
                 ),
               ],
             ),
@@ -337,13 +373,20 @@ class _VerifyPageState extends State<VerifyPage> {
                 child: _buildUploadBox(
                   l.verify_front_side,
                   v.idFront,
+                  v.idFrontBytes,
                   'front',
                   l,
                 ),
               ),
               const SizedBox(width: 16),
               Expanded(
-                child: _buildUploadBox(l.verify_back_side, v.idBack, 'back', l),
+                child: _buildUploadBox(
+                  l.verify_back_side,
+                  v.idBack,
+                  v.idBackBytes,
+                  'back',
+                  l,
+                ),
               ),
             ],
           ),
@@ -393,21 +436,19 @@ class _VerifyPageState extends State<VerifyPage> {
                       borderRadius: BorderRadius.circular(100),
                       border: Border.all(color: MyTheme.primary, width: 2),
                     ),
-                    child:
-                        v.selfie == null
-                            ? const Center(
-                              child: Icon(
-                                Icons.camera_alt,
-                                size: 40,
-                                color: MyTheme.primary,
-                              ),
-                            )
-                            : ClipRRect(
-                              borderRadius: BorderRadius.circular(100),
-                              child: kIsWeb
-                                  ? Image.network(v.selfie!.path, fit: BoxFit.cover)
-                                  : Image.file(v.selfie!, fit: BoxFit.cover),
-                            ),
+                    // Sanket: Bug 3 — use Image.memory on Web, Image.file on mobile
+                    child: _buildImagePreview(
+                      file: v.selfie,
+                      bytes: v.selfieBytes,
+                      borderRadius: 100,
+                      placeholder: const Center(
+                        child: Icon(
+                          Icons.camera_alt,
+                          size: 40,
+                          color: MyTheme.primary,
+                        ),
+                      ),
+                    ),
                   ),
                 ),
               ],
@@ -420,6 +461,12 @@ class _VerifyPageState extends State<VerifyPage> {
 
   Widget _buildStep3(AppState state, AppLocalizations l) {
     final v = state.userVerifyState!;
+    // Sanket: Bug 10 — Check idFront AND idBack AND selfie for documents label
+    final bool docsAttached =
+        (v.idFront != null || v.idFrontBytes != null) &&
+        (v.idBack != null || v.idBackBytes != null) &&
+        (v.selfie != null || v.selfieBytes != null);
+
     return SingleChildScrollView(
       padding: const EdgeInsets.all(20),
       child: Column(
@@ -432,13 +479,15 @@ class _VerifyPageState extends State<VerifyPage> {
               children: [
                 _reviewRow(l.verify_id_type_label, v.idType),
                 _divider(),
-                _reviewRow(l.verify_id_number_label, v.idNumber),
+                // Sanket: Bug 5 — show "Not provided" if idNumber is empty
+                _reviewRow(
+                  l.verify_id_number_label,
+                  v.idNumber.trim().isEmpty ? "Not provided" : v.idNumber,
+                ),
                 _divider(),
                 _reviewRow(
                   l.verify_documents_label,
-                  v.idFront != null && v.selfie != null
-                      ? l.verify_attached
-                      : l.verify_missing,
+                  docsAttached ? l.verify_attached : l.verify_missing,
                 ),
               ],
             ),
@@ -454,9 +503,32 @@ class _VerifyPageState extends State<VerifyPage> {
     );
   }
 
+  // Sanket: Unified image preview widget — Bug 3 fix for Web vs mobile rendering
+  Widget _buildImagePreview({
+    required File? file,
+    required Uint8List? bytes,
+    required double borderRadius,
+    required Widget placeholder,
+    BoxFit fit = BoxFit.cover,
+  }) {
+    if (kIsWeb && bytes != null) {
+      return ClipRRect(
+        borderRadius: BorderRadius.circular(borderRadius),
+        child: Image.memory(bytes, fit: fit),
+      );
+    } else if (!kIsWeb && file != null) {
+      return ClipRRect(
+        borderRadius: BorderRadius.circular(borderRadius),
+        child: Image.file(file, fit: fit),
+      );
+    }
+    return placeholder;
+  }
+
   Widget _buildUploadBox(
     String label,
     File? file,
+    Uint8List? bytes,
     String type,
     AppLocalizations l,
   ) {
@@ -477,31 +549,28 @@ class _VerifyPageState extends State<VerifyPage> {
               borderRadius: BorderRadius.circular(12),
               border: Border.all(color: MyTheme.border),
             ),
-            child:
-                file == null
-                    ? Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        const Icon(
-                          Icons.add_a_photo_outlined,
-                          color: MyTheme.primary,
-                        ),
-                        const SizedBox(height: 4),
-                        Text(
-                          l.verify_upload,
-                          style: const TextStyle(
-                            fontSize: 10,
-                            color: MyTheme.primary,
-                          ),
-                        ),
-                      ],
-                    )
-                    : ClipRRect(
-                      borderRadius: BorderRadius.circular(12),
-                      child: kIsWeb
-                          ? Image.network(file.path, fit: BoxFit.cover)
-                          : Image.file(file, fit: BoxFit.cover),
+            child: _buildImagePreview(
+              file: file,
+              bytes: bytes,
+              borderRadius: 12,
+              placeholder: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  const Icon(
+                    Icons.add_a_photo_outlined,
+                    color: MyTheme.primary,
+                  ),
+                  const SizedBox(height: 4),
+                  Text(
+                    l.verify_upload,
+                    style: const TextStyle(
+                      fontSize: 10,
+                      color: MyTheme.primary,
                     ),
+                  ),
+                ],
+              ),
+            ),
           ),
         ),
       ],
@@ -555,25 +624,27 @@ class _VerifyPageState extends State<VerifyPage> {
                 gradient: !v.isSubmitting ? Styles.primaryGradient : null,
                 borderRadius: BorderRadius.circular(12),
                 color: !v.isSubmitting ? null : MyTheme.primary.withOpacity(0.5),
-                boxShadow: !v.isSubmitting ? [
-                  BoxShadow(
-                    color: MyTheme.primary.withOpacity(0.3),
-                    blurRadius: 10,
-                    offset: const Offset(0, 4),
-                  )
-                ] : [],
+                boxShadow: !v.isSubmitting
+                    ? [
+                        BoxShadow(
+                          color: MyTheme.primary.withOpacity(0.3),
+                          blurRadius: 10,
+                          offset: const Offset(0, 4),
+                        ),
+                      ]
+                    : [],
               ),
               child: ElevatedButton(
-                onPressed:
-                    v.isSubmitting
-                        ? null
-                        : () {
-                          if (_currentPage < 2) {
-                            _nextPage();
-                          } else {
-                            store.dispatch(submitVerifyFormAction(context));
-                          }
-                        },
+                onPressed: v.isSubmitting
+                    ? null
+                    : () {
+                        if (_currentPage < 2) {
+                          // Sanket: Bug 6 & 7 — validate before advancing
+                          _handleNext(state, l);
+                        } else {
+                          store.dispatch(submitVerifyFormAction(context));
+                        }
+                      },
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.transparent,
                   shadowColor: Colors.transparent,
@@ -584,25 +655,22 @@ class _VerifyPageState extends State<VerifyPage> {
                   ),
                   elevation: 0,
                 ),
-                child:
-                    v.isSubmitting
-                        ? const SizedBox(
-                          height: 20,
-                          width: 20,
-                          child: CircularProgressIndicator(
-                            color: Colors.white,
-                            strokeWidth: 2,
-                          ),
-                        )
-                        : Text(
-                          _currentPage == 2
-                              ? l.verify_submit_for_review
-                              : l.verify_next,
-                          style: const TextStyle(
-                            color: Colors.white,
-                            fontWeight: FontWeight.bold,
-                          ),
+                child: v.isSubmitting
+                    ? const SizedBox(
+                        height: 20,
+                        width: 20,
+                        child: CircularProgressIndicator(
+                          color: Colors.white,
+                          strokeWidth: 2,
                         ),
+                      )
+                    : Text(
+                        _currentPage == 2 ? l.verify_submit_for_review : l.verify_next,
+                        style: const TextStyle(
+                          color: Colors.white,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
               ),
             ),
           ),
