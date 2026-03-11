@@ -25,7 +25,7 @@ class NewMembersResponse {
             json["data"] == null
                 ? []
                 : List<MemberData>.from(
-                  json["data"].map((x) => MemberData.fromJson(x)),
+                  json["data"].where((x) => x != null).map((x) => MemberData.fromJson(x)),
                 ),
       );
 
