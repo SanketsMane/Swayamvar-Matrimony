@@ -38,10 +38,10 @@ class Data {
   String? postalCode;
 
   factory Data.fromJson(Map<String, dynamic> json) => Data(
-    country: json["country"],
-    state: json["state"],
-    city: json["city"],
-    postalCode: json["postal_code"],
+    country: json["country"]?.toString(),
+    state: json["state"]?.toString(),
+    city: json["city"]?.toString(),
+    postalCode: json["postal_code"]?.toString(),
   );
 
   Map<String, dynamic> toJson() => {

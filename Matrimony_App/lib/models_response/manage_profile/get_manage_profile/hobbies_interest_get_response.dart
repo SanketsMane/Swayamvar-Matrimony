@@ -55,16 +55,16 @@ class HobbiesInterestData {
 
   factory HobbiesInterestData.fromJson(Map<String, dynamic> json) =>
       HobbiesInterestData(
-        hobbies: json["hobbies"],
-        interests: json["interests"],
-        music: json["music"],
-        books: json["books"],
-        movies: json["movies"],
-        tvShows: json["tv_shows"],
-        sports: json["sports"],
-        fitnessActivities: json["fitness_activities"],
-        cuisines: json["cuisines"],
-        dressStyles: json["dress_styles"],
+        hobbies: json["hobbies"]?.toString(),
+        interests: json["interests"]?.toString(),
+        music: json["music"]?.toString(),
+        books: json["books"]?.toString(),
+        movies: json["movies"]?.toString(),
+        tvShows: json["tv_shows"]?.toString(),
+        sports: json["sports"]?.toString(),
+        fitnessActivities: json["fitness_activities"]?.toString(),
+        cuisines: json["cuisines"]?.toString(),
+        dressStyles: json["dress_styles"]?.toString(),
       );
 
   Map<String, dynamic> toJson() => {

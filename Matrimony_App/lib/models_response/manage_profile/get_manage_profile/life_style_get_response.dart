@@ -38,10 +38,10 @@ class Data {
   String? livingWith;
 
   factory Data.fromJson(Map<String, dynamic> json) => Data(
-    diet: json["diet"],
-    drink: json["drink"],
-    smoke: json["smoke"],
-    livingWith: json["living_with"],
+    diet: json["diet"]?.toString(),
+    drink: json["drink"]?.toString(),
+    smoke: json["smoke"]?.toString(),
+    livingWith: json["living_with"]?.toString(),
   );
 
   Map<String, dynamic> toJson() => {

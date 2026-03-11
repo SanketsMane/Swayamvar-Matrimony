@@ -49,13 +49,13 @@ class PresentAddressData {
 
   factory PresentAddressData.fromJson(Map<String, dynamic> json) =>
       PresentAddressData(
-        country: json["country"],
-        state: json["state"],
-        city: json["city"],
-        postalCode: json["postal_code"],
-        address: json["address"],
-        govIdType: json["gov_id_type"],
-        govIdNumber: json["gov_id_number"],
+        country: json["country"]?.toString(),
+        state: json["state"]?.toString(),
+        city: json["city"]?.toString(),
+        postalCode: json["postal_code"]?.toString(),
+        address: json["address"]?.toString(),
+        govIdType: json["gov_id_type"]?.toString(),
+        govIdNumber: json["gov_id_number"]?.toString(),
       );
 
   Map<String, dynamic> toJson() => {

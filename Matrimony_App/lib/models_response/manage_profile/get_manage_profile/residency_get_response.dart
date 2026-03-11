@@ -43,10 +43,10 @@ class Data {
   String? immigrationStatus;
 
   factory Data.fromJson(Map<String, dynamic> json) => Data(
-    birthCountry: json["birth_country"],
-    recidencyCountry: json["recidency_country"],
-    growupCountry: json["growup_country"],
-    immigrationStatus: json["immigration_status"],
+    birthCountry: json["birth_country"]?.toString(),
+    recidencyCountry: json["recidency_country"]?.toString(),
+    growupCountry: json["growup_country"]?.toString(),
+    immigrationStatus: json["immigration_status"]?.toString(),
   );
 
   Map<String, dynamic> toJson() => {

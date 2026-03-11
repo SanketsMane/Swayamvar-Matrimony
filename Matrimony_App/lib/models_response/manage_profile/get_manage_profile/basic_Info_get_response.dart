@@ -69,10 +69,10 @@ class BasicInfoData {
             ? null
             : DateTime.tryParse(json["date_of_birth"]),
         onbehalf: json["onbehalf"] == null ? null : Onbehalf.fromJson(json["onbehalf"]),
-        noOfChildren: json["no_of_children"],
-        gender: json["gender"],
-        phone: json["phone"],
-        maritialStatus: json["maritial_status"],
+        noOfChildren: json["no_of_children"]?.toString(),
+        gender: json["gender"]?.toString(),
+        phone: json["phone"]?.toString(),
+        maritialStatus: json["maritial_status"]?.toString(),
         religionId: json["religion_id"] == null || json["religion_id"].toString().isEmpty
             ? null
             : int.tryParse(json["religion_id"].toString()),

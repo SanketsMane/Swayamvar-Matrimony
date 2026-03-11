@@ -55,12 +55,12 @@ class PhysicalAttrData {
       PhysicalAttrData(
         height: json["height"] == null || json["height"].toString().isEmpty ? null : double.tryParse(json["height"].toString()),
         weight: json["weight"] == null || json["weight"].toString().isEmpty ? null : int.tryParse(json["weight"].toString()),
-        eyeColor: json["eye_color"],
-        hairColor: json["hair_color"],
-        complexion: json["complexion"],
-        bloodGroup: json["blood_group"],
-        bodyType: json["body_type"],
-        bodyArt: json["body_art"],
+        eyeColor: json["eye_color"]?.toString(),
+        hairColor: json["hair_color"]?.toString(),
+        complexion: json["complexion"]?.toString(),
+        bloodGroup: json["blood_group"]?.toString(),
+        bodyType: json["body_type"]?.toString(),
+        bodyArt: json["body_art"]?.toString(),
         disability: json["disability"]?.toString(),
       );
 

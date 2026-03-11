@@ -375,7 +375,9 @@ class _MyProfileState extends State<MyProfile> {
           _surname.text = d.lastName ?? '';
           if (d.dateOfBirth != null) {
             _dob = d.dateOfBirth;
-            _computedAge = _calculateAge(_dob!);
+            if (_dob != null) {
+              _computedAge = _calculateAge(_dob!);
+            }
           }
           // Sanket: Map marital status id/name back to a stable API value
           if (d.maritialStatus != null) {
@@ -413,7 +415,7 @@ class _MyProfileState extends State<MyProfile> {
             _bloodGroupDisplay = p.bloodGroup;
           }
           if (p.height != null) {
-            final h = p.height!.toString();
+            final h = p.height.toString();
             _heightDisplay = _heightOptions.entries
                 .where((e) => e.value == h)
                 .map((e) => e.value) // Store stable API value
@@ -437,11 +439,11 @@ class _MyProfileState extends State<MyProfile> {
         // ---- Education ----
         if (eduRes.result == true && eduRes.data != null && eduRes.data!.isNotEmpty) {
           final e = eduRes.data!.first;
-          final targetDegree = e.degree?.toLowerCase();
+          final targetDegree = e.degree?.toString().toLowerCase();
           _educationDisplay = _educationOptions.entries
               .where((item) => item.value.toLowerCase() == targetDegree || item.key.toLowerCase() == targetDegree)
               .map((item) => item.value) // Store stable API value
-              .firstOrNull ?? e.degree;
+              .firstOrNull ?? e.degree?.toString();
           _educationDetails.text = e.institution ?? '';
           _eduStart = e.start;
         }
@@ -449,11 +451,11 @@ class _MyProfileState extends State<MyProfile> {
         // ---- Career ----
         if (careerRes.result == true && careerRes.data != null && careerRes.data!.isNotEmpty) {
           final c = careerRes.data!.first;
-          final targetOcc = c.designation?.toLowerCase();
+          final targetOcc = c.designation?.toString().toLowerCase();
           _occupationDisplay = _occupationOptions.entries
               .where((item) => item.value.toLowerCase() == targetOcc || item.key.toLowerCase() == targetOcc)
               .map((item) => item.value) // Store stable API value
-              .firstOrNull ?? c.designation;
+              .firstOrNull ?? c.designation?.toString();
           _occupationDetails.text = c.company ?? '';
           _careerStart = c.start;
           if (c.annualIncome != null) {
@@ -552,11 +554,11 @@ class _MyProfileState extends State<MyProfile> {
 
         // ---- Diet (from LifeStyle) ----
         if (lifeStyleRes.data != null) {
-          final target = lifeStyleRes.data!.diet?.toLowerCase();
+          final target = lifeStyleRes.data!.diet?.toString().toLowerCase();
           _dietDisplay = _dietOptions.entries
               .where((e) => e.value.toLowerCase() == target || e.key.toLowerCase() == target)
               .map((e) => e.value)
-              .firstOrNull ?? lifeStyleRes.data!.diet;
+              .firstOrNull ?? lifeStyleRes.data!.diet?.toString();
         }
 
         // ---- Spiritual & Social (Manglik/Intercaste) ----

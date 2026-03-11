@@ -56,15 +56,15 @@ class FamilyData {
   String? propertyDetails;
 
   factory FamilyData.fromJson(Map<String, dynamic> json) => FamilyData(
-        father: json["father"],
-        mother: json["mother"],
-        sibling: json["sibling"],
+        father: json["father"]?.toString(),
+        mother: json["mother"]?.toString(),
+        sibling: json["sibling"]?.toString(),
         noOfBrothers: json["no_of_brothers"],
         marriedBrothers: json["married_brothers"],
         noOfSisters: json["no_of_sisters"],
         marriedSisters: json["married_sisters"],
-        parentsOccupation: json["parents_occupation"],
-        propertyDetails: json["property_details"],
+        parentsOccupation: json["parents_occupation"]?.toString(),
+        propertyDetails: json["property_details"]?.toString(),
       );
 
   Map<String, dynamic> toJson() => {

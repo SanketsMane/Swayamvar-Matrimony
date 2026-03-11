@@ -38,10 +38,10 @@ class Data {
   var cityOfBirth;
 
   factory Data.fromJson(Map<String, dynamic> json) => Data(
-    sunSign: json["sun_sign"],
-    moonSign: json["moon_sign"],
-    timeOfBirth: json["time_of_birth"],
-    cityOfBirth: json["city_of_birth"],
+    sunSign: json["sun_sign"]?.toString(),
+    moonSign: json["moon_sign"]?.toString(),
+    timeOfBirth: json["time_of_birth"]?.toString(),
+    cityOfBirth: json["city_of_birth"]?.toString(),
   );
 
   Map<String, dynamic> toJson() => {

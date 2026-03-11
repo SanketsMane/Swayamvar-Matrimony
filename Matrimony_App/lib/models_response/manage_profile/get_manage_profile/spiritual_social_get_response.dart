@@ -60,8 +60,8 @@ class Data {
         personalValue: json["personal_value"],
         familyValueId: json["family_value_id"]?.toString(),
         communityValue: json["community_value"],
-        manglik: json["manglik"],
-        intercaste: json["intercaste"],
+        manglik: json["manglik"]?.toString(),
+        intercaste: json["intercaste"]?.toString(),
       );
 
   Map<String, dynamic> toJson() => {
