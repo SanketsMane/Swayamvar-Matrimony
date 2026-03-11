@@ -77,9 +77,8 @@ PermanentAddressState permanent_get_response(
   PermanentAddressState state,
   PermanentGetResponse action,
 ) {
-  state.permanentGetResponse ??= PermanentGetResponse();
-  state.permanentGetResponse!.result = action.result;
-  state.permanentGetResponse!.data = action.data;
+  state.permanentGetResponse?.result = action.result;
+  state.permanentGetResponse?.data = action.data;
   return state;
 }
 
@@ -87,9 +86,7 @@ PermanentAddressState state_response(
   PermanentAddressState state,
   PermanentAddressStateListAction action,
 ) {
-  state.stateResponse ??= PermanentAddressStateListAction([]);
-  state.stateResponse!.data ??= [];
-  state.stateResponse!.data!.addAll(action.data ?? []);
+  state.stateResponse?.data?.addAll(action.data ?? []);
   if (state.stateResponse!.data!.isNotEmpty) {
     state.selected_state = state.stateResponse!.data!.first;
 
@@ -113,7 +110,7 @@ PermanentAddressState city_responose(
   PermanentAddressState state,
   PermanentAddressCityListAction action,
 ) {
-  state.cityResponse!.data!.addAll(action.data!);
+  state.cityResponse?.data?.addAll(action.data ?? []);
   if (state.cityResponse!.data!.isNotEmpty) {
     state.selected_city = state.cityResponse!.data!.first;
     for (var element in state.cityResponse!.data!) {

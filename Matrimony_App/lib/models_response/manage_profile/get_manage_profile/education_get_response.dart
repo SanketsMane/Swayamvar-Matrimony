@@ -47,10 +47,7 @@ class Data {
   bool? present;
 
   factory Data.fromJson(Map<String, dynamic> json) => Data(
-    id:
-        json["id"] is int
-            ? json["id"]
-            : int.tryParse(json["id"].toString()) ?? 0,
+    id: json["id"] is int ? json["id"] : int.tryParse(json["id"].toString()) ?? 0,
     degree:
         json["degree"] is String
             ? json["degree"]

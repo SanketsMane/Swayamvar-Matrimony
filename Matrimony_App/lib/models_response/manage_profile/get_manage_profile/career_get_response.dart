@@ -118,10 +118,7 @@ class Data {
   String? annualIncome;
 
   factory Data.fromJson(Map<String, dynamic> json) => Data(
-    id:
-        json["id"] is int
-            ? json["id"]
-            : int.tryParse(json["id"].toString()) ?? 0,
+    id: json["id"] is int ? json["id"] : int.tryParse(json["id"].toString()) ?? 0,
 
     designation:
         json["designation"] is String

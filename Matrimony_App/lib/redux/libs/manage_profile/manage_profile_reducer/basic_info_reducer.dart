@@ -32,18 +32,19 @@ BasicInfoState? basic_info_reducer(BasicInfoState? state, dynamic action) {
 
   if (action == UpdateInfo.basicInfo) {
     FocusManager.instance.primaryFocus?.unfocus();
-    if (state?.formKey.currentState?.validate() == true) {
+    final currentState = state;
+    if (currentState?.formKey.currentState?.validate() == true) {
       store.dispatch(
         basicInfoUpdateMiddleware(
-          f_name: state.f_nameController!.text,
-          l_name: state.l_nameController!.text,
-          gender: state.gendervalue?.toLowerCase() == "male" ? 1 : 2,
-          dob: state.date.toString(),
-          phone: state.phoneController!.text,
-          onbehalf: state.on_behalves_value?.id,
-          m_status: state.marital_status_value?.id,
-          noofChild: state.no_childController!.text,
-          photo: state.image,
+          f_name: currentState?.f_nameController?.text,
+          l_name: currentState?.l_nameController?.text,
+          gender: currentState?.gendervalue?.toLowerCase() == "male" ? 1 : 2,
+          dob: currentState?.date.toString(),
+          phone: currentState?.phoneController?.text,
+          onbehalf: currentState?.on_behalves_value?.id,
+          m_status: currentState?.marital_status_value?.id,
+          noofChild: currentState?.no_childController?.text,
+          photo: currentState?.image,
         ),
       );
     }

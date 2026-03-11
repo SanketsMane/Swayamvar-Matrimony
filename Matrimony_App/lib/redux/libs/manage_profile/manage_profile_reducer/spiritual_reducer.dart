@@ -67,9 +67,8 @@ SpiritualSocialState spiritual_social_get_response(
   SpiritualSocialState state,
   SpiritualSocialGetResponse action,
 ) {
-  state.spiritualSocialGetResponse ??= SpiritualSocialGetResponse();
-  state.spiritualSocialGetResponse!.data = action.data;
-  state.spiritualSocialGetResponse!.result = action.result;
+  state.spiritualSocialGetResponse?.data = action.data;
+  state.spiritualSocialGetResponse?.result = action.result;
   return state;
 }
 
@@ -86,9 +85,7 @@ SpiritualSocialState add_family_value(SpiritualSocialState state, AddFamilyValue
 
 ///caste
 SpiritualSocialState caste_response(SpiritualSocialState state, CasteResponse action) {
-  state.casteResponse ??= CasteResponse(data: []);
-  state.casteResponse!.data ??= [];
-  state.casteResponse!.data!.addAll(action.data ?? []);
+  state.casteResponse?.data?.addAll(action.data ?? []);
 
   if (state.casteResponse!.data!.isNotEmpty) {
     state.caste_val = state.casteResponse!.data!.first;
@@ -113,12 +110,12 @@ SpiritualSocialState add_caste_value(SpiritualSocialState state, AddCasteValueAc
 
 /// subcaste
 SpiritualSocialState sub_caste_response(SpiritualSocialState state, SubcasteResponse action) {
-  state.subcasteResponse!.data!.addAll(action.data!);
+  state.subcasteResponse?.data?.addAll(action.data ?? []);
 
-  if (state.subcasteResponse!.data!.isNotEmpty) {
+  if (state.subcasteResponse?.data?.isNotEmpty == true) {
     state.sub_caste_val = state.subcasteResponse!.data!.first;
 
-    if (state.spiritualSocialGetResponse!.result!) {
+    if (state.spiritualSocialGetResponse?.result == true) {
       for (var element in state.subcasteResponse!.data!) {
         if (element.name ==
             state.spiritualSocialGetResponse!.data!.subCasteId) {

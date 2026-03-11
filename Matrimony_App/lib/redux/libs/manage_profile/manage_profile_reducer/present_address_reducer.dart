@@ -96,10 +96,8 @@ PresentAddressState? present_address_reducer(
 
 /// city
 PresentAddressState city_response(PresentAddressState state, CityResponseForPresentAddress action) {
-  state.cityResponse ??= CityResponseForPresentAddress([]);
-  state.cityResponse!.data ??= [];
-  state.cityResponse!.data!.addAll(action.data ?? []);
-  state.selected_city = state.cityResponse!.data!.isNotEmpty ? state.cityResponse!.data!.first : null;
+  state.cityResponse?.data?.addAll(action.data ?? []);
+  state.selected_city = (state.cityResponse?.data?.isNotEmpty == true) ? state.cityResponse!.data!.first : null;
 
   if (state.presentAddressData?.city != null) {
     for (var element in state.cityResponse!.data!) {
@@ -114,8 +112,8 @@ PresentAddressState city_response(PresentAddressState state, CityResponseForPres
 }
 
 PresentAddressState state_response(PresentAddressState state, StateResponse action) {
-  state.stateResponse!.data!.addAll(action.data!);
-  if (action.data!.isNotEmpty) {
+  state.stateResponse?.data?.addAll(action.data ?? []);
+  if (action.data?.isNotEmpty == true) {
     state.selected_state = action.data!.first;
 
     // Default to Maharashtra (ID 22) if country is India and no state is previously selected [Sanket]

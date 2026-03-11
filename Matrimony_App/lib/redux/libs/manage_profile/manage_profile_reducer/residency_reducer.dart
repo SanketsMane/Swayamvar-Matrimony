@@ -33,8 +33,7 @@ ResidencyState residency_save_changes(ResidencyState state, ResidencySaveChanges
 }
 
 ResidencyState residency_get_response(ResidencyState state, ResidencyGetResponse action) {
-  state.residencyGetResponse ??= ResidencyGetResponse();
-  state.residencyGetResponse!.result = action.result;
-  state.residencyGetResponse!.data = action.data;
+  state.residencyGetResponse?.result = action.result;
+  state.residencyGetResponse?.data = action.data;
   return state;
 }

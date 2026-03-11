@@ -157,8 +157,7 @@ PartnerExpectationState pex_partnerexpectation_get_response(
   PartnerExpectationState state,
   PartnerExpectationGetResponse action,
 ) {
-  state.partnerExpectationGetResponse ??= PartnerExpectationGetResponse();
-  state.partnerExpectationGetResponse!.data = action.data;
+  state.partnerExpectationGetResponse?.data = action.data;
   
   final d = state.partnerExpectationGetResponse?.data;
   state.general_requirement_controller.text = d?.general ?? '';
