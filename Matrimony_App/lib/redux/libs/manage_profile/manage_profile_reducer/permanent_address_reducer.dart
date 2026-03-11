@@ -77,6 +77,7 @@ PermanentAddressState permanent_get_response(
   PermanentAddressState state,
   PermanentGetResponse action,
 ) {
+  state.permanentGetResponse ??= PermanentGetResponse();
   state.permanentGetResponse!.result = action.result;
   state.permanentGetResponse!.data = action.data;
   return state;
@@ -86,7 +87,9 @@ PermanentAddressState state_response(
   PermanentAddressState state,
   PermanentAddressStateListAction action,
 ) {
-  state.stateResponse!.data!.addAll(action.data!);
+  state.stateResponse ??= PermanentAddressStateListAction([]);
+  state.stateResponse!.data ??= [];
+  state.stateResponse!.data!.addAll(action.data ?? []);
   if (state.stateResponse!.data!.isNotEmpty) {
     state.selected_state = state.stateResponse!.data!.first;
 
@@ -127,12 +130,12 @@ PermanentAddressState permanent_address_save_changes_toggler(
   PermanentAddressState state,
   PermanentAddressSaveChanges action,
 ) {
-  state.permanent_address_save_changes = !state.permanent_address_save_changes!;
+  state.permanent_address_save_changes = !(state.permanent_address_save_changes ?? false);
   return state;
 }
 
 PermanentAddressState is_loading_toggler(PermanentAddressState state, IsLoading action) {
-  state.is_loading = !state.is_loading!;
+  state.is_loading = !(state.is_loading ?? false);
   return state;
 }
 

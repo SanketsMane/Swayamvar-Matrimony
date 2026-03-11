@@ -55,8 +55,8 @@ PresentAddressState? present_address_reducer(
   dynamic action,
 ) {
   if (action is PresentAddressLoader) {
-    !state!.isLoading!;
-    return state;
+    state?.isLoading = !(state?.isLoading ?? false);
+    return state!;
   }
 
   if (action is PresentAddressSaveChanges) {
@@ -65,8 +65,8 @@ PresentAddressState? present_address_reducer(
   }
 
   if (action is PresentAddressLoader) {
-    state!.page_loader_toogler();
-    return state;
+    state?.page_loader_toogler();
+    return state!;
   }
 
   if (action is StateResponse) {
@@ -79,9 +79,9 @@ PresentAddressState? present_address_reducer(
   }
 
   if (action is PresentAddressStoreAction) {
-    state!.presentAddressData = action.payload!.data;
-    state.result = action.payload!.result;
-    return state;
+    state?.presentAddressData = action.payload?.data;
+    state?.result = action.payload?.result;
+    return state!;
   }
 
   if (action is EmptyStateAction) {
@@ -96,8 +96,10 @@ PresentAddressState? present_address_reducer(
 
 /// city
 PresentAddressState city_response(PresentAddressState state, CityResponseForPresentAddress action) {
-  state.cityResponse!.data!.addAll(action.data!);
-  state.selected_city = state.cityResponse!.data!.first;
+  state.cityResponse ??= CityResponseForPresentAddress([]);
+  state.cityResponse!.data ??= [];
+  state.cityResponse!.data!.addAll(action.data ?? []);
+  state.selected_city = state.cityResponse!.data!.isNotEmpty ? state.cityResponse!.data!.first : null;
 
   if (state.presentAddressData?.city != null) {
     for (var element in state.cityResponse!.data!) {

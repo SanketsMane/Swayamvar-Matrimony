@@ -18,8 +18,8 @@ SpiritualSocialState? spiritual_reducer(
   }
 
   if (action is SpiritualSaveChanges) {
-    state!.set_sp_save_change();
-    return state;
+    state?.set_sp_save_change();
+    return state!;
   }
 
   if (action is CasteResponse) {
@@ -67,6 +67,7 @@ SpiritualSocialState spiritual_social_get_response(
   SpiritualSocialState state,
   SpiritualSocialGetResponse action,
 ) {
+  state.spiritualSocialGetResponse ??= SpiritualSocialGetResponse();
   state.spiritualSocialGetResponse!.data = action.data;
   state.spiritualSocialGetResponse!.result = action.result;
   return state;
@@ -85,13 +86,15 @@ SpiritualSocialState add_family_value(SpiritualSocialState state, AddFamilyValue
 
 ///caste
 SpiritualSocialState caste_response(SpiritualSocialState state, CasteResponse action) {
-  state.casteResponse!.data!.addAll(action.data!);
+  state.casteResponse ??= CasteResponse(data: []);
+  state.casteResponse!.data ??= [];
+  state.casteResponse!.data!.addAll(action.data ?? []);
 
   if (state.casteResponse!.data!.isNotEmpty) {
     state.caste_val = state.casteResponse!.data!.first;
-    if (state.spiritualSocialGetResponse!.result!) {
+    if (state.spiritualSocialGetResponse?.result == true) {
       for (var element in state.casteResponse!.data!) {
-        if (element.name == state.spiritualSocialGetResponse!.data?.casteId) {
+        if (element.name == state.spiritualSocialGetResponse!.data?.casteId?.toString()) {
           state.caste_val = element;
         }
       }
@@ -139,7 +142,7 @@ SpiritualSocialState caste_list_clear(SpiritualSocialState state, EmptyCasteActi
 }
 
 SpiritualSocialState subcaste_list_clear(SpiritualSocialState state, EmptySubCasteAction action) {
-  state.subcasteResponse!.data!.clear();
+  state.subcasteResponse?.data?.clear();
   state.sub_caste_val = null;
   return state;
 }

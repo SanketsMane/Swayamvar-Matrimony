@@ -12,23 +12,27 @@ import '../manage_profile_middleware/manage_profile_update_middlewares.dart';
 
 BasicInfoState? basic_info_reducer(BasicInfoState? state, dynamic action) {
   if (action == SaveChanges.basicInfo) {
-    state!.isloading = !state.isloading!;
-    return state;
+    state?.isloading = !(state?.isloading ?? false);
+    return state!;
   }
 
   if (action is BasicInfoStoreAction) {
-    bir_basic_info_get_response(state!, action);
+    if (state != null) {
+      bir_basic_info_get_response(state, action);
+    }
   }
   if (action is SetBasicGalImage) {
     print('setting basic gal image');
-    state!.image = action.image;
-    state.imageName = action.imageName;
-    return state;
+    if (state != null) {
+      state.image = action.image;
+      state.imageName = action.imageName;
+    }
+    return state!;
   }
 
   if (action == UpdateInfo.basicInfo) {
     FocusManager.instance.primaryFocus?.unfocus();
-    if (state!.formKey.currentState!.validate()) {
+    if (state?.formKey.currentState?.validate() == true) {
       store.dispatch(
         basicInfoUpdateMiddleware(
           f_name: state.f_nameController!.text,

@@ -157,24 +157,18 @@ PartnerExpectationState pex_partnerexpectation_get_response(
   PartnerExpectationState state,
   PartnerExpectationGetResponse action,
 ) {
-  // print(state.partnerExpectationGetResponse?.data?.toJson());
+  state.partnerExpectationGetResponse ??= PartnerExpectationGetResponse();
   state.partnerExpectationGetResponse!.data = action.data;
-  state.general_requirement_controller.text =
-      state.partnerExpectationGetResponse!.data!.general!;
-  state.min_height_controller.text =
-      "${state.partnerExpectationGetResponse!.data!.height ?? ''}";
-  state.max_weight_controller.text =
-      "${state.partnerExpectationGetResponse!.data!.weight ?? ''}";
-  state.education_controller.text =
-      "${state.partnerExpectationGetResponse!.data!.education ?? ''}";
-  state.profession_controller.text =
-      "${state.partnerExpectationGetResponse!.data!.profession ?? ''}";
-  state.personal_value_controller.text =
-      "${state.partnerExpectationGetResponse!.data!.personalValue ?? ''}";
-  state.complexion_controller.text =
-      "${state.partnerExpectationGetResponse!.data!.complexion ?? ''}";
-  state.body_controller.text =
-      "${state.partnerExpectationGetResponse!.data!.bodyType ?? ''}";
+  
+  final d = state.partnerExpectationGetResponse?.data;
+  state.general_requirement_controller.text = d?.general ?? '';
+  state.min_height_controller.text = "${d?.height ?? ''}";
+  state.max_weight_controller.text = "${d?.weight ?? ''}";
+  state.education_controller.text = "${d?.education ?? ''}";
+  state.profession_controller.text = "${d?.profession ?? ''}";
+  state.personal_value_controller.text = "${d?.personalValue ?? ''}";
+  state.complexion_controller.text = "${d?.complexion ?? ''}";
+  state.body_controller.text = "${d?.bodyType ?? ''}";
   // Sanket: Mapping now handled in partnerExpectationGetMiddleware.
   // pexprofile_drop_down_response(state);
   //store.dispatch(profiledropdownMiddleware());
@@ -253,12 +247,12 @@ PartnerExpectationState pex_caste_response(
 
 PartnerExpectationState pex_save_toggler(PartnerExpectationState state, bool value) {
   state.partner_expectation_save_changes =
-      !state.partner_expectation_save_changes!;
+      !(state.partner_expectation_save_changes ?? false);
   return state;
 }
 
 PartnerExpectationState pex_loader_toggler(PartnerExpectationState state, Pexloader action) {
-  state.isloading = !state.isloading!;
+  state.isloading = !(state.isloading ?? false);
   return state;
 }
 

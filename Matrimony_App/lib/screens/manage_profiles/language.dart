@@ -30,9 +30,8 @@ class _LanguageState extends State<Language> {
     data.saveChangesLoader = false;
     List<DDown> knownLanguage = [];
     
-    // Default mother tongue to Marathi (assuming ID 48 is Marathi based on common patterns in this app)
-    // Sanket: If no mother tongue is selected, default to Marathi
-    if (data.selectedMotherTongue == null) {
+    // Sanket: If no mother tongue is selected, check dropdown data safely
+    if (data.selectedMotherTongue == null && store.state.manageProfileCombineState?.profiledropdownResponseData?.data?.languageList != null) {
       for (var element in store.state.manageProfileCombineState!.profiledropdownResponseData!.data!.languageList!) {
         if (element.name == "Marathi") {
           data.selectedMotherTongue = element;
@@ -41,22 +40,19 @@ class _LanguageState extends State<Language> {
       }
     }
 
-    if (data.languageGetResponse!.result != null &&
+    if (data.languageGetResponse?.result != null &&
         data.languageGetResponse!.result!) {
       data.selectedKnowLanguage.clear();
-      for (var element
-          in store
-              .state
-              .manageProfileCombineState!
-              .profiledropdownResponseData!
-              .data!
-              .languageList!) {
-        if (element.id == data.languageGetResponse!.data!.motherTongue?.id) {
-          data.selectedMotherTongue = element;
-        }
-        for (var knowL in data.languageGetResponse!.data!.knownLanguages!) {
-          if (knowL.id == element.id) {
-            knownLanguage.add(element);
+      final languageList = store.state.manageProfileCombineState?.profiledropdownResponseData?.data?.languageList;
+      if (languageList != null && data.languageGetResponse?.data?.knownLanguages != null) {
+        for (var element in languageList) {
+          if (element.id == data.languageGetResponse!.data!.motherTongue?.id) {
+            data.selectedMotherTongue = element;
+          }
+          for (var knowL in data.languageGetResponse!.data!.knownLanguages!) {
+            if (knowL.id == element.id) {
+              knownLanguage.add(element);
+            }
           }
         }
       }
@@ -76,12 +72,11 @@ class _LanguageState extends State<Language> {
     return StoreConnector<AppState, LanguageState?>(
       converter:
           (state) => store.state.manageProfileCombineState?.languageState,
-      onInit:
+        onInit:
           (store) => [
             setProfileDropdownValues(),
-            setInitData(store.state.manageProfileCombineState!.languageState!),
-
-            // print(store.state.manageProfileCombineState.profiledropdownResponseData==null),
+            if (store.state.manageProfileCombineState?.languageState != null)
+              setInitData(store.state.manageProfileCombineState!.languageState!),
           ],
       builder:
           (_, state) => Scaffold(
@@ -128,7 +123,7 @@ class _LanguageState extends State<Language> {
             (value) {
               state.selectedMotherTongue = value;
             },
-            value: state!.selectedMotherTongue,
+            value: state?.selectedMotherTongue,
           ),
         ),
         const SizedBox(height: 20),
@@ -255,8 +250,8 @@ class _LanguageState extends State<Language> {
         } else if (!state.saveChangesLoader!) {
           store.dispatch(
             languageUpdateMiddleware(
-              mother_tongue: state.selectedMotherTongue?.id,
-              known_language: DDown().getIds(state.selectedKnowLanguage),
+              mother_tongue: state?.selectedMotherTongue?.id,
+              known_language: DDown().getIds(state?.selectedKnowLanguage ?? []),
             ),
           );
         } else {

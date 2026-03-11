@@ -7,21 +7,23 @@ class LifeStyleSaveChanges {}
 
 LifeStyleState? life_style_reducer(LifeStyleState? state, dynamic action) {
   if (action is IsLoading) {
-    state!.isLoading = !state.isLoading!;
-    return state;
+    state?.isLoading = !(state?.isLoading ?? false);
+    return state!;
   }
 
   if (action is LifeStyleSaveChanges) {
-    state!.saveChanges = !state.saveChanges!;
-    return state;
+    state?.saveChanges = !(state?.saveChanges ?? false);
+    return state!;
   }
 
   if (action is LifeStyleGetResponse) {
-    state!.lifeStyleGetResponse = LifeStyleGetResponse(
-      data: action.data,
-      result: action.result,
-    );
-    return state;
+    if (state != null) {
+      state.lifeStyleGetResponse = LifeStyleGetResponse(
+        data: action.data,
+        result: action.result,
+      );
+    }
+    return state!;
   }
 
   return state;

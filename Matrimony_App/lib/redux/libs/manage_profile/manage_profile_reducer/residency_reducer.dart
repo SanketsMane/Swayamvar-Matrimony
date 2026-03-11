@@ -23,16 +23,17 @@ ResidencyState? residency_reducer(ResidencyState? state, dynamic action) {
 }
 
 ResidencyState is_loading(ResidencyState state, IsLoading action) {
-  state.isloading = !state.isloading!;
+  state.isloading = !(state.isloading ?? false);
   return state;
 }
 
 ResidencyState residency_save_changes(ResidencyState state, ResidencySaveChanges action) {
-  state.pageloader = !state.pageloader!;
+  state.pageloader = !(state.pageloader ?? false);
   return state;
 }
 
 ResidencyState residency_get_response(ResidencyState state, ResidencyGetResponse action) {
+  state.residencyGetResponse ??= ResidencyGetResponse();
   state.residencyGetResponse!.result = action.result;
   state.residencyGetResponse!.data = action.data;
   return state;

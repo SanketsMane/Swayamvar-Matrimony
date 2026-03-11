@@ -24,7 +24,7 @@ class LanguageGetResponse {
         data: json["data"] == null ? null : Data.fromJson(json["data"]),
       );
 
-  Map<String, dynamic> toJson() => {"result": result, "data": data!.toJson()};
+  Map<String, dynamic> toJson() => {"result": result, "data": data?.toJson()};
 
   LanguageGetResponse.initialState()
     : result = false,

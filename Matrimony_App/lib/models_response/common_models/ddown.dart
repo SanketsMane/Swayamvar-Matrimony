@@ -13,7 +13,7 @@ class DDown {
     List<int> tmp = [];
 
     for (var element in data) {
-      tmp.add(element.id!);
+      tmp.add(element.id ?? 0);
     }
     return tmp.toString();
   }

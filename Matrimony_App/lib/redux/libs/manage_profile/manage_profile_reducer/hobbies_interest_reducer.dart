@@ -11,14 +11,16 @@ HobbiesInterestState? hobbies_interest_reducer(
   dynamic action,
 ) {
   if (action is HobbiesInterestLoader) {
-    state!.isLoading = !state.isLoading!;
-    return state;
+    state?.isLoading = !(state?.isLoading ?? false);
+    return state!;
   }
 
   if (action is HobbiesInterestStoreAction) {
-    state!.hobbiesInterestData = action.payload!.data;
-    setHobbiesInterest(state);
-    return state;
+    state?.hobbiesInterestData = action.payload?.data;
+    if (state != null) {
+      setHobbiesInterest(state);
+    }
+    return state!;
   }
 
   //update info
@@ -32,17 +34,17 @@ HobbiesInterestState? hobbies_interest_reducer(
 }
 
 void setHobbiesInterest(HobbiesInterestState? state) {
-  state!.hobbiesController!.text = state.hobbiesInterestData!.hobbies!;
-  state.interestsController!.text = state.hobbiesInterestData!.interests!;
-  state.musicController!.text = state.hobbiesInterestData!.music!;
-  state.booksController!.text = state.hobbiesInterestData!.books!;
-  state.moviesController!.text = state.hobbiesInterestData!.movies!;
-  state.tvShowController!.text = state.hobbiesInterestData!.tvShows!;
-  state.sportsController!.text = state.hobbiesInterestData!.sports!;
-  state.fitnessActivitiesController!.text =
-      state.hobbiesInterestData!.fitnessActivities!;
-  state.cuisinesController!.text = state.hobbiesInterestData!.cuisines!;
-  state.dressStylesController!.text = state.hobbiesInterestData!.dressStyles!;
+  state?.hobbiesController?.text = state.hobbiesInterestData?.hobbies ?? "";
+  state?.interestsController?.text = state.hobbiesInterestData?.interests ?? "";
+  state?.musicController?.text = state.hobbiesInterestData?.music ?? "";
+  state?.booksController?.text = state.hobbiesInterestData?.books ?? "";
+  state?.moviesController?.text = state.hobbiesInterestData?.movies ?? "";
+  state?.tvShowController?.text = state.hobbiesInterestData?.tvShows ?? "";
+  state?.sportsController?.text = state.hobbiesInterestData?.sports ?? "";
+  state?.fitnessActivitiesController?.text =
+      state.hobbiesInterestData?.fitnessActivities ?? "";
+  state?.cuisinesController?.text = state.hobbiesInterestData?.cuisines ?? "";
+  state?.dressStylesController?.text = state.hobbiesInterestData?.dressStyles ?? "";
 }
 
 // action

@@ -11,13 +11,15 @@ AttitudeBehaviorState? attitude_behavior_reducer(
   dynamic action,
 ) {
   if (action is AttitudeBehaviorLoader) {
-    state!.isLoading = !state.isLoading!;
-    return state;
+    state?.isLoading = !(state?.isLoading ?? false);
+    return state!;
   }
 
   if (action is AttitudeBehaviorStoreAction) {
-    state!.attitudeBehaviorData = action.payload!.data;
-    setAttitudeBehaviour(state);
+    state?.attitudeBehaviorData = action.payload?.data;
+    if (state != null) {
+      setAttitudeBehaviour(state);
+    }
   }
 
   if (action == UpdateInfo.attitudeBehaviour) {
@@ -30,12 +32,12 @@ AttitudeBehaviorState? attitude_behavior_reducer(
 }
 
 void setAttitudeBehaviour(AttitudeBehaviorState? state) {
-  state!.affectionController!.text = state.attitudeBehaviorData!.affection;
-  state.humorController!.text = state.attitudeBehaviorData!.humor;
-  state.religiousServiceController!.text =
-      state.attitudeBehaviorData!.religiousService;
-  state.politicalViewsController!.text =
-      state.attitudeBehaviorData!.politicalViews;
+  state?.affectionController?.text = state.attitudeBehaviorData?.affection ?? "";
+  state?.humorController?.text = state.attitudeBehaviorData?.humor ?? "";
+  state?.religiousServiceController?.text =
+      state.attitudeBehaviorData?.religiousService ?? "";
+  state?.politicalViewsController?.text =
+      state.attitudeBehaviorData?.politicalViews ?? "";
 }
 
 // actions

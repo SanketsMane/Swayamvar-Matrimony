@@ -11,14 +11,16 @@ PhysicalAttrState? physical_attr_reducer(
   dynamic action,
 ) {
   if (action is PhysicalAttrLoader) {
-    state!.isLoading = !state.isLoading!;
-    return state;
+    state?.isLoading = !(state?.isLoading ?? false);
+    return state!;
   }
 
   if (action is PhysicalAttrStoreAction) {
-    state!.physicalAttrData = action.payload!.data;
-    setPhysicalAttr(state);
-    return state;
+    state?.physicalAttrData = action.payload?.data;
+    if (state != null) {
+      setPhysicalAttr(state);
+    }
+    return state!;
   }
 
   if (action == UpdateInfo.physicalAttr) {
@@ -31,18 +33,16 @@ PhysicalAttrState? physical_attr_reducer(
 }
 
 void setPhysicalAttr(PhysicalAttrState? state) {
-  state!.heightController!.text = state.physicalAttrData!.height!.toString();
-  state.weightController!.text = state.physicalAttrData!.weight!.toString();
-  state.eyeColorController!.text = state.physicalAttrData!.eyeColor!.toString();
-  state.hairColorController!.text =
-      state.physicalAttrData!.hairColor!.toString();
-  state.complexionController!.text =
-      state.physicalAttrData!.complexion!.toString();
-  state.bodyTypeController!.text = state.physicalAttrData!.bodyType!.toString();
-  state.bodyArtController!.text = state.physicalAttrData!.bodyArt!.toString();
-  state.disabilityController!.text =
-      state.physicalAttrData!.disability!.toString();
-  state.bloodController!.text = state.physicalAttrData!.bloodGroup!.toString();
+  final d = state?.physicalAttrData;
+  state?.heightController?.text = d?.height?.toString() ?? "";
+  state?.weightController?.text = d?.weight?.toString() ?? "";
+  state?.eyeColorController?.text = d?.eyeColor?.toString() ?? "";
+  state?.hairColorController?.text = d?.hairColor?.toString() ?? "";
+  state?.complexionController?.text = d?.complexion?.toString() ?? "";
+  state?.bodyTypeController?.text = d?.bodyType?.toString() ?? "";
+  state?.bodyArtController?.text = d?.bodyArt?.toString() ?? "";
+  state?.disabilityController?.text = d?.disability?.toString() ?? "";
+  state?.bloodController?.text = d?.bloodGroup?.toString() ?? "";
 }
 
 // actions

@@ -57,7 +57,7 @@ EducationState? status_toggler(EducationState? state, dynamic action) {
 }
 
 EducationState delete(EducationState state, dynamic action) {
-  state.isDelete = !state.isDelete!;
+  state.isDelete = !(state.isDelete ?? false);
   return state;
 }
 
@@ -90,12 +90,12 @@ EducationState reset_list(EducationState state, dynamic action) {
 }
 
 EducationState update_changes(EducationState state, dynamic action) {
-  state.update_changes = !state.update_changes!;
+  state.update_changes = !(state.update_changes ?? false);
   return state;
 }
 
 EducationState edu_save_changes(EducationState state, Edusavechanges action) {
-  state.saveChanges = !state.saveChanges!; // Toggle saveChanges flag
+  state.saveChanges = !(state.saveChanges ?? false); // Toggle saveChanges flag
   return state;
 }
 

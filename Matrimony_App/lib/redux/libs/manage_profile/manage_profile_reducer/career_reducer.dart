@@ -38,17 +38,17 @@ CareerState? status_toggler(CareerState? state, dynamic action) {
 }
 
 CareerState update_change(CareerState state, dynamic action) {
-  state.update_changes = !state.update_changes!;
+  state.update_changes = !(state.update_changes ?? false);
   return state;
 }
 
 CareerState save_changes(CareerState state, dynamic action) {
-  state.saveChanges = !state.saveChanges!;
+  state.saveChanges = !(state.saveChanges ?? false);
   return state;
 }
 
 CareerState delete(CareerState state, dynamic action) {
-  state.isDelete = !state.isDelete!;
+  state.isDelete = !(state.isDelete ?? false);
   return state;
 }
 
