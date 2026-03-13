@@ -182,6 +182,15 @@ class TelecallerController extends Controller
         return back();
     }
 
+    /**
+     * Show telecaller details (redirects to performance)
+     * Added by Sanket
+     */
+    public function show($id)
+    {
+        return redirect()->route('telecallers.performance', encrypt($id));
+    }
+
     public function performance($id)
     {
         $telecaller = User::findOrFail(decrypt($id));
