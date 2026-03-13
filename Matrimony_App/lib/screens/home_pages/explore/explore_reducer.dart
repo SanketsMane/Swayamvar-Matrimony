@@ -10,118 +10,117 @@ ExploreState? explore_reducer(ExploreState? state, action) {
 
   //slider
   if (action is SliderStoreAction) {
-    state!.isFetchingSlider = false;
-    state.sliderImageList = action.payload!.data;
+    state?.isFetchingSlider = false;
+    state?.sliderImageList = action.payload?.data;
     return state;
   }
   if (action is SliderFailureAction) {
-    state!.sliderError = action.error;
+    state?.sliderError = action.error;
     return state;
   }
   // premium members
   if (action is PremiumMembersStoreAction) {
-    state!.isFetchingPremiumMembers = false;
-    state.premiumMemberList = action.payload!.data;
+    state?.isFetchingPremiumMembers = false;
+    state?.premiumMemberList = action.payload?.data;
     return state;
   }
   if (action is PremiumMembersFailureAction) {
-    state!.isFetchingPremiumMembers = false;
-    state.premiumMembersError = action.error;
+    state?.isFetchingPremiumMembers = false;
+    state?.premiumMembersError = action.error;
     return state;
   }
 
   // banner
   if (action is BannerStoreAction) {
-    state!.isFetchingBanner = false;
-    state.bannerList = action.payload!.data;
+    state?.isFetchingBanner = false;
+    state?.bannerList = action.payload?.data;
     return state;
   }
   if (action is BannerFailureAction) {
-    state!.isFetchingBanner = false;
-    state.bannerError = action.error;
+    state?.isFetchingBanner = false;
+    state?.bannerError = action.error;
     return state;
   }
 
   // trusted by millions
   if (action is TrustedByStoreAction) {
-    state!.isFetchingTrustedBy = false;
-    state.trustedByList = action.payload!.data;
+    state?.isFetchingTrustedBy = false;
+    state?.trustedByList = action.payload?.data;
     return state;
   }
   if (action is TrustedByFailureAction) {
-    state!.isFetchingTrustedBy = false;
-    state.trustedByError = action.error;
+    state?.isFetchingTrustedBy = false;
+    state?.trustedByError = action.error;
     return state;
   }
 
   // new members
   if (action is NewMembersStoreAction) {
-    state!.isFetchingNewMembers = false;
-    state.newMemberList = action.payload!.data;
+    state?.isFetchingNewMembers = false;
+    state?.newMemberList = action.payload?.data;
     return state;
   }
   if (action is NewMembersFailureAction) {
-    state!.isFetchingNewMembers = false;
-    state.newMemberError = action.error;
+    state?.isFetchingNewMembers = false;
+    state?.newMemberError = action.error;
     return state;
   }
   // happy stories
   if (action is EHappyStoriesStoreAction) {
-    state!.isFetchingHappyStories = false;
-    state.happyStoriesList = action.payload!.data;
+    state?.isFetchingHappyStories = false;
+    state?.happyStoriesList = action.payload?.data;
     return state;
   }
   if (action is EHappyStoriesFailureAction) {
-    state!.happyStoriesError = action.error;
+    state?.happyStoriesError = action.error;
     return state;
   }
   // packages
   if (action is PackageStoreAction) {
-    state!.isFetchingPackage = false;
-    state.packageList = action.payload!.data;
+    state?.isFetchingPackage = false;
+    state?.packageList = action.payload?.data;
     return state;
   }
   if (action is PackageFailureAction) {
-    state!.packageError = action.error;
+    state?.happyStoriesError = action.error;
     return state;
   }
-
   // review
   if (action is ReviewStoreAction) {
-    state!.isFetchingReview = false;
-    state.review = action.payload!.data;
+    state?.isFetchingReview = false;
+    state?.review = action.payload?.data;
     return state;
   }
   if (action is ReviewFailureAction) {
-    state!.reviewError = action.error;
+    state?.reviewError = action.error;
     return state;
   }
 
   // blogs
   if (action is BlogStoreAction) {
-    state!.isFetchingBlog = false;
-    state.blogList = action.payload!.data;
+    state?.isFetchingBlog = false;
+    state?.blogList = action.payload?.data;
     return state;
   }
   if (action is BlogFailureAction) {
-    state!.blogError = action.error;
+    state?.blogError = action.error;
     return state;
   }
 
   // carousel first index set
   if (action is SetExploreFirstBannerCarouselIndex) {
-    state!.carouselIndex = action.payload;
+    state?.carouselIndex = action.payload ?? 0; // Added fallback for carouselIndex
     return state;
   }
 
   // carousel second index set
   if (action is SetExploreSecondBannerCarouselIndex) {
-    state!.carouselIndex2 = action.payload;
+    state?.carouselIndex2 = action.payload ?? 0; // Added fallback for carouselIndex2
     return state;
   }
   // set happy stories carousel set
   if (action is SetExploreHappyStoriesCarouselIndex) {
-    state!.happyStoriesIndex = action.payload;
+    state?.happyStoriesIndex = action.payload ?? 0; // Added fallback for happyStoriesIndex
     return state;
   }
 

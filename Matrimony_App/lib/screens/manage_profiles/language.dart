@@ -114,14 +114,10 @@ class _LanguageState extends State<Language> {
           padding: EdgeInsets.symmetric(horizontal: 10),
           child: CommonWidget().buildDropdownButtonFormField(
             context,
-            store
-                .state
-                .manageProfileCombineState!
-                .profiledropdownResponseData!
-                .data!
-                .languageList!,
+            store.state.manageProfileCombineState?.profiledropdownResponseData
+                ?.data?.languageList ?? [],
             (value) {
-              state.selectedMotherTongue = value;
+              state?.selectedMotherTongue = value;
             },
             value: state?.selectedMotherTongue,
           ),

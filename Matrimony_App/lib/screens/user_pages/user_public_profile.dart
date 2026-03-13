@@ -10,7 +10,7 @@ import 'package:active_matrimonial_flutter_app/screens/my_dashboard_pages/shortl
 import 'package:active_matrimonial_flutter_app/screens/user_pages/public_profile_middleware.dart';
 import 'package:flutter/material.dart';
 import 'package:active_matrimonial_flutter_app/l10n/app_localizations.dart';
-import 'package:active_matrimonial_flutter_app/models_response/public_profile_response.dart';
+import 'package:intl/intl.dart';
 import '../others/report_dialog.dart';
 
 class UserPublicProfile extends StatefulWidget {
@@ -72,43 +72,35 @@ class _UserPublicProfileState extends State<UserPublicProfile> {
                       padding: const EdgeInsets.symmetric(horizontal: 16),
                       child: Column(
                         children: [
-                          // 2. Basic Info Card
-                          _buildBasicInfoCard(context, profile),
+                          // 1. Basic Information
+                          _buildBasicInfoSection(context, profile),
                           const SizedBox(height: 16),
 
-                          // 3. About Section
-                          _buildAboutSection(context, profile),
+                          // 2. Physical Details
+                          _buildPhysicalDetailsSection(context, profile),
                           const SizedBox(height: 16),
 
-                          // 4. Personal Details
-                          _buildPersonalDetails(context, profile),
+                          // 3. Family Details
+                          _buildFamilyDetailsSection(context, profile),
                           const SizedBox(height: 16),
 
-                          // 5. Professional Details
-                          _buildProfessionalDetails(context, profile),
+                          // 4. Education & Career
+                          _buildEducationCareerSection(context, profile),
                           const SizedBox(height: 16),
 
-                          // 6. Physical Attributes (NEW)
-                          _buildPhysicalAttributes(context, profile),
+                          // 5. Lifestyle & Spiritual
+                          _buildLifestyleSpiritualSection(context, profile),
                           const SizedBox(height: 16),
 
-                          // 7. Spiritual & Social (NEW)
-                          _buildSpiritualBackground(context, profile),
+                          // 6. Contact & Location
+                          _buildContactLocationSection(context, profile),
                           const SizedBox(height: 16),
 
-                          // 8. Lifestyle (NEW)
-                          _buildLifestyle(context, profile),
+                          // 7. Partner Expectations
+                          _buildPartnerExpectationsSection(context, profile),
                           const SizedBox(height: 16),
 
-                          // 9. Family Details
-                          _buildFamilyDetails(context, profile),
-                          const SizedBox(height: 16),
-
-                          // 10. Partner Expectations (NEW)
-                          _buildPartnerExpectations(context, profile),
-                          const SizedBox(height: 16),
-
-                          // 11. Gallery Section
+                          // 8. Photo Gallery
                           _buildGallerySection(context, state),
 
                           const SizedBox(height: 160), // Space for sticky bars
@@ -174,6 +166,25 @@ class _UserPublicProfileState extends State<UserPublicProfile> {
           ),
         ),
       ],
+    );
+  }
+
+  Widget _circleActionBtn(
+    IconData icon,
+    VoidCallback onTap, {
+    Color? iconColor,
+  }) {
+    return InkWell(
+      onTap: onTap,
+      child: Container(
+        height: 40,
+        width: 40,
+        decoration: BoxDecoration(
+          color: Colors.white.withOpacity(0.9),
+          shape: BoxShape.circle,
+        ),
+        child: Icon(icon, color: iconColor ?? MyTheme.text_primary, size: 20),
+      ),
     );
   }
 
@@ -305,7 +316,7 @@ class _UserPublicProfileState extends State<UserPublicProfile> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                "${basic?.firstName ?? ''}, ${state.publicProfileState!.basic?.age ?? ''}",
+                "${basic?.firstName ?? ''} ${basic?.middleName ?? ''} ${basic?.lastName ?? ''}, ${basic?.age ?? ''}",
                 style: Styles.profileName.copyWith(
                   color: Colors.white,
                   fontSize: 28,
@@ -321,7 +332,7 @@ class _UserPublicProfileState extends State<UserPublicProfile> {
                   ),
                   const SizedBox(width: 4),
                   Text(
-                    "ठाणे, महाराष्ट्र", // Localized mock
+                    "${state.publicProfileState!.presentAddress?.city ?? ''}, ${state.publicProfileState!.permanentAddress?.state ?? ''}",
                     style: Styles.body.copyWith(
                       fontSize: 14,
                       color: Colors.white.withOpacity(0.8),
@@ -330,23 +341,7 @@ class _UserPublicProfileState extends State<UserPublicProfile> {
                 ],
               ),
               const SizedBox(height: 12),
-              Container(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 12,
-                  vertical: 6,
-                ),
-                decoration: BoxDecoration(
-                  color: MyTheme.primary,
-                  borderRadius: BorderRadius.circular(20),
-                ),
-                child: Text(
-                  "$compatibility जुळते",
-                  style: Styles.caption.copyWith(
-                    color: Colors.white,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-              ),
+              // Sanket: Removed Compatibility Match % overlay as requested
             ],
           ),
         ),
@@ -354,264 +349,186 @@ class _UserPublicProfileState extends State<UserPublicProfile> {
     );
   }
 
-  Widget _circleActionBtn(
-    IconData icon,
-    VoidCallback onTap, {
-    Color? iconColor,
-  }) {
-    return InkWell(
-      onTap: onTap,
-      child: Container(
-        height: 40,
-        width: 40,
-        decoration: BoxDecoration(
-          color: Colors.white.withOpacity(0.9),
-          shape: BoxShape.circle,
-        ),
-        child: Icon(icon, color: iconColor ?? MyTheme.text_primary, size: 20),
-      ),
-    );
-  }
+  // =========================================================================
+  // SECTION 1: Basic Information
+  // =========================================================================
+  Widget _buildBasicInfoSection(BuildContext context, dynamic profile) {
+    final basic = profile.basic;
+    if (basic == null) return const SizedBox.shrink();
 
-  Widget _buildBasicInfoCard(BuildContext context, dynamic profile) {
-    final l = AppLocalizations.of(context)!;
     return _profileCard(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          _sectionTitle(l.pub_profile_basic_info),
-          const SizedBox(height: 16),
-          GridView.count(
-            crossAxisCount: 2,
-            shrinkWrap: true,
-            physics: const NeverScrollableScrollPhysics(),
-            childAspectRatio: 3.5,
-            children: [
-              _infoTile(
-                l.pub_profile_religion,
-                profile.spiritual?.religionId ?? "-",
+          _sectionTitle("Basic Information"),
+          const SizedBox(height: 8),
+          _detailRow("First Name", basic.firstName),
+          _detailRow("Middle Name", basic.middleName),
+          _detailRow("Surname", basic.lastName),
+          _detailRow("Date of Birth", basic.dateOfBirth != null ? DateFormat('dd-MM-yyyy').format(basic.dateOfBirth!) : null),
+          _detailRow("Age", basic.age?.toString()),
+          _detailRow("Religion", basic.religion),
+          _detailRow("Caste", basic.caste),
+          _detailRow("Sub-Caste", profile.spiritual?.subCaste),
+          _detailRow("Marital Status", basic.maritialStatus),
+          if (basic.maritialStatus != "Unmarried")
+            _detailRow("Number of Children", basic.noOfChildren?.toString()),
+          // Sanket: About Me is Step 1 Introduction
+          if (basic.about != null && basic.about!.isNotEmpty)
+            Padding(
+              padding: const EdgeInsets.only(top: 16),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text("About Me", style: Styles.body.copyWith(fontWeight: FontWeight.bold, color: MyTheme.text_secondary, fontSize: 12)),
+                  const SizedBox(height: 4),
+                  Text(basic.about!, style: Styles.body.copyWith(color: MyTheme.text_primary, fontSize: 14, height: 1.5)),
+                ],
               ),
-              _infoTile(
-                l.pub_profile_height,
-                "${profile.physical?.height ?? '-'}'",
-              ),
-              _infoTile(
-                l.pub_profile_marital_status,
-                profile.basic?.maritialStatus ?? "-",
-              ),
-              _infoTile(
-                l.pub_profile_mother_tongue,
-                profile.motherTongue?.name ?? "-",
-              ),
-            ],
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildAboutSection(BuildContext context, dynamic profile) {
-    final l = AppLocalizations.of(context)!;
-    return _profileCard(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          _sectionTitle(l.pub_profile_about),
-          const SizedBox(height: 12),
-          Text(
-            profile.introduction?.introduction ?? "-",
-            style: Styles.regular_gull_grey_12.copyWith(
-              fontSize: 14,
-              height: 1.5,
-              color: MyTheme.text_primary,
             ),
-          ),
         ],
       ),
     );
   }
 
-  Widget _buildPersonalDetails(BuildContext context, dynamic profile) {
-    final l = AppLocalizations.of(context)!;
+  // =========================================================================
+  // SECTION 2: Physical Details
+  // =========================================================================
+  Widget _buildPhysicalDetailsSection(BuildContext context, dynamic profile) {
+    final physical = profile.physical;
+    final basic = profile.basic; // Fallback for basic-info-mapped fields
+    
     return _profileCard(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          _sectionTitle(l.pub_profile_personal),
+          _sectionTitle("Physical Details"),
           const SizedBox(height: 8),
-          _detailRow(
-            l.pub_profile_age,
-            "${profile.basic?.age ?? '-'} ${l.pub_profile_age_years}",
-          ),
-          _detailRow(
-            l.pub_profile_religion,
-            profile.spiritual?.religionId ?? "-",
-          ),
-          _detailRow(l.pub_profile_caste, profile.spiritual?.casteId ?? "-"),
-          _detailRow(
-            l.pub_profile_mother_tongue,
-            profile.motherTongue?.name ?? "-",
-          ),
-          _detailRow(
-            l.pub_profile_education,
-            (profile.education is List && profile.education.isNotEmpty)
-                ? profile.education.first.degree
-                : "-",
-          ),
-          _detailRow(
-            l.pub_profile_location,
-            profile.presentAddress?.city ?? "-",
-          ),
+          _detailRow("Height", physical?.height?.toString() ?? basic?.height),
+          _detailRow("Weight", physical?.weight?.toString() ?? basic?.weight),
+          _detailRow("Blood Group", physical?.bloodGroup ?? basic?.bloodGroup),
+          _detailRow("Complexion", physical?.complexion ?? basic?.complexion),
+          _detailRow("Physical Disability", (physical?.physicalDisability == true || basic?.disability == 1) ? "Yes" : "No"),
+          if (physical?.physicalDisability == true || basic?.disability == 1)
+            _detailRow("Disability Details", physical?.disability ?? "N/A"),
         ],
       ),
     );
   }
 
-  Widget _buildProfessionalDetails(BuildContext context, dynamic profile) {
-    final l = AppLocalizations.of(context)!;
+  // =========================================================================
+  // SECTION 3: Family Details
+  // =========================================================================
+  Widget _buildFamilyDetailsSection(BuildContext context, dynamic profile) {
+    final family = profile.family;
+    if (family == null) return const SizedBox.shrink();
+
     return _profileCard(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          _sectionTitle(l.pub_profile_professional),
+          _sectionTitle("Family Details"),
           const SizedBox(height: 8),
-          _detailRow(
-            l.pub_profile_designation,
-            (profile.career is List && profile.career.isNotEmpty)
-                ? profile.career.first.designation
-                : "-",
-          ),
-          _detailRow(
-            l.pub_profile_company,
-            (profile.career is List && profile.career.isNotEmpty)
-                ? profile.career.first.company
-                : "-",
-          ),
-          _detailRow(
-            l.pub_profile_income,
-            (profile.career is List && profile.career.isNotEmpty)
-                ? profile.career.first.income
-                : "-",
-          ),
+          _detailRow("Father Alive", family.father),
+          _detailRow("Mother Alive", family.mother),
+          _detailRow("Total Brothers", family.sibling?.toString().split(',').firstOrNull),
+          _detailRow("Total Sisters", family.sibling?.toString().split(',').lastOrNull),
         ],
       ),
     );
   }
 
-  // Sanket: Physical Attributes Card (NEW)
-  Widget _buildPhysicalAttributes(BuildContext context, dynamic profile) {
-    final l = AppLocalizations.of(context)!;
-    final PhysicalAttributes? physical =
-        profile.physical is PhysicalAttributes ? profile.physical : null;
+  // =========================================================================
+  // SECTION 4: Education & Career
+  // =========================================================================
+  Widget _buildEducationCareerSection(BuildContext context, dynamic profile) {
+    final edu = profile.education is List && profile.education.isNotEmpty ? profile.education.first : null;
+    final car = profile.career is List && profile.career.isNotEmpty ? profile.career.first : null;
+    final basic = profile.basic;
 
     return _profileCard(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          _sectionTitle(l.pub_profile_physical),
+          _sectionTitle("Education & Career"),
           const SizedBox(height: 8),
-          _detailRow(l.pub_profile_height, "${physical?.height ?? '-'}"),
-          _detailRow(l.pub_profile_weight, "${physical?.weight ?? '-'} kg"),
-          _detailRow(l.pub_profile_blood_group, physical?.bloodGroup ?? "-"),
-          _detailRow(l.pub_profile_complexion, physical?.complexion ?? "-"),
-          _detailRow(
-            l.pub_profile_disability,
-            (physical?.physicalDisability ?? false)
-                ? l.profile_yes
-                : l.profile_no,
-          ),
+          _detailRow("Highest Education Level", edu?.degree),
+          _detailRow("Education Details", edu?.institution),
+          _detailRow("Occupation Type", car?.designation),
+          _detailRow("Occupation Details", car?.company),
+          _detailRow("Annual Income", car?.income ?? basic?.annualIncome),
         ],
       ),
     );
   }
 
-  // Sanket: Spiritual & Social Card (NEW)
-  Widget _buildSpiritualBackground(BuildContext context, dynamic profile) {
-    final l = AppLocalizations.of(context)!;
-    final SpiritualBackgrounds? spiritual =
-        profile.spiritual is SpiritualBackgrounds ? profile.spiritual : null;
+  // =========================================================================
+  // SECTION 5: Lifestyle & Spiritual
+  // =========================================================================
+  Widget _buildLifestyleSpiritualSection(BuildContext context, dynamic profile) {
+    final life = profile.lifeStyle;
+    final spiritual = profile.spiritual;
+    final basic = profile.basic;
 
     return _profileCard(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          _sectionTitle(l.pub_profile_spiritual),
+          _sectionTitle("Lifestyle & Spiritual"),
           const SizedBox(height: 8),
-          _detailRow(l.pub_profile_religion, spiritual?.religionId ?? "-"),
-          _detailRow(l.pub_profile_caste, spiritual?.casteId ?? "-"),
-          _detailRow(
-            l.pub_profile_manglik,
-            (spiritual?.manglik ?? false) ? l.profile_yes : l.profile_no,
-          ),
-          _detailRow(
-            l.pub_profile_intercaste,
-            (spiritual?.intercasteAccepted ?? false)
-                ? l.profile_yes
-                : l.profile_no,
-          ),
+          _detailRow("Diet", life?.diet ?? basic?.diet),
+          _detailRow("Manglik Status", (spiritual?.manglik == 1 || basic?.manglik == 1) ? "Yes" : "No"),
+          _detailRow("Intercaste Accepted", (spiritual?.intercasteAccepted == 1) ? "Yes" : "No"),
         ],
       ),
     );
   }
 
-  // Sanket: Lifestyle Card (NEW)
-  Widget _buildLifestyle(BuildContext context, dynamic profile) {
-    final l = AppLocalizations.of(context)!;
+  // =========================================================================
+  // SECTION 6: Contact & Location
+  // =========================================================================
+  Widget _buildContactLocationSection(BuildContext context, dynamic profile) {
+    final addr = profile.permanentAddress;
+    final contact = profile.contactDetails;
+    final basic = profile.basic;
+
     return _profileCard(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          _sectionTitle(l.pub_profile_lifestyle),
+          _sectionTitle("Contact & Location"),
           const SizedBox(height: 8),
-          _detailRow(l.pub_profile_diet, profile.lifeStyle?.diet ?? "-"),
-          _detailRow(l.pub_profile_drink, profile.lifeStyle?.drink ?? "-"),
-          _detailRow(l.pub_profile_smoke, profile.lifeStyle?.smoke ?? "-"),
+          _detailRow("Permanent Address", addr?.postalCode),
+          _detailRow("District", addr?.city),
+          _detailRow("Mobile Number 1", contact?.phone ?? basic?.phone),
+          _detailRow("Mobile Number 2", basic?.phone),
         ],
       ),
     );
   }
 
-  Widget _buildFamilyDetails(BuildContext context, dynamic profile) {
-    final l = AppLocalizations.of(context)!;
-    return _profileCard(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          _sectionTitle(l.pub_profile_family),
-          const SizedBox(height: 8),
-          _detailRow(l.pub_profile_father, profile.family?.father ?? "-"),
-          _detailRow(l.pub_profile_mother, profile.family?.mother ?? "-"),
-          _detailRow(l.pub_profile_brothers, profile.family?.sibling ?? "-"),
-        ],
-      ),
-    );
-  }
-
-  // Sanket: Partner Expectations Card (NEW)
-  Widget _buildPartnerExpectations(BuildContext context, dynamic profile) {
-    final l = AppLocalizations.of(context)!;
-    final PartnerExpectation? partner =
-        profile.partnerExpectation is PartnerExpectation
-            ? profile.partnerExpectation
-            : null;
+  // =========================================================================
+  // SECTION 7: Partner Expectations
+  // =========================================================================
+  Widget _buildPartnerExpectationsSection(BuildContext context, dynamic profile) {
+    final partner = profile.partnerExpectation;
+    if (partner == null) return const SizedBox.shrink();
 
     return _profileCard(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          _sectionTitle(l.pub_profile_partner_exp),
+          _sectionTitle("Partner Expectations"),
           const SizedBox(height: 8),
-          _detailRow(l.pub_profile_pref_edu, partner?.expectedEducation ?? "-"),
-          _detailRow(l.pub_profile_pref_income, partner?.expectedIncome ?? "-"),
-          _detailRow(l.pub_profile_pref_cities, partner?.preferredCity ?? "-"),
-          _detailRow(
-            l.pub_profile_pref_divorce,
-            (partner?.divorceAccepted ?? false) ? l.profile_yes : l.profile_no,
-          ),
-          _detailRow(
-            l.pub_profile_manglik,
-            (partner?.partnerManglik ?? false) ? l.profile_yes : l.profile_no,
-          ),
+          _detailRow("Partner Religion", partner.religion),
+          _detailRow("Partner Caste", partner.caste),
+          _detailRow("Partner Sub-Caste", partner.subCaste),
+          _detailRow("Minimum Expected Education", partner.expectedEducation),
+          _detailRow("Minimum Expected Income", partner.expectedIncome),
+          _detailRow("Preferred Cities", partner.general),
+          _detailRow("Divorce Accepted", (partner.divorceAccepted == 1) ? "Yes" : "No"),
+          _detailRow("Partner Manglik", (partner.partnerManglik == 1) ? "Yes" : "No"),
+          _detailRow("Partner Intercaste Accepted", (partner.partnerIntercaste == 1) ? "Yes" : "No"),
         ],
       ),
     );
@@ -781,31 +698,22 @@ class _UserPublicProfileState extends State<UserPublicProfile> {
     );
   }
 
-  Widget _infoTile(String label, dynamic value) {
-    String safeValue = (value == null || value.toString().isEmpty || value.toString() == 'null') ? "-" : value.toString();
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(label, style: Styles.regular_gull_grey_12.copyWith(fontSize: 11)),
-        const SizedBox(height: 2),
-        Text(safeValue, style: Styles.bold_arsenic_12.copyWith(fontSize: 14)),
-      ],
-    );
-  }
-
   Widget _detailRow(String label, dynamic value) {
-    String safeValue = (value == null || value.toString().isEmpty || value.toString() == 'null') ? "-" : value.toString();
+    if (value == null || value.toString().isEmpty || value.toString().toLowerCase() == 'null' || value.toString() == '0' || value.toString() == 'N/A') {
+      return const SizedBox.shrink(); // Hide empty fields (Rule #2)
+    }
+
+    String safeValue = value.toString();
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 8),
       child: Row(
-        crossAxisAlignment:
-            CrossAxisAlignment.start, // Sanket: Handle multi-line overflow
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
             label,
             style: Styles.regular_gull_grey_12.copyWith(fontSize: 14),
           ),
-          const SizedBox(width: 8), // Gap
+          const SizedBox(width: 8),
           Expanded(
             child: Text(
               safeValue,

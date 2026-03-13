@@ -266,11 +266,16 @@ class AttitudeBehavior {
 class BasicInfo {
   BasicInfo({
     this.firstName,
+    this.middleName, // Added by Sanket
     this.lastName,
+    this.surname, // Added by Sanket
     this.code,
     this.age,
+    this.religionId, // Added by Sanket
     this.religion,
+    this.casteId, // Added by Sanket
     this.caste,
+    this.subCasteId, // Added by Sanket
     this.dateOfBirth,
     this.onbehalf,
     this.noOfChildren,
@@ -280,14 +285,29 @@ class BasicInfo {
     this.photo,
     this.mothereTongue,
     this.approved,
+    this.about, // Added by Sanket
+    this.bio, // Added by Sanket
+    this.annualIncome, // Added by Sanket
+    this.height, // Added by Sanket
+    this.weight, // Added by Sanket
+    this.complexion, // Added by Sanket
+    this.bloodGroup, // Added by Sanket
+    this.disability, // Added by Sanket
+    this.diet, // Added by Sanket
+    this.manglik, // Added by Sanket
   });
 
   String? firstName;
+  String? middleName; // Added by Sanket
   String? lastName;
+  String? surname; // Added by Sanket
   String? code;
   dynamic age;
+  int? religionId; // Added by Sanket
   String? religion;
+  int? casteId; // Added by Sanket
   String? caste;
+  int? subCasteId; // Added by Sanket
   DateTime? dateOfBirth;
   MotherTongue? onbehalf;
   dynamic noOfChildren;
@@ -297,47 +317,87 @@ class BasicInfo {
   String? photo;
   String? mothereTongue;
   dynamic approved;
+  String? about; // Added by Sanket
+  String? bio; // Added by Sanket
+  String? annualIncome; // Added by Sanket
+  String? height; // Added by Sanket
+  String? weight; // Added by Sanket
+  String? complexion; // Added by Sanket
+  String? bloodGroup; // Added by Sanket
+  dynamic disability; // Added by Sanket
+  String? diet; // Added by Sanket
+  dynamic manglik; // Added by Sanket
 
   factory BasicInfo.fromJson(Map<String, dynamic> json) => BasicInfo(
-        firstName: json["first_name"] ?? json["firs_name"],
-        lastName: json["last_name"],
-        code: json["code"],
-        age: json["age"],
-        religion: json["religion"],
-        caste: json["caste"],
-        dateOfBirth: json["date_of_birth"] == null
+    firstName: json["first_name"] ?? json["firs_name"],
+    middleName: json["middle_name"], // Sanket
+    lastName: json["last_name"],
+    surname: json["surname"] ?? json["last_name"], // Sanket
+    code: json["code"],
+    age: json["age"],
+    religionId: json["religion_id"], // Sanket
+    religion: json["religion"],
+    casteId: json["caste_id"], // Sanket
+    caste: json["caste"],
+    subCasteId: json["sub_caste_id"], // Sanket
+    dateOfBirth:
+        json["date_of_birth"] == null
             ? null
             : DateTime.tryParse(json["date_of_birth"]),
-        onbehalf: json["onbehalf"] == null
-            ? null
-            : MotherTongue.fromJson(json["onbehalf"]),
-        noOfChildren: json["no_of_children"],
-        gender: json["gender"],
-        phone: json["phone"],
-        maritialStatus: json["maritial_status"],
-        photo: json["photo"],
-        mothereTongue: json["mothere_tongue"]?.toString(),
-        approved: json["approved"],
-      );
+    onbehalf:
+        json["onbehalf"] == null ? null : MotherTongue.fromJson(json["onbehalf"]),
+    noOfChildren: json["no_of_children"],
+    gender: json["gender"],
+    phone: json["phone"],
+    maritialStatus: json["maritial_status"],
+    photo: json["photo"],
+    mothereTongue: json["mothere_tongue"]?.toString(),
+    approved: json["approved"],
+    about: json["about"], // Sanket
+    bio: json["bio"], // Sanket
+    annualIncome: json["annual_income"]?.toString(), // Sanket
+    height: json["height"]?.toString(), // Sanket
+    weight: json["weight"]?.toString(), // Sanket
+    complexion: json["complexion"], // Sanket
+    bloodGroup: json["blood_group"], // Sanket
+    disability: json["disability"], // Sanket
+    diet: json["diet"], // Sanket
+    manglik: json["manglik"], // Sanket
+  );
 
   Map<String, dynamic> toJson() => {
-        "first_name": firstName,
-        "firs_name": firstName,
-        "last_name": lastName,
-        "code": code,
-        "age": age,
-        "religion": religion,
-        "caste": caste,
-        "date_of_birth": dateOfBirth?.toIso8601String(),
-        "onbehalf": onbehalf?.toJson(),
-        "no_of_children": noOfChildren,
-        "gender": gender,
-        "phone": phone,
-        "maritial_status": maritialStatus,
-        "photo": photo,
-        "mothere_tongue": mothereTongue,
-        "approved": approved,
-      };
+    "first_name": firstName,
+    "firs_name": firstName,
+    "middle_name": middleName, // Sanket
+    "last_name": lastName,
+    "surname": surname, // Sanket
+    "code": code,
+    "age": age,
+    "religion_id": religionId, // Sanket
+    "religion": religion,
+    "caste_id": casteId, // Sanket
+    "caste": caste,
+    "sub_caste_id": subCasteId, // Sanket
+    "date_of_birth": dateOfBirth?.toIso8601String(),
+    "onbehalf": onbehalf?.toJson(),
+    "no_of_children": noOfChildren,
+    "gender": gender,
+    "phone": phone,
+    "maritial_status": maritialStatus,
+    "photo": photo,
+    "mothere_tongue": mothereTongue,
+    "approved": approved,
+    "about": about, // Sanket
+    "bio": bio, // Sanket
+    "annual_income": annualIncome, // Sanket
+    "height": height, // Sanket
+    "weight": weight, // Sanket
+    "complexion": complexion, // Sanket
+    "blood_group": bloodGroup, // Sanket
+    "disability": disability, // Sanket
+    "diet": diet, // Sanket
+    "manglik": manglik, // Sanket
+  };
 }
 
 class MotherTongue {
@@ -555,12 +615,18 @@ class PartnerExpectation {
     this.height,
     this.weight,
     this.maritalStatus,
+    this.maritalStatusId, // Added by Sanket
     this.childrenAcceptable,
     this.residenceCountryId,
+    this.residenceCountry, // Added by Sanket
     this.religionId,
+    this.religion, // Added by Sanket
     this.casteId,
+    this.caste, // Added by Sanket
     this.subCasteId,
+    this.subCaste, // Added by Sanket
     this.education,
+    this.expectedEducation, // Added by Sanket
     this.profession,
     this.smokingAcceptable,
     this.drinkingAcceptable,
@@ -568,35 +634,49 @@ class PartnerExpectation {
     this.bodyType,
     this.personalValue,
     this.manglik,
+    this.partnerManglik, // Added by Sanket
     this.language,
     this.familyValueId,
     this.preferredCountryId,
     this.preferredStateId,
     this.complexion,
+    this.expectedIncome, // Added by Sanket
+    this.divorceAccepted, // Added by Sanket
+    this.partnerIntercaste, // Added by Sanket
   });
 
   String? general;
   var height;
   var weight;
   String? maritalStatus;
-  String? childrenAcceptable;
-  String? residenceCountryId;
-  String? religionId;
-  String? casteId;
-  String? subCasteId;
+  int? maritalStatusId; // Added by Sanket
+  dynamic childrenAcceptable;
+  dynamic residenceCountryId;
+  String? residenceCountry; // Added by Sanket
+  dynamic religionId;
+  String? religion; // Added by Sanket
+  dynamic casteId;
+  String? caste; // Added by Sanket
+  dynamic subCasteId;
+  String? subCaste; // Added by Sanket
   String? education;
+  String? expectedEducation; // Added by Sanket
   String? profession;
-  String? smokingAcceptable;
-  String? drinkingAcceptable;
+  dynamic smokingAcceptable;
+  dynamic drinkingAcceptable;
   String? diet;
   String? bodyType;
   String? personalValue;
-  String? manglik;
+  dynamic manglik;
+  dynamic partnerManglik; // Added by Sanket
   String? language;
   String? familyValueId;
-  String? preferredCountryId;
-  String? preferredStateId;
+  dynamic preferredCountryId;
+  dynamic preferredStateId;
   String? complexion;
+  String? expectedIncome; // Added by Sanket
+  dynamic divorceAccepted; // Added by Sanket
+  dynamic partnerIntercaste; // Added by Sanket
 
   factory PartnerExpectation.fromJson(Map<String, dynamic> json) =>
       PartnerExpectation(
@@ -604,12 +684,18 @@ class PartnerExpectation {
         height: json["height"],
         weight: json["weight"],
         maritalStatus: json["marital_status"],
+        maritalStatusId: json["marital_status_id"], // Sanket
         childrenAcceptable: json["children_acceptable"],
         residenceCountryId: json["residence_country_id"],
+        residenceCountry: json["residence_country"], // Sanket
         religionId: json["religion_id"],
+        religion: json["religion"], // Sanket
         casteId: json["caste_id"],
+        caste: json["caste"], // Sanket
         subCasteId: json["sub_caste_id"],
+        subCaste: json["sub_caste"], // Sanket
         education: json["education"],
+        expectedEducation: json["expected_education"] ?? json["education"], // Sanket
         profession: json["profession"],
         smokingAcceptable: json["smoking_acceptable"],
         drinkingAcceptable: json["drinking_acceptable"],
@@ -617,32 +703,34 @@ class PartnerExpectation {
         bodyType: json["body_type"],
         personalValue: json["personal_value"],
         manglik: json["manglik"],
+        partnerManglik: json["partner_manglik"] ?? json["manglik"], // Sanket
         language: json["language"],
-        familyValueId: json["family_value_id"],
+        familyValueId: json["family_value_id"]?.toString(),
         preferredCountryId: json["preferred_country_id"],
         preferredStateId: json["preferred_state_id"],
         complexion: json["complexion"],
+        expectedIncome: json["expected_income"]?.toString(), // Sanket
+        divorceAccepted: json["divorce_accepted"], // Sanket
+        partnerIntercaste: json["partner_intercaste"], // Sanket
       );
-
-  // Sanket: Getters for 2026 UI compatibility
-  String get expectedEducation => education ?? "-";
-  String get expectedIncome => "-"; // Not in current backend
-  String get preferredCity => "-"; // Not in current backend
-  bool get divorceAccepted =>
-      maritalStatus?.toLowerCase().contains("divorce") ?? false;
-  bool get partnerManglik => manglik?.toLowerCase() == "yes";
 
   Map<String, dynamic> toJson() => {
     "general": general,
     "height": height,
     "weight": weight,
     "marital_status": maritalStatus,
+    "marital_status_id": maritalStatusId, // Sanket
     "children_acceptable": childrenAcceptable,
     "residence_country_id": residenceCountryId,
+    "residence_country": residenceCountry, // Sanket
     "religion_id": religionId,
+    "religion": religion, // Sanket
     "caste_id": casteId,
+    "caste": caste, // Sanket
     "sub_caste_id": subCasteId,
+    "sub_caste": subCaste, // Sanket
     "education": education,
+    "expected_education": expectedEducation, // Sanket
     "profession": profession,
     "smoking_acceptable": smokingAcceptable,
     "drinking_acceptable": drinkingAcceptable,
@@ -650,11 +738,15 @@ class PartnerExpectation {
     "body_type": bodyType,
     "personal_value": personalValue,
     "manglik": manglik,
+    "partner_manglik": partnerManglik, // Sanket
     "language": language,
     "family_value_id": familyValueId,
     "preferred_country_id": preferredCountryId,
     "preferred_state_id": preferredStateId,
     "complexion": complexion,
+    "expected_income": expectedIncome, // Sanket
+    "divorce_accepted": divorceAccepted, // Sanket
+    "partner_intercaste": partnerIntercaste, // Sanket
   };
 }
 
@@ -780,42 +872,54 @@ class SpiritualBackgrounds {
     this.religionId,
     this.casteId,
     this.subCasteId,
+    this.subCaste, // Added by Sanket
     this.ethnicity,
     this.personalValue,
     this.familyValueId,
+    this.familyValue, // Added by Sanket
     this.communityValue,
+    this.manglik, // Added by Sanket
+    this.intercasteAccepted, // Added by Sanket
   });
 
   String? religionId;
   String? casteId;
   String? subCasteId;
+  String? subCaste; // Added by Sanket
   String? ethnicity;
   String? personalValue;
   String? familyValueId;
+  String? familyValue; // Added by Sanket
   String? communityValue;
+  dynamic manglik; // Added by Sanket
+  dynamic intercasteAccepted; // Added by Sanket
 
   factory SpiritualBackgrounds.fromJson(Map<String, dynamic> json) =>
       SpiritualBackgrounds(
-        religionId: json["religion_id"],
-        casteId: json["caste_id"],
-        subCasteId: json["sub_caste_id"],
+        religionId: json["religion_id"]?.toString(),
+        casteId: json["caste_id"]?.toString(),
+        subCasteId: json["sub_caste_id"]?.toString(),
+        subCaste: json["sub_caste"], // Sanket
         ethnicity: json["ethnicity"],
         personalValue: json["personal_value"],
-        familyValueId: json["family_value_id"],
+        familyValueId: json["family_value_id"]?.toString(),
+        familyValue: json["family_value"], // Sanket
         communityValue: json["community_value"],
+        manglik: json["manglik"], // Sanket
+        intercasteAccepted: json["intercaste_accepted"], // Sanket
       );
 
   Map<String, dynamic> toJson() => {
     "religion_id": religionId,
     "caste_id": casteId,
     "sub_caste_id": subCasteId,
+    "sub_caste": subCaste, // Sanket
     "ethnicity": ethnicity,
     "personal_value": personalValue,
     "family_value_id": familyValueId,
+    "family_value": familyValue, // Sanket
     "community_value": communityValue,
+    "manglik": manglik, // Sanket
+    "intercaste_accepted": intercasteAccepted, // Sanket
   };
-
-  // Sanket: Getters for 2026 UI compatibility
-  bool get manglik => false; // Not in current backend spiritual info
-  bool get intercasteAccepted => true; // Defaulting for search/match
 }

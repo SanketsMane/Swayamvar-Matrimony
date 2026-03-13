@@ -101,14 +101,14 @@ class _ExploreState extends State<Explore> {
   Widget build(BuildContext context) {
     return StoreConnector<AppState, ExploreViewModel>(
       converter: (store) => ExploreViewModel.fromStore(store),
-      onInit:
-          (store) => [
-            store.dispatch(fetchPremiumMembersAction()),
-            store.dispatch(fetchNewMembersAction()),
-            if (store.state.basicSearchState?.searchText != null)
-              _searchController.text =
-                  store.state.basicSearchState!.searchText!,
-          ],
+      onInit: (store) {
+        store.dispatch(fetchPremiumMembersAction());
+        store.dispatch(fetchNewMembersAction());
+        if (store.state.basicSearchState?.searchText != null) {
+          _searchController.text =
+              store.state.basicSearchState?.searchText ?? "";
+        }
+      },
       builder: (_, vm) {
         // Ensure data is loaded
         if (vm.premiumMembersList == null || vm.newMemberList == null) {
@@ -163,7 +163,7 @@ class _ExploreState extends State<Explore> {
             final shouldPop =
                 (await OneContext().showDialog<bool>(
                   builder: (BuildContext context) => exit_alert_dialog(context),
-                ))!;
+                )) ?? false;
             return shouldPop;
           },
           child: Scaffold(
@@ -472,7 +472,7 @@ class _ExploreState extends State<Explore> {
                         AppLocalizations.of(context)!.explore_interest,
                         Icons.favorite,
                         MyTheme.primary,
-                        () => vm.expressInterest(userId: m.userId!),
+                        () => vm.expressInterest(userId: m.userId ?? 0),
                       ),
                     ),
                     const SizedBox(width: 8),
@@ -481,7 +481,7 @@ class _ExploreState extends State<Explore> {
                         AppLocalizations.of(context)!.explore_shortlist,
                         Icons.star_border,
                         MyTheme.text_secondary,
-                        () => vm.addShortlist(user: m.userId!),
+                        () => vm.addShortlist(user: m.userId ?? 0),
                       ),
                     ),
                     const SizedBox(width: 8),
@@ -504,7 +504,7 @@ class _ExploreState extends State<Explore> {
                       () {
                         showDialog(
                           context: context,
-                          builder: (context) => ReportDialog(userId: m.userId!),
+                          builder: (context) => ReportDialog(userId: m.userId ?? 0),
                         );
                       },
                     ),
@@ -590,7 +590,7 @@ class _ExploreState extends State<Explore> {
 
   Widget _buildNearbyCard(BuildContext context, MemberData m, int idx) {
     return GestureDetector(
-      onTap: () => AIZRoute.push(context, UserPublicProfile(userId: m.userId!)),
+      onTap: () => AIZRoute.push(context, UserPublicProfile(userId: m.userId ?? 0)),
       child: Container(
         width: 140,
         margin: const EdgeInsets.symmetric(horizontal: 4),
@@ -884,7 +884,7 @@ class _ExploreState extends State<Explore> {
 
   Widget _buildNewMatchCard(BuildContext context, MemberData m, int idx) {
     return GestureDetector(
-      onTap: () => AIZRoute.push(context, UserPublicProfile(userId: m.userId!)),
+      onTap: () => AIZRoute.push(context, UserPublicProfile(userId: m.userId ?? 0)),
       child: Container(
         decoration: BoxDecoration(
           color: MyTheme.white,
@@ -911,7 +911,7 @@ class _ExploreState extends State<Explore> {
                       onTap: () {
                         showDialog(
                           context: context,
-                          builder: (context) => ReportDialog(userId: m.userId!),
+                          builder: (context) => ReportDialog(userId: m.userId ?? 0),
                         );
                       },
                       child: Container(

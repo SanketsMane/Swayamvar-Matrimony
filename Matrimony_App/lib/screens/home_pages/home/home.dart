@@ -322,7 +322,7 @@ class _HomeState extends State<Home> {
                         vm.profileData?.memberPhoto != null
                             ? DecorationImage(
                               image: MyImage.imageProvider(
-                                vm.profileData!.memberPhoto,
+                                vm.profileData?.memberPhoto,
                               ),
                               fit: BoxFit.cover,
                             )
@@ -1473,7 +1473,7 @@ class HomeViewModel {
 
   static HomeViewModel fromStore(Store<AppState> store) {
     String? error = store.state.accountState?.error;
-    bool isLoading = store.state.accountState?.profileData == null && (error == null || error.isEmpty);
+    bool isLoading = store.state.accountState?.profileData == null && (error == null || (error?.isEmpty ?? true));
 
     return HomeViewModel(
       profileData: store.state.accountState?.profileData,
@@ -1485,20 +1485,10 @@ class HomeViewModel {
         "full_profile_show_according_to_membership",
         "1",
       ),
-      activeMembers: store.state.homeState!.homeDataList,
-      activeNowList:
-          store
-              .state
-              .homeState!
-              .homeDataList, // TODO: Assuming standard list for now, will refine if there's a specific 'activeNow' list in state later.
-      isFetch: store.state.homeState!.isFetching,
-      packageExpire:
-          store
-              .state
-              .accountState!
-              .profileData
-              ?.currentPackageInfo
-              ?.packageExpiry,
+      activeMembers: store.state.homeState?.homeDataList ?? [],
+      activeNowList: store.state.homeState?.homeDataList ?? [], // TODO: Assuming standard list for now, will refine if there's a specific 'activeNow' list in state later.
+      isFetch: store.state.homeState?.isFetching ?? false,
+      packageExpire: store.state.accountState?.profileData?.currentPackageInfo?.packageExpiry,
       myInterestStateLoading: store.state.myInterestState?.isLoading,
       shortlistStateLoading: store.state.shortlistState?.isLoading,
       profileViewCount:
