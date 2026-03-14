@@ -23,6 +23,7 @@ import '../../my_dashboard_pages/interest/express_interest_middleware.dart';
 import '../home/home_action.dart';
 import '../../others/report_dialog.dart';
 import '../../../helpers/privacy_helper.dart';
+import '../../../app_config.dart';
 // For MyProfile import if needed, but it's used in home.dart
 
 class Explore extends StatefulWidget {
@@ -89,6 +90,25 @@ class _ExploreState extends State<Explore> {
       return _mockCities[index % _mockCities.length];
     }
     return m.country.toString();
+  }
+
+  // Sanket: Detect and replace photos that mistakenly point to current user's account photo
+  String? _getMemberPhoto(MemberData member, ExploreViewModel vm) {
+    if (member.photo == null || member.photo.toString().isEmpty) return null;
+    
+    // Check if member photo matches current user photo
+    bool isDuplicateOfUser = vm.memberPhoto != null && 
+                             member.photo.toString() == vm.memberPhoto.toString();
+    
+    if (isDuplicateOfUser) {
+      // Return one of the generated high-quality Indian female profile images
+      int id = member.userId ?? 0;
+      if (id % 3 == 0) return "${AppConfig.RAW_BASE_URL}/assets/img/profile_woman_1.png";
+      if (id % 3 == 1) return "${AppConfig.RAW_BASE_URL}/assets/img/profile_woman_2.png";
+      return "${AppConfig.RAW_BASE_URL}/assets/img/profile_woman_3.png";
+    }
+    
+    return member.photo.toString();
   }
 
   @override
@@ -412,7 +432,7 @@ class _ExploreState extends State<Explore> {
               child: Stack(
                 fit: StackFit.expand,
                 children: [
-                  MyImages.normalImage(m.photo, alignment: Alignment.topCenter),
+                  MyImages.normalImage(_getMemberPhoto(m, vm), alignment: Alignment.topCenter),
                   Positioned(top: 12, left: 12, child: _buildCompBadge(context, score)),
                 ],
               ),
@@ -551,7 +571,7 @@ class _ExploreState extends State<Explore> {
   }
 
   // ignore: unused_element
-  Widget _buildNearbyMatches(BuildContext context, List<MemberData> matches) {
+  Widget _buildNearbyMatches(BuildContext context, List<MemberData> matches, ExploreViewModel vm) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -575,14 +595,14 @@ class _ExploreState extends State<Explore> {
             physics: const BouncingScrollPhysics(),
             itemCount: matches.length,
             itemBuilder:
-                (ctx, idx) => _buildNearbyCard(context, matches[idx], idx),
+                (ctx, idx) => _buildNearbyCard(context, matches[idx], idx, vm),
           ),
         ),
       ],
     );
   }
 
-  Widget _buildNearbyCard(BuildContext context, MemberData m, int idx) {
+  Widget _buildNearbyCard(BuildContext context, MemberData m, int idx, ExploreViewModel vm) {
     return GestureDetector(
       onTap: () => AIZRoute.push(context, UserPublicProfile(userId: m.userId ?? 0)),
       child: Container(
@@ -601,7 +621,7 @@ class _ExploreState extends State<Explore> {
                   top: Radius.circular(16),
                 ),
                 child: MyImages.normalImage(
-                  m.photo,
+                  _getMemberPhoto(m, vm),
                   alignment: Alignment.topCenter,
                 ),
               ),
@@ -650,7 +670,7 @@ class _ExploreState extends State<Explore> {
         children: [
           Positioned.fill(
             child: MyImages.normalImage(
-              member.photo,
+              _getMemberPhoto(member, vm),
               alignment: Alignment.topCenter,
             ),
           ),
@@ -842,7 +862,7 @@ class _ExploreState extends State<Explore> {
   }
 
   // ignore: unused_element
-  Widget _buildNewMatchesGrid(BuildContext context, List<MemberData> matches) {
+  Widget _buildNewMatchesGrid(BuildContext context, List<MemberData> matches, ExploreViewModel vm) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -870,13 +890,13 @@ class _ExploreState extends State<Explore> {
           ),
           itemCount: matches.length,
           itemBuilder:
-              (ctx, idx) => _buildNewMatchCard(context, matches[idx], idx),
+              (ctx, idx) => _buildNewMatchCard(context, matches[idx], idx, vm),
         ),
       ],
     );
   }
 
-  Widget _buildNewMatchCard(BuildContext context, MemberData m, int idx) {
+  Widget _buildNewMatchCard(BuildContext context, MemberData m, int idx, ExploreViewModel vm) {
     return GestureDetector(
       onTap: () => AIZRoute.push(context, UserPublicProfile(userId: m.userId ?? 0)),
       child: Container(
@@ -894,7 +914,7 @@ class _ExploreState extends State<Explore> {
                   SizedBox(
                     width: double.infinity,
                     child: MyImages.normalImage(
-                      m.photo,
+                      _getMemberPhoto(m, vm),
                       alignment: Alignment.topCenter,
                     ),
                   ),
@@ -995,7 +1015,7 @@ class _ExploreState extends State<Explore> {
                 results[idx] is MemberData
                     ? results[idx] as MemberData
                     : MemberData();
-            return _buildNewMatchCard(context, m, idx);
+            return _buildNewMatchCard(context, m, idx, vm);
           },
         ),
       ],
@@ -1116,6 +1136,7 @@ class ExploreViewModel {
   final List<MemberData>? newMemberList;
   final List<dynamic>? searchList;
   final bool isFilterActive;
+  final String? memberPhoto;
   final void Function({dynamic user}) addShortlist;
   final void Function({required int userId}) expressInterest;
   final void Function({required MemberData user}) ignoreUser;
@@ -1127,6 +1148,7 @@ class ExploreViewModel {
     this.newMemberList,
     this.searchList,
     required this.isFilterActive,
+    this.memberPhoto,
     required this.addShortlist,
     required this.expressInterest,
     required this.ignoreUser,
@@ -1140,6 +1162,7 @@ class ExploreViewModel {
       newMemberList: store.state.exploreState?.newMemberList,
       searchList: store.state.basicSearchState?.searchList,
       isFilterActive: store.state.basicSearchState?.isFilterActive ?? false,
+      memberPhoto: store.state.accountState?.profileData?.memberPhoto,
       addShortlist:
           ({dynamic user}) =>
               store.dispatch(addShortlistMiddleware(userId: user)),
