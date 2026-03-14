@@ -58,7 +58,7 @@
 
                 <!-- Footer -->
                 <div class="bg-white text-center py-3 px-15px px-lg-25px mt-auto">
-                    <p class="mb-0">Swayamvar - Developed by Sanket Mane version 1.1</p>
+                    <p class="mb-0">Swayamvar - Developed by Sanket Mane version 1.2</p>
                 </div>
             </div>
             <!-- Mian content end -->
