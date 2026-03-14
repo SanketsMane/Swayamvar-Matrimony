@@ -15,7 +15,6 @@ class MyImages {
 
     // Sanket: Handle absolute URLs
     if (cleanUrl.startsWith("http")) {
-      if (kDebugMode) print("MyImages: Absolute URL -> $cleanUrl");
       return cleanUrl;
     }
 

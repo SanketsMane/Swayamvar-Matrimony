@@ -593,7 +593,6 @@ class ManageProfileRepository {
 
     var data = educationGetResponseFromJson(response.body);
     debugPrint("Education data fetched: ${data.data}");
-    print("education data:${response.body}");
 
     return data;
   }

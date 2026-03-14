@@ -1,4 +1,4 @@
-// Sanket: True Custom Painted Cut Bottom Navigation Bar (Real Fix - Final Stable)
+
 import 'package:flutter/material.dart';
 import '../const/my_theme.dart';
 
@@ -69,7 +69,7 @@ class _CustomBottomNavBarState extends State<CustomBottomNavBar>
   Widget build(BuildContext context) {
     final width = MediaQuery.of(context).size.width;
     final itemWidth = width / icons.length;
-    // Sanket: labels removed — icon-only nav design
+
     const double navbarHeight = 65.0; // Slightly increased for labels
     const double circleSize = 52.0;
 
@@ -127,7 +127,7 @@ class _CustomBottomNavBarState extends State<CustomBottomNavBar>
                                           : MyTheme.text_secondary,
                                   size: 22,
                                 ),
-                                // Sanket: Labels removed — icon-only nav
+
                               ],
                             ),
                           ),
@@ -162,7 +162,7 @@ class _CustomBottomNavBarState extends State<CustomBottomNavBar>
                             color: Colors.white,
                             size: 22,
                           ),
-                          // Sanket: No label in active bubble — icon only
+
                         ],
                       ),
                     ),

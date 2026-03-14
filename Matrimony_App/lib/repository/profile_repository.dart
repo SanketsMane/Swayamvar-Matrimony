@@ -24,7 +24,7 @@ class AccountRepository {
     // Check for "un_verified" or "blocked"
     AizRequestResponse.check(response);
 
-    print("RAW JSON RESPONSE FROM PROFILE API: ${response.body}");
+
     var data = profileResponseFromJson(response.body);
 
     if (data.result == false && data.data == null) {

@@ -17,7 +17,7 @@ FamilyState? family_reducer(FamilyState? state, dynamic action) {
   }
 
   if (action is FamilyStoreAction) {
-    state!.familyData = action.payload!.data;
+    state!.familyData = action.payload?.data;
     setFamily(state);
     return state;
   }
@@ -32,9 +32,10 @@ FamilyState? family_reducer(FamilyState? state, dynamic action) {
 }
 
 void setFamily(FamilyState? state) {
-  state!.fatherController!.text = state.familyData!.father!;
-  state.motherController!.text = state.familyData!.mother!;
-  state.siblingController!.text = state.familyData!.sibling!;
+  if (state == null || state.familyData == null) return;
+  state.fatherController?.text = state.familyData?.father ?? '';
+  state.motherController?.text = state.familyData?.mother ?? '';
+  state.siblingController?.text = state.familyData?.sibling ?? '';
 }
 
 // actions

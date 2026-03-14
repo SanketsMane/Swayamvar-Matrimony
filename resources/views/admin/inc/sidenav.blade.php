@@ -37,6 +37,19 @@
                             </a>
                         </li>
                         @endcan
+                        
+                        <li class="aiz-side-nav-item">
+                            <a href="{{ route('telecallers.biodata_tracking') }}" class="aiz-side-nav-link">
+                                <span class="aiz-side-nav-text">{{ translate('Biodata Tracking') }}</span>
+                            </a>
+                        </li>
+                        
+                        <li class="aiz-side-nav-item">
+                            <a href="{{ route('telecalling.fill_biodata') }}" class="aiz-side-nav-link">
+                                <span class="aiz-side-nav-text">{{ translate('Fill Biodata') }}</span>
+                            </a>
+                        </li>
+
                         @can('manage_telecallers')
                         <li class="aiz-side-nav-item">
                             <a href="{{ route('telecallers.index') ?? '#' }}" class="aiz-side-nav-link">

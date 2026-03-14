@@ -724,7 +724,7 @@ class ProfileController extends Controller
             if ($user->member) {
                 $known_languages = json_decode($user->member->known_languages);
                 $mother_tongue = json_decode($user->member->mothere_tongue);
-                if ($known_languages != null) {
+                if ($known_languages != null && is_array($known_languages)) {
                     $member_known_languages = LanguageResource::collection(MemberLanguage::whereIn('id', $known_languages)->get());
                 }
                 if ($mother_tongue != null) {

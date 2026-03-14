@@ -13,7 +13,8 @@ ChatState? chat_reducer(ChatState? state, action) {
     return state;
   }
   if (action is ChatFailureAction) {
-    state!.error = action.error;
+    state!.isFetching = false;
+    state.error = action.error;
     return state;
   }
   return state;

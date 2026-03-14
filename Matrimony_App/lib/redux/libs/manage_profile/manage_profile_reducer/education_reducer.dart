@@ -84,7 +84,6 @@ EducationState reset_list(EducationState state, dynamic action) {
   state.saveChanges = false;
   state.update_changes = false;
 
-  debugPrint("Resetting education state: ${state.toString()}");
 
   return state;
 }

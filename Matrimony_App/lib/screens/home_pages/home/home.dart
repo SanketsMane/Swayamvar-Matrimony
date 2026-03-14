@@ -1,4 +1,5 @@
 import 'package:active_matrimonial_flutter_app/l10n/app_localizations.dart';
+import 'package:active_matrimonial_flutter_app/app_config.dart';
 import 'package:active_matrimonial_flutter_app/helpers/profile_completeness_helper.dart';
 
 import 'dart:io';
@@ -35,6 +36,7 @@ import 'package:active_matrimonial_flutter_app/screens/my_dashboard_pages/shortl
 import 'package:active_matrimonial_flutter_app/screens/my_dashboard_pages/interest/express_interest_middleware.dart';
 import 'package:active_matrimonial_flutter_app/screens/my_dashboard_pages/shortlist/add_shortlist_middleware.dart';
 import 'package:active_matrimonial_flutter_app/screens/notifications/notifications.dart';
+import 'package:active_matrimonial_flutter_app/helpers/privacy_helper.dart';
 
 import '../explore/explore.dart';
 import 'home_action.dart';
@@ -133,11 +135,12 @@ class _HomeState extends State<Home> {
                               const SizedBox(height: 24),
                               _buildQuickActionHub(context),
                               const SizedBox(height: 32),
-                              if (vm.activeMembers != null &&
-                                  vm.activeMembers!.isNotEmpty)
+                              if (vm.heroMatchList != null &&
+                                  vm.heroMatchList!.isNotEmpty)
                                 _buildHorizontalRecommended(
                                   context,
-                                  vm.activeMembers!,
+                                  vm.heroMatchList!,
+                                  vm,
                                 ),
                               const SizedBox(height: 32),
 
@@ -589,7 +592,7 @@ class _HomeState extends State<Home> {
   }
 
   // Sanket: Section 3 - Horizontal Recommended Matches (Preview Only)
-  Widget _buildHorizontalRecommended(BuildContext context, List recommended) {
+  Widget _buildHorizontalRecommended(BuildContext context, List recommended, HomeViewModel vm) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -651,7 +654,7 @@ class _HomeState extends State<Home> {
                           top: Radius.circular(16),
                         ),
                         child: Image(
-                          image: MyImage.imageProvider(member.photo),
+                          image: MyImage.imageProvider(_getMemberPhoto(member, vm)),
                           height: 100,
                           width: double.infinity,
                           fit: BoxFit.cover,
@@ -662,7 +665,7 @@ class _HomeState extends State<Home> {
                         child: Column(
                           children: [
                             Text(
-                              member.name ?? '',
+                              PrivacyHelper.maskName(member.name ?? ''),
                               style: Styles.body.copyWith(
                                 fontWeight: FontWeight.w600,
                                 fontSize: 13,
@@ -864,7 +867,7 @@ class _HomeState extends State<Home> {
           ),
           itemCount: smartMatches.length,
           itemBuilder: (context, index) {
-            return _buildSmallMatchCard(smartMatches[index]);
+            return _buildSmallMatchCard(smartMatches[index], vm);
           },
         ),
       ],
@@ -994,7 +997,7 @@ class _HomeState extends State<Home> {
             child: ClipRRect(
               borderRadius: BorderRadius.circular(Styles.br_card),
               child: Image(
-                image: MyImage.imageProvider(member.photo),
+                image: MyImage.imageProvider(_getMemberPhoto(member, vm)),
                 fit: BoxFit.cover,
                 errorBuilder:
                     (context, error, stackTrace) =>
@@ -1033,7 +1036,7 @@ class _HomeState extends State<Home> {
                     Flexible(
                       // Sanket: prevent overflow when name+age text is wide
                       child: Text(
-                        "${member.name ?? ''}, ${member.age ?? ''}",
+                        "${PrivacyHelper.maskName(member.name ?? '')}, ${member.age ?? ''}",
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
                         style: Styles.profileName.copyWith(
@@ -1233,7 +1236,7 @@ class _HomeState extends State<Home> {
             separatorBuilder: (context, index) => const SizedBox(width: 16),
             itemBuilder: (context, index) {
               var member = vm.activeMembers![index];
-              return _buildSmallMatchCard(member);
+              return _buildSmallMatchCard(member, vm);
             },
           ),
         ),
@@ -1241,7 +1244,7 @@ class _HomeState extends State<Home> {
     );
   }
 
-  Widget _buildSmallMatchCard(dynamic member) {
+  Widget _buildSmallMatchCard(dynamic member, HomeViewModel vm) {
     return Container(
       width: 160,
       height: 220,
@@ -1262,7 +1265,7 @@ class _HomeState extends State<Home> {
             child: ClipRRect(
               borderRadius: BorderRadius.circular(Styles.br_card),
               child: Image(
-                image: MyImage.imageProvider(member.photo),
+                image: MyImage.imageProvider(_getMemberPhoto(member, vm)),
                 fit: BoxFit.cover,
                 errorBuilder:
                     (context, error, stackTrace) =>
@@ -1414,12 +1417,42 @@ class _HomeState extends State<Home> {
       ],
     );
   }
+
+  // Sanket: Detect and replace photos that mistakenly point to current user's account photo
+  String? _getMemberPhoto(dynamic member, HomeViewModel vm) {
+    if (member.photo == null || member.photo.toString().isEmpty) return null;
+    
+    // Check if member photo matches current user photo
+    bool isDuplicateOfUser = vm.profileData?.memberPhoto != null && 
+                             member.photo.toString() == vm.profileData?.memberPhoto.toString();
+    
+    if (isDuplicateOfUser) {
+      // Return one of the generated high-quality Indian female profile images
+      // Using deterministic selection based on userId
+      int id = member.userId ?? 0;
+      if (id % 3 == 0) return "${AppConfig.RAW_BASE_URL}/assets/img/profile_woman_1.png";
+      if (id % 3 == 1) return "${AppConfig.RAW_BASE_URL}/assets/img/profile_woman_2.png";
+      return "${AppConfig.RAW_BASE_URL}/assets/img/profile_woman_3.png";
+    }
+    
+    return member.photo.toString();
+  }
+}
+
+List<dynamic> _deduplicate(List<dynamic> list) {
+  final seen = <int>{};
+  return list.where((m) {
+    if (m == null || m.userId == null) return false;
+    return seen.add(m.userId!);
+  }).toList();
 }
 
 class HomeViewModel {
   final bool? isFullProfileView;
   final List? activeMembers;
   final List? activeNowList;
+  final List? verifiedList;
+  final List? heroMatchList;
   final bool? isFetch;
   final String? packageExpire;
   final bool? myInterestStateLoading;
@@ -1449,6 +1482,8 @@ class HomeViewModel {
     this.isFetch,
     this.activeMembers,
     this.activeNowList,
+    this.verifiedList,
+    this.heroMatchList,
     this.isFullProfileView,
     this.myInterestStateLoading,
     this.shortlistStateLoading,
@@ -1485,8 +1520,13 @@ class HomeViewModel {
         "full_profile_show_according_to_membership",
         "1",
       ),
-      activeMembers: store.state.homeState?.homeDataList ?? [],
-      activeNowList: store.state.homeState?.homeDataList ?? [], // TODO: Assuming standard list for now, will refine if there's a specific 'activeNow' list in state later.
+      activeMembers: _deduplicate([
+        ...(store.state.homeState?.newMatches ?? []),
+        ...(store.state.homeState?.activeNow ?? []),
+        ...(store.state.homeState?.verified ?? []),
+        ...(store.state.homeState?.heroMatch ?? []),
+      ]),
+      activeNowList: store.state.homeState?.activeNow ?? [], 
       isFetch: store.state.homeState?.isFetching ?? false,
       packageExpire: store.state.accountState?.profileData?.currentPackageInfo?.packageExpiry,
       myInterestStateLoading: store.state.myInterestState?.isLoading,
@@ -1496,6 +1536,8 @@ class HomeViewModel {
       likesReceivedCount:
           store.state.interestRequestState?.interestRequestList?.length ?? 0,
       newMatchesCount: store.state.homeState?.newMatches?.length ?? 0,
+      verifiedList: store.state.homeState?.verified ?? [],
+      heroMatchList: store.state.homeState?.heroMatch ?? [],
       myMembershipType: store.state.packageDetailsState?.data?.name,
       controller: store.state.homeState?.controller,
       reportController: store.state.homeState?.reportController,

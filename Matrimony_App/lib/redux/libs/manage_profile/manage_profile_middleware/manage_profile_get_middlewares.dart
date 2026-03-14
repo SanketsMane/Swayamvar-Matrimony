@@ -40,7 +40,7 @@ ThunkAction<AppState> astronomicGetMiddleware() {
         AstronomicGetResponse(data: data.data, result: data.result),
       );
     } catch (e) {
-      debugPrint(e.toString());
+      debugPrint("AstronomicGet catch: $e");
 
       return;
     }
@@ -54,7 +54,7 @@ ThunkAction<AppState> attitudeInterestsGetMiddleware() {
 
       store.dispatch(AttitudeBehaviorStoreAction(payload: data));
     } catch (e) {
-      debugPrint(e.toString());
+      debugPrint("AttitudeInterestsGet catch: $e");
 
       return;
     }
@@ -110,7 +110,7 @@ ThunkAction<AppState> basicInfoGetMiddleware() {
         }
       }
     } catch (e) {
-      debugPrint(e.toString());
+      debugPrint("BasicInfoGet catch: $e");
       return;
     }
   };
@@ -150,7 +150,7 @@ ThunkAction<AppState> careerGetMiddleware() {
 
       store.dispatch(CareerGetResponse(data: data.data, result: data.result));
     } catch (e) {
-      debugPrint(e.toString());
+      debugPrint("CareerGet catch: $e");
 
       return;
     }
@@ -163,7 +163,7 @@ ThunkAction<AppState> contactGetMiddleware() {
       var data = await ManageProfileRepository().fetchContact();
       store.dispatch(ContactStoreAction(payload: data));
     } catch (e) {
-      debugPrint(e.toString());
+      debugPrint("ContactGet catch: $e");
       return;
     }
   };
@@ -203,7 +203,7 @@ ThunkAction<AppState> educationGetMiddleware() {
       store
           .dispatch(EducationGetResponse(data: data.data, result: data.result));
     } catch (e) {
-      debugPrint(e.toString());
+      debugPrint("EducationGet catch: $e");
       debugPrint("Fetching education data...");
 
       return;
@@ -218,7 +218,7 @@ ThunkAction<AppState> familyGetMiddleware() {
 
       store.dispatch(FamilyStoreAction(payload: data));
     } catch (e) {
-      debugPrint(e.toString());
+      debugPrint("FamilyGet catch: $e");
 
       return;
     }

@@ -22,7 +22,7 @@ BasicInfoState? basic_info_reducer(BasicInfoState? state, dynamic action) {
     }
   }
   if (action is SetBasicGalImage) {
-    print('setting basic gal image');
+
     if (state != null) {
       state.image = action.image;
       state.imageName = action.imageName;
@@ -73,7 +73,7 @@ BasicInfoState bir_basic_info_get_response(
 }
 
 BasicInfoState setBasicInfo(BasicInfoState state) {
-  print(state.basicInfo);
+
   if (state.basicInfo != null) {
     state.f_nameController!.text = state.basicInfo!.firstName ?? '';
     state.l_nameController!.text = state.basicInfo!.lastName ?? '';

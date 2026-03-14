@@ -325,7 +325,7 @@ class _MyProfileState extends State<MyProfile> {
   // Data Loading — Bug #7: load all sections
   // =========================================================================
   Future<void> _loadProfileData() async {
-    debugPrint('Sanket: Starting profile data load...');
+
     await _loadInitialDropdowns(); // Sanket: Ensure lists are ready before mapping
     try {
       final repo = ManageProfileRepository();
@@ -364,7 +364,7 @@ class _MyProfileState extends State<MyProfile> {
       final lifeStyleRes = await lifeStyleFuture; // Sanket: For diet
       final spiRes = await spiFuture; // Added by Sanket
 
-      debugPrint('Sanket: BasicInfo trace: ${basicRes.result}, data: ${basicRes.data?.firstName}');
+
 
       setState(() {
         // ---- Basic info ----
@@ -382,7 +382,7 @@ class _MyProfileState extends State<MyProfile> {
           // Sanket: Map marital status id/name back to a stable API value
           if (d.maritialStatus != null) {
             final apiVal = d.maritialStatus.toString().toLowerCase();
-            debugPrint('Sanket: Marital Status from API: $apiVal');
+
             _maritalStatusDisplay = _maritalOptions.entries
                 .where((e) =>
                     e.value.toLowerCase() == apiVal ||
@@ -470,16 +470,16 @@ class _MyProfileState extends State<MyProfile> {
         // ---- Address & District ----
         if (addrRes.data != null) {
           final a = addrRes.data!;
-          debugPrint('Sanket: Address from API: ${a.address}');
+
           _address.text = a.address ?? '';
           if (a.city != null) {
             final targetCity = a.city!.toString().toLowerCase();
-            debugPrint('Sanket: City/District from API: $targetCity');
+
             _districtDisplay = _districtList
                 .where((e) => e.name?.toLowerCase() == targetCity || e.id.toString() == targetCity)
                 .map((e) => e.name)
                 .firstOrNull ?? a.city;
-            debugPrint('Sanket: Mapped District Display: $_districtDisplay');
+
           }
           if (a.govIdType != null) {
             final target = a.govIdType!.toLowerCase();
@@ -495,7 +495,7 @@ class _MyProfileState extends State<MyProfile> {
         if (partnerRes.data != null) {
           final ex = partnerRes.data!;
           _preferredCitiesCtrl.text = ex.general ?? '';
-          debugPrint('Sanket: Preferred Cities from API: ${ex.general}');
+
           
           if (ex.manglik != null) {
             _partnerManglik = ex.manglik.toString() == '1' || ex.manglik.toString().toLowerCase() == 'yes';
@@ -514,7 +514,7 @@ class _MyProfileState extends State<MyProfile> {
           
           if (ex.expectedIncome != null) {
             final target = ex.expectedIncome!.toString().toLowerCase();
-            debugPrint('Sanket: Expected Income from API: $target');
+
             _expectedIncomeDisplay = _incomeOptions.entries
                 .where((e) => e.value.toLowerCase() == target || e.key.toLowerCase() == target)
                 .map((e) => e.value)
@@ -522,7 +522,7 @@ class _MyProfileState extends State<MyProfile> {
           }
           if (ex.partnerIntercaste != null) {
             final ic = ex.partnerIntercaste.toString().toLowerCase();
-            debugPrint('Sanket: Partner Intercaste from API: $ic');
+
             _partnerIntercaste = ic == '1' || ic == 'yes';
           }
 
@@ -593,11 +593,11 @@ class _MyProfileState extends State<MyProfile> {
         }
 
         _isLoadingData = false;
-        debugPrint('Sanket: Profile data load completed.');
+
       });
     } catch (e) {
       if (mounted) setState(() => _isLoadingData = false);
-      debugPrint('Sanket: Error loading profile data: $e');
+      debugPrint('Error loading profile data: $e');
     }
   }
 
@@ -739,7 +739,7 @@ class _MyProfileState extends State<MyProfile> {
       final preferredCitiesText = _preferredCitiesCtrl.text.trim();
 
       final distId = _districtList.where((e) => e.name == _districtDisplay).map((e) => e.id).firstOrNull;
-      debugPrint('Sanket: Submitting form with District ID: $distId for name: $_districtDisplay');
+
 
       // Sanket: Use Atomic Update (B-001) - send all text data in one request
       final response = await repo.fullProfileUpdate(
@@ -846,7 +846,7 @@ class _MyProfileState extends State<MyProfile> {
     } catch (e) {
       if (!mounted) return;
       setState(() => _isSubmitting = false);
-      debugPrint('Sanket: Profile submit error: $e');
+      debugPrint('Profile submit error: $e');
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text(AppLocalizations.of(context)!.profile_save_error),

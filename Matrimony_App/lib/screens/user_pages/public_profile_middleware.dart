@@ -14,7 +14,7 @@ ThunkAction<AppState> publicProfileMiddleware({required int userId}) {
 
       store.dispatch(PublicProfileStoreAction(data: data.data));
     } catch (e) {
-      debugPrint(e.toString());
+      debugPrint("PublicProfile catch: $e");
       store.dispatch(PublicProfileFailureAction(error: e.toString()));
     }
   };

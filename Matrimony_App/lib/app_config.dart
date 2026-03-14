@@ -3,7 +3,7 @@ var this_year = DateTime.now().year.toString();
 class AppConfig {
   // configure this
   static String copyright_text =
-      "Developed By Sanket Mane $this_year"; //it will show in your splash screen
+      "Developed By Sanket Mane - Version 1.2 - $this_year"; //it will show in your splash screen
   static String app_name = "Swayamvar"; //it will show in your splash screen
   static String purshase_code =
       'your_purchase_code'; // enter your purchase_code here

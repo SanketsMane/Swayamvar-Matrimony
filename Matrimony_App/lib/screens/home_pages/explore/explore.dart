@@ -22,6 +22,7 @@ import '../../my_dashboard_pages/shortlist/add_shortlist_middleware.dart';
 import '../../my_dashboard_pages/interest/express_interest_middleware.dart';
 import '../home/home_action.dart';
 import '../../others/report_dialog.dart';
+import '../../../helpers/privacy_helper.dart';
 // For MyProfile import if needed, but it's used in home.dart
 
 class Explore extends StatefulWidget {
@@ -77,15 +78,8 @@ class _ExploreState extends State<Explore> {
     _pageController.dispose();
     super.dispose();
   }
-
   String _getName(MemberData m, int index) {
-    if (m.name == null ||
-        m.name.toString().trim().isEmpty ||
-        m.name.toString().toLowerCase() == 'dummy' ||
-        m.name.toString().toLowerCase() == 'test') {
-      return _mockNames[index % _mockNames.length];
-    }
-    return m.name.toString();
+    return PrivacyHelper.maskName(m.name.toString());
   }
 
   String _getDistrict(MemberData m, int index) {
@@ -328,7 +322,7 @@ class _ExploreState extends State<Explore> {
     );
   }
 
-  Widget _buildCompBadge(int match) {
+  Widget _buildCompBadge(BuildContext context, int match) {
     Color bColor;
     if (match >= 85) {
       bColor = MyTheme.success;
@@ -359,7 +353,7 @@ class _ExploreState extends State<Explore> {
   }
 
   // ignore: unused_element
-  Widget _buildTopMatches(List<MemberData> matches, ExploreViewModel vm) {
+  Widget _buildTopMatches(BuildContext context, List<MemberData> matches, ExploreViewModel vm) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -419,7 +413,7 @@ class _ExploreState extends State<Explore> {
                 fit: StackFit.expand,
                 children: [
                   MyImages.normalImage(m.photo, alignment: Alignment.topCenter),
-                  Positioned(top: 12, left: 12, child: _buildCompBadge(score)),
+                  Positioned(top: 12, left: 12, child: _buildCompBadge(context, score)),
                 ],
               ),
             ),
@@ -445,7 +439,7 @@ class _ExploreState extends State<Explore> {
                   ),
                 ),
                 const SizedBox(height: 12),
-                _buildInfoChips(m),
+                _buildInfoChips(context, m),
                 const SizedBox(height: 12),
 
                 Container(
@@ -557,7 +551,7 @@ class _ExploreState extends State<Explore> {
   }
 
   // ignore: unused_element
-  Widget _buildNearbyMatches(List<MemberData> matches) {
+  Widget _buildNearbyMatches(BuildContext context, List<MemberData> matches) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -716,7 +710,7 @@ class _ExploreState extends State<Explore> {
                   ],
                 ),
                 const SizedBox(height: 12),
-                _buildInfoChips(member, isDarkTheme: true),
+                _buildInfoChips(context, member, isDarkTheme: true),
               ],
             ),
           ),
@@ -848,7 +842,7 @@ class _ExploreState extends State<Explore> {
   }
 
   // ignore: unused_element
-  Widget _buildNewMatchesGrid(List<MemberData> matches) {
+  Widget _buildNewMatchesGrid(BuildContext context, List<MemberData> matches) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -1042,7 +1036,7 @@ class _ExploreState extends State<Explore> {
     );
   }
 
-  Widget _buildInfoChips(MemberData m, {bool isDarkTheme = false}) {
+  Widget _buildInfoChips(BuildContext context, MemberData m, {bool isDarkTheme = false}) {
     final l = AppLocalizations.of(context)!;
     final na = l.explore_chip_na;
     final List<String> chips = [];

@@ -1,4 +1,4 @@
-// Sanket: New Settings screen — premium 2026 design system
+
 import 'package:active_matrimonial_flutter_app/const/my_theme.dart';
 import 'package:active_matrimonial_flutter_app/const/style.dart';
 import 'package:active_matrimonial_flutter_app/helpers/navigator_push.dart';
@@ -46,7 +46,7 @@ class SettingsScreen extends StatelessWidget {
                     l.settings_item_plans,
                     () => NavigatorPush.push(context, const PremiumPlans()),
                   ),
-                  // Sanket: Verify Profile item with real-time status badge
+
                   _settingsItem(
                     Icons.verified_user_outlined,
                     l.settings_item_verify,
@@ -206,7 +206,7 @@ class SettingsScreen extends StatelessWidget {
               ),
               TextButton(
                 onPressed: () {
-                  // Sanket: Placeholder for deactivation logic
+
                   Navigator.pop(context);
                 },
                 child: Text(
@@ -307,7 +307,6 @@ class SettingsScreen extends StatelessWidget {
     );
   }
 
-  // Sanket: Generates status badge for the verify item
   Widget? _buildVerifyBadge(String? status) {
     if (status == null || status.isEmpty) return null;
 

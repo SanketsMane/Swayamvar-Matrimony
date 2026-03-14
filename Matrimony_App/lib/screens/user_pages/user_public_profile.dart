@@ -1,4 +1,4 @@
-// Sanket: Public Profile screen — premium 2026 layout
+
 import 'package:active_matrimonial_flutter_app/components/my_images.dart';
 import 'package:active_matrimonial_flutter_app/const/my_theme.dart';
 import 'package:active_matrimonial_flutter_app/const/style.dart';
@@ -11,6 +11,11 @@ import 'package:active_matrimonial_flutter_app/screens/user_pages/public_profile
 import 'package:flutter/material.dart';
 import 'package:active_matrimonial_flutter_app/l10n/app_localizations.dart';
 import 'package:intl/intl.dart';
+import 'package:active_matrimonial_flutter_app/helpers/privacy_helper.dart';
+import 'package:active_matrimonial_flutter_app/repository/contact_view_repository.dart';
+import 'package:active_matrimonial_flutter_app/components/yes_no_dialog.dart';
+import 'package:active_matrimonial_flutter_app/screens/package/premium_plans.dart';
+import 'package:active_matrimonial_flutter_app/helpers/navigator_push.dart';
 import '../others/report_dialog.dart';
 
 class UserPublicProfile extends StatefulWidget {
@@ -32,7 +37,7 @@ class _UserPublicProfileState extends State<UserPublicProfile> {
   }
 
   void _fetchData() {
-    // Sanket: Approval status does NOT gate app access — any registered user can view profiles.
+
     store.dispatch(Reset.publicProfile);
     store.dispatch(publicProfileMiddleware(userId: widget.userId));
     store.dispatch(Reset.memberInfo);
@@ -53,8 +58,8 @@ class _UserPublicProfileState extends State<UserPublicProfile> {
           );
         }
 
-        final profile = state.publicProfileState!;
-        final compatibility = "${profile.profilematch ?? 92}% Match";
+        final pProfile = state.publicProfileState!;
+        final compatibility = "${pProfile.profilematch ?? 92}% Match";
 
         return Scaffold(
           backgroundColor: MyTheme.background,
@@ -64,7 +69,7 @@ class _UserPublicProfileState extends State<UserPublicProfile> {
                 child: Column(
                   children: [
                     // 1. Hero Image Section (420px)
-                    _buildHeroSection(context, state, compatibility),
+                    _buildHeroSection(context, state, pProfile, compatibility),
 
                     const SizedBox(height: 24),
 
@@ -73,31 +78,31 @@ class _UserPublicProfileState extends State<UserPublicProfile> {
                       child: Column(
                         children: [
                           // 1. Basic Information
-                          _buildBasicInfoSection(context, profile),
+                          _buildBasicInfoSection(context, pProfile),
                           const SizedBox(height: 16),
 
                           // 2. Physical Details
-                          _buildPhysicalDetailsSection(context, profile),
+                          _buildPhysicalDetailsSection(context, pProfile),
                           const SizedBox(height: 16),
 
                           // 3. Family Details
-                          _buildFamilyDetailsSection(context, profile),
+                          _buildFamilyDetailsSection(context, pProfile),
                           const SizedBox(height: 16),
 
                           // 4. Education & Career
-                          _buildEducationCareerSection(context, profile),
+                          _buildEducationCareerSection(context, pProfile),
                           const SizedBox(height: 16),
 
                           // 5. Lifestyle & Spiritual
-                          _buildLifestyleSpiritualSection(context, profile),
+                          _buildLifestyleSpiritualSection(context, pProfile),
                           const SizedBox(height: 16),
 
                           // 6. Contact & Location
-                          _buildContactLocationSection(context, profile),
+                          _buildContactLocationSection(context, pProfile),
                           const SizedBox(height: 16),
 
                           // 7. Partner Expectations
-                          _buildPartnerExpectationsSection(context, profile),
+                          _buildPartnerExpectationsSection(context, pProfile),
                           const SizedBox(height: 16),
 
                           // 8. Photo Gallery
@@ -190,10 +195,13 @@ class _UserPublicProfileState extends State<UserPublicProfile> {
 
   Widget _buildHeroSection(
     BuildContext context,
-    AppState state,
+    AppState appState,
+    dynamic pProfile,
     String compatibility,
   ) {
-    final basic = state.publicProfileState!.basic;
+    if (pProfile == null) return const SizedBox.shrink();
+    final basic = pProfile.basic;
+    final bool isVisible = pProfile.viewContactCheck ?? false;
 
     return Stack(
       children: [
@@ -256,12 +264,12 @@ class _UserPublicProfileState extends State<UserPublicProfile> {
           child: Row(
             children: [
               _circleActionBtn(
-                (state.memberInfoState?.memberInfo?.shortlistStatus ?? 0) == 1
+                (appState.memberInfoState?.memberInfo?.shortlistStatus ?? 0) == 1
                     ? Icons.favorite_rounded
                     : Icons.favorite_border_rounded,
                 () => store.dispatch(addShortlistMiddleware(userId: widget.userId)),
                 iconColor:
-                    (state.memberInfoState?.memberInfo?.shortlistStatus ?? 0) == 1
+                    (appState.memberInfoState?.memberInfo?.shortlistStatus ?? 0) == 1
                         ? MyTheme.primary
                         : MyTheme.text_primary,
               ),
@@ -316,7 +324,7 @@ class _UserPublicProfileState extends State<UserPublicProfile> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                "${basic?.firstName ?? ''} ${basic?.middleName ?? ''} ${basic?.lastName ?? ''}, ${basic?.age ?? ''}",
+                "${PrivacyHelper.maskName(basic?.firstName, isVisible: isVisible)} ${PrivacyHelper.maskName(basic?.middleName, isVisible: isVisible)} ${PrivacyHelper.maskName(basic?.lastName, isVisible: isVisible)}, ${basic?.age ?? ''}",
                 style: Styles.profileName.copyWith(
                   color: Colors.white,
                   fontSize: 28,
@@ -332,7 +340,7 @@ class _UserPublicProfileState extends State<UserPublicProfile> {
                   ),
                   const SizedBox(width: 4),
                   Text(
-                    "${state.publicProfileState!.presentAddress?.city ?? ''}, ${state.publicProfileState!.permanentAddress?.state ?? ''}",
+                    "${pProfile.presentAddress?.city ?? ''}, ${pProfile.permanentAddress?.state ?? ''}",
                     style: Styles.body.copyWith(
                       fontSize: 14,
                       color: Colors.white.withOpacity(0.8),
@@ -341,7 +349,7 @@ class _UserPublicProfileState extends State<UserPublicProfile> {
                 ],
               ),
               const SizedBox(height: 12),
-              // Sanket: Removed Compatibility Match % overlay as requested
+
             ],
           ),
         ),
@@ -352,8 +360,8 @@ class _UserPublicProfileState extends State<UserPublicProfile> {
   // =========================================================================
   // SECTION 1: Basic Information
   // =========================================================================
-  Widget _buildBasicInfoSection(BuildContext context, dynamic profile) {
-    final basic = profile.basic;
+  Widget _buildBasicInfoSection(BuildContext context, dynamic pProfile) {
+    final basic = pProfile.basic;
     if (basic == null) return const SizedBox.shrink();
 
     return _profileCard(
@@ -362,18 +370,19 @@ class _UserPublicProfileState extends State<UserPublicProfile> {
         children: [
           _sectionTitle("Basic Information"),
           const SizedBox(height: 8),
-          _detailRow("First Name", basic.firstName),
-          _detailRow("Middle Name", basic.middleName),
-          _detailRow("Surname", basic.lastName),
-          _detailRow("Date of Birth", basic.dateOfBirth != null ? DateFormat('dd-MM-yyyy').format(basic.dateOfBirth!) : null),
+          _detailRow("First Name", PrivacyHelper.maskName(basic.firstName, isVisible: pProfile.viewContactCheck ?? false)),
+          _detailRow("Middle Name", PrivacyHelper.maskName(basic.middleName, isVisible: pProfile.viewContactCheck ?? false)),
+          _detailRow("Surname", PrivacyHelper.maskName(basic.lastName, isVisible: pProfile.viewContactCheck ?? false)),
+
+          _detailRow("Date of Birth", (pProfile.viewContactCheck == true && basic.dateOfBirth != null) ? DateFormat('dd-MM-yyyy').format(basic.dateOfBirth!) : null),
           _detailRow("Age", basic.age?.toString()),
           _detailRow("Religion", basic.religion),
           _detailRow("Caste", basic.caste),
-          _detailRow("Sub-Caste", profile.spiritual?.subCaste),
+          _detailRow("Sub-Caste", pProfile.spiritual?.subCaste),
           _detailRow("Marital Status", basic.maritialStatus),
           if (basic.maritialStatus != "Unmarried")
             _detailRow("Number of Children", basic.noOfChildren?.toString()),
-          // Sanket: About Me is Step 1 Introduction
+
           if (basic.about != null && basic.about!.isNotEmpty)
             Padding(
               padding: const EdgeInsets.only(top: 16),
@@ -394,9 +403,9 @@ class _UserPublicProfileState extends State<UserPublicProfile> {
   // =========================================================================
   // SECTION 2: Physical Details
   // =========================================================================
-  Widget _buildPhysicalDetailsSection(BuildContext context, dynamic profile) {
-    final physical = profile.physical;
-    final basic = profile.basic; // Fallback for basic-info-mapped fields
+  Widget _buildPhysicalDetailsSection(BuildContext context, dynamic pProfile) {
+    final physical = pProfile.physical;
+    final basic = pProfile.basic; // Fallback for basic-info-mapped fields
     
     return _profileCard(
       child: Column(
@@ -419,8 +428,8 @@ class _UserPublicProfileState extends State<UserPublicProfile> {
   // =========================================================================
   // SECTION 3: Family Details
   // =========================================================================
-  Widget _buildFamilyDetailsSection(BuildContext context, dynamic profile) {
-    final family = profile.family;
+  Widget _buildFamilyDetailsSection(BuildContext context, dynamic pProfile) {
+    final family = pProfile.family;
     if (family == null) return const SizedBox.shrink();
 
     return _profileCard(
@@ -441,10 +450,10 @@ class _UserPublicProfileState extends State<UserPublicProfile> {
   // =========================================================================
   // SECTION 4: Education & Career
   // =========================================================================
-  Widget _buildEducationCareerSection(BuildContext context, dynamic profile) {
-    final edu = profile.education is List && profile.education.isNotEmpty ? profile.education.first : null;
-    final car = profile.career is List && profile.career.isNotEmpty ? profile.career.first : null;
-    final basic = profile.basic;
+  Widget _buildEducationCareerSection(BuildContext context, dynamic pProfile) {
+    final edu = pProfile.education is List && pProfile.education.isNotEmpty ? pProfile.education.first : null;
+    final car = pProfile.career is List && pProfile.career.isNotEmpty ? pProfile.career.first : null;
+    final basic = pProfile.basic;
 
     return _profileCard(
       child: Column(
@@ -465,10 +474,10 @@ class _UserPublicProfileState extends State<UserPublicProfile> {
   // =========================================================================
   // SECTION 5: Lifestyle & Spiritual
   // =========================================================================
-  Widget _buildLifestyleSpiritualSection(BuildContext context, dynamic profile) {
-    final life = profile.lifeStyle;
-    final spiritual = profile.spiritual;
-    final basic = profile.basic;
+  Widget _buildLifestyleSpiritualSection(BuildContext context, dynamic pProfile) {
+    final life = pProfile.lifeStyle;
+    final spiritual = pProfile.spiritual;
+    final basic = pProfile.basic;
 
     return _profileCard(
       child: Column(
@@ -487,31 +496,67 @@ class _UserPublicProfileState extends State<UserPublicProfile> {
   // =========================================================================
   // SECTION 6: Contact & Location
   // =========================================================================
-  Widget _buildContactLocationSection(BuildContext context, dynamic profile) {
-    final addr = profile.permanentAddress;
-    final contact = profile.contactDetails;
-    final basic = profile.basic;
+  Widget _buildContactLocationSection(BuildContext context, dynamic pProfile) {
+    final addr = pProfile.permanentAddress;
+    final contact = pProfile.contact;
+    final basic = pProfile.basic;
+    bool isVisible = pProfile.viewContactCheck ?? false;
 
     return _profileCard(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          _sectionTitle("Contact & Location"),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              _sectionTitle("Contact & Location"),
+              if (!isVisible)
+                TextButton.icon(
+                  onPressed: () => _handleViewContact(context),
+                  icon: const Icon(Icons.visibility_outlined, size: 16, color: MyTheme.primary),
+                  label: const Text(
+                    "Show Details",
+                    style: TextStyle(color: MyTheme.primary, fontSize: 13, fontWeight: FontWeight.bold),
+                  ),
+                ),
+            ],
+          ),
           const SizedBox(height: 8),
-          _detailRow("Permanent Address", addr?.postalCode),
+          _detailRow("Permanent Address", PrivacyHelper.maskSensitive(addr?.postalCode, isVisible: isVisible)),
           _detailRow("District", addr?.city),
-          _detailRow("Mobile Number 1", contact?.phone ?? basic?.phone),
-          _detailRow("Mobile Number 2", basic?.phone),
+          _detailRow("Mobile Number 1", PrivacyHelper.maskPhone(contact?.phone ?? basic?.phone, isVisible: isVisible)),
+          _detailRow("Mobile Number 2", PrivacyHelper.maskPhone(basic?.phone, isVisible: isVisible)),
         ],
       ),
     );
   }
 
+  void _handleViewContact(BuildContext context) {
+    final state = store.state;
+    final remaining = state.accountState?.profileData?.remainingContactView ?? 0;
+
+    if (remaining <= 0) {
+      YesNoDialog.show(
+        title: "Update Package",
+        content: "You have no remaining contact views. Please upgrade your package.",
+        onClickYes: () => NavigatorPush.push(context, const PremiumPlans()),
+        yestTxt: "Upgrade",
+      );
+    } else {
+      YesNoDialog.show(
+        title: "View Contact",
+        content: "Viewing this contact will deduct 1 view from your balance. Remaining: $remaining",
+        onClickYes: () => store.dispatch(postContactView(id: widget.userId)),
+        yestTxt: "View Now",
+      );
+    }
+  }
+
   // =========================================================================
   // SECTION 7: Partner Expectations
   // =========================================================================
-  Widget _buildPartnerExpectationsSection(BuildContext context, dynamic profile) {
-    final partner = profile.partnerExpectation;
+  Widget _buildPartnerExpectationsSection(BuildContext context, dynamic pProfile) {
+    final partner = pProfile.partnerExpectation;
     if (partner == null) return const SizedBox.shrink();
 
     return _profileCard(
@@ -577,7 +622,7 @@ class _UserPublicProfileState extends State<UserPublicProfile> {
     );
   }
 
-  Widget _buildFloatingActions(BuildContext context, AppState state) {
+  Widget _buildFloatingActions(BuildContext context, AppState appState) {
     return Positioned(
       bottom: 84 + MediaQuery.of(context).padding.bottom, // Above bottom nav
       left: 16,
@@ -616,17 +661,26 @@ class _UserPublicProfileState extends State<UserPublicProfile> {
               "चॅट",
               Colors.blueAccent,
               () {
+                if (appState.authState?.userData?.membership == 1) {
+                  YesNoDialog.show(
+                    title: "Premium Feature",
+                    content: "Please upgrade your plan to unlock messaging.",
+                    onClickYes: () => NavigatorPush.push(context, const PremiumPlans()),
+                    yestTxt: "Upgrade Now",
+                  );
+                  return;
+                }
                 OneContext().push(
                   MaterialPageRoute(
                     builder:
                         (context) => Chat(
                           userId: widget.userId,
-                          name: state.publicProfileState!.basic?.firstName,
-                          picture: state.publicProfileState!.basic?.photo,
-                          age: state.publicProfileState!.basic?.age?.toString(),
+                          name: appState.publicProfileState!.basic?.firstName,
+                          picture: appState.publicProfileState!.basic?.photo,
+                          age: appState.publicProfileState!.basic?.age?.toString(),
                           isVerified:
-                              state.publicProfileState!.basic?.approved == 1,
-                          phone: state.publicProfileState!.basic?.phone,
+                              appState.publicProfileState!.basic?.approved == 1,
+                          phone: appState.publicProfileState!.basic?.phone,
                         ),
                   ),
                 );

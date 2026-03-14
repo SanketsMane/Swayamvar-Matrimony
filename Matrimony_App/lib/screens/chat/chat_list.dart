@@ -14,6 +14,7 @@ import '../../components/matched_profile_widget.dart';
 import '../../const/my_theme.dart';
 import '../../helpers/navigator_push.dart';
 import '../../redux/libs/matched_profile/matched_profile_middleware.dart';
+import '../package/premium_plans.dart';
 
 class ChatList extends StatefulWidget {
   final bool? backButtonAppearance;
@@ -37,13 +38,21 @@ class _ChatListState extends State<ChatList> {
 
   void _initialFetch() {
     bool isDeactivated = store.state.authState?.userData?.deactivated == 1;
+    // Sanket: membership == 1 means FREE/NO PACKAGE in this system
+    bool isFree = store.state.authState?.userData?.membership == 1;
 
     // Sanket: Approval status does NOT gate app access — any registered user can use the app.
     // Only a deactivated account is blocked.
-    if (!isDeactivated) {
+    if (!isDeactivated && !isFree) {
       store.dispatch(Reset.chatList);
       store.dispatch(chatMiddleware());
       store.dispatch(matchedProfileFetchAction());
+    } else if (isFree) {
+      // If free, we MUST clear the fetching state if it was left true from a previous role/state
+      // although Reset.chatList usually handles it, being explicit avoids infinite spinners.
+      store.dispatch(Reset.chatList);
+      // We manually set isFetching to false for free users so _buildChatList doesn't spin
+      store.state.chatState?.isFetching = false;
     }
   }
 
@@ -68,6 +77,7 @@ class _ChatListState extends State<ChatList> {
       converter: (store) => store.state,
       builder: (_, state) {
         final isDeactivated = state.authState?.userData?.deactivated == 1;
+        final isFree = state.authState?.userData?.membership == 1;
 
         return Scaffold(
           backgroundColor: MyTheme.background,
@@ -86,54 +96,56 @@ class _ChatListState extends State<ChatList> {
                             child: DeactivatedAccountMessage(),
                           ),
                         )
-                        : RefreshIndicator(
-                          color: MyTheme.primary,
-                          onRefresh: () async {
-                            await store.dispatch(chatMiddleware());
-                            await store.dispatch(matchedProfileFetchAction());
-                          },
-                          child: SingleChildScrollView(
-                            physics: const AlwaysScrollableScrollPhysics(),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                const SizedBox(height: 16),
+                        : (isFree
+                            ? _buildFreeState(context)
+                            : RefreshIndicator(
+                              color: MyTheme.primary,
+                              onRefresh: () async {
+                                await store.dispatch(chatMiddleware());
+                                await store.dispatch(matchedProfileFetchAction());
+                              },
+                              child: SingleChildScrollView(
+                                physics: const AlwaysScrollableScrollPhysics(),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    const SizedBox(height: 16),
 
-                                // Horizontal Matched Profiles
-                                MatchedProfileWidget(
-                                  matched_profile_controller:
-                                      _matchedProfileController,
-                                  state: state,
-                                ),
-
-                                const SizedBox(height: 8),
-
-                                Padding(
-                                  padding: const EdgeInsets.symmetric(
-                                    horizontal: 16,
-                                  ),
-                                  child: Text(
-                                    AppLocalizations.of(
-                                      context,
-                                    )!.chat_list_messages,
-                                    // Sanket: Section header uses Tiro Devanagari Marathi
-                                    style: Styles.h2.copyWith(
-                                      fontSize: 17,
-                                      color: MyTheme.text_primary,
+                                    // Horizontal Matched Profiles
+                                    MatchedProfileWidget(
+                                      matched_profile_controller:
+                                          _matchedProfileController,
+                                      state: state,
                                     ),
-                                  ),
+
+                                    const SizedBox(height: 8),
+
+                                    Padding(
+                                      padding: const EdgeInsets.symmetric(
+                                        horizontal: 16,
+                                      ),
+                                      child: Text(
+                                        AppLocalizations.of(
+                                          context,
+                                        )!.chat_list_messages,
+                                        // Sanket: Section header uses Tiro Devanagari Marathi
+                                        style: Styles.h2.copyWith(
+                                          fontSize: 17,
+                                          color: MyTheme.text_primary,
+                                        ),
+                                      ),
+                                    ),
+
+                                    const SizedBox(height: 12),
+
+                                    // Chat List
+                                    _buildChatList(context, state),
+
+                                    const SizedBox(height: 40),
+                                  ],
                                 ),
-
-                                const SizedBox(height: 12),
-
-                                // Chat List
-                                _buildChatList(context, state),
-
-                                const SizedBox(height: 40),
-                              ],
-                            ),
-                          ),
-                        ),
+                              ),
+                            )),
               ),
             ],
           ),
@@ -258,13 +270,13 @@ class _ChatListState extends State<ChatList> {
               height: 120,
               width: 120,
               decoration: BoxDecoration(
-                color: MyTheme.primary.withOpacity(0.05),
+                color: MyTheme.primary.withValues(alpha: 0.05),
                 shape: BoxShape.circle,
               ),
               child: Icon(
                 Icons.chat_bubble_outline_rounded,
                 size: 48,
-                color: MyTheme.primary.withOpacity(0.5),
+                color: MyTheme.primary.withValues(alpha: 0.5),
               ),
             ),
             const SizedBox(height: 24),
@@ -303,6 +315,63 @@ class _ChatListState extends State<ChatList> {
                   color: Colors.white,
                   fontSize: 14,
                 ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildFreeState(BuildContext context) {
+    return Center(
+      child: Padding(
+        padding: const EdgeInsets.all(40),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Container(
+              height: 120,
+              width: 120,
+              decoration: BoxDecoration(
+                color: MyTheme.primary.withValues(alpha: 0.1),
+                shape: BoxShape.circle,
+              ),
+              child: const Icon(
+                Icons.lock_outline_rounded,
+                size: 56,
+                color: MyTheme.primary,
+              ),
+            ),
+            const SizedBox(height: 32),
+            const Text(
+              "Premium Feature",
+              style: TextStyle(
+                fontSize: 22,
+                fontWeight: FontWeight.bold,
+                color: MyTheme.text_primary,
+              ),
+            ),
+            const SizedBox(height: 12),
+            const Text(
+              "Upgrade your plan to unlock messaging and connect with matches instantly.",
+              textAlign: TextAlign.center,
+              style: TextStyle(fontSize: 14, color: MyTheme.text_secondary),
+            ),
+            const SizedBox(height: 32),
+            ElevatedButton(
+              onPressed: () => NavigatorPush.push(context, const PremiumPlans()),
+              style: ElevatedButton.styleFrom(
+                backgroundColor: MyTheme.primary,
+                foregroundColor: Colors.white,
+                minimumSize: const Size(200, 52),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(12),
+                ),
+              ),
+              child: const Text(
+                "Upgrade Now",
+                style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
               ),
             ),
           ],

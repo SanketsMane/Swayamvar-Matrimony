@@ -3,6 +3,10 @@ import 'package:flutter/material.dart';
 import '../const/my_theme.dart';
 import '../const/style.dart';
 import '../screens/chat/chat.dart';
+import '../screens/package/premium_plans.dart';
+import '../helpers/navigator_push.dart';
+import '../screens/core.dart';
+import 'yes_no_dialog.dart';
 import 'my_images.dart';
 
 class ChatListWidget extends StatelessWidget {
@@ -40,6 +44,19 @@ class ChatListWidget extends StatelessWidget {
 
     return InkWell(
       onTap: () {
+        final state = store.state;
+        final isFree = state.authState?.userData?.membership == 1;
+
+        if (isFree) {
+          YesNoDialog.show(
+            title: "Upgrade Plan",
+            content: "Please upgrade your plan to start chatting with matches.",
+            onClickYes: () => NavigatorPush.push(context, const PremiumPlans()),
+            yestTxt: "Upgrade Now",
+          );
+          return;
+        }
+
         Navigator.push(
           context,
           MaterialPageRoute(
