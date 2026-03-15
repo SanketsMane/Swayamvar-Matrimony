@@ -38,6 +38,8 @@ import 'package:active_matrimonial_flutter_app/screens/my_dashboard_pages/shortl
 import 'package:active_matrimonial_flutter_app/screens/notifications/notifications.dart';
 import 'package:active_matrimonial_flutter_app/helpers/privacy_helper.dart';
 
+import '../../../helpers/list_helper.dart';
+import '../../others/report_dialog.dart';
 import '../explore/explore.dart';
 import 'home_action.dart';
 import 'home_middleware.dart';
@@ -1520,13 +1522,13 @@ class HomeViewModel {
         "full_profile_show_according_to_membership",
         "1",
       ),
-      activeMembers: _deduplicate([
+      activeMembers: ListHelper.deduplicate([
         ...(store.state.homeState?.newMatches ?? []),
         ...(store.state.homeState?.activeNow ?? []),
         ...(store.state.homeState?.verified ?? []),
         ...(store.state.homeState?.heroMatch ?? []),
       ]),
-      activeNowList: store.state.homeState?.activeNow ?? [], 
+      activeNowList: ListHelper.deduplicate(store.state.homeState?.activeNow ?? []), 
       isFetch: store.state.homeState?.isFetching ?? false,
       packageExpire: store.state.accountState?.profileData?.currentPackageInfo?.packageExpiry,
       myInterestStateLoading: store.state.myInterestState?.isLoading,
@@ -1536,8 +1538,8 @@ class HomeViewModel {
       likesReceivedCount:
           store.state.interestRequestState?.interestRequestList?.length ?? 0,
       newMatchesCount: store.state.homeState?.newMatches?.length ?? 0,
-      verifiedList: store.state.homeState?.verified ?? [],
-      heroMatchList: store.state.homeState?.heroMatch ?? [],
+      verifiedList: ListHelper.deduplicate(store.state.homeState?.verified ?? []),
+      heroMatchList: ListHelper.deduplicate(store.state.homeState?.heroMatch ?? []),
       myMembershipType: store.state.packageDetailsState?.data?.name,
       controller: store.state.homeState?.controller,
       reportController: store.state.homeState?.reportController,

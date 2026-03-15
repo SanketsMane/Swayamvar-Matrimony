@@ -23,6 +23,7 @@ import '../../my_dashboard_pages/interest/express_interest_middleware.dart';
 import '../home/home_action.dart';
 import '../../others/report_dialog.dart';
 import '../../../helpers/privacy_helper.dart';
+import '../../../helpers/list_helper.dart';
 import '../../../app_config.dart';
 // For MyProfile import if needed, but it's used in home.dart
 
@@ -1158,8 +1159,8 @@ class ExploreViewModel {
     return ExploreViewModel(
       isLogin: store.state.authState?.userData?.id != null,
       isDeactivated: store.state.authState?.userData?.deactivated == 1,
-      premiumMembersList: store.state.exploreState?.premiumMemberList,
-      newMemberList: store.state.exploreState?.newMemberList,
+      premiumMembersList: ListHelper.deduplicate(store.state.exploreState?.premiumMemberList),
+      newMemberList: ListHelper.deduplicate(store.state.exploreState?.newMemberList),
       searchList: store.state.basicSearchState?.searchList,
       isFilterActive: store.state.basicSearchState?.isFilterActive ?? false,
       memberPhoto: store.state.accountState?.profileData?.memberPhoto,

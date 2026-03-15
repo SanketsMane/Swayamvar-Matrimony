@@ -12,6 +12,8 @@ class AppConfig {
       "swayamvarmatrimony.in"; // Sanket: production domain
 
   // do not configure these below
+  static const String VERSION = "1.2.2";
+  static const String APP_NAME = "Swayamvar Matrimony";
   static const String API_ENDPATH = "api";
   static const String PROTOCOL = HTTPS ? "https://" : "http://";
   static const String RAW_BASE_URL = "$PROTOCOL$DOMAIN_PATH";

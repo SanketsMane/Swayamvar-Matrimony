@@ -18,6 +18,11 @@ class MyImages {
       return cleanUrl;
     }
 
+    // Sanket: Handle local asset paths
+    if (cleanUrl.startsWith("assets/")) {
+      return cleanUrl;
+    }
+
     // Sanket: Prefix relative path with Raw Base URL
     String baseUrl = AppConfig.RAW_BASE_URL;
     String finalUrl = "$baseUrl/$cleanUrl";
@@ -37,6 +42,20 @@ class MyImages {
         'assets/images/342x200.png',
         fit: fit,
         alignment: alignment,
+      );
+    }
+
+    // Sanket: Use Image.asset for bundled assets
+    if (formattedUrl.startsWith("assets/")) {
+      return Image.asset(
+        formattedUrl,
+        fit: fit,
+        alignment: alignment,
+        errorBuilder: (context, error, stackTrace) => Image.asset(
+          'assets/images/342x200.png',
+          fit: fit,
+          alignment: alignment,
+        ),
       );
     }
 
@@ -180,6 +199,10 @@ class MyImage {
     String formattedUrl = MyImages._getFormattedUrl(url);
     if (formattedUrl.isEmpty) {
       return const AssetImage('assets/images/342x200.png');
+    }
+
+    if (formattedUrl.startsWith("assets/")) {
+      return AssetImage(formattedUrl);
     }
 
     if (kIsWeb) {
