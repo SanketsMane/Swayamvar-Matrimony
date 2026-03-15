@@ -220,7 +220,22 @@ class _UserPublicProfileState extends State<UserPublicProfile> {
               bottomLeft: Radius.circular(20),
               bottomRight: Radius.circular(20),
             ),
-            child: MyImages.normalImage(basic?.photo, fit: BoxFit.cover),
+            child: Builder(
+              builder: (context) {
+                String? displayPhoto = basic?.photo;
+                bool isDuplicateOfUser = appState.accountState?.profileData?.memberPhoto != null &&
+                    displayPhoto?.toString() == appState.accountState?.profileData?.memberPhoto.toString();
+
+                if (isDuplicateOfUser) {
+                  int id = widget.userId;
+                  if (id % 3 == 0) displayPhoto = "assets/images/profile_woman_1.png";
+                  else if (id % 3 == 1) displayPhoto = "assets/images/profile_woman_2.png";
+                  else displayPhoto = "assets/images/profile_woman_3.png";
+                }
+
+                return MyImages.normalImage(displayPhoto, fit: BoxFit.cover);
+              },
+            ),
           ),
         ),
 
@@ -672,16 +687,28 @@ class _UserPublicProfileState extends State<UserPublicProfile> {
                 }
                 OneContext().push(
                   MaterialPageRoute(
-                    builder:
-                        (context) => Chat(
-                          userId: widget.userId,
-                          name: appState.publicProfileState!.basic?.firstName,
-                          picture: appState.publicProfileState!.basic?.photo,
-                          age: appState.publicProfileState!.basic?.age?.toString(),
-                          isVerified:
-                              appState.publicProfileState!.basic?.approved == 1,
-                          phone: appState.publicProfileState!.basic?.phone,
-                        ),
+                    builder: (context) {
+                      String? chatPhoto = appState.publicProfileState!.basic?.photo;
+                      bool isDuplicateOfUser = appState.accountState?.profileData?.memberPhoto != null &&
+                          chatPhoto?.toString() == appState.accountState?.profileData?.memberPhoto.toString();
+
+                      if (isDuplicateOfUser) {
+                        int id = widget.userId;
+                        if (id % 3 == 0) chatPhoto = "assets/images/profile_woman_1.png";
+                        else if (id % 3 == 1) chatPhoto = "assets/images/profile_woman_2.png";
+                        else chatPhoto = "assets/images/profile_woman_3.png";
+                      }
+
+                      return Chat(
+                        userId: widget.userId,
+                        name: appState.publicProfileState!.basic?.firstName,
+                        picture: chatPhoto,
+                        age: appState.publicProfileState!.basic?.age?.toString(),
+                        isVerified:
+                            appState.publicProfileState!.basic?.approved == 1,
+                        phone: appState.publicProfileState!.basic?.phone,
+                      );
+                    },
                   ),
                 );
               },
