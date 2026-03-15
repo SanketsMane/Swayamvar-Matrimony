@@ -103,13 +103,10 @@ class _MyAppState extends State<MyApp> {
             navigatorKey: OneContext().navigator.key,
             theme: ThemeData(
               scaffoldBackgroundColor: Colors.white,
-              fontFamily:
-                  languageProvider.appLocale.languageCode == 'mr'
-                      ? "Noto Sans Devanagari"
-                      : "Poppins",
+              fontFamily: "Noto Sans Devanagari",
               fontFamilyFallback: const [
-                "Noto Sans Devanagari",
                 "Noto Sans",
+                "Poppins",
                 "Apple Color Emoji",
                 "Segoe UI Emoji",
               ],

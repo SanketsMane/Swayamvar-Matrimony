@@ -102,11 +102,11 @@ class _ExploreState extends State<Explore> {
                              member.photo.toString() == vm.memberPhoto.toString();
     
     if (isDuplicateOfUser) {
-      // Return one of the generated high-quality Indian female profile images
+      // Use locally bundled replacement assets for dummy profiles
       int id = member.userId ?? 0;
-      if (id % 3 == 0) return "${AppConfig.RAW_BASE_URL}/assets/img/profile_woman_1.png";
-      if (id % 3 == 1) return "${AppConfig.RAW_BASE_URL}/assets/img/profile_woman_2.png";
-      return "${AppConfig.RAW_BASE_URL}/assets/img/profile_woman_3.png";
+      if (id % 3 == 0) return "assets/images/profile_woman_1.png";
+      if (id % 3 == 1) return "assets/images/profile_woman_2.png";
+      return "assets/images/profile_woman_3.png";
     }
     
     return member.photo.toString();
@@ -1156,11 +1156,16 @@ class ExploreViewModel {
   });
 
   static ExploreViewModel fromStore(Store<AppState> store) {
+    // SankET: Global deduplication for Explore screen
+    final seen = <int>{};
+    final premiumList = ListHelper.deduplicateGlobal(store.state.exploreState?.premiumMemberList, seen);
+    final newList = ListHelper.deduplicateGlobal(store.state.exploreState?.newMemberList, seen);
+
     return ExploreViewModel(
       isLogin: store.state.authState?.userData?.id != null,
       isDeactivated: store.state.authState?.userData?.deactivated == 1,
-      premiumMembersList: ListHelper.deduplicate(store.state.exploreState?.premiumMemberList),
-      newMemberList: ListHelper.deduplicate(store.state.exploreState?.newMemberList),
+      premiumMembersList: premiumList,
+      newMemberList: newList,
       searchList: store.state.basicSearchState?.searchList,
       isFilterActive: store.state.basicSearchState?.isFilterActive ?? false,
       memberPhoto: store.state.accountState?.profileData?.memberPhoto,

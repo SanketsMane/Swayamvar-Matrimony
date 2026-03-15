@@ -1429,12 +1429,11 @@ class _HomeState extends State<Home> {
                              member.photo.toString() == vm.profileData?.memberPhoto.toString();
     
     if (isDuplicateOfUser) {
-      // Return one of the generated high-quality Indian female profile images
-      // Using deterministic selection based on userId
+      // Use locally bundled replacement assets for dummy profiles
       int id = member.userId ?? 0;
-      if (id % 3 == 0) return "${AppConfig.RAW_BASE_URL}/assets/img/profile_woman_1.png";
-      if (id % 3 == 1) return "${AppConfig.RAW_BASE_URL}/assets/img/profile_woman_2.png";
-      return "${AppConfig.RAW_BASE_URL}/assets/img/profile_woman_3.png";
+      if (id % 3 == 0) return "assets/images/profile_woman_1.png";
+      if (id % 3 == 1) return "assets/images/profile_woman_2.png";
+      return "assets/images/profile_woman_3.png";
     }
     
     return member.photo.toString();
@@ -1512,6 +1511,13 @@ class HomeViewModel {
     String? error = store.state.accountState?.error;
     bool isLoading = store.state.accountState?.profileData == null && (error == null || (error?.isEmpty ?? true));
 
+    // SankET: Global deduplication across all lists on Home screen
+    final Set<int> seenIds = {};
+    final heroMatchList = ListHelper.deduplicateGlobal(store.state.homeState?.heroMatch, seenIds);
+    final verifiedList = ListHelper.deduplicateGlobal(store.state.homeState?.verified, seenIds);
+    final activeNowList = ListHelper.deduplicateGlobal(store.state.homeState?.activeNow, seenIds);
+    final newMatchesList = ListHelper.deduplicateGlobal(store.state.homeState?.newMatches, seenIds);
+
     return HomeViewModel(
       profileData: store.state.accountState?.profileData,
       profileState: store.state.manageProfileCombineState,
@@ -1523,12 +1529,12 @@ class HomeViewModel {
         "1",
       ),
       activeMembers: ListHelper.deduplicate([
-        ...(store.state.homeState?.newMatches ?? []),
-        ...(store.state.homeState?.activeNow ?? []),
-        ...(store.state.homeState?.verified ?? []),
-        ...(store.state.homeState?.heroMatch ?? []),
+        ...heroMatchList,
+        ...verifiedList,
+        ...activeNowList,
+        ...newMatchesList,
       ]),
-      activeNowList: ListHelper.deduplicate(store.state.homeState?.activeNow ?? []), 
+      activeNowList: activeNowList, 
       isFetch: store.state.homeState?.isFetching ?? false,
       packageExpire: store.state.accountState?.profileData?.currentPackageInfo?.packageExpiry,
       myInterestStateLoading: store.state.myInterestState?.isLoading,
@@ -1537,9 +1543,9 @@ class HomeViewModel {
           store.state.pictureProfileViewState?.pictureProfileList?.length ?? 0,
       likesReceivedCount:
           store.state.interestRequestState?.interestRequestList?.length ?? 0,
-      newMatchesCount: store.state.homeState?.newMatches?.length ?? 0,
-      verifiedList: ListHelper.deduplicate(store.state.homeState?.verified ?? []),
-      heroMatchList: ListHelper.deduplicate(store.state.homeState?.heroMatch ?? []),
+      newMatchesCount: newMatchesList.length,
+      verifiedList: verifiedList,
+      heroMatchList: heroMatchList,
       myMembershipType: store.state.packageDetailsState?.data?.name,
       controller: store.state.homeState?.controller,
       reportController: store.state.homeState?.reportController,
